@@ -1,0 +1,256 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Navigation trees &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Miscellaneous information" href="index.html" />
+    <link rel="next" title="Search engine optimization" href="seo.html" />
+    <link rel="prev" title="Changing Portal Transforms Settings via Python" href="portal_transforms.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="seo.html" title="Search engine optimization"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="portal_transforms.html" title="Changing Portal Transforms Settings via Python"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Miscellaneous information</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="navigation-trees">
+<h1>Navigation trees<a class="headerlink" href="#navigation-trees" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
+<li><a class="reference internal" href="#creating-a-custom-navigation-tree" id="id2">Creating a custom navigation tree</a></li>
+<li><a class="reference internal" href="#excluding-items-in-the-navigation-tree" id="id3">Excluding items in the navigation tree</a></li>
+</ul>
+</div>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">How navigation trees are generate in Plone and how to generate
+custom navigation trees.</p>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Plone exposes methods to build navigation trees.</p>
+<ul class="simple">
+<li>from Products.CMFPlone.browser.navtree import NavtreeStrategyBase</li>
+<li>buildFolderTree</li>
+</ul>
+<p>These are internally used by navigation portlet and sitemap.</p>
+</div>
+<div class="section" id="creating-a-custom-navigation-tree">
+<h2><a class="toc-backref" href="#id2">Creating a custom navigation tree</a><a class="headerlink" href="#creating-a-custom-navigation-tree" title="Permalink to this headline">¶</a></h2>
+<p>See <a class="reference external" href="http://svn.plone.org/svn/collective/Products.PloneHelpCenter/trunk/Products/PloneHelpCenter/content/ReferenceManual.py">Products.PloneHelpCenter</a> for full code.</p>
+<p>The following example builds Table of Contents for <em>Reference Manual</em> content type:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Strategy</span><span class="p">(</span><span class="n">NavtreeStrategyBase</span><span class="p">):</span>
+
+    <span class="n">rootPath</span> <span class="o">=</span> <span class="s">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">getPhysicalPath</span><span class="p">())</span>
+    <span class="n">showAllParents</span> <span class="o">=</span> <span class="bp">False</span>
+
+<span class="n">strategy</span> <span class="o">=</span> <span class="n">Strategy</span><span class="p">()</span>
+<span class="n">query</span><span class="o">=</span>  <span class="p">{</span><span class="s">&#39;path&#39;</span>        <span class="p">:</span> <span class="s">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">getPhysicalPath</span><span class="p">()),</span>
+         <span class="s">&#39;object_provides&#39;</span> <span class="p">:</span> <span class="s">&#39;Products.PloneHelpCenter.interfaces.IHelpCenterMultiPage&#39;</span><span class="p">,</span>
+         <span class="s">&#39;sort_on&#39;</span>     <span class="p">:</span> <span class="s">&#39;getObjPositionInParent&#39;</span><span class="p">}</span>
+
+<span class="n">toc</span> <span class="o">=</span> <span class="n">buildFolderTree</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">strategy</span><span class="p">)[</span><span class="s">&#39;children&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="excluding-items-in-the-navigation-tree">
+<h2><a class="toc-backref" href="#id3">Excluding items in the navigation tree</a><a class="headerlink" href="#excluding-items-in-the-navigation-tree" title="Permalink to this headline">¶</a></h2>
+<p>Your navigation tree strategy must define method <tt class="docutils literal"><span class="pre">nodeFilter()</span></tt>
+which can check for portal_catalog metadata column <tt class="docutils literal"><span class="pre">exclude_from_nav</span></tt>.</p>
+<p>Example (from Products.CMFPlone.broser.navtree):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">SitemapNavtreeStrategy</span><span class="p">(</span><span class="n">NavtreeStrategyBase</span><span class="p">):</span>
+
+        <span class="k">def</span> <span class="nf">nodeFilter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+            <span class="n">item</span> <span class="o">=</span> <span class="n">node</span><span class="p">[</span><span class="s">&#39;item&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s">&#39;exclude_from_nav&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">False</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">True</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Navigation trees</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#creating-a-custom-navigation-tree">Creating a custom navigation tree</a></li>
+<li><a class="reference internal" href="#excluding-items-in-the-navigation-tree">Excluding items in the navigation tree</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="portal_transforms.html"
+                        title="previous chapter">Changing Portal Transforms Settings via Python</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="seo.html"
+                        title="next chapter">Search engine optimization</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/misc/navigationtree.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="seo.html" title="Search engine optimization"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="portal_transforms.html" title="Changing Portal Transforms Settings via Python"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Miscellaneous information</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

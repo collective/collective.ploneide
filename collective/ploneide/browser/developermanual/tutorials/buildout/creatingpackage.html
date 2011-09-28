@@ -1,0 +1,353 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Creating a new package &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../../index.html" />
+    <link rel="up" title="Buildout" href="index.html" />
+    <link rel="next" title="A deployment configuration" href="deployment.html" />
+    <link rel="prev" title="Installing a third party product" href="thirdparty.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="deployment.html" title="A deployment configuration"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="thirdparty.html" title="Installing a third party product"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Tutorials</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Buildout</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="creating-a-new-package">
+<h1>Creating a new package<a class="headerlink" href="#creating-a-new-package" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">Adding a new custom package is not much different from installing a
+third-party one.</p>
+</div>
+<div class="section" id="creating-a-traditional-zope-2-product">
+<h2>Creating a traditional Zope 2 product<a class="headerlink" href="#creating-a-traditional-zope-2-product" title="Permalink to this headline">¶</a></h2>
+<p>To create a traditional Zope 2 product, put it in the top-level
+<em>products/</em> directory and re-start Zope. Nothing more should be
+required. As explained previously, products placed here will be
+found automatically at start-up, and their <em>configure.zcml</em> files
+will be executed automatically.</p>
+</div>
+<div class="section" id="creating-an-egg">
+<h2>Creating an egg<a class="headerlink" href="#creating-an-egg" title="Permalink to this headline">¶</a></h2>
+<p>Of course, if you are using products, you cannot benefit from the
+additional features of eggs, including automatic dependency
+management, distribution via the Cheese Shop and nested
+namespaces.</p>
+<p>The easiest way to create a new egg is to use the <em>paster*command,
+which we already used to create the buildout. To create a new basic
+package, with a top-level namespace (e.g. your company name) and a
+specific name, go to the *src/</em> directory and run:</p>
+<div class="highlight-python"><pre>$ cd src
+$ paster create -t plone myorg.mypackage</pre>
+</div>
+<p>You will be asked a series of questions. Make sure that the
+namespace package and package name correspond to the name of the
+egg. In this case, the namespace package is <em>myorg</em> and the package
+name is <em>mypackage</em>. In general, answer <em>False</em> to the question on
+whether your package if &quot;zip safe&quot;. Enter other metadata as
+requested.</p>
+<p>You will now have:</p>
+<ul class="simple">
+<li>A <em>setup.py</em> which contains the metadata you entered</li>
+<li>A package in <em>myorg.mypackage/myorg/mypackage</em>. Your source code
+goes here.</li>
+<li>A skeleton <em>configure.zcml</em>, tests.py and a few other useful
+starting points.</li>
+<li>Some generic documentation in <em>myorg.mypackage/docs</em>.</li>
+</ul>
+<p>Of course, you must also add this package to the buildout. In
+<em>buildout.cfg</em>, you might have:</p>
+<div class="highlight-python"><pre>[buildout]
+...
+eggs =
+    ...
+    myorg.mypackage
+
+develop =
+    src/myorg.mypackage</pre>
+</div>
+<p>Unless you plan to include this package from another one (or use
+automatic ZCML loading, explained below), you probably also need a
+ZCML slug:</p>
+<div class="highlight-python"><pre>[instance]
+...
+zcml =
+    myorg.mypackage</pre>
+</div>
+<p>Do not forget to re-run buildout after making the change:</p>
+<div class="highlight-python"><pre>$ ./bin/buildout</pre>
+</div>
+<div class="section" id="automate-zcml-loading-for-your-package">
+<h3>Automate ZCML loading for your package<a class="headerlink" href="#automate-zcml-loading-for-your-package" title="Permalink to this headline">¶</a></h3>
+<p>If you're not including your package from another one, you can
+still avoid having to include a ZCML slug in <em>buildout.cfg</em> for it.
+This is particulary useful to avoid unneccessary repetition of
+package names in <em>buildout.cfg</em>, which begginer integrators might
+easily overlook. From Plone 3.3 on, you can make your packages
+signal that their ZCML should be included by adding:</p>
+<div class="highlight-python"><pre>setup(...entry_points="""...[z3c.autoinclude.plugin]target = plone...)"""</pre>
+</div>
+<p>to their <em>setup.py</em> file. For further information, see the
+<a class="reference external" href="http://peak.telecommunity.com/DevCenter/setuptools#dynamic-discovery-of-services-and-plugins">setuptools documentation about dynamic discovery of services and plugins</a>.` &lt;<a class="reference external" href="http://peak.telecommunity.com/DevCenter/setuptools#id19">http://peak.telecommunity.com/DevCenter/setuptools#id19</a>&gt;`_</p>
+</div>
+<div class="section" id="specifying-dependencies">
+<h3>Specifying dependencies<a class="headerlink" href="#specifying-dependencies" title="Permalink to this headline">¶</a></h3>
+<p>If your new package has explicit dependencies, you can list them in
+<em>setup.py</em>. That way, buildout will be able to download and install
+these as well. Dependencies are listed in the <em>install_requires</em>
+argument to the <em>setup()</em> method, By default, <em>setuptools*is listed
+here, since we need this to support namespace packages. To add
+*sqlalchemy*0.3 (but not 0.4), and the *MySQL-Python</em> driver, you
+could amend this to read:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">install_requires</span><span class="o">=</span><span class="p">[</span>
+          <span class="s">&#39;setuptools&#39;</span><span class="p">,</span>
+          <span class="s">&#39;sqlalchemy&gt;=0.3,&lt;0.4dev&#39;</span><span class="p">,</span>
+          <span class="s">&#39;MySQL-Python&#39;</span><span class="p">,</span>
+      <span class="p">],</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="uploading-your-egg-to-the-cheese-shop">
+<h3>Uploading your egg to the Cheese Shop<a class="headerlink" href="#uploading-your-egg-to-the-cheese-shop" title="Permalink to this headline">¶</a></h3>
+<p>If you want to share your packge with the rest of the Python
+community and make it easy to install using tools like buildout and
+<em>easy_install</em>, you can upload the package to the Cheese Shop.</p>
+<p>Before doing so, you should:</p>
+<ul class="simple">
+<li>Commit your latest changes and tag the release in Subversion, if
+applicable.</li>
+<li>Make sure the version number in <em>setup.py</em> is correct. This
+should use common conventions such as &quot;1.0b2&quot; for the second beta
+of version 1.0, or &quot;2.1.3rc1&quot; for the first release candidate of
+version 2.1.3.</li>
+<li>If you are using Mac OS X, run
+export&nbsp;COPY_EXTENDED_ATTRIBUTES_DISABLE=true on the shell first
+- otherwise, the egg will contain Mac OS X resource forks which
+cause problems if your egg is used on Windows.</li>
+</ul>
+<p>When you are ready, run the following command from your package's
+directory (e.g. <em>src/myorg.mypackage</em>):</p>
+<div class="highlight-python"><pre>$ python setup.py egg_info -RDb "" sdist register upload</pre>
+</div>
+<p>This will ask you to create a Cheese Shop account if you do not
+have one already. You can run this command as often as you'd like
+to release a new version (probably with a new version number).</p>
+</div>
+</div>
+<div class="section" id="creating-development-releases">
+<h2>Creating development releases<a class="headerlink" href="#creating-development-releases" title="Permalink to this headline">¶</a></h2>
+<p>When working on a project, you might want to generate development
+releases of a project to push to a staging server. Instead of
+increasing the version number in the <tt class="docutils literal"><span class="pre">setup.py</span></tt> file each time, you
+can use the <tt class="docutils literal"><span class="pre">egg_info</span></tt> command to name the release appropiately.</p>
+<p>For a complete list of the available options, run:</p>
+<div class="highlight-python"><pre>$ python setup.py --help egg_info</pre>
+</div>
+<p>If you're using subversion for version control, you can use the
+revision numbers. For example, this will generate a targz package in
+the <tt class="docutils literal"><span class="pre">dist</span></tt> folder named <tt class="docutils literal"><span class="pre">your.package-rXXXX</span></tt>, where <tt class="docutils literal"><span class="pre">XXXX</span></tt> is a
+revision number:</p>
+<div class="highlight-python"><pre>$ python setup.py sdist egg_info -r</pre>
+</div>
+<p>If you do nigthly releases, tagging with the date is a good option:</p>
+<div class="highlight-python"><pre>$ python setup.py sdist egg_info -d</pre>
+</div>
+<p>If you don't want to enter the full command everytime you make a
+release, you can use the setup.cfg file to set the defaults. For example:</p>
+<div class="highlight-cfg"><div class="highlight"><pre><span class="k">[egg_info]</span>
+<span class="na">tag_date</span> <span class="o">=</span> <span class="s">true</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../../index.html"><img src="../../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Creating a new package</a><ul>
+<li><a class="reference internal" href="#creating-a-traditional-zope-2-product">Creating a traditional Zope 2 product</a></li>
+<li><a class="reference internal" href="#creating-an-egg">Creating an egg</a><ul>
+<li><a class="reference internal" href="#automate-zcml-loading-for-your-package">Automate ZCML loading for your package</a></li>
+<li><a class="reference internal" href="#specifying-dependencies">Specifying dependencies</a></li>
+<li><a class="reference internal" href="#uploading-your-egg-to-the-cheese-shop">Uploading your egg to the Cheese Shop</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#creating-development-releases">Creating development releases</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="thirdparty.html"
+                        title="previous chapter">Installing a third party product</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="deployment.html"
+                        title="next chapter">A deployment configuration</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/tutorials/buildout/creatingpackage.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="deployment.html" title="A deployment configuration"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="thirdparty.html" title="Installing a third party product"
+             >previous</a> |</li>
+        <li><a href="../../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Tutorials</a> &raquo;</li>
+          <li><a href="index.html" >Buildout</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

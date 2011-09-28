@@ -1,0 +1,279 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Hello World &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../../../index.html" />
+    <link rel="up" title="Getting Started" href="index.html" />
+    <link rel="next" title="Basic Features" href="../basic-features/index.html" />
+    <link rel="prev" title="UML" href="uml.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../basic-features/index.html" title="Basic Features"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="uml.html" title="UML"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Tutorials</a> &raquo;</li>
+          <li><a href="../index.html" >Using ArchGenXML</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Getting Started</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="hello-world">
+<h1>Hello World<a class="headerlink" href="#hello-world" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#generating-the-product" id="id1">Generating the product</a></li>
+<li><a class="reference internal" href="#installing-and-using-the-generated-product" id="id2">Installing and using the generated product</a></li>
+</ul>
+</div>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">Create your first minimal content type with ArchGenXML</p>
+</div>
+<p>Open the UML tool of your choice. Make a new UML model and give it a name
+<tt class="docutils literal"><span class="pre">HelloWorld</span></tt>. Then add a class diagram (most UML tools do this automatically).</p>
+<p>Choose the tool for class creation and add a class to the diagram. Give it a
+name such as <tt class="docutils literal"><span class="pre">HelloType</span></tt> and add an attribute <tt class="docutils literal"><span class="pre">HelloText</span></tt> with type
+<tt class="docutils literal"><span class="pre">string</span></tt>. The <a class="reference external" href="helloworld3.zargo">helloworld3.zargo</a> (Plone 3.0) /
+<a class="reference external" href="helloworld25.zargo">helloworld25.zargo</a> (Plone 2.5) models were created using
+ArgoUML, and contain the type as described above.</p>
+<img alt="Example HelloWorld with HelloType in UML" src="../../../_images/helloworld.png" style="width: 400px;" />
+<div class="section" id="generating-the-product">
+<h2><a class="toc-backref" href="#id1">Generating the product</a><a class="headerlink" href="#generating-the-product" title="Permalink to this headline">¶</a></h2>
+<p>Save your model as <tt class="docutils literal"><span class="pre">helloworld.zargo</span></tt> (ArgoUML) or <tt class="docutils literal"><span class="pre">helloworld.zuml</span></tt>
+(Poseidon), or export it as an XMI file with the name <tt class="docutils literal"><span class="pre">helloworld.xmi</span></tt>. Then
+go to the command line and execute:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> archgenxml helloworld.zargo
+</pre></div>
+</div>
+<p>ArchGenXML will begin code generation. When it completes, you will have a new
+folder <tt class="docutils literal"><span class="pre">HelloWorld</span></tt> on your file system. Its contents looks like:</p>
+<div class="highlight-python"><pre>HelloWorld/
+|-- Extensions (only with plone_target_version=2.5)
+| |-- Install.py
+| `-- __init__.py
+|-- HelloType.py
+|-- __init__.py
+|-- config.py
+|-- configure.zcml
+|-- i18n
+| `-- generated.pot
+|-- interfaces.py
+|-- locales
+|-- profiles
+| `-- default
+| |-- HelloWorld_marker.txt
+| |-- cssregistry.xml
+| |-- factorytool.xml
+| |-- import_steps.xml
+| |-- jsregistry.xml
+| |-- metadata.xml
+| |-- skins.xml
+| |-- types
+| | `-- HelloType.xml
+| `-- types.xml
+|-- profiles.zcml
+|-- refresh.txt
+|-- setuphandlers.py
+`-- skins
+|-- helloworld_images
+| `-- HelloType.gif
+|-- helloworld_styles
+`-- helloworld_templates</pre>
+</div>
+</div>
+<div class="section" id="installing-and-using-the-generated-product">
+<h2><a class="toc-backref" href="#id2">Installing and using the generated product</a><a class="headerlink" href="#installing-and-using-the-generated-product" title="Permalink to this headline">¶</a></h2>
+<p>Move the whole folder <tt class="docutils literal"><span class="pre">HelloWorld</span></tt> to your Zope/Plone 3 instance's
+<tt class="docutils literal"><span class="pre">Products</span></tt> folder. Restart Zope, open Plone in a browser and log in as
+Manager. Choose <em>Plone Setup</em> from the personal bar and choose <em>Add/Remove
+Products</em>. A new product <tt class="docutils literal"><span class="pre">HelloWorld</span></tt> should now appear in the list of
+products available for install. Choose it and click <em>install</em>. Go to your
+personal folder. In the list of addable items, you'll find the content type
+from the new product. Add a test instance to see if it works.</p>
+<img alt="Plone: HelloType in action" src="../../../_images/helloworld-plone-shot.png" style="width: 400px;" />
+<p>That's the trick. By the way: the title is always part of the schema. But don't
+worry: you can hide or recycle it later.</p>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../../../index.html"><img src="../../../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Hello World</a><ul>
+<li><a class="reference internal" href="#generating-the-product">Generating the product</a></li>
+<li><a class="reference internal" href="#installing-and-using-the-generated-product">Installing and using the generated product</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="uml.html"
+                        title="previous chapter">UML</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../basic-features/index.html"
+                        title="next chapter">Basic Features</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../../_sources/tutorials/archgenxml/getting-started/hello-world.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../basic-features/index.html" title="Basic Features"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="uml.html" title="UML"
+             >previous</a> |</li>
+        <li><a href="../../../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Tutorials</a> &raquo;</li>
+          <li><a href="../index.html" >Using ArchGenXML</a> &raquo;</li>
+          <li><a href="index.html" >Getting Started</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

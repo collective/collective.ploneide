@@ -1,0 +1,650 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Portlets &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Portlets" href="index.html" />
+    <link rel="next" title="Appendix: Practicals" href="appendix/index.html" />
+    <link rel="prev" title="Order and blacklisting" href="blacklisting.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="appendix/index.html" title="Appendix: Practicals"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="blacklisting.html" title="Order and blacklisting"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Portlets</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="portlets">
+<h1>Portlets<a class="headerlink" href="#portlets" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">How to create and subclass portlets in Plone. How to look-up and modify
+portlets on the site programmatically.</p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
+<li><a class="reference internal" href="#creating-a-portlet" id="id2">Creating a portlet</a></li>
+<li><a class="reference internal" href="#subclassing-a-portlet" id="id3">Subclassing a portlet</a></li>
+<li><a class="reference internal" href="#using-z3c-form-in-portlets" id="id4">Using z3c.form in portlets</a></li>
+<li><a class="reference internal" href="#overriding-portlet-rendering" id="id5">Overriding portlet rendering</a></li>
+<li><a class="reference internal" href="#update-and-render" id="id6">update() and render()</a></li>
+<li><a class="reference internal" href="#available-property" id="id7">available property</a></li>
+<li><a class="reference internal" href="#iterate-portlets-assigned-to-the-portal-root" id="id8">Iterate portlets assigned to the portal root</a></li>
+<li><a class="reference internal" href="#walking-through-every-portlet-on-the-site" id="id9">Walking through every portlet on the site</a></li>
+<li><a class="reference internal" href="#checking-if-a-certain-context-portlet-is-active-on-a-page" id="id10">Checking if a certain context portlet is active on a page</a></li>
+<li><a class="reference internal" href="#rendering-a-portlet" id="id11">Rendering a portlet</a></li>
+<li><a class="reference internal" href="#hiding-unwanted-portlets" id="id12">Hiding unwanted portlets</a></li>
+<li><a class="reference internal" href="#writing-your-own-portlet-manager" id="id13">Writing your own portlet manager</a></li>
+<li><a class="reference internal" href="#fixing-relative-links" id="id14">Fixing relative links</a></li>
+<li><a class="reference internal" href="#other-resources-and-examples" id="id15">Other resources and examples</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Please read <a class="reference external" href="http://plone.org/documentation/manual/portlets-developer-manual/basic-plone.portlets-architecture">Portlets developer manual</a>.</p>
+</div>
+<div class="section" id="creating-a-portlet">
+<h2><a class="toc-backref" href="#id2">Creating a portlet</a><a class="headerlink" href="#creating-a-portlet" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>You need a paster-compatible product skeleton created using <em>paster create -t plone</em> or
+<em>paster create -t archetypes</em> commands.</li>
+<li>Use project specific paster command <em>paster addcontent portlet</em> to create a code
+skeleton for your new portlet.</li>
+</ul>
+</div>
+<div class="section" id="subclassing-a-portlet">
+<h2><a class="toc-backref" href="#id3">Subclassing a portlet</a><a class="headerlink" href="#subclassing-a-portlet" title="Permalink to this headline">¶</a></h2>
+<p>You can subclass a portlet to create a new portlet type with your enhanced functionality.</p>
+<ul class="simple">
+<li><a class="reference external" href="http://plone.org/documentation/manual/developer-manual/portlets/appendix-practicals/subclassing-new-portlets">http://plone.org/documentation/manual/developer-manual/portlets/appendix-practicals/subclassing-new-portlets</a></li>
+</ul>
+</div>
+<div class="section" id="using-z3c-form-in-portlets">
+<h2><a class="toc-backref" href="#id4">Using z3c.form in portlets</a><a class="headerlink" href="#using-z3c-form-in-portlets" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="../forms/z3c.form.html"><em>z3c.form</em></a> is a modern form library for Plone. The out of the box Plone portlets
+use older <em>zope.formlib</em>.</p>
+<p>Discussion related to the matter</p>
+<ul class="simple">
+<li><a class="reference external" href="http://stackoverflow.com/questions/5174905/can-i-use-z3c-form-on-plone-portlets-instead-of-zope-formlib">http://stackoverflow.com/questions/5174905/can-i-use-z3c-form-on-plone-portlets-instead-of-zope-formlib</a></li>
+</ul>
+</div>
+<div class="section" id="overriding-portlet-rendering">
+<h2><a class="toc-backref" href="#id5">Overriding portlet rendering</a><a class="headerlink" href="#overriding-portlet-rendering" title="Permalink to this headline">¶</a></h2>
+<p>Use <tt class="docutils literal"><span class="pre">&lt;plone:portletRenderer&gt;</span></tt> directive.
+Specify 1) layer, 2) template and/or 3) class 4) portlet interface.</p>
+<p>You need <tt class="docutils literal"><span class="pre">&lt;include</span> <span class="pre">package=&quot;&quot;&gt;</span></tt> directive for the package
+whose portlet you are going to override.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;configure</span>
+    <span class="na">xmlns:plone=</span><span class="s">&quot;http://namespaces.plone.org/plone&quot;</span>
+    <span class="nt">&gt;</span>
+
+        <span class="nt">&lt;include</span> <span class="na">package=</span><span class="s">&quot;plone.app.portlets&quot;</span> <span class="nt">/&gt;</span>
+
+        <span class="nt">&lt;plone:portletRenderer</span>
+           <span class="na">portlet=</span><span class="s">&quot;plone.app.portlets.portlets.news.INewsPortlet&quot;</span>
+           <span class="na">template=</span><span class="s">&quot;mytheme_news.pt&quot;</span>
+           <span class="na">layer=</span><span class="s">&quot;.interfaces.IThemeSpecific&quot;</span>
+           <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;/configure&gt;</span>
+</pre></div>
+</div>
+<p>More information</p>
+<ul class="simple">
+<li><a class="reference external" href="http://plone.org/documentation/manual/theme-reference/elements/portlet/override-the-portlets-in-plone-3.0">http://plone.org/documentation/manual/theme-reference/elements/portlet/override-the-portlets-in-plone-3.0</a></li>
+</ul>
+</div>
+<div class="section" id="update-and-render">
+<h2><a class="toc-backref" href="#id6">update() and render()</a><a class="headerlink" href="#update-and-render" title="Permalink to this headline">¶</a></h2>
+<p>These methods should honour <a class="reference external" href="http://svn.zope.org/zope.contentprovider/trunk/src/zope/contentprovider/interfaces.py?rev=98212&amp;view=auto">zope.contentprovider.interfaces.IContentProvider call contract</a>.</p>
+</div>
+<div class="section" id="available-property">
+<h2><a class="toc-backref" href="#id7">available property</a><a class="headerlink" href="#available-property" title="Permalink to this headline">¶</a></h2>
+<p>The portlet renderer can define available property to hint the portlet manager when the portlet should be rendered.</p>
+<p>Example</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Renderer</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">Renderer</span><span class="p">):</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">available</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c"># Show this portlet for logged in users only</span>
+        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">anonymous</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="iterate-portlets-assigned-to-the-portal-root">
+<h2><a class="toc-backref" href="#id8">Iterate portlets assigned to the portal root</a><a class="headerlink" href="#iterate-portlets-assigned-to-the-portal-root" title="Permalink to this headline">¶</a></h2>
+<p>Below is an simple example how to print all portlets
+which have been assigned to the portal root:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">check_root_portlets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Print all portlet assignments in the portal root &quot;&quot;&quot;</span>
+
+    <span class="kn">from</span> <span class="nn">zope.component</span> <span class="kn">import</span> <span class="n">getUtility</span><span class="p">,</span> <span class="n">getMultiAdapter</span>
+    <span class="kn">from</span> <span class="nn">plone.portlets.interfaces</span> <span class="kn">import</span> <span class="n">IPortletManager</span>
+    <span class="kn">from</span> <span class="nn">plone.portlets.interfaces</span> <span class="kn">import</span> <span class="n">IPortletAssignment</span>
+    <span class="kn">from</span> <span class="nn">plone.portlets.interfaces</span> <span class="kn">import</span> <span class="n">IPortletAssignmentMapping</span>
+
+    <span class="n">content</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">portal</span>
+
+    <span class="k">for</span> <span class="n">manager_name</span> <span class="ow">in</span> <span class="p">[</span> <span class="s">&quot;plone.leftcolumn&quot;</span><span class="p">,</span> <span class="s">&quot;plone.rightcolumn&quot;</span> <span class="p">]:</span>
+
+        <span class="k">print</span> <span class="s">&quot;Checking portlet column:&quot;</span> <span class="o">+</span> <span class="n">manager_name</span>
+
+        <span class="n">manager</span> <span class="o">=</span> <span class="n">getUtility</span><span class="p">(</span><span class="n">IPortletManager</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">manager_name</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">content</span><span class="p">)</span>
+
+        <span class="n">mapping</span> <span class="o">=</span> <span class="n">getMultiAdapter</span><span class="p">((</span><span class="n">content</span><span class="p">,</span> <span class="n">manager</span><span class="p">),</span> <span class="n">IPortletAssignmentMapping</span><span class="p">)</span>
+
+        <span class="c"># id is portlet assignment id</span>
+        <span class="c"># and automatically generated</span>
+        <span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">assignment</span> <span class="ow">in</span> <span class="n">mapping</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">print</span> <span class="s">&quot;Found portlet assignment:&quot;</span> <span class="o">+</span> <span class="nb">id</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">assignment</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="walking-through-every-portlet-on-the-site">
+<h2><a class="toc-backref" href="#id9">Walking through every portlet on the site</a><a class="headerlink" href="#walking-through-every-portlet-on-the-site" title="Permalink to this headline">¶</a></h2>
+<p>The following code iterates through all portlets assigned
+directly to content items. This excludes dashboard, group and content type based portlets.
+Then it prints some info about them and renders them.</p>
+<p>Example code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">Products.Five.browser</span> <span class="kn">import</span> <span class="n">BrowserView</span>
+
+<span class="kn">from</span> <span class="nn">zope.component</span> <span class="kn">import</span> <span class="n">getUtility</span><span class="p">,</span> <span class="n">getMultiAdapter</span>
+<span class="kn">from</span> <span class="nn">zope.app.component.hooks</span> <span class="kn">import</span> <span class="n">setHooks</span><span class="p">,</span> <span class="n">setSite</span><span class="p">,</span> <span class="n">getSite</span>
+
+<span class="kn">from</span> <span class="nn">plone.portlets.interfaces</span> <span class="kn">import</span> <span class="n">IPortletType</span>
+<span class="kn">from</span> <span class="nn">plone.portlets.interfaces</span> <span class="kn">import</span> <span class="n">IPortletManager</span>
+<span class="kn">from</span> <span class="nn">plone.portlets.interfaces</span> <span class="kn">import</span> <span class="n">IPortletAssignment</span>
+<span class="kn">from</span> <span class="nn">plone.portlets.interfaces</span> <span class="kn">import</span> <span class="n">IPortletDataProvider</span>
+<span class="kn">from</span> <span class="nn">plone.portlets.interfaces</span> <span class="kn">import</span> <span class="n">IPortletRenderer</span>
+<span class="kn">from</span> <span class="nn">plone.portlets.interfaces</span> <span class="kn">import</span> <span class="n">IPortletAssignmentMapping</span>
+<span class="kn">from</span> <span class="nn">plone.portlets.interfaces</span> <span class="kn">import</span> <span class="n">ILocalPortletAssignable</span>
+
+<span class="kn">from</span> <span class="nn">Products.CMFCore.interfaces</span> <span class="kn">import</span> <span class="n">IContentish</span>
+
+<span class="k">class</span> <span class="nc">FixPortlets</span><span class="p">(</span><span class="n">BrowserView</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Magical portlet debugging view &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+
+            <span class="n">request</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span>
+
+            <span class="n">portal</span> <span class="o">=</span> <span class="n">getSite</span><span class="p">()</span>
+
+            <span class="c"># Not sure why this is needed...</span>
+            <span class="n">view</span> <span class="o">=</span> <span class="n">portal</span><span class="o">.</span><span class="n">restrictedTraverse</span><span class="p">(</span><span class="s">&#39;@@plone&#39;</span><span class="p">)</span>
+
+            <span class="c"># Query all content items on the site which can get portlets assigned</span>
+            <span class="c"># Note that this should excule special, hidden, items like tools which otherwise</span>
+            <span class="c"># might appearn in portal_catalog queries</span>
+            <span class="n">all_content</span> <span class="o">=</span> <span class="n">portal</span><span class="o">.</span><span class="n">portal_catalog</span><span class="p">(</span><span class="n">show_inactive</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="s">&quot;ALL&quot;</span><span class="p">,</span> <span class="n">object_provides</span><span class="o">=</span><span class="n">ILocalPortletAssignable</span><span class="o">.</span><span class="n">__identifier__</span><span class="p">)</span>
+
+            <span class="c"># Load the real object instead of index stub</span>
+            <span class="n">all_content</span> <span class="o">=</span> <span class="p">[</span> <span class="n">content</span><span class="o">.</span><span class="n">getObject</span><span class="p">()</span> <span class="k">for</span> <span class="n">content</span> <span class="ow">in</span> <span class="n">all_content</span> <span class="p">]</span>
+
+            <span class="c"># portal itself does not show up in the query above,</span>
+            <span class="c"># though it might contain portlet assignments</span>
+            <span class="n">all_content</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">all_content</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="n">portal</span><span class="p">]</span>
+
+            <span class="k">for</span> <span class="n">content</span> <span class="ow">in</span> <span class="n">all_content</span><span class="p">:</span>
+
+                    <span class="k">for</span> <span class="n">manager_name</span> <span class="ow">in</span> <span class="p">[</span> <span class="s">&quot;plone.leftcolumn&quot;</span><span class="p">,</span> <span class="s">&quot;plone.rightcolumn&quot;</span> <span class="p">]:</span>
+
+                            <span class="n">manager</span> <span class="o">=</span> <span class="n">getUtility</span><span class="p">(</span><span class="n">IPortletManager</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">manager_name</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">content</span><span class="p">)</span>
+
+                            <span class="n">mapping</span> <span class="o">=</span> <span class="n">getMultiAdapter</span><span class="p">((</span><span class="n">content</span><span class="p">,</span> <span class="n">manager</span><span class="p">),</span> <span class="n">IPortletAssignmentMapping</span><span class="p">)</span>
+
+                            <span class="c"># id is portlet assignment id</span>
+                            <span class="c"># and automatically generated</span>
+                            <span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">assignment</span> <span class="ow">in</span> <span class="n">mapping</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                                    <span class="k">print</span> <span class="s">&quot;Found portlet assignment:&quot;</span> <span class="o">+</span> <span class="nb">id</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">assignment</span><span class="p">)</span>
+
+                                    <span class="n">renderer</span> <span class="o">=</span> <span class="n">getMultiAdapter</span><span class="p">((</span><span class="n">content</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">view</span><span class="p">,</span> <span class="n">manager</span><span class="p">,</span> <span class="n">assignment</span><span class="p">),</span> <span class="n">IPortletRenderer</span><span class="p">)</span>
+
+                                    <span class="c"># Renderer acquisition chain must be set-up so that templates</span>
+                                    <span class="c"># et. al. can resolve permission inheritance</span>
+                                    <span class="n">renderer</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">__of__</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+
+                                    <span class="c"># Seee http://svn.zope.org/zope.contentprovider/trunk/src/zope/contentprovider/interfaces.py?rev=98212&amp;view=auto</span>
+                                    <span class="n">renderer</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+                                    <span class="n">html</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+                                    <span class="k">print</span> <span class="s">&quot;Got HTML output:&quot;</span> <span class="o">+</span> <span class="n">html</span>
+
+
+            <span class="k">return</span> <span class="s">&quot;OK&quot;</span>
+</pre></div>
+</div>
+<p>For more information about portlet assignments and managers, see</p>
+<ul class="simple">
+<li><a class="reference external" href="http://svn.plone.org/svn/plone/plone.app.portlets/trunk/plone/app/portlets/tests/test_mapping.py">http://svn.plone.org/svn/plone/plone.app.portlets/trunk/plone/app/portlets/tests/test_mapping.py</a></li>
+<li><a class="reference external" href="http://svn.plone.org/svn/plone/plone.app.portlets/trunk/plone/app/portlets/tests/test_traversal.py">http://svn.plone.org/svn/plone/plone.app.portlets/trunk/plone/app/portlets/tests/test_traversal.py</a></li>
+<li><a class="reference external" href="http://svn.plone.org/svn/plone/plone.app.portlets/trunk/plone/app/portlets/configure.zcml">http://svn.plone.org/svn/plone/plone.app.portlets/trunk/plone/app/portlets/configure.zcml</a></li>
+<li><a class="reference external" href="http://svn.plone.org/svn/plone/plone.portlets/trunk/plone/portlets/interfaces.py">http://svn.plone.org/svn/plone/plone.portlets/trunk/plone/portlets/interfaces.py</a></li>
+<li><a class="reference external" href="http://svn.zope.org/zope.contentprovider/trunk/src/zope/contentprovider/interfaces.py?rev=98212&amp;view=auto">http://svn.zope.org/zope.contentprovider/trunk/src/zope/contentprovider/interfaces.py?rev=98212&amp;view=auto</a> (for portlet renderers)</li>
+</ul>
+</div>
+<div class="section" id="checking-if-a-certain-context-portlet-is-active-on-a-page">
+<h2><a class="toc-backref" href="#id10">Checking if a certain context portlet is active on a page</a><a class="headerlink" href="#checking-if-a-certain-context-portlet-is-active-on-a-page" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Iterate through portlet managers by name</li>
+<li>Get portlet retriever for the manager</li>
+<li>Get portlets</li>
+<li>Check if the portlet assignment provides your particular portlet marker interface</li>
+</ul>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">Acquisition</span>
+<span class="kn">from</span> <span class="nn">zope.component</span> <span class="kn">import</span> <span class="n">getUtility</span><span class="p">,</span> <span class="n">getMultiAdapter</span>
+
+
+<span class="kn">from</span> <span class="nn">plone.portlets.interfaces</span> <span class="kn">import</span> <span class="n">IPortletRetriever</span><span class="p">,</span> <span class="n">IPortletManager</span>
+
+<span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&quot;plone.leftcolumn&quot;</span><span class="p">,</span> <span class="s">&quot;plone.rightcolumn&quot;</span><span class="p">]:</span>
+
+    <span class="n">manager</span> <span class="o">=</span> <span class="n">getUtility</span><span class="p">(</span><span class="n">IPortletManager</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">column</span><span class="p">)</span>
+
+    <span class="n">retriever</span> <span class="o">=</span> <span class="n">getMultiAdapter</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">manager</span><span class="p">),</span> <span class="n">IPortletRetriever</span><span class="p">)</span>
+
+    <span class="n">portlets</span> <span class="o">=</span> <span class="n">retriever</span><span class="o">.</span><span class="n">getPortlets</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">portlet</span> <span class="ow">in</span> <span class="n">portlets</span><span class="p">:</span>
+
+        <span class="c"># portlet is {&#39;category&#39;: &#39;context&#39;, &#39;assignment&#39;: &lt;FacebookLikeBoxAssignment at facebook-like-box&gt;, &#39;name&#39;: u&#39;facebook-like-box&#39;, &#39;key&#39;: &#39;/isleofback/sisalto/huvit-ja-harrasteet</span>
+        <span class="c"># Identify portlet by interface provided by assignment</span>
+        <span class="k">if</span> <span class="n">IFacebookLikeBoxData</span><span class="o">.</span><span class="n">providedBy</span><span class="p">(</span><span class="n">portlet</span><span class="p">[</span><span class="s">&quot;assignment&quot;</span><span class="p">]):</span>
+            <span class="k">return</span> <span class="bp">True</span>
+
+<span class="k">return</span> <span class="bp">False</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="rendering-a-portlet">
+<h2><a class="toc-backref" href="#id11">Rendering a portlet</a><a class="headerlink" href="#rendering-a-portlet" title="Permalink to this headline">¶</a></h2>
+<p>Below is an example how to render a portlet in Plone</p>
+<ul class="simple">
+<li>A portlet is assigned to some context in some portlet manager</li>
+<li>We can dig these assignments up by portlet id (not user visible) or portlet type (portlet assignment interface)</li>
+</ul>
+<p>How to get your portlet HTML:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">Acquisition</span>
+<span class="kn">from</span> <span class="nn">zope.component</span> <span class="kn">import</span> <span class="n">getUtility</span><span class="p">,</span> <span class="n">getMultiAdapter</span><span class="p">,</span> <span class="n">queryMultiAdapter</span>
+<span class="kn">from</span> <span class="nn">plone.portlets.interfaces</span> <span class="kn">import</span> <span class="n">IPortletRetriever</span><span class="p">,</span> <span class="n">IPortletManager</span><span class="p">,</span> <span class="n">IPortletRenderer</span>
+
+<span class="k">def</span> <span class="nf">get_portlet_manager</span><span class="p">(</span><span class="n">column</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Return one of default Plone portlet managers.</span>
+
+<span class="sd">    @param column: &quot;plone.leftcolumn&quot; or &quot;plone.rightcolumn&quot;</span>
+
+<span class="sd">    @return: plone.portlets.interfaces.IPortletManagerRenderer instance</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">manager</span> <span class="o">=</span> <span class="n">getUtility</span><span class="p">(</span><span class="n">IPortletManager</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">column</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">manager</span>
+
+<span class="k">def</span> <span class="nf">render_portlet</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">view</span><span class="p">,</span> <span class="n">manager</span><span class="p">,</span> <span class="n">interface</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Render a portlet defined in external location.</span>
+
+<span class="sd">    .. note ::</span>
+
+<span class="sd">        Portlets can be idenfied by id (not user visible)</span>
+<span class="sd">        or interface (portlet class). This method supports look up</span>
+<span class="sd">        by interface and will return the first matching portlet with this interface.</span>
+
+<span class="sd">    @param context: Content item reference where portlet appear</span>
+
+<span class="sd">    @param manager: IPortletManagerRenderer instance</span>
+
+<span class="sd">    @param view: Current view or None if not available</span>
+
+<span class="sd">    @param interface: Marker interface class we use to identify the portlet. E.g. IFacebookPortlet</span>
+
+<span class="sd">    @return: Rendered portlet HTML as a string, or empty string if portlet not found</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">retriever</span> <span class="o">=</span> <span class="n">getMultiAdapter</span><span class="p">((</span><span class="n">context</span><span class="p">,</span> <span class="n">manager</span><span class="p">),</span> <span class="n">IPortletRetriever</span><span class="p">)</span>
+
+    <span class="n">portlets</span> <span class="o">=</span> <span class="n">retriever</span><span class="o">.</span><span class="n">getPortlets</span><span class="p">()</span>
+
+    <span class="n">assignment</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">for</span> <span class="n">portlet</span> <span class="ow">in</span> <span class="n">portlets</span><span class="p">:</span>
+
+        <span class="c"># portlet is {&#39;category&#39;: &#39;context&#39;, &#39;assignment&#39;: &lt;FacebookLikeBoxAssignment at facebook-like-box&gt;, &#39;name&#39;: u&#39;facebook-like-box&#39;, &#39;key&#39;: &#39;/isleofback/sisalto/huvit-ja-harrasteet</span>
+        <span class="c"># Identify portlet by interface provided by assignment</span>
+        <span class="k">if</span> <span class="n">interface</span><span class="o">.</span><span class="n">providedBy</span><span class="p">(</span><span class="n">portlet</span><span class="p">[</span><span class="s">&quot;assignment&quot;</span><span class="p">]):</span>
+            <span class="n">assignment</span> <span class="o">=</span> <span class="n">portlet</span><span class="p">[</span><span class="s">&quot;assignment&quot;</span><span class="p">]</span>
+            <span class="k">break</span>
+
+    <span class="k">if</span> <span class="n">assignment</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="c"># Did not find a portlet</span>
+        <span class="k">return</span> <span class="s">&quot;&quot;</span>
+
+    <span class="c">#- A special type of content provider, IPortletRenderer, knows how to render each</span>
+    <span class="c">#type of portlet. The IPortletRenderer should be a multi-adapter from</span>
+    <span class="c">#(context, request, view, portlet manager, data provider).</span>
+
+    <span class="n">renderer</span> <span class="o">=</span> <span class="n">queryMultiAdapter</span><span class="p">((</span><span class="n">context</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">view</span><span class="p">,</span> <span class="n">manager</span><span class="p">,</span> <span class="n">assignment</span><span class="p">),</span> <span class="n">IPortletRenderer</span><span class="p">)</span>
+
+    <span class="c"># Make sure we have working acquisition chain</span>
+    <span class="n">renderer</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">__of__</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">renderer</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&quot;No portlet renderer found for portlet assignment:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">assignment</span><span class="p">))</span>
+
+    <span class="n">renderer</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+    <span class="c"># Does not check visibility here... force render always</span>
+    <span class="n">html</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">html</span>
+</pre></div>
+</div>
+<p>How to use this code in your own view:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">render_slope_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Render a portlet from another page in-line to this page</span>
+
+<span class="sd">    Does not render other portlets in the same portlet manager.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">aq_inner</span>
+    <span class="n">request</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span>
+    <span class="n">view</span> <span class="o">=</span> <span class="bp">self</span>
+
+    <span class="n">column</span> <span class="o">=</span> <span class="s">&quot;isleofback.app.frontpageportlets&quot;</span>
+
+    <span class="c"># Alternatively, you can directly query your custom portlet manager by interface</span>
+    <span class="kn">from</span> <span class="nn">isleofback.app.portlets.slopeinfo</span> <span class="kn">import</span> <span class="n">ISlopeInfo</span>
+
+    <span class="n">manager</span> <span class="o">=</span> <span class="n">get_portlet_manager</span><span class="p">(</span><span class="n">column</span><span class="p">)</span>
+
+    <span class="n">html</span> <span class="o">=</span> <span class="n">render_portlet</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">view</span><span class="p">,</span> <span class="n">manager</span><span class="p">,</span> <span class="n">ISlopeInfo</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">html</span>
+</pre></div>
+</div>
+<p>How to call view helper function from page template</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">tal:replace=</span><span class="s">&quot;structure view/render_slope_info&quot;</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<p>More info</p>
+<ul class="simple">
+<li><a class="reference external" href="http://blog.mfabrik.com/2011/03/10/how%C2%A0to-render-a-portlet-in-plone/">http://blog.mfabrik.com/2011/03/10/how%C2%A0to-render-a-portlet-in-plone/</a></li>
+</ul>
+</div>
+<div class="section" id="hiding-unwanted-portlets">
+<h2><a class="toc-backref" href="#id12">Hiding unwanted portlets</a><a class="headerlink" href="#hiding-unwanted-portlets" title="Permalink to this headline">¶</a></h2>
+<p>Example portlets.xml:</p>
+<div class="highlight-python"><pre>&lt;!-- This leaves only News portlet --&gt;
+
+&lt;portlet addview="portlets.Calendar" remove="true" /&gt;
+&lt;portlet addview="portlets.Classic" remove="true" /&gt;
+&lt;portlet addview="portlets.Login" remove="true" /&gt;
+&lt;portlet addview="portlets.Events" remove="true" /&gt;
+&lt;portlet addview="portlets.Recent" remove="true" /&gt;
+&lt;portlet addview="portlets.rss" remove="true" /&gt;
+&lt;portlet addview="portlets.Search" remove="true" /&gt;
+&lt;portlet addview="portlets.Language" remove="true" /&gt;
+&lt;portlet addview="plone.portlet.collection.Collection" remove="true" /&gt;
+&lt;portlet addview="plone.portlet.static.Static" remove="true" /&gt;
+
+&lt;!-- collective.flowplayer add-on --&gt;
+&lt;portlet addview="collective.flowplayer.Player" remove="true" /&gt;</pre>
+</div>
+<p>Portlet na,es can be found in <tt class="docutils literal"><span class="pre">plone.app.portlets/configure.zcml</span></tt>.</p>
+<p>More info:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://stackoverflow.com/questions/5897656/disabling-portlet-types-site-wide-in-plone">http://stackoverflow.com/questions/5897656/disabling-portlet-types-site-wide-in-plone</a></li>
+</ul>
+</div>
+<div class="section" id="writing-your-own-portlet-manager">
+<h2><a class="toc-backref" href="#id13">Writing your own portlet manager</a><a class="headerlink" href="#writing-your-own-portlet-manager" title="Permalink to this headline">¶</a></h2>
+<p>If you need additional portlet slots at the site.</p>
+<ul class="simple">
+<li><a class="reference external" href="https://weblion.psu.edu/svn/weblion/weblion/Products.ContentWellPortlets/trunk/Products/ContentWellPortlets/tests/test_setup.py">https://weblion.psu.edu/svn/weblion/weblion/Products.ContentWellPortlets/trunk/Products/ContentWellPortlets/tests/test_setup.py</a></li>
+</ul>
+</div>
+<div class="section" id="fixing-relative-links">
+<h2><a class="toc-backref" href="#id14">Fixing relative links</a><a class="headerlink" href="#fixing-relative-links" title="Permalink to this headline">¶</a></h2>
+<p>Example (in progress):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">etree</span>
+<span class="kn">from</span> <span class="nn">StringIO</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="kn">import</span> <span class="nn">urlparse</span>
+<span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">html</span>
+
+<span class="k">def</span> <span class="nf">fix_links</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">absolute_prefix</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Rewrite relative links to be absolute links based on certain URL.</span>
+
+<span class="sd">    @param html: HTML snippet as a string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">HTMLParser</span><span class="p">()</span>
+
+    <span class="n">content</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+    <span class="n">tree</span>  <span class="o">=</span> <span class="n">html</span><span class="o">.</span><span class="n">fragment_fromstring</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">create_parent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">join</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Join relative URL</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">url</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s">&quot;://&quot;</span> <span class="ow">in</span> <span class="n">url</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">urlparse</span><span class="o">.</span><span class="n">urljoin</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c"># Already absolute</span>
+            <span class="k">return</span> <span class="n">url</span>
+
+    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s">&#39;//*[@src]&#39;</span><span class="p">):</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;src&#39;</span><span class="p">)</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="n">absolute_prefix</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
+        <span class="n">node</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;src&#39;</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s">&#39;//*[@href]&#39;</span><span class="p">):</span>
+        <span class="n">href</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;href&#39;</span><span class="p">)</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="n">absolute_prefix</span><span class="p">,</span> <span class="n">href</span><span class="p">)</span>
+        <span class="n">node</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;href&#39;</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
+
+    <span class="n">data</span> <span class="o">=</span>  <span class="n">etree</span><span class="o">.</span><span class="n">tostring</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">pretty_print</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s">&quot;utf-8&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">data</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="other-resources-and-examples">
+<h2><a class="toc-backref" href="#id15">Other resources and examples</a><a class="headerlink" href="#other-resources-and-examples" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="https://svn.plone.org/svn/plone/plone.portlet.static/trunk/plone/portlet/static/">Static text portlet</a>.</li>
+<li><a class="reference external" href="https://svn.plone.org/svn/collective/collective.easytemplate/trunk/collective/easytemplate/browser/portlets/templated.py">Templated portlet</a></li>
+</ul>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Portlets</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#creating-a-portlet">Creating a portlet</a></li>
+<li><a class="reference internal" href="#subclassing-a-portlet">Subclassing a portlet</a></li>
+<li><a class="reference internal" href="#using-z3c-form-in-portlets">Using z3c.form in portlets</a></li>
+<li><a class="reference internal" href="#overriding-portlet-rendering">Overriding portlet rendering</a></li>
+<li><a class="reference internal" href="#update-and-render">update() and render()</a></li>
+<li><a class="reference internal" href="#available-property">available property</a></li>
+<li><a class="reference internal" href="#iterate-portlets-assigned-to-the-portal-root">Iterate portlets assigned to the portal root</a></li>
+<li><a class="reference internal" href="#walking-through-every-portlet-on-the-site">Walking through every portlet on the site</a></li>
+<li><a class="reference internal" href="#checking-if-a-certain-context-portlet-is-active-on-a-page">Checking if a certain context portlet is active on a page</a></li>
+<li><a class="reference internal" href="#rendering-a-portlet">Rendering a portlet</a></li>
+<li><a class="reference internal" href="#hiding-unwanted-portlets">Hiding unwanted portlets</a></li>
+<li><a class="reference internal" href="#writing-your-own-portlet-manager">Writing your own portlet manager</a></li>
+<li><a class="reference internal" href="#fixing-relative-links">Fixing relative links</a></li>
+<li><a class="reference internal" href="#other-resources-and-examples">Other resources and examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="blacklisting.html"
+                        title="previous chapter">Order and blacklisting</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="appendix/index.html"
+                        title="next chapter">Appendix: Practicals</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/portlets/tips.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="appendix/index.html" title="Appendix: Practicals"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="blacklisting.html" title="Order and blacklisting"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Portlets</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

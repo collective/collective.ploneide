@@ -1,0 +1,439 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Events &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Events and rules" href="index.html" />
+    <link rel="next" title="Content rules" href="content_rules.html" />
+    <link rel="prev" title="Events and rules" href="index.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="content_rules.html" title="Content rules"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Events and rules"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Events and rules</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="events">
+<h1>Events<a class="headerlink" href="#events" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">How to add event hooks to your Plone code to perform actions when
+something happens on a Plone site.</p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
+<li><a class="reference internal" href="#registering-an-event-handler" id="id2">Registering an event handler</a><ul>
+<li><a class="reference internal" href="#subscribing-using-the-five-grok-api" id="id3">Subscribing using the  <tt class="docutils literal"><span class="pre">five.grok</span></tt> API</a></li>
+<li><a class="reference internal" href="#subscribing-using-zcml" id="id4">Subscribing using ZCML</a></li>
+<li><a class="reference internal" href="#subscribing-using-python" id="id5">Subscribing using Python</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#firing-an-event" id="id6">Firing an event</a></li>
+<li><a class="reference internal" href="#event-types" id="id7">Event types</a><ul>
+<li><a class="reference internal" href="#creation-events" id="id8"><em>Creation</em> events</a></li>
+<li><a class="reference internal" href="#modified-events" id="id9"><em>Modified</em> events</a></li>
+<li><a class="reference internal" href="#delete-events" id="id10"><em>Delete</em> events</a></li>
+<li><a class="reference internal" href="#copy-events" id="id11"><em>Copy</em> events</a></li>
+<li><a class="reference internal" href="#zope-startup-events" id="id12">Zope startup events</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#see-also" id="id13">See also</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>This document briefly discusses event handling using the <tt class="docutils literal"><span class="pre">zope.event</span></tt> module.
+The Zope Component Architecture's <a class="reference external" href="http://pypi.python.org/pypi/zope.event">zope.event package</a> is
+used to manage subscribeable events in Plone.</p>
+<p>Some of the notable characteristics of the Plone event system are:</p>
+<ul class="simple">
+<li>it is simple;</li>
+<li>subscriber calling order is not modifiable — you cannot set the order in which event handlers are called;</li>
+<li>events cannot be cancelled — all handlers will always get the event;</li>
+<li>event handlers cannot have return values;</li>
+<li>exceptions raised in an event handler will interrupt the request processing.</li>
+</ul>
+<p>For more information, see:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://plone.org/products/dexterity/documentation/manual/five.grok/core-components/events">http://plone.org/products/dexterity/documentation/manual/five.grok/core-components/events</a></li>
+</ul>
+</div>
+<div class="section" id="registering-an-event-handler">
+<h2><a class="toc-backref" href="#id2">Registering an event handler</a><a class="headerlink" href="#registering-an-event-handler" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="subscribing-using-the-five-grok-api">
+<h3><a class="toc-backref" href="#id3">Subscribing using the  <tt class="docutils literal"><span class="pre">five.grok</span></tt> API</a><a class="headerlink" href="#subscribing-using-the-five-grok-api" title="Permalink to this headline">¶</a></h3>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">five</span> <span class="kn">import</span> <span class="n">grok</span>
+<span class="kn">from</span> <span class="nn">Products.Archetypes.interfaces</span> <span class="kn">import</span> <span class="n">IObjectEditedEvent</span>
+
+<span class="k">class</span> <span class="nc">ORAResearcher</span><span class="p">(</span><span class="n">folder</span><span class="o">.</span><span class="n">ATFolder</span><span class="p">):</span>
+
+    <span class="n">meta_type</span> <span class="o">=</span> <span class="s">&quot;ORAResearcher&quot;</span>
+    <span class="n">schema</span> <span class="o">=</span> <span class="n">ORAResearcherSchema</span>
+
+    <span class="k">def</span> <span class="nf">doSomethingDependingOnTheData</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Do something with the object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+
+<span class="nd">@grok.subscribe</span><span class="p">(</span><span class="n">ORAResearcher</span><span class="p">,</span> <span class="n">IObjectEditedEvent</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">object_edited</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Catch edit events.</span>
+
+<span class="sd">    @param context: Object for which the event was fired</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c"># Call content type methods</span>
+    <span class="n">context</span><span class="o">.</span><span class="n">doSomethingDependingOnTheData</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You need to have <tt class="docutils literal"><span class="pre">five.grok</span></tt> initialization code in your product's
+root <tt class="docutils literal"><span class="pre">configure.zcml</span></tt> to be able to use Grok-like event subscribers.
+Otherwise your event handlers won't get called.</p>
+</div>
+<p>For more information, see:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://plone.org/products/dexterity/documentation/manual/five.grok/core-components/events">http://plone.org/products/dexterity/documentation/manual/five.grok/core-components/events</a></li>
+</ul>
+</div>
+<div class="section" id="subscribing-using-zcml">
+<h3><a class="toc-backref" href="#id4">Subscribing using ZCML</a><a class="headerlink" href="#subscribing-using-zcml" title="Permalink to this headline">¶</a></h3>
+<p>Custom event example:</p>
+<div class="highlight-python"><pre>&lt;subscriber
+  for=".interfaces.IMyObject
+       .interfaces.IMyEvent"
+  handler=".content.MyObject.myEventHandler"
+  /&gt;</pre>
+</div>
+<p>Life cycle events example:</p>
+<div class="highlight-python"><pre>&lt;subscriber
+  zcml:condition="installed zope.lifecycleevent"
+  for=".interfaces.ISitsPatient
+       zope.lifecycleevent.IObjectModifiedEvent"
+  handler=".content.SitsPatient.objectModified"
+  /&gt;</pre>
+</div>
+</div>
+<div class="section" id="subscribing-using-python">
+<h3><a class="toc-backref" href="#id5">Subscribing using Python</a><a class="headerlink" href="#subscribing-using-python" title="Permalink to this headline">¶</a></h3>
+<p>The following subscription is valid through the process life cycle. In unit
+tests, it is important to clear test event handlers between the test steps.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">zope.component</span>
+
+<span class="k">def</span> <span class="nf">my_event_handler</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    @param context: Zope object for which the event was fired for. Usually this is a Plone content object.</span>
+
+<span class="sd">    @param event: Subclass of event.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+
+<span class="n">gsm</span> <span class="o">=</span> <span class="n">zope</span><span class="o">.</span><span class="n">component</span><span class="o">.</span><span class="n">getGlobalSiteManager</span><span class="p">()</span>
+<span class="n">gsm</span><span class="o">.</span><span class="n">registerHandler</span><span class="p">(</span><span class="n">my_event_handler</span><span class="p">,</span> <span class="p">(</span><span class="n">IMyObject</span><span class="p">,</span><span class="n">IMyEvent</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="firing-an-event">
+<h2><a class="toc-backref" href="#id6">Firing an event</a><a class="headerlink" href="#firing-an-event" title="Permalink to this headline">¶</a></h2>
+<p>Use <tt class="docutils literal"><span class="pre">zope.event.notify()</span></tt> to fire event objects to their subscribers.</p>
+<p>Example of how to fire an event in unit tests:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">zope.event</span>
+<span class="kn">from</span> <span class="nn">plone.postpublicationhook.event</span> <span class="kn">import</span> <span class="n">AfterPublicationEvent</span>
+
+<span class="n">event</span> <span class="o">=</span> <span class="n">AfterPublicationEvent</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">portal</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">portal</span><span class="o">.</span><span class="n">REQUEST</span><span class="p">)</span>
+<span class="n">zope</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="event-types">
+<h2><a class="toc-backref" href="#id7">Event types</a><a class="headerlink" href="#event-types" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="creation-events">
+<h3><a class="toc-backref" href="#id8"><em>Creation</em> events</a><a class="headerlink" href="#creation-events" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">Products.Archetypes.interfaces.IObjectInitializedEvent</span></tt></dt>
+<dd>is fired for an Archetypes-based object when it's being initialised; i.e.
+when it's being populated for the first time.</dd>
+<dt><tt class="docutils literal"><span class="pre">Products.Archetypes.interfaces.IWebDAVObjectInitializedEvent</span></tt></dt>
+<dd>is fired for an Archetypes-based object when it's being initialised via
+WebDAV.</dd>
+<dt><tt class="docutils literal"><span class="pre">zope.lifecycleevent.IObjectCreatedEvent</span></tt></dt>
+<dd>is fired for all Zopeish objects when they are being created (they don't
+necessarily need to be content objects).</dd>
+</dl>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Archetypes and Zope 3 events might not be compatible with each other.
+Please see links below.</p>
+</div>
+<p>Other resources:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://plone.org/documentation/manual/developer-manual/archetypes/other-useful-archetypes-features/how-to-use-events-to-hook-the-archetypes-creation-process">http://plone.org/documentation/manual/developer-manual/archetypes/other-useful-archetypes-features/how-to-use-events-to-hook-the-archetypes-creation-process</a></li>
+<li><a class="reference external" href="http://n2.nabble.com/IObjectInitializedEvent-tp4784897p4784897.html">http://n2.nabble.com/IObjectInitializedEvent-tp4784897p4784897.html</a></li>
+</ul>
+</div>
+<div class="section" id="modified-events">
+<h3><a class="toc-backref" href="#id9"><em>Modified</em> events</a><a class="headerlink" href="#modified-events" title="Permalink to this headline">¶</a></h3>
+<p>Two different content event types are available and might work differently
+depending on your scenario:</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">Products.Archetypes.interfaces.IObjectEditedEvent</span></tt></dt>
+<dd>called for Archetypes-based objects that are not in the creation stage
+any more.</dd>
+</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><tt class="docutils literal"><span class="pre">Products.Archetypes.interfaces.IObjectEditedEvent</span></tt> is fired after
+<tt class="docutils literal"><span class="pre">reindexObject()</span></tt> is called. If you manipulate your content object in a
+handler for this event, you need to manually reindex new values, or the
+changes will not be reflected in the <tt class="docutils literal"><span class="pre">portal_catalog</span></tt>.</p>
+</div>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">zope.lifecycleevent.IObjectModifiedEvent</span></tt></dt>
+<dd>called for creation-stage events as well, unlike the previous event type.</dd>
+<dt><tt class="docutils literal"><span class="pre">Products.Archetypes.interfaces.IWebDAVObjectEditedEvent</span></tt></dt>
+<dd>called for Archetypes-based objects when they are being edited via WebDAV.</dd>
+<dt><tt class="docutils literal"><span class="pre">Products.Archetypes.interfaces.IEditBegunEvent</span></tt></dt>
+<dd>called for Archetypes-based objects when an edit operation is begun.</dd>
+<dt><tt class="docutils literal"><span class="pre">Products.Archetypes.interfaces.IEditCancelledEvent</span></tt></dt>
+<dd>called for Archetypes-based objects when an edit operation is cancelled.</dd>
+</dl>
+</div>
+<div class="section" id="delete-events">
+<h3><a class="toc-backref" href="#id10"><em>Delete</em> events</a><a class="headerlink" href="#delete-events" title="Permalink to this headline">¶</a></h3>
+<p>Delete events can be fired several times for the same object.
+Some delete event transactions are rolled back.</p>
+<ul class="simple">
+<li>Read more about Delete events in <a class="reference external" href="http://n2.nabble.com/Event-on-object-deletion-tp3670562p3670562.html">this discussion</a>.</li>
+</ul>
+</div>
+<div class="section" id="copy-events">
+<h3><a class="toc-backref" href="#id11"><em>Copy</em> events</a><a class="headerlink" href="#copy-events" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">zope.lifecycleevent.IObjectCopiedEvent</span></tt></dt>
+<dd>is triggered when an object is copied.</dd>
+</dl>
+</div>
+<div class="section" id="zope-startup-events">
+<h3><a class="toc-backref" href="#id12">Zope startup events</a><a class="headerlink" href="#zope-startup-events" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">zope.processlifetime.IProcessStarting</span></tt></dt>
+<dd>is triggered after component registry has been loaded and Zope is
+starting up.</dd>
+<dt><tt class="docutils literal"><span class="pre">zope.processlifetime.IDatabaseOpened</span></tt></dt>
+<dd>is triggered after the main ZODB database has been opened.</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id13">See also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://pypi.python.org/pypi/zope.event/3.4.1">http://pypi.python.org/pypi/zope.event/3.4.1</a></li>
+<li><a class="reference external" href="http://apidoc.zope.org/++apidoc++/ZCML/http_co__sl__sl_namespaces.zope.org_sl_zope/subscriber/index.html">http://apidoc.zope.org/++apidoc++/ZCML/http_co__sl__sl_namespaces.zope.org_sl_zope/subscriber/index.html</a></li>
+<li><tt class="docutils literal"><span class="pre">zope.component.registry</span></tt></li>
+</ul>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Events</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#registering-an-event-handler">Registering an event handler</a><ul>
+<li><a class="reference internal" href="#subscribing-using-the-five-grok-api">Subscribing using the  <tt class="docutils literal"><span class="pre">five.grok</span></tt> API</a></li>
+<li><a class="reference internal" href="#subscribing-using-zcml">Subscribing using ZCML</a></li>
+<li><a class="reference internal" href="#subscribing-using-python">Subscribing using Python</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#firing-an-event">Firing an event</a></li>
+<li><a class="reference internal" href="#event-types">Event types</a><ul>
+<li><a class="reference internal" href="#creation-events"><em>Creation</em> events</a></li>
+<li><a class="reference internal" href="#modified-events"><em>Modified</em> events</a></li>
+<li><a class="reference internal" href="#delete-events"><em>Delete</em> events</a></li>
+<li><a class="reference internal" href="#copy-events"><em>Copy</em> events</a></li>
+<li><a class="reference internal" href="#zope-startup-events">Zope startup events</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#see-also">See also</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Events and rules</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="content_rules.html"
+                        title="next chapter">Content rules</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/events_and_rules/events.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="content_rules.html" title="Content rules"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Events and rules"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Events and rules</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

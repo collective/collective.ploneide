@@ -1,0 +1,246 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Using the config file to get shorter tagged values &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../../../index.html" />
+    <link rel="up" title="Recipes and Tips" href="index.html" />
+    <link rel="next" title="Old style vs. new style technologies" href="../../old-style-vs-new-style/index.html" />
+    <link rel="prev" title="Recipes and Tips" href="index.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../old-style-vs-new-style/index.html" title="Old style vs. new style technologies"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Recipes and Tips"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Tutorials</a> &raquo;</li>
+          <li><a href="../index.html" >Using ArchGenXML</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Recipes and Tips</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="using-the-config-file-to-get-shorter-tagged-values">
+<h1>Using the config file to get shorter tagged values<a class="headerlink" href="#using-the-config-file-to-get-shorter-tagged-values" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#the-config-file" id="id1">The config file</a></li>
+<li><a class="reference internal" href="#shorter-tagged-values" id="id2">Shorter tagged values</a></li>
+</ul>
+</div>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">Some tagged values can get quite lengthy. If you use such a lengthy value a
+few times, you can store it in your project's config file.</p>
+</div>
+<p>An example of long tagged values are the permissions you set on workflow
+states. A key <tt class="docutils literal"><span class="pre">view</span></tt>, with the value <tt class="docutils literal"><span class="pre">Manager,</span> <span class="pre">Member,</span> <span class="pre">Reviewer</span></tt>, for
+instance.</p>
+<p>In tagged values, the text you type in is normally taken as a string. If you
+prefix your value with <tt class="docutils literal"><span class="pre">python:</span></tt>, it is copy-pasted literally into your code.
+So <tt class="docutils literal"><span class="pre">python:[&quot;a&quot;,</span> <span class="pre">&quot;b&quot;]</span></tt> is put into your code as <tt class="docutils literal"><span class="pre">[&quot;a&quot;,</span> <span class="pre">&quot;b&quot;]</span></tt>.</p>
+<div class="section" id="the-config-file">
+<h2><a class="toc-backref" href="#id1">The config file</a><a class="headerlink" href="#the-config-file" title="Permalink to this headline">¶</a></h2>
+<p>ArchGenXML generates a <tt class="docutils literal"><span class="pre">config.py</span></tt> file in your Product's root directory,
+which in turn tries to import <tt class="docutils literal"><span class="pre">AppConfig.py</span></tt>. So stuff you put in there is
+treated as if it is placed in the main config file.</p>
+<p>Every ArchGenXML-generated file contains an import like <tt class="docutils literal"><span class="pre">from</span>
+<span class="pre">Products.YourProduct.config</span> <span class="pre">import</span> <span class="pre">*</span></tt>, so the variables defined in your
+AppConfig are directly available in all the files. This means that <em>you can
+specify shortcuts</em> for the tagged values.</p>
+</div>
+<div class="section" id="shorter-tagged-values">
+<h2><a class="toc-backref" href="#id2">Shorter tagged values</a><a class="headerlink" href="#shorter-tagged-values" title="Permalink to this headline">¶</a></h2>
+<p>Example line in your 'AppConfig.py':</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">EDITORS</span> <span class="o">=</span> <span class="s">&#39;Manager, Member, Reviewer&#39;</span>
+</pre></div>
+</div>
+<p>Remember that we can use <tt class="docutils literal"><span class="pre">python:</span></tt> to paste raw python code directly into the
+generated files. After adding above line, the original tagged value <tt class="docutils literal"><span class="pre">view</span></tt>
+with value <tt class="docutils literal"><span class="pre">Manager,</span> <span class="pre">Member,</span> <span class="pre">Reviewer</span></tt> can be shortened to the tagged value
+<tt class="docutils literal"><span class="pre">view</span></tt> with value <tt class="docutils literal"><span class="pre">python:EDITORS</span></tt>. Now that's handy :-) And if you need to
+change this definition you have it at a central place. No need to touch 2, 3 or
+more <tt class="docutils literal"><span class="pre">states</span></tt> in UML where it's used several times on each.</p>
+<p>You can use this little <em>feature</em> almost everywhere, so its not limited to
+workflow.</p>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../../../index.html"><img src="../../../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Using the config file to get shorter tagged values</a><ul>
+<li><a class="reference internal" href="#the-config-file">The config file</a></li>
+<li><a class="reference internal" href="#shorter-tagged-values">Shorter tagged values</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Recipes and Tips</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../../old-style-vs-new-style/index.html"
+                        title="next chapter">Old style vs. new style technologies</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../../_sources/tutorials/archgenxml/recipes-and-tips/using-the-config-file-to-get-shorter-tagged-values.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../old-style-vs-new-style/index.html" title="Old style vs. new style technologies"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Recipes and Tips"
+             >previous</a> |</li>
+        <li><a href="../../../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Tutorials</a> &raquo;</li>
+          <li><a href="../index.html" >Using ArchGenXML</a> &raquo;</li>
+          <li><a href="index.html" >Recipes and Tips</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

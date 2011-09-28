@@ -1,0 +1,63 @@
+<script type="text/javascript">
+    
+    function loadSaveAsTreeView(){
+        var directory = document.getElementById('save-as-project-eggs').value;
+        $('#save-as-directory').val(directory);
+        $('#save-as-current-directory').html(directory);
+        $('#save-as-directory-area').load('@@list-directory?directory='+directory+'&no_files=1&ajax_load=1 #results option');
+    }
+    
+    function updateSaveAsTreeView(){
+        var directory = document.getElementById('save-as-directory').value;
+        var new_dir = document.getElementById('save-as-directory-area').value;
+    
+        jQuery.get('@@test-dir',
+                    {'directory':directory,
+                     'new_dir':new_dir
+                    },
+                    function(results){
+                        if (results){
+                            $('#save-as-directory').val(results);
+                            $('#save-as-current-directory').html(results);
+                            $('#save-as-directory-area').load('@@list-directory?directory='+results+'&no_files=1&ajax_load=1 #results option');
+                        }
+                        else{
+                            loadFileInEditor(new_dir);
+                        }
+                    });
+        
+    }
+    
+    function saveAsSave(){
+        
+        var directory = document.getElementById('save-as-directory').value;
+        var filename = document.getElementById('save-as-filename').value;
+        
+        saveFileAs(directory, filename);
+    }
+    
+</script>
+
+<h2>Save as:</h2>
+<div id="save-as-project-tree">
+    <select id="save-as-project-eggs" name="save-as-project-eggs">
+        <option tal:repeat="egg view/getCurrentEggs"
+                tal:attributes="value python:egg[0]"
+                tal:content="python:egg[1]"/>
+    </select>
+    <input type="button" value="Update" onclick="loadSaveAsTreeView()">
+</div>
+
+<div id="save-as-file-explorer">
+    <input type="hidden" id="save-as-directory" name="save-as-directory">
+    <select id="save-as-directory-area" name="save-as-directory-area" size=10 onclick="updateSaveAsTreeView()">
+    </select>
+</div>
+
+<h2>Current directory:</h2>
+<span id="save-as-current-directory" name="save-as-current-directory"></span><br/>
+
+<h2>Filename:</h2>
+<input type="text" id="save-as-filename" name="save-as-filename">
+
+<input type="button" value="Save" onclick="saveAsSave()">

@@ -1,0 +1,489 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Dynamic views &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Content management" href="index.html" />
+    <link rel="next" title="Behaviors" href="behaviors.html" />
+    <link rel="prev" title="Timestamps" href="timestamps.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="behaviors.html" title="Behaviors"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="timestamps.html" title="Timestamps"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Content management</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="dynamic-views">
+<h1>Dynamic views<a class="headerlink" href="#dynamic-views" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
+<li><a class="reference internal" href="#permission-for-changing-the-view-template-of-an-item" id="id2">Permission for changing the view template of an item</a></li>
+<li><a class="reference internal" href="#default-dynamic-views" id="id3">Default dynamic views</a></li>
+<li><a class="reference internal" href="#creating-a-dynamic-view" id="id4">Creating a dynamic view</a><ul>
+<li><a class="reference internal" href="#register-a-dynamic-view-menu-item" id="id5">Register a dynamic view menu item</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#checking-that-your-view-is-available" id="id6">Checking that your view is available</a></li>
+<li><a class="reference internal" href="#getting-active-layout" id="id7">Getting active layout</a></li>
+<li><a class="reference internal" href="#changing-default-view-programmatically" id="id8">Changing default view programmatically</a></li>
+<li><a class="reference internal" href="#default-page" id="id9">Default page</a></li>
+<li><a class="reference internal" href="#setting-view-using-marker-interfaces" id="id10">Setting view using marker interfaces</a></li>
+<li><a class="reference internal" href="#default-folder-dynamic-view" id="id11">Default Folder dynamic view</a></li>
+<li><a class="reference internal" href="#migration-script-from-default-view-to-another" id="id12">Migration script from default view to another</a></li>
+<li><a class="reference internal" href="#method-aliases" id="id13">Method aliases</a></li>
+<li><a class="reference internal" href="#other-resources" id="id14">Other resources</a></li>
+</ul>
+</div>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">How to change the active view of a Plone content item programmatically</p>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Dynamic views are views which the content editor can choose for his/her content
+from <em>Display...</em> drop down menu in the green edit frame.</p>
+<p>By default, Plone comes with dynamic views for</p>
+<ul class="simple">
+<li>Folder listing</li>
+<li>Summary</li>
+<li>Photo album</li>
+<li>etc.</li>
+</ul>
+</div>
+<div class="section" id="permission-for-changing-the-view-template-of-an-item">
+<h2><a class="toc-backref" href="#id2">Permission for changing the view template of an item</a><a class="headerlink" href="#permission-for-changing-the-view-template-of-an-item" title="Permalink to this headline">¶</a></h2>
+<p>An user needs the &quot;Modify view template&quot; permission to use the dynamic
+view dropdown. If you want to restrict this ability, grant/revoke this
+permission adequately.</p>
+<p>This can be useful for some content-types like Dexterity ones, where
+dynamic views are enabled by default and the easiest way to disable
+them is using this permission.</p>
+</div>
+<div class="section" id="default-dynamic-views">
+<h2><a class="toc-backref" href="#id3">Default dynamic views</a><a class="headerlink" href="#default-dynamic-views" title="Permalink to this headline">¶</a></h2>
+<p>Plone supports few dynamic views for folders out of the box</p>
+<ul class="simple">
+<li>Summary view (folder_summary_view)</li>
+<li>Tabular view (folder_tabular_view)</li>
+<li>Album view (atct_album_view)</li>
+<li>Listing (folder_listing)</li>
+<li>Full view (folder_full_view)</li>
+</ul>
+<p>These are defined in <a class="reference internal" href="types.html"><em>portal_types information</em></a> for <em>Folder</em> content type
+and mapped to <em>Display</em> menu all over in ZCML using <tt class="docutils literal"><span class="pre">browser:menuItem</span></tt> as described below.</p>
+<p>More info</p>
+<ul class="simple">
+<li><a class="reference internal" href="../views/browserviews.html"><em>Overriding views</em></a></li>
+</ul>
+</div>
+<div class="section" id="creating-a-dynamic-view">
+<h2><a class="toc-backref" href="#id4">Creating a dynamic view</a><a class="headerlink" href="#creating-a-dynamic-view" title="Permalink to this headline">¶</a></h2>
+<p>Dynamic view can be skins template or BrowserView. Dynamic view machinery
+only cares about the path name coming after the context object.</p>
+<div class="section" id="register-a-dynamic-view-menu-item">
+<h3><a class="toc-backref" href="#id5">Register a dynamic view menu item</a><a class="headerlink" href="#register-a-dynamic-view-menu-item" title="Permalink to this headline">¶</a></h3>
+<p>Your content type must support dynamic views</p>
+<ul class="simple">
+<li>Content type subclasses Products.CMFDynamicViewFTI.browserdefault.BrowserDefaultMixin</li>
+</ul>
+<p>You need to register dynamic view menu item with the corresponding view in configure.zcml:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;browser:menuItem</span>
+      <span class="na">for=</span><span class="s">&quot;Products.ATContentTypes.interface.IATFolder&quot;</span>
+      <span class="na">menu=</span><span class="s">&quot;plone_displayviews&quot;</span>
+      <span class="na">title=</span><span class="s">&quot;Product listing&quot;</span>
+      <span class="na">action=</span><span class="s">&quot;@@product_listing&quot;</span>
+      <span class="na">description=</span><span class="s">&quot;List folder contents as product summary view&quot;</span>
+      <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Products.ATContentTypes uses non-standard name for &quot;interfaces&quot; package.
+It is &quot;interface&quot; there, when all other packages use &quot;interfaces&quot;.</p>
+</div>
+<p>The view must be listed in portal_types for the content type. In this case
+we should enable it for Archetypes folder using the following GenericSetup XML
+<em>profiles/default/types/Folder.xml</em>.</p>
+<p>Note that you don't need to copy the whole Folder.xml / Topic.xml from
+Products/CMFPlone/profiles/default/types, but including the changed fields
+(view_methods) in XML code is enough.</p>
+<p>You can also change this through portal_types in ZMI.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">view_methods must not have &#64;&#64;&nbsp;view signature in the method name.</p>
+</div>
+<div class="highlight-xml"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot;?&gt;</span>
+<span class="nt">&lt;object</span> <span class="na">name=</span><span class="s">&quot;Folder&quot;</span>
+   <span class="na">meta_type=</span><span class="s">&quot;Factory-based Type Information with dynamic views&quot;</span>
+   <span class="na">i18n:domain=</span><span class="s">&quot;plone&quot;</span> <span class="na">xmlns:i18n=</span><span class="s">&quot;http://xml.zope.org/namespaces/i18n&quot;</span><span class="nt">&gt;</span>
+     <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;view_methods&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;element</span> <span class="na">value=</span><span class="s">&quot;folder_summary_view&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;element</span> <span class="na">value=</span><span class="s">&quot;folder_tabular_view&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;element</span> <span class="na">value=</span><span class="s">&quot;atct_album_view&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;element</span> <span class="na">value=</span><span class="s">&quot;folder_listing&quot;</span><span class="nt">/&gt;</span>
+
+      <span class="c">&lt;!-- We retrofit these new views for Folders in portal_types info --&gt;</span>
+      <span class="nt">&lt;element</span> <span class="na">value=</span><span class="s">&quot;product_listing&quot;</span><span class="nt">/&gt;</span>
+
+     <span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/object&gt;</span>
+</pre></div>
+</div>
+<p>Also if you want to Collections have this listing you need to add
+the following <em>profiles/default/types/Topic.xml</em>.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot;?&gt;</span>
+<span class="nt">&lt;object</span> <span class="na">name=</span><span class="s">&quot;Topic&quot;</span>
+   <span class="na">meta_type=</span><span class="s">&quot;Factory-based Type Information with dynamic views&quot;</span>
+   <span class="na">i18n:domain=</span><span class="s">&quot;plone&quot;</span> <span class="na">xmlns:i18n=</span><span class="s">&quot;http://xml.zope.org/namespaces/i18n&quot;</span><span class="nt">&gt;</span>
+ <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;view_methods&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;element</span> <span class="na">value=</span><span class="s">&quot;folder_listing&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;element</span> <span class="na">value=</span><span class="s">&quot;folder_summary_view&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;element</span> <span class="na">value=</span><span class="s">&quot;folder_tabular_view&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;element</span> <span class="na">value=</span><span class="s">&quot;atct_album_view&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;element</span> <span class="na">value=</span><span class="s">&quot;atct_topic_view&quot;</span><span class="nt">/&gt;</span>
+
+  <span class="c">&lt;!-- We retrofit these new views for Folders in portal_types info --&gt;</span>
+  <span class="nt">&lt;element</span> <span class="na">value=</span><span class="s">&quot;product_listing&quot;</span><span class="nt">/&gt;</span>
+
+ <span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/object&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="checking-that-your-view-is-available">
+<h2><a class="toc-backref" href="#id6">Checking that your view is available</a><a class="headerlink" href="#checking-that-your-view-is-available" title="Permalink to this headline">¶</a></h2>
+<p>Products.CMFDynamicViewFTI.browserdefault.BrowserDefaultMixin.getAvailableLayouts() returns
+the list of known layouts like following:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[(</span><span class="s">&#39;folder_summary_view&#39;</span><span class="p">,</span> <span class="s">&#39;Summary view&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;folder_tabular_view&#39;</span><span class="p">,</span> <span class="s">&#39;Tabular view&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;atct_album_view&#39;</span><span class="p">,</span> <span class="s">&#39;Thumbnail view&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;folder_listing&#39;</span><span class="p">,</span> <span class="s">&#39;Standard view&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;product_listing&#39;</span><span class="p">,</span> <span class="s">u&#39;Product listing&#39;</span><span class="p">)]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">layout_ids</span> <span class="o">=</span> <span class="p">[</span> <span class="nb">id</span> <span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">title</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">portal</span><span class="o">.</span><span class="n">folder</span><span class="o">.</span><span class="n">getAvailableLayouts</span><span class="p">()</span> <span class="p">]</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="s">&quot;product_list&quot;</span> <span class="ow">in</span> <span class="n">layout_ids</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="getting-active-layout">
+<h2><a class="toc-backref" href="#id7">Getting active layout</a><a class="headerlink" href="#getting-active-layout" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Need code example.</p>
+</div>
+</div>
+<div class="section" id="changing-default-view-programmatically">
+<h2><a class="toc-backref" href="#id8">Changing default view programmatically</a><a class="headerlink" href="#changing-default-view-programmatically" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="bp">self</span><span class="o">.</span><span class="n">portal</span><span class="o">.</span><span class="n">folder</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="s">&quot;product_listing&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="default-page">
+<h2><a class="toc-backref" href="#id9">Default page</a><a class="headerlink" href="#default-page" title="Permalink to this headline">¶</a></h2>
+<p>Default page is the <strong>content</strong> chosen to display when the visitor arrives
+to URL without any subpages or views selected.</p>
+<p>This is useful if you are doing folder listing manually
+and you want to filter out the default view.</p>
+<p>default_page helper view can be used to manipulate default pages.</p>
+<p>Getting default page</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Filter out default content</span>
+<span class="n">container</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getListingContainer</span><span class="p">()</span>
+<span class="n">default_page_helper</span> <span class="o">=</span> <span class="n">getMultiAdapter</span><span class="p">((</span><span class="n">container</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;default_page&#39;</span><span class="p">)</span>
+
+<span class="c"># Return content object which is the default page or None if not set</span>
+<span class="n">default_page</span> <span class="o">=</span> <span class="n">default_page_helper</span><span class="o">.</span><span class="n">getDefaultPage</span><span class="p">(</span><span class="n">container</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Another example how to use this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">Products.CMFCore.interfaces</span> <span class="kn">import</span> <span class="n">IFolderish</span>
+
+<span class="k">def</span> <span class="nf">hasTabs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Determine whether the page itself, or default page, in the case of folders, has setting showTabs set true.</span>
+
+<span class="sd">    Show tab setting defined in dynamicpage.py.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+    <span class="n">page</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">IFolderish</span><span class="o">.</span><span class="n">providedBy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">):</span>
+            <span class="n">folder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span>
+            <span class="n">default_page_helper</span> <span class="o">=</span> <span class="n">getMultiAdapter</span><span class="p">((</span><span class="n">folder</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;default_page&#39;</span><span class="p">)</span>
+            <span class="n">page_name</span> <span class="o">=</span> <span class="n">default_page_helper</span><span class="o">.</span><span class="n">getDefaultPage</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span>
+            <span class="n">page</span> <span class="o">=</span> <span class="n">folder</span><span class="p">[</span><span class="n">page_name</span><span class="p">]</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="n">tabs</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="s">&quot;showTabs&quot;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">tabs</span>
+</pre></div>
+</div>
+<p>Setting default page can be done as simple as setting default_page attribute
+of the folder to be the id of the default page:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">folder</span><span class="o">.</span><span class="n">default_page</span> <span class="o">=</span> <span class="s">&quot;my_content_id&quot;</span>
+</pre></div>
+</div>
+<p>More information can be found in</p>
+<ul class="simple">
+<li><a class="reference external" href="https://svn.plone.org/svn/plone/plone.app.layout/trunk/plone/app/layout/globals/context.py">https://svn.plone.org/svn/plone/plone.app.layout/trunk/plone/app/layout/globals/context.py</a></li>
+<li><a class="reference external" href="https://svn.plone.org/svn/plone/plone.app.layout/trunk/plone/app/layout/navigation/defaultpage.py">https://svn.plone.org/svn/plone/plone.app.layout/trunk/plone/app/layout/navigation/defaultpage.py</a></li>
+</ul>
+</div>
+<div class="section" id="setting-view-using-marker-interfaces">
+<h2><a class="toc-backref" href="#id10">Setting view using marker interfaces</a><a class="headerlink" href="#setting-view-using-marker-interfaces" title="Permalink to this headline">¶</a></h2>
+<p>If you need to have a view for few individual content items only it is best
+to do using marker interfaces.</p>
+<ul class="simple">
+<li>Register a view against a marker interface</li>
+<li>Assign this marker interface to a content item using Zope Management Interface</li>
+</ul>
+<p>For more info</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.netsight.co.uk/blog/2010/5/21/setting-a-default-view-of-a-folder-in-plone">http://www.netsight.co.uk/blog/2010/5/21/setting-a-default-view-of-a-folder-in-plone</a></li>
+<li>::doc::<cite>marker interfaces &lt;/components/interfaces&gt;</cite></li>
+</ul>
+</div>
+<div class="section" id="default-folder-dynamic-view">
+<h2><a class="toc-backref" href="#id11">Default Folder dynamic view</a><a class="headerlink" href="#default-folder-dynamic-view" title="Permalink to this headline">¶</a></h2>
+<p>This is what Plone Folder content views out of the box</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">Products.CMFPlone/skins/plone_content/folder_summary_view.pt</span></tt>
+(a non-view based old style Zope 2 page template)</li>
+</ul>
+</div>
+<div class="section" id="migration-script-from-default-view-to-another">
+<h2><a class="toc-backref" href="#id12">Migration script from default view to another</a><a class="headerlink" href="#migration-script-from-default-view-to-another" title="Permalink to this headline">¶</a></h2>
+<p>The below is a script snippet which allows you to change all default views
+of folder to another type. You can execute script through ZMI as Python Script.</p>
+<p>Script code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">StringIO</span> <span class="kn">import</span> <span class="n">StringIO</span>
+
+<span class="n">buf</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">()</span>
+<span class="n">orignal</span><span class="o">=</span><span class="s">&#39;fancy_zoom_view&#39;</span>
+<span class="n">target</span><span class="o">=</span><span class="s">&#39;atct_album_view&#39;</span>
+<span class="k">for</span> <span class="n">brain</span> <span class="ow">in</span> <span class="n">context</span><span class="o">.</span><span class="n">portal_catalog</span><span class="p">(</span><span class="n">portal_type</span><span class="o">=</span><span class="s">&quot;Folder&quot;</span><span class="p">):</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">brain</span><span class="o">.</span><span class="n">getObject</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s">&quot;layout&quot;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span> <span class="o">==</span> <span class="n">orignal</span><span class="p">:</span>
+                <span class="k">print</span> <span class="o">&gt;&gt;</span> <span class="n">buf</span><span class="p">,</span> <span class="s">&quot;Updated:&quot;</span> <span class="o">+</span> <span class="n">obj</span><span class="o">.</span><span class="n">absolute_url</span><span class="p">()</span>
+                <span class="n">obj</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+<span class="k">return</span> <span class="n">buf</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This will allow you to migrate to <tt class="docutils literal"><span class="pre">collective.fancyzoom</span></tt> to Plone 4 default album view / Products.PipBox.</p>
+</div>
+<div class="section" id="method-aliases">
+<h2><a class="toc-backref" href="#id13">Method aliases</a><a class="headerlink" href="#method-aliases" title="Permalink to this headline">¶</a></h2>
+<p>Method aliases allow you to redirect basic actions (view, edit) to content type specific view.
+Aliases are configured in portal_types.</p>
+</div>
+<div class="section" id="other-resources">
+<h2><a class="toc-backref" href="#id14">Other resources</a><a class="headerlink" href="#other-resources" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://blog.jphoude.qc.ca/2008/09/14/plone-changing-title-zope3-views/">http://blog.jphoude.qc.ca/2008/09/14/plone-changing-title-zope3-views/</a></li>
+<li><a class="reference external" href="http://plone.org/documentation/how-to/how-to-create-and-set-a-custom-homepage-template-using-generic-setup">http://plone.org/documentation/how-to/how-to-create-and-set-a-custom-homepage-template-using-generic-setup</a></li>
+<li><a class="reference external" href="http://plone.org/products/cmfdynamicviewfti/">CMFDynamicView plone.org product page</a></li>
+</ul>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Dynamic views</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#permission-for-changing-the-view-template-of-an-item">Permission for changing the view template of an item</a></li>
+<li><a class="reference internal" href="#default-dynamic-views">Default dynamic views</a></li>
+<li><a class="reference internal" href="#creating-a-dynamic-view">Creating a dynamic view</a><ul>
+<li><a class="reference internal" href="#register-a-dynamic-view-menu-item">Register a dynamic view menu item</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#checking-that-your-view-is-available">Checking that your view is available</a></li>
+<li><a class="reference internal" href="#getting-active-layout">Getting active layout</a></li>
+<li><a class="reference internal" href="#changing-default-view-programmatically">Changing default view programmatically</a></li>
+<li><a class="reference internal" href="#default-page">Default page</a></li>
+<li><a class="reference internal" href="#setting-view-using-marker-interfaces">Setting view using marker interfaces</a></li>
+<li><a class="reference internal" href="#default-folder-dynamic-view">Default Folder dynamic view</a></li>
+<li><a class="reference internal" href="#migration-script-from-default-view-to-another">Migration script from default view to another</a></li>
+<li><a class="reference internal" href="#method-aliases">Method aliases</a></li>
+<li><a class="reference internal" href="#other-resources">Other resources</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="timestamps.html"
+                        title="previous chapter">Timestamps</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="behaviors.html"
+                        title="next chapter">Behaviors</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/content/dynamic_views.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="behaviors.html" title="Behaviors"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="timestamps.html" title="Timestamps"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Content management</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Persistency and transactions &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="next" title="Persistent objects" href="persistent.html" />
+    <link rel="prev" title="Vocabularies" href="../models/vocabularies.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="persistent.html" title="Persistent objects"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../models/vocabularies.html" title="Vocabularies"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="persistency-and-transactions">
+<h1>Persistency and transactions<a class="headerlink" href="#persistency-and-transactions" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="persistent.html">Persistent objects</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="persistent.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="persistent.html#lists-and-dictionaries">Lists and dictionaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="persistent.html#persistentlist-vs-normal-python-list">PersistentList vs. normal Python list</a></li>
+<li class="toctree-l2"><a class="reference internal" href="persistent.html#persistent-modifications-setattr-and-transactions">Persistent, modifications, __setattr__ and transactions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="persistent.html#up-to-date-reads">Up-to-date reads</a></li>
+<li class="toctree-l2"><a class="reference internal" href="persistent.html#accessing-broken-objects">Accessing broken objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="persistent.html#fixing-damaged-objects">Fixing damaged objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="persistent.html#volatile-references">Volatile references</a></li>
+<li class="toctree-l2"><a class="reference internal" href="persistent.html#measuring-persistent-object-sizes">Measuring persistent object sizes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="transactions.html">Transactions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="transactions.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transactions.html#using-transactions">Using transactions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transactions.html#transaction-boundary-events">Transaction boundary events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transactions.html#viewing-transaction-content-and-debugging-transactions">Viewing transaction content and debugging transactions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="lifecycle.html">Object lifecycles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="database.html">ZODB Database</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="database.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="database.html#object-database-constraints">Object database constraints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="database.html#data-model">Data model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="database.html#browsing">Browsing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="database.html#zodb-versions">ZODB versions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="database.html#zodb-tips-and-tricks">ZODB tips and tricks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="database.html#packing-the-database-offline">Packing the database offline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="database.html#visualizing-database-object-graphs">Visualizing database object graphs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="database.html#cache-size">Cache size</a></li>
+<li class="toctree-l2"><a class="reference internal" href="database.html#integrity-checks">Integrity checks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="storage.html">Storage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="storage.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="storage.html#pickling">Pickling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="storage.html#binary-trees">Binary trees</a></li>
+<li class="toctree-l2"><a class="reference internal" href="storage.html#buckets">Buckets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="storage.html#storing-as-attribute-vs-storing-in-btree">Storing as attribute vs. storing in BTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="storage.html#blobs">BLOBs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="storage.html#sql-values">SQL values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="storage.html#transaction-sizes">Transaction sizes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="storage.html#analysing-data-fs-content-offline">Analysing Data.fs content offline</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="migrations.html">Migrations</a></li>
+</ul>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../models/vocabularies.html"
+                        title="previous chapter">Vocabularies</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="persistent.html"
+                        title="next chapter">Persistent objects</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/persistency/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="persistent.html" title="Persistent objects"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../models/vocabularies.html" title="Vocabularies"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

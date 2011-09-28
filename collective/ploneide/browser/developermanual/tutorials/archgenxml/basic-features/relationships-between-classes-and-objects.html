@@ -1,0 +1,306 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Relationships between classes and objects &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../../../index.html" />
+    <link rel="up" title="Basic Features" href="index.html" />
+    <link rel="next" title="Workflows" href="workflows.html" />
+    <link rel="prev" title="Methods and Actions" href="methods-and-actions.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="workflows.html" title="Workflows"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="methods-and-actions.html" title="Methods and Actions"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Tutorials</a> &raquo;</li>
+          <li><a href="../index.html" >Using ArchGenXML</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Basic Features</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="relationships-between-classes-and-objects">
+<h1>Relationships between classes and objects<a class="headerlink" href="#relationships-between-classes-and-objects" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#aggregations-global-containment" id="id1">Aggregations: Global Containment</a></li>
+<li><a class="reference internal" href="#compositions-strict-containment" id="id2">Compositions: Strict Containment</a></li>
+<li><a class="reference internal" href="#directed-associations-references" id="id3">Directed Associations: References</a><ul>
+<li><a class="reference internal" href="#directed-associations" id="id4">Directed Associations</a></li>
+<li><a class="reference internal" href="#references-as-class-attributes" id="id5">References as class attributes</a></li>
+<li><a class="reference internal" href="#reference-classes-advanced" id="id6">Reference classes (advanced)</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">How to use references, associations, aggregations and compositions</p>
+</div>
+<p>With aggregations, compositions and associations you define where your new type will show up, what it might contain and to which content it can point to.</p>
+<p>There is virtually no limit on how many aggregations, compositions and associations you can attach to a class.</p>
+<div class="section" id="aggregations-global-containment">
+<h2><a class="toc-backref" href="#id1">Aggregations: Global Containment</a><a class="headerlink" href="#aggregations-global-containment" title="Permalink to this headline">¶</a></h2>
+<img alt="Aggregation" src="../../../_images/aggregation.png" />
+<p>Aggregation means: This content can exist global and in this container. The container class that gets the empty rhomb (diamond) attached is derived from BaseFolder and it's <tt class="docutils literal"><span class="pre">allowed_content_types</span></tt> is set to the class that is attached to it. If more than class is attached to one class by aggregations the <tt class="docutils literal"><span class="pre">allowed_content_types</span></tt> is extended accordingly. The attached class keeps the default <tt class="docutils literal"><span class="pre">global_allow=1</span></tt>.</p>
+</div>
+<div class="section" id="compositions-strict-containment">
+<h2><a class="toc-backref" href="#id2">Compositions: Strict Containment</a><a class="headerlink" href="#compositions-strict-containment" title="Permalink to this headline">¶</a></h2>
+<img alt="Composition" src="../../../_images/composition.png" />
+<p>Compositions are used to model parts that exist or live and die with their associated owner. So the code generated is similar to the one generated by aggregations, but with one major difference: The attached classes are only allowed to be generated in the folderish type of the class they're attached to (this is done by setting <tt class="docutils literal"><span class="pre">global_allow=0</span></tt> in the factory type information of the class).</p>
+</div>
+<div class="section" id="directed-associations-references">
+<h2><a class="toc-backref" href="#id3">Directed Associations: References</a><a class="headerlink" href="#directed-associations-references" title="Permalink to this headline">¶</a></h2>
+<img alt="Directed Association" src="../../../_images/directedassociation.png" />
+<p>References are used to store the relation of an object to other objects.</p>
+<p>Each content type that derives from <tt class="docutils literal"><span class="pre">IReferenceable</span></tt> is capable of being referenced. Objects from such a content type have an UID (Unique Identification) that's unique throughout the whole Plone site. Therefore References don't break if you move referenced objects around in the site.</p>
+<p>To use <tt class="docutils literal"><span class="pre">ReferenceFields</span></tt> there are two possible ways. The by models-design clean way is to use directed associations. Another possibility is to define References as class-attributes.</p>
+<div class="section" id="directed-associations">
+<h3><a class="toc-backref" href="#id4">Directed Associations</a><a class="headerlink" href="#directed-associations" title="Permalink to this headline">¶</a></h3>
+<p>An directed association between two classes generates a <tt class="docutils literal"><span class="pre">ReferenceField</span></tt> in the class where the association starts.</p>
+<p>The <tt class="docutils literal"><span class="pre">relationship</span></tt> itself is named after the association's name.</p>
+<p>The multiplicity defines if the allows a 1:1 or 1:n relation.</p>
+<div class="admonition attention">
+<p class="first admonition-title">Attention</p>
+<p class="last">This only results in validation on the field. References at all don't know anything about
+multiplicity, so this is only a check on userinterface-level.</p>
+</div>
+<p>All other field settings are taken from the association's end, including information how to generate the widget. By default a ReferenceWidget is used. You can use tagged values on the association's end to define label, description, a different widget-type, schemata, etc. like you do it on a field (on a class attribute).</p>
+<p>The big drawback of using associations to create ReferenceFields is that they always get attached to the end of the schema and there is no way to change that in the UML diagram. So if you need order in your fields read the next section.</p>
+</div>
+<div class="section" id="references-as-class-attributes">
+<h3><a class="toc-backref" href="#id5">References as class attributes</a><a class="headerlink" href="#references-as-class-attributes" title="Permalink to this headline">¶</a></h3>
+<p>You can define an attribute with the type reference. Then you can apply any needed tagged values to it.</p>
+<p>keys of interest are:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">allowed_types</span></tt> : needs a list of allowed types</li>
+<li><tt class="docutils literal"><span class="pre">multiValued</span></tt> : set to 0 to only be able to select one object to reference to</li>
+<li><tt class="docutils literal"><span class="pre">relationship</span></tt> : name of the relationship in the reference_catalog</li>
+</ul>
+<p>The benefit of using an attribute to define the reference is that you can define the place in the schema where the ReferenceField will show up.</p>
+</div>
+<div class="section" id="reference-classes-advanced">
+<h3><a class="toc-backref" href="#id6">Reference classes (advanced)</a><a class="headerlink" href="#reference-classes-advanced" title="Permalink to this headline">¶</a></h3>
+<p>Sometimes it's needed to store information not in the origin or
+destination class, but in the reference itself. UML has a notation to
+model this: <a class="reference external" href="http://argouml.tigris.org/documentation/defaulthtml/manual/ch17s11.html#s2.ref.association_multiway">association classes</a></p>
+<p>ArchGenXML support them automatically. When a model includes an
+association class, two things occur:</p>
+<ol class="loweralpha simple">
+<li>A new content type is created, named like the association name</li>
+<li>The generated ReferenceField has a new attribute defined like this: <tt class="docutils literal"><span class="pre">referenceClass</span> <span class="pre">=</span> <span class="pre">ContentReferenceCreator('My_Association_Name')</span></tt></li>
+</ol>
+<p>This causes that the class of the reference instances is now not <tt class="docutils literal"><span class="pre">Archetypes.ReferenceEngine.Reference</span></tt>, but <tt class="docutils literal"><span class="pre">Archetypes.ReferenceEngine.ContentReference</span></tt>, a subclass of it that has a new method: getContentObject(), that return the content inside the
+reference.</p>
+<p>The same effect can be reached without association classes, by defining a content type and then adding the <tt class="docutils literal"><span class="pre">association_class</span></tt> tagged value to the association (although I haven't been able to make this work).</p>
+<p>To create the reference via code, use a special form of the addReference method:</p>
+<div class="highlight-python"><pre>origin = &lt;the origin content&gt;
+destination = &lt;the destination content&gt;
+assocName = &lt;the association name&gt;
+
+origin.addReference(destination,
+    assocName,
+    referenceClass=ContentReferenceCreator(assocName),
+    attr1=value1,
+    attr2=value2...)</pre>
+</div>
+<p>(where attr1, attr2... are the attributes of the association)</p>
+<p>To read the data, we can't use the origin.getRefs(assocName) method, as usual, because it returns only the destination objects. One way to read it is by using the reference_catalog tool:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">Products.CMFCore.utils</span> <span class="kn">import</span> <span class="n">getToolByName</span>
+<span class="n">tool</span> <span class="o">=</span> <span class="n">getToolByName</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="s">&#39;reference_catalog&#39;</span><span class="p">)</span>
+<span class="n">refs</span> <span class="o">=</span> <span class="n">tool</span><span class="o">.</span><span class="n">getReferences</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="n">assocName</span><span class="p">)</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">refs</span><span class="p">:</span>
+    <span class="k">return</span> <span class="p">[]</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">return</span> <span class="p">[(</span><span class="n">ref</span><span class="o">.</span><span class="n">getContentObject</span><span class="p">(),</span> <span class="n">ref</span><span class="o">.</span><span class="n">getTargetObject</span><span class="p">())</span> <span class="k">for</span> <span class="n">ref</span> <span class="ow">in</span> <span class="n">refs</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../../../index.html"><img src="../../../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Relationships between classes and objects</a><ul>
+<li><a class="reference internal" href="#aggregations-global-containment">Aggregations: Global Containment</a></li>
+<li><a class="reference internal" href="#compositions-strict-containment">Compositions: Strict Containment</a></li>
+<li><a class="reference internal" href="#directed-associations-references">Directed Associations: References</a><ul>
+<li><a class="reference internal" href="#directed-associations">Directed Associations</a></li>
+<li><a class="reference internal" href="#references-as-class-attributes">References as class attributes</a></li>
+<li><a class="reference internal" href="#reference-classes-advanced">Reference classes (advanced)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="methods-and-actions.html"
+                        title="previous chapter">Methods and Actions</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="workflows.html"
+                        title="next chapter">Workflows</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../../_sources/tutorials/archgenxml/basic-features/relationships-between-classes-and-objects.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="workflows.html" title="Workflows"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="methods-and-actions.html" title="Methods and Actions"
+             >previous</a> |</li>
+        <li><a href="../../../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Tutorials</a> &raquo;</li>
+          <li><a href="../index.html" >Using ArchGenXML</a> &raquo;</li>
+          <li><a href="index.html" >Basic Features</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

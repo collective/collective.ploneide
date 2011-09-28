@@ -1,0 +1,339 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>RSS &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Functionality and features" href="index.html" />
+    <link rel="next" title="Collections" href="collections.html" />
+    <link rel="prev" title="Dashboard" href="dashboard.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="collections.html" title="Collections"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="dashboard.html" title="Dashboard"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Functionality and features</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="rss">
+<h1><a class="toc-backref" href="#id1">RSS</a><a class="headerlink" href="#rss" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">Programming RSS feeds on Plone sites</p>
+</div>
+<div class="contents topic" id="local">
+<p class="topic-title first">local</p>
+<ul class="simple">
+<li><a class="reference internal" href="#rss" id="id1">RSS</a><ul>
+<li><a class="reference internal" href="#introduction" id="id2">Introduction</a></li>
+<li><a class="reference internal" href="#creating-a-global-language-neutral-plone-site-content-aggregator" id="id3">Creating a global, language neutral, Plone site content aggregator</a><ul>
+<li><a class="reference internal" href="#creating-the-collection" id="id4">Creating the collection</a></li>
+<li><a class="reference internal" href="#collecting-content-for-the-rss-feed" id="id5">Collecting content for the RSS feed</a></li>
+<li><a class="reference internal" href="#linking-the-rss-feed-to-site-action-links" id="id6">Linking the RSS feed to site action links</a></li>
+<li><a class="reference internal" href="#publish-and-test" id="id7">Publish and test</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#portal-syndication" id="id8">portal_syndication</a></li>
+<li><a class="reference internal" href="#rss-feed-content" id="id9">RSS feed content</a></li>
+<li><a class="reference internal" href="#changing-rss-feed-template" id="id10">Changing RSS feed template</a><ul>
+<li><a class="reference internal" href="#enabling-full-body-text-in-rss-feed" id="id11">Enabling full body text in RSS feed</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id2">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Plone can generate RSS feeds from folderish content types (folder / collection).
+If you want to aggregate content from all the site to RSS feed, you first create
+a collection conten item and then enable RSS feed on this collection content item.</p>
+</div>
+<div class="section" id="creating-a-global-language-neutral-plone-site-content-aggregator">
+<h2><a class="toc-backref" href="#id3">Creating a global, language neutral, Plone site content aggregator</a><a class="headerlink" href="#creating-a-global-language-neutral-plone-site-content-aggregator" title="Permalink to this headline">¶</a></h2>
+<p>These instructions tell you how to create a RSS feed collection for your Plone site.
+You can choose what content types ends up to the RSS stream. Also,
+the aggregator is language aware so that it works correctly on multilingual sites.</p>
+<div class="section" id="creating-the-collection">
+<h3><a class="toc-backref" href="#id4">Creating the collection</a><a class="headerlink" href="#creating-the-collection" title="Permalink to this headline">¶</a></h3>
+<p>First we create a collection which will aggregate all the site content
+for the RSS feed.</p>
+<ul class="simple">
+<li>Go to site root</li>
+<li>Add new collection</li>
+<li>Title &quot;Your site name - RSS feed&quot;</li>
+<li>On <em>Category</em> tab, set <em>Language</em> to neutral</li>
+<li>On <em>Settings</em> tab, choose <em>Exclude from navigation</em></li>
+<li>Save</li>
+<li>Go to site root / <em>Contents</em> tab</li>
+<li>Check your RSS content collection</li>
+<li>Choose <em>Rename</em> button</li>
+<li>Change item id to <tt class="docutils literal"><span class="pre">site-feed</span></tt></li>
+</ul>
+</div>
+<div class="section" id="collecting-content-for-the-rss-feed">
+<h3><a class="toc-backref" href="#id5">Collecting content for the RSS feed</a><a class="headerlink" href="#collecting-content-for-the-rss-feed" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Go to your collection content item</li>
+<li>Go to <em>criteria</em> tab</li>
+<li>Set <em>content types</em> criteria</li>
+<li>Set sort by publishing date, reverse</li>
+<li>Save</li>
+<li>Now, choose content items you want to appear in the feed and <em>Save</em> again</li>
+</ul>
+<p>You can now preview the content of RSS feed
+on <em>View</em> tab.</p>
+</div>
+<div class="section" id="linking-the-rss-feed-to-site-action-links">
+<h3><a class="toc-backref" href="#id6">Linking the RSS feed to site action links</a><a class="headerlink" href="#linking-the-rss-feed-to-site-action-links" title="Permalink to this headline">¶</a></h3>
+<p><em>Site actions</em> is the top right link slot on the Plone site.
+By default, Plone site wide RSS link will appear there if enabled.</p>
+<ul>
+<li><p class="first">Go to portal_actions in ZMI</p>
+</li>
+<li><p class="first">Go to <em>/portal_actions/site_actions/rss</em></p>
+</li>
+<li><p class="first">In URL expression type:</p>
+<div class="highlight-python"><pre>string:${object/@@plone_portal_state/portal_url}/site-feed/RSS?set_language=${object/@@plone_portal_state/language}</pre>
+</div>
+</li>
+</ul>
+<p>This expression will</p>
+<ul class="simple">
+<li>Get URL for <em>site-feed</em> object, using <em>RSS</em> template</li>
+<li>Will explicitly set HTTP GET query parameter <em>set_language</em> which can be used to manually
+force Plone content language. We use the current language (from the user cookie) here,
+to make sure that the user gets RSS feed in correct language on multilingual sites.</li>
+</ul>
+<p>More about <a class="reference internal" href="expressions.html"><em>expressions</em></a>.</p>
+</div>
+<div class="section" id="publish-and-test">
+<h3><a class="toc-backref" href="#id7">Publish and test</a><a class="headerlink" href="#publish-and-test" title="Permalink to this headline">¶</a></h3>
+<p>Publish collection after the content seems to be right, using the workflow
+menu on the collection content item.</p>
+<p>Test RSS feed by copy-pasting RSS URL from the site action to your RSS Reader, like
+<em>Google Reader</em>.</p>
+</div>
+</div>
+<div class="section" id="portal-syndication">
+<h2><a class="toc-backref" href="#id8">portal_syndication</a><a class="headerlink" href="#portal-syndication" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">portal_syndication</span></tt> is a persistent utility  managing RSS settings.
+It provides settings to for formatting RSS feeds (update frequence, number of items).</p>
+<ul class="simple">
+<li><a class="reference external" href="http://svn.plone.org/svn/plone/Plone/trunk/Products/CMFPlone/SyndicationTool.py">http://svn.plone.org/svn/plone/Plone/trunk/Products/CMFPlone/SyndicationTool.py</a></li>
+</ul>
+</div>
+<div class="section" id="rss-feed-content">
+<h2><a class="toc-backref" href="#id9">RSS feed content</a><a class="headerlink" href="#rss-feed-content" title="Permalink to this headline">¶</a></h2>
+<p>RSS feed content is the content of the folder or special stream provided by
+the content type.</p>
+<p><tt class="docutils literal"><span class="pre">portal_syndication</span></tt> uses the following logic to pull the content:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s">&#39;synContentValues&#39;</span><span class="p">):</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">synContentValues</span><span class="p">()</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">getFolderContents</span><span class="p">()</span>
+<span class="k">return</span> <span class="n">values</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="changing-rss-feed-template">
+<h2><a class="toc-backref" href="#id10">Changing RSS feed template</a><a class="headerlink" href="#changing-rss-feed-template" title="Permalink to this headline">¶</a></h2>
+<p>RSS feed is stored in template <em>CMFPlone/skins/plone_templates/rss_template</em>.</p>
+<div class="section" id="enabling-full-body-text-in-rss-feed">
+<h3><a class="toc-backref" href="#id11">Enabling full body text in RSS feed</a><a class="headerlink" href="#enabling-full-body-text-in-rss-feed" title="Permalink to this headline">¶</a></h3>
+<p>See <a class="reference external" href="http://rudd-o.com/en/linux-and-free-software/a-hack-to-enable-full-text-feeds-in-plone">this example</a>.</p>
+</div>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">RSS</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#creating-a-global-language-neutral-plone-site-content-aggregator">Creating a global, language neutral, Plone site content aggregator</a><ul>
+<li><a class="reference internal" href="#creating-the-collection">Creating the collection</a></li>
+<li><a class="reference internal" href="#collecting-content-for-the-rss-feed">Collecting content for the RSS feed</a></li>
+<li><a class="reference internal" href="#linking-the-rss-feed-to-site-action-links">Linking the RSS feed to site action links</a></li>
+<li><a class="reference internal" href="#publish-and-test">Publish and test</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#portal-syndication">portal_syndication</a></li>
+<li><a class="reference internal" href="#rss-feed-content">RSS feed content</a></li>
+<li><a class="reference internal" href="#changing-rss-feed-template">Changing RSS feed template</a><ul>
+<li><a class="reference internal" href="#enabling-full-body-text-in-rss-feed">Enabling full body text in RSS feed</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="dashboard.html"
+                        title="previous chapter">Dashboard</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="collections.html"
+                        title="next chapter">Collections</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/functionality/rss.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="collections.html" title="Collections"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="dashboard.html" title="Dashboard"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Functionality and features</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

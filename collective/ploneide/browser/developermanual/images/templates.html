@@ -1,0 +1,379 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Images in page templates &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Images" href="index.html" />
+    <link rel="next" title="Python Imaging Library (PIL)" href="pil.html" />
+    <link rel="prev" title="Image-like content" href="content.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pil.html" title="Python Imaging Library (PIL)"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="content.html" title="Image-like content"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Images</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="images-in-page-templates">
+<h1>Images in page templates<a class="headerlink" href="#images-in-page-templates" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">How to link to images in page templates in Plone.</p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#putting-a-static-image-into-a-page-template" id="id1">Putting a static image into a page template</a><ul>
+<li><a class="reference internal" href="#relative-image-look-ups" id="id2">Relative image look-ups</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#registering-static-media-folders-in-your-add-on-product" id="id3">Registering static media folders in your add-on product</a><ul>
+<li><a class="reference internal" href="#zope-3-resource-directory" id="id4">Zope 3 resource directory</a></li>
+<li><a class="reference internal" href="#grok-static-media-folder" id="id5">Grok static media folder</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#rendering-image-content-items" id="id6">Rendering Image content items</a></li>
+<li><a class="reference internal" href="#rendering-imagefield" id="id7">Rendering ImageField</a></li>
+<li><a class="reference internal" href="#tag-method" id="id8">tag() method</a><ul>
+<li><a class="reference internal" href="#scaling-images" id="id9">Scaling images</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="putting-a-static-image-into-a-page-template">
+<h2><a class="toc-backref" href="#id1">Putting a static image into a page template</a><a class="headerlink" href="#putting-a-static-image-into-a-page-template" title="Permalink to this headline">¶</a></h2>
+<p>Here is an example how to create &lt;img&gt; tag in .pt file:</p>
+<div class="highlight-python"><pre>&lt;img tal:attributes="src string:${context/@@plone_portal_state/portal_url}/++resource++plonetheme.mfabrik/close-icon.png" alt="[ X ]"/&gt;</pre>
+</div>
+<p>Let's break this down</p>
+<ul class="simple">
+<li>Obviosly we are rendering &lt;img&gt; tag</li>
+<li>src attribute is dynamically generated using TALES expression</li>
+<li>We use <em>string comprehension</em> to create src attribute. Alternative we could use e.g. <em>python:</em> protocol
+and embed one line python code to generate the attribute value.</li>
+<li>We look up a helper view called <a class="reference internal" href="../misc/context.html"><em>plone_portal_state</em></a>. It is a
+BrowserView shipped with Plone and its purpose is to expose different helper methods
+to page templates and Python code.</li>
+<li>We call <em>plone_portal_state's</em> method <tt class="docutils literal"><span class="pre">portal_url()</span></tt> this will return the
+root URL of our site. Note that this is not necessary the domain top level URL,
+as Plone sites can be nested in folders.</li>
+<li>We append our Zope 3 resource path to our site root URL (see below). This maps
+to some static media folder in our add-on files on the disk.</li>
+<li>There we point to <em>close-icon.png</em> image file.</li>
+<li>We also add &lt;img&gt; alt attribute normally. It is not dynamically generated.</li>
+</ul>
+<p>When the page template is generated, the following snippet could look like:</p>
+<div class="highlight-python"><pre>::</pre>
+</div>
+<blockquote>
+&lt;img src=&quot;<a class="reference external" href="http://localhost:8080/mfabrik/++resource++plonetheme.mfabrik/logo.png">http://localhost:8080/mfabrik/++resource++plonetheme.mfabrik/logo.png</a>&quot; alt=&quot;[ X ]&quot;&gt;</blockquote>
+<p>... or ...</p>
+<div class="highlight-python"><pre>&lt;img src="http://mfabrik.com/++resource++plonetheme.mfabrik/logo.png" alt="[ X ]"&gt;</pre>
+</div>
+<p>... depending of the site virtual hosting configuration.</p>
+<div class="section" id="relative-image-look-ups">
+<h3><a class="toc-backref" href="#id2">Relative image look-ups</a><a class="headerlink" href="#relative-image-look-ups" title="Permalink to this headline">¶</a></h3>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Do not never create relative image look-ups without prefixing the image source
+URL with the site root.</p>
+</div>
+<p>Hardcoded relative image path might seem to work:</p>
+<div class="highlight-python"><pre>&lt;img src="++resource++plonetheme.mfabrik/logo.png" &gt;</pre>
+</div>
+<p>...but this causes different image <em>base URL</em> on every page. The image URLs,
+from the browser point of view, would be</p>
+<dl class="docutils">
+<dt>::</dt>
+<dd>&lt;img src=&quot;<a class="reference external" href="http://yoursite/++resource++plonetheme.mfabrik/logo.png">http://yoursite/++resource++plonetheme.mfabrik/logo.png</a>&quot; &gt;</dd>
+</dl>
+<div class="highlight-python"><pre>&lt;img src="http://yoursite/folder/++resource++plonetheme.mfabrik/logo.png" &gt;</pre>
+</div>
+<p>... which <strong>prevents browser to cache the image</strong>.</p>
+</div>
+</div>
+<div class="section" id="registering-static-media-folders-in-your-add-on-product">
+<h2><a class="toc-backref" href="#id3">Registering static media folders in your add-on product</a><a class="headerlink" href="#registering-static-media-folders-in-your-add-on-product" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="zope-3-resource-directory">
+<h3><a class="toc-backref" href="#id4">Zope 3 resource directory</a><a class="headerlink" href="#zope-3-resource-directory" title="Permalink to this headline">¶</a></h3>
+<p>Right way to put in a static image is for Zope 3 resource directory</p>
+<ul class="simple">
+<li>Create folder <em>yourcompany.product/yourcompany/product/browser/static</em>.</li>
+<li>Add the following ZCML to <em>yourcompany.product/yourcompany/product/browser/configure.zcml</em>.</li>
+</ul>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;browser:resourceDirectory</span>
+    <span class="na">name=</span><span class="s">&quot;yourcompany.product&quot;</span>
+    <span class="na">directory=</span><span class="s">&quot;static&quot;</span>
+    <span class="na">layer=</span><span class="s">&quot;.interfaces.IThemeSpecific&quot;</span>
+    <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<p>This will be picked up as ++resource++yourcompany.product/ static media path path.</p>
+<p>Layer is optional: The static media path is available only
+when your add-on product is installed if the <a class="reference internal" href="../views/layers.html"><em>layer</em></a> is specified.</p>
+</div>
+<div class="section" id="grok-static-media-folder">
+<h3><a class="toc-backref" href="#id5">Grok static media folder</a><a class="headerlink" href="#grok-static-media-folder" title="Permalink to this headline">¶</a></h3>
+<p>This applies for add-on products using <a class="reference internal" href="../components/grok.html"><em>five.grok</em></a> API.</p>
+<p>Create folder yourcompany.product/yourcompany/product/static</p>
+<p>This will be automatically picked up as ++resource++yourcompany.product/ static media path
+when Grok'ed add-on is launched</p>
+</div>
+</div>
+<div class="section" id="rendering-image-content-items">
+<h2><a class="toc-backref" href="#id6">Rendering Image content items</a><a class="headerlink" href="#rendering-image-content-items" title="Permalink to this headline">¶</a></h2>
+<p>You can refer to ATImage object's content data download by adding /image to URL:</p>
+<div class="highlight-python"><pre>&lt;img alt="" tal:attributes="src string:${context/getImage/absolute_url}/image" /&gt;</pre>
+</div>
+<p>The magic is done in __bobo_traverse__ of ATImage by providing traversable hooks to access image download:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://svn.plone.org/svn/collective/Products.ATContentTypes/trunk/Products/ATContentTypes/content/image.py">http://svn.plone.org/svn/collective/Products.ATContentTypes/trunk/Products/ATContentTypes/content/image.py</a></li>
+</ul>
+</div>
+<div class="section" id="rendering-imagefield">
+<h2><a class="toc-backref" href="#id7">Rendering ImageField</a><a class="headerlink" href="#rendering-imagefield" title="Permalink to this headline">¶</a></h2>
+<p>Archetypes's ImageField maps its data to the content object at attribute which is the field's name.
+If you have field 'campaignVideoThumbnail' you can make image tag by following</p>
+<div class="highlight-python"><pre>&lt;img class="thumbnail" tal:attributes="src string:${campaign/absolute_url}/campaignVideoThumbnail" alt="Campaign video" /&gt;</pre>
+</div>
+<p>If you need more complex &lt;img&gt; output, create a helper function in your BrowserView and use Python code
+to perform the ImageField manipulation.</p>
+<p>See ImageField for more information</p>
+<ul class="simple">
+<li><a class="reference external" href="http://svn.plone.org/svn/archetypes/Products.Archetypes/trunk/Products/Archetypes/Field.py">http://svn.plone.org/svn/archetypes/Products.Archetypes/trunk/Products/Archetypes/Field.py</a></li>
+</ul>
+</div>
+<div class="section" id="tag-method">
+<h2><a class="toc-backref" href="#id8">tag() method</a><a class="headerlink" href="#tag-method" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Using of tag() is discouraged. Create your image tags manually.</p>
+</div>
+<p>Some content provide handy tag() method to generate &lt;img src=&quot;&quot; /&gt; tags
+with different image sizes.</p>
+<p>tag() is available in</p>
+<ul class="simple">
+<li>Archetypes ImageField</li>
+<li>ATNewsItem</li>
+<li>ATImage</li>
+<li>FSImage (Zope 2 image object in file-system)</li>
+</ul>
+<p>tag() is defined in <a class="reference external" href="http://svn.zope.org/Zope/trunk/src/OFS/Image.py?rev=96262&amp;view=auto">OFS.Image</a>.</p>
+<div class="section" id="scaling-images">
+<h3><a class="toc-backref" href="#id9">Scaling images</a><a class="headerlink" href="#scaling-images" title="Permalink to this headline">¶</a></h3>
+<p>tag() supports scaling. Scale sizes are predefined.
+When ATImage is uploaded
+various scaled versions of it are stored in the database.</p>
+<p>Displaying a version of the image using scale &quot;preview&quot;</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">image</span><span class="o">.</span><span class="n">tag</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="s">&quot;preview&quot;</span><span class="p">,</span> <span class="n">alt</span><span class="o">=</span><span class="s">&quot;foobar text&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Will give out:</p>
+<div class="highlight-python"><pre>&lt;img src="http://something/folder/image/image_preview" alt="foobar text" /&gt;</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you are not using alt attribute you should always set it to
+empty string alt=&quot;&quot;. Otherwise screen readers will read
+the src attribute of the &lt;img&gt; aloud.</p>
+</div>
+<p>In order to simplify the accessing of these image scales, use <a class="reference external" href="http://pypi.python.org/pypi/archetypes.fieldtraverser">archetypes.fieldtraverser</a>.
+This package allows you to traverse to the stored image scales while still using AnnotationStorage and is a lot simpler to get going (in the author's humble opinion :).</p>
+<p>Default scale names and sizes are defined in ImageField declaration for custom ImageFields.
+For ATImage those are in <a class="reference external" href="http://svn.plone.org/svn/collective/Products.ATContentTypes/trunk/Products/ATContentTypes/content/image.py">Products.ATContentTypes.content.image</a>.</p>
+</div>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Images in page templates</a><ul>
+<li><a class="reference internal" href="#putting-a-static-image-into-a-page-template">Putting a static image into a page template</a><ul>
+<li><a class="reference internal" href="#relative-image-look-ups">Relative image look-ups</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#registering-static-media-folders-in-your-add-on-product">Registering static media folders in your add-on product</a><ul>
+<li><a class="reference internal" href="#zope-3-resource-directory">Zope 3 resource directory</a></li>
+<li><a class="reference internal" href="#grok-static-media-folder">Grok static media folder</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#rendering-image-content-items">Rendering Image content items</a></li>
+<li><a class="reference internal" href="#rendering-imagefield">Rendering ImageField</a></li>
+<li><a class="reference internal" href="#tag-method">tag() method</a><ul>
+<li><a class="reference internal" href="#scaling-images">Scaling images</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="content.html"
+                        title="previous chapter">Image-like content</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pil.html"
+                        title="next chapter">Python Imaging Library (PIL)</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/images/templates.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pil.html" title="Python Imaging Library (PIL)"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="content.html" title="Image-like content"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Images</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

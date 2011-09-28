@@ -1,0 +1,420 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>RAM cache &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Performance and tuning" href="index.html" />
+    <link rel="next" title="Performance and caching tips" href="tips.html" />
+    <link rel="prev" title="Cache decorators" href="decorators.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tips.html" title="Performance and caching tips"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="decorators.html" title="Cache decorators"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Performance and tuning</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="ram-cache">
+<h1>RAM cache<a class="headerlink" href="#ram-cache" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id2">Introduction</a></li>
+<li><a class="reference internal" href="#using-memcached-backend" id="id3">Using memcached backend</a><ul>
+<li><a class="reference internal" href="#memoizers" id="id4">Memoizers</a></li>
+<li><a class="reference internal" href="#id1" id="id5">RAM Cache</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#using-custom-ram-cache" id="id6">Using custom RAM cache</a></li>
+<li><a class="reference internal" href="#zcacheable" id="id7">ZCacheable</a></li>
+<li><a class="reference internal" href="#other-resources" id="id8">Other resources</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id2">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>RAM cache is a Zope facility to create custom in-process caches.</p>
+</div>
+<div class="section" id="using-memcached-backend">
+<h2><a class="toc-backref" href="#id3">Using memcached backend</a><a class="headerlink" href="#using-memcached-backend" title="Permalink to this headline">¶</a></h2>
+<p>By default, Zope uses in-process memory cache. It is possible to replace this with memcached.</p>
+<p>Advantages</p>
+<ul class="simple">
+<li>All front-end clients share the cache</li>
+<li>Cache survives over a client restart</li>
+</ul>
+<div class="section" id="memoizers">
+<h3><a class="toc-backref" href="#id4">Memoizers</a><a class="headerlink" href="#memoizers" title="Permalink to this headline">¶</a></h3>
+<p>Memoize's RAM cache can be replaced with Memcached backend with the following snipped.</p>
+<p>See <em>plone.org</em> set-up as an example</p>
+<ul class="simple">
+<li><a class="reference external" href="http://svn.plone.org/svn/plone/plone.org/Products.PloneOrg/trunk/Products/PloneOrg/caching.py">http://svn.plone.org/svn/plone/plone.org/Products.PloneOrg/trunk/Products/PloneOrg/caching.py</a></li>
+</ul>
+</div>
+<div class="section" id="id1">
+<h3><a class="toc-backref" href="#id5">RAM Cache</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>RAM cache is used e.g. as a rendered template cache backend.</p>
+<p>You can add MemecachedManager to your zope setup, and replace RamCache instance in ZMI with a new instance of MemcachedManager (just with the same id).</p>
+<ul class="simple">
+<li><a class="reference external" href="http://pypi.python.org/pypi/Products.MemcachedManager">http://pypi.python.org/pypi/Products.MemcachedManager</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="using-custom-ram-cache">
+<h2><a class="toc-backref" href="#id6">Using custom RAM cache</a><a class="headerlink" href="#using-custom-ram-cache" title="Permalink to this headline">¶</a></h2>
+<p>You want to use a custom cache if you think cache size or saturation will pose problems.</p>
+<p>The following advanced example shows how to enhance existing content type text and description accessors
+by performing HTML transformations and caching the result in a custom RAM cache.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">import</span> <span class="nn">lxml.html</span>
+
+<span class="kn">from</span> <span class="nn">zope.app.cache</span> <span class="kn">import</span> <span class="n">ram</span>
+
+<span class="kn">from</span> <span class="nn">Products.feedfeeder.content.item</span> <span class="kn">import</span> <span class="n">FeedFeederItem</span>
+<span class="kn">from</span> <span class="nn">gomobile.xhtmlmp.transformers.xhtmlmp_safe</span> <span class="kn">import</span> <span class="n">clean_xhtml_mp</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s">&quot;GoMobile&quot;</span><span class="p">)</span>
+
+<span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Running in feedfeeder monkey-patches&quot;</span><span class="p">)</span>
+
+<span class="c"># Cache storing transformed XHTML</span>
+<span class="n">xhtml_cache</span> <span class="o">=</span> <span class="n">ram</span><span class="o">.</span><span class="n">RAMCache</span><span class="p">()</span>
+<span class="n">xhtml_cache</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">maxAge</span><span class="o">=</span><span class="mi">86400</span><span class="p">,</span> <span class="n">maxEntries</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+
+<span class="c"># Dummy object to mark missing values from cache</span>
+<span class="n">_marker</span> <span class="o">=</span> <span class="nb">object</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">cache</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Special cache decorator which generates cache key based on context object and cache name &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">fun</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">replacement</span><span class="p">(</span><span class="n">context</span><span class="p">):</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">UID</span><span class="p">())</span> <span class="o">+</span> <span class="s">&quot;.&quot;</span> <span class="o">+</span> <span class="n">name</span>
+
+            <span class="n">cached_value</span> <span class="o">=</span> <span class="n">xhtml_cache</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">_marker</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">cached_value</span> <span class="ow">is</span> <span class="n">_marker</span><span class="p">:</span>
+                <span class="n">cached_value</span> <span class="o">=</span> <span class="n">fun</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+                <span class="n">xhtml_cache</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">cached_value</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">cached_value</span>
+        <span class="k">return</span> <span class="n">replacement</span>
+    <span class="k">return</span> <span class="n">decorator</span>
+
+
+<span class="k">def</span> <span class="nf">flush_cache</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Clear entry in RAMCache</span>
+
+<span class="sd">    global_key is function specific key, key is context specific key.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">UID</span><span class="p">()</span> <span class="o">+</span> <span class="s">&quot;.&quot;</span> <span class="o">+</span> <span class="n">name</span>
+    <span class="n">xhtml_cache</span><span class="o">.</span><span class="n">invalidate</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+
+<span class="c">#</span>
+<span class="c"># Modify existing body text and description accessors so that</span>
+<span class="c"># 1) HTML is cleaned</span>
+<span class="c"># 2) The result cleaned HTML is cached in RAM</span>
+<span class="c">#</span>
+<span class="c"># We do not persistently want to store cleaned HTML,</span>
+<span class="c"># since our cleaner might be b0rked and we want to easily</span>
+<span class="c"># regenerate cleaned HTML when needed.</span>
+<span class="c">#</span>
+
+<span class="c"># Run in monkey patching</span>
+<span class="n">FeedFeederItem</span><span class="o">.</span><span class="n">_old_getText</span> <span class="o">=</span> <span class="n">FeedFeederItem</span><span class="o">.</span><span class="n">getText</span>
+<span class="n">FeedFeederItem</span><span class="o">.</span><span class="n">_old_setText</span> <span class="o">=</span> <span class="n">FeedFeederItem</span><span class="o">.</span><span class="n">setText</span>
+<span class="n">FeedFeederItem</span><span class="o">.</span><span class="n">_old_Description</span> <span class="o">=</span> <span class="n">FeedFeederItem</span><span class="o">.</span><span class="n">Description</span>
+<span class="n">FeedFeederItem</span><span class="o">.</span><span class="n">_old_setDescription</span> <span class="o">=</span> <span class="n">FeedFeederItem</span><span class="o">.</span><span class="n">setDescription</span>
+
+<span class="nd">@cache</span><span class="p">(</span><span class="s">&quot;text&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">_getText</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Body text accessor &quot;&quot;&quot;</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">FeedFeederItem</span><span class="o">.</span><span class="n">_old_getText</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">text</span><span class="p">:</span>
+        <span class="c"># can be None</span>
+        <span class="n">clean</span> <span class="o">=</span> <span class="n">clean_xhtml_mp</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">print</span> <span class="s">&quot;Cleaned text:&quot;</span> <span class="o">+</span> <span class="n">clean</span>
+        <span class="k">return</span> <span class="n">clean</span>
+
+    <span class="k">return</span> <span class="n">text</span>
+
+<span class="k">def</span> <span class="nf">_setText</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="n">FeedFeederItem</span><span class="o">.</span><span class="n">_old_setText</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+    <span class="n">flush_cache</span><span class="p">(</span><span class="s">&quot;text&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+
+<span class="nd">@cache</span><span class="p">(</span><span class="s">&quot;description&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">_Description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Description accessor &quot;&quot;&quot;</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">FeedFeederItem</span><span class="o">.</span><span class="n">_old_Description</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="c">#print &quot;Accessing description:&quot; + str(text)</span>
+
+    <span class="c"># Remove any HTML formatting in the description</span>
+    <span class="k">if</span> <span class="n">text</span><span class="p">:</span>
+        <span class="n">parsed</span> <span class="o">=</span> <span class="n">lxml</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&quot;utf-8&quot;</span><span class="p">))</span>
+        <span class="n">clean</span> <span class="o">=</span> <span class="n">lxml</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">tostring</span><span class="p">(</span><span class="n">parsed</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s">&quot;utf-8&quot;</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s">&quot;text&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&quot;utf-8&quot;</span><span class="p">)</span>
+        <span class="c">#print &quot;Cleaned decsription:&quot; + clean</span>
+        <span class="k">return</span> <span class="n">clean</span>
+
+    <span class="k">return</span> <span class="n">text</span>
+
+<span class="k">def</span> <span class="nf">_setDescription</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="n">FeedFeederItem</span><span class="o">.</span><span class="n">_old_setDescription</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+    <span class="n">flush_cache</span><span class="p">(</span><span class="s">&quot;description&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+
+<span class="n">FeedFeederItem</span><span class="o">.</span><span class="n">getText</span> <span class="o">=</span> <span class="n">_getText</span>
+<span class="n">FeedFeederItem</span><span class="o">.</span><span class="n">setText</span> <span class="o">=</span> <span class="n">_setText</span>
+<span class="n">FeedFeederItem</span><span class="o">.</span><span class="n">Description</span> <span class="o">=</span> <span class="n">_Description</span>
+<span class="n">FeedFeederItem</span><span class="o">.</span><span class="n">setDescription</span> <span class="o">=</span> <span class="n">_setDescription</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="zcacheable">
+<h2><a class="toc-backref" href="#id7">ZCacheable</a><a class="headerlink" href="#zcacheable" title="Permalink to this headline">¶</a></h2>
+<p>ZCacheable is ancient Zope design pattern for cache.
+It allows persistent objects inherited from OFS.Cacheable
+to have cache backend set externally.</p>
+<p>Used cache type (cache id) is stored <a class="reference internal" href="../persistency/persistent.html"><em>persistently</em></a>
+per cache user object,
+but cache can be created run-time (RAM cache) or externally (memcache) depending
+on the situation.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Do not use ZCacheable in new code.</p>
+</div>
+<p>It takes optional backends which must be explicitly set:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">enableCaching</span><span class="p">():</span>
+    <span class="n">pas</span><span class="o">=</span><span class="n">getPAS</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">pas</span><span class="o">.</span><span class="n">ZCacheable_getManager</span><span class="p">()</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">pas</span><span class="o">.</span><span class="n">ZCacheable_setManagerId</span><span class="p">(</span><span class="n">manager_id</span><span class="o">=</span><span class="s">&quot;RAMCache&quot;</span><span class="p">)</span>
+    <span class="n">getLDAPPlugin</span><span class="p">()</span><span class="o">.</span><span class="n">ZCacheable_setManagerId</span><span class="p">(</span><span class="n">manager_id</span><span class="o">=</span><span class="s">&quot;RAMCache&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The RAMCAche above is per thread. You cannot clear this cache for all ZEO clients easily.</p>
+<p>Some hints</p>
+<p>Is enabled per persistent object:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">app</span><span class="o">.</span><span class="n">test2</span><span class="o">.</span><span class="n">acl_users</span><span class="o">.</span><span class="n">ZCacheable_isCachingEnabled</span><span class="p">()</span>
+<span class="go">&lt;Products.StandardCacheManagers.RAMCacheManager.RAMCache instance at 0x10a064cf8&gt;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">app</span><span class="o">.</span><span class="n">test2</span><span class="o">.</span><span class="n">acl_users</span><span class="o">.</span><span class="n">ZCacheable_enabled</span><span class="p">()</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+<p>Get known cache backends:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">app</span><span class="o">.</span><span class="n">test2</span><span class="o">.</span><span class="n">acl_users</span><span class="o">.</span><span class="n">ZCacheable_getManagerIds</span><span class="p">()</span>
+<span class="go">({&#39;id&#39;: &#39;caching_policy_manager&#39;, &#39;title&#39;: &#39;&#39;}, {&#39;id&#39;: &#39;HTTPCache&#39;, &#39;title&#39;: &#39;&#39;}, {&#39;id&#39;: &#39;RAMCache&#39;, &#39;title&#39;: &#39;&#39;}, {&#39;id&#39;: &#39;ResourceRegistryCache&#39;, &#39;title&#39;: &#39;Cache for saved ResourceRegistry files&#39;})</span>
+</pre></div>
+</div>
+<p>Disabling it (persistent change):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">app</span><span class="o">.</span><span class="n">test2</span><span class="o">.</span><span class="n">acl_users</span><span class="o">.</span><span class="n">ZCacheable_setManagerId</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">app</span><span class="o">.</span><span class="n">test2</span><span class="o">.</span><span class="n">acl_users</span><span class="o">.</span><span class="n">ZCacheable_enabled</span><span class="p">()</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">app</span><span class="o">.</span><span class="n">test2</span><span class="o">.</span><span class="n">acl_users</span><span class="o">.</span><span class="n">ZCacheable_getManagerIds</span><span class="p">()</span>
+<span class="go">({&#39;id&#39;: &#39;caching_policy_manager&#39;, &#39;title&#39;: &#39;&#39;}, {&#39;id&#39;: &#39;HTTPCache&#39;, &#39;title&#39;: &#39;&#39;}, {&#39;id&#39;: &#39;RAMCache&#39;, &#39;title&#39;: &#39;&#39;}, {&#39;id&#39;: &#39;ResourceRegistryCache&#39;, &#39;title&#39;: &#39;Cache for saved ResourceRegistry files&#39;})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">app</span><span class="o">.</span><span class="n">test2</span><span class="o">.</span><span class="n">acl_users</span><span class="o">.</span><span class="n">ZCacheable_isCachingEnabled</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">app</span><span class="o">.</span><span class="n">test2</span><span class="o">.</span><span class="n">acl_users</span><span class="o">.</span><span class="n">ZCacheable_setEnabled</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>More info</p>
+<ul class="simple">
+<li><a class="reference external" href="http://svn.zope.org/Zope/trunk/src/OFS/Cache.py?rev=115280&amp;view=auto">http://svn.zope.org/Zope/trunk/src/OFS/Cache.py?rev=115280&amp;view=auto</a></li>
+<li><a class="reference external" href="http://wiki.zope.org/CacheManager/Architecture">http://wiki.zope.org/CacheManager/Architecture</a></li>
+<li><a class="reference external" href="http://svn.plone.org/svn/plone/plone.app.ldap/trunk/plone/app/ldap/ploneldap/util.py">http://svn.plone.org/svn/plone/plone.app.ldap/trunk/plone/app/ldap/ploneldap/util.py</a></li>
+</ul>
+</div>
+<div class="section" id="other-resources">
+<h2><a class="toc-backref" href="#id8">Other resources</a><a class="headerlink" href="#other-resources" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="https://svn.plone.org/svn/plone/plone.memoize/trunk/plone/memoize/">plone.memoize source code</a>.</li>
+<li><a class="reference external" href="http://svn.zope.org/zope.app.cache/trunk/src/zope/app/cache/">zope.app.cache source code</a></li>
+</ul>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">RAM cache</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#using-memcached-backend">Using memcached backend</a><ul>
+<li><a class="reference internal" href="#memoizers">Memoizers</a></li>
+<li><a class="reference internal" href="#id1">RAM Cache</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#using-custom-ram-cache">Using custom RAM cache</a></li>
+<li><a class="reference internal" href="#zcacheable">ZCacheable</a></li>
+<li><a class="reference internal" href="#other-resources">Other resources</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="decorators.html"
+                        title="previous chapter">Cache decorators</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="tips.html"
+                        title="next chapter">Performance and caching tips</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/performance/ramcache.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tips.html" title="Performance and caching tips"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="decorators.html" title="Cache decorators"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Performance and tuning</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

@@ -1,0 +1,553 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Writing and updating this document &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Introduction" href="index.html" />
+    <link rel="next" title="How to upload Plone community developer documentation to Plone CMS" href="developermanual.html" />
+    <link rel="prev" title="Preface" href="preface.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="developermanual.html" title="How to upload Plone community developer documentation to Plone CMS"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="preface.html" title="Preface"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Introduction</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="writing-and-updating-this-document">
+<h1>Writing and updating this document<a class="headerlink" href="#writing-and-updating-this-document" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
+<li><a class="reference internal" href="#contributions-needed" id="id2">Contributions needed</a></li>
+<li><a class="reference internal" href="#contributing-methods" id="id3">Contributing methods</a><ul>
+<li><a class="reference internal" href="#committing-directly-to-plone-collective-on-github" id="id4">Committing directly to Plone Collective on Github</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#code-documentation" id="id5">Code documentation</a><ul>
+<li><a class="reference internal" href="#asking-someone-to-do-changes-for-you" id="id6">Asking someone to do changes for you</a></li>
+<li><a class="reference internal" href="#site-update-process-what-happens-after-a-commit" id="id7">Site update process --- what happens after a commit</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#document-page-format" id="id8">Document page format</a><ul>
+<li><a class="reference internal" href="#page-structure" id="id9">Page structure</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#section-structure" id="id10">Section structure</a><ul>
+<li><a class="reference internal" href="#syntax-highlighting" id="id11">Syntax highlighting</a></li>
+<li><a class="reference internal" href="#other-sphinx-and-restructured-text-source-snippets" id="id12">Other Sphinx and restructured text source snippets</a></li>
+<li><a class="reference internal" href="#information-boxes" id="id13">Information boxes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#security-warning" id="id14">Security warning</a></li>
+<li><a class="reference internal" href="#test-warning" id="id15">Test warning</a></li>
+<li><a class="reference internal" href="#deprecation-warning" id="id16">Deprecation warning</a><ul>
+<li><a class="reference internal" href="#unfinished-documentation" id="id17">Unfinished documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">How to write and submit content for the <em>Plone Community Developer
+Manual</em>.</p>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>This chapter explains the basics of contributing to this document.</p>
+</div>
+<div class="section" id="contributions-needed">
+<h2><a class="toc-backref" href="#id2">Contributions needed</a><a class="headerlink" href="#contributions-needed" title="Permalink to this headline">¶</a></h2>
+<p>Below is the list of documentation and references we'd like to see:</p>
+<ul class="simple">
+<li>New code snippets and system descriptions</li>
+<li>Links to external documentation</li>
+<li>Links to component READMEs</li>
+<li>Links to blog posts talking about particular issues</li>
+<li>Links to email list discussions</li>
+<li>Links to source code (directly to the version control)</li>
+<li>Clean up and restructuring</li>
+</ul>
+</div>
+<div class="section" id="contributing-methods">
+<h2><a class="toc-backref" href="#id3">Contributing methods</a><a class="headerlink" href="#contributing-methods" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="committing-directly-to-plone-collective-on-github">
+<h3><a class="toc-backref" href="#id4">Committing directly to Plone Collective on Github</a><a class="headerlink" href="#committing-directly-to-plone-collective-on-github" title="Permalink to this headline">¶</a></h3>
+<p>This is the recommended method. Please do not be afraid to commit.
+If you break the documentation or add invalid information,
+it will be cleaned up sooner or later and no one is going to blame you:
+human errors happen all the time.</p>
+<ul>
+<li><p class="first">Learn about <a class="reference external" href="http://sphinx.pocoo.org/">Sphinx</a> and <a class="reference external" href="http://sphinx.pocoo.org/rest.html">restructured text</a>.</p>
+</li>
+<li><p class="first"><a class="reference external" href="http://collective.github.com/">Get Plone Collective on Github commit access</a>.</p>
+</li>
+<li><p class="first">Get the documentation source files:</p>
+<div class="highlight-python"><pre>git clone https://github.com/collective/collective.developermanual</pre>
+</div>
+</li>
+<li><p class="first">Edit the file which you want to update.</p>
+</li>
+<li><p class="first">Run buildout (or just bin/develop update) to get latest documentation include the code</p>
+</li>
+<li><p class="first">Check that Sphinx building does not give warnings:</p>
+<div class="highlight-python"><pre>bin/sphinx-build source build</pre>
+</div>
+</li>
+<li><p class="first">Commit changes:</p>
+<div class="highlight-python"><pre>git commit -m "My message what I changed"
+git push</pre>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="code-documentation">
+<h2><a class="toc-backref" href="#id5">Code documentation</a><a class="headerlink" href="#code-documentation" title="Permalink to this headline">¶</a></h2>
+<p>For certain kinds of documentation it is better to write the documentation in parts
+of the plone core code base. This can be done using the autodoc sphinx extension.</p>
+<p>... to include a module docstring</p>
+<div class="highlight-python"><pre>.. automodule:: plone.app.contentrules.exportimport</pre>
+</div>
+<p>... to include a class docstring</p>
+<div class="highlight-python"><pre>.. autoclass:: Products.CMFEditions.exportimport.repository.RepositoryToolXMLAdapter</pre>
+</div>
+<p>... or to include both a module and class docstrings</p>
+<div class="highlight-python"><pre>.. automodule:: Products.CMFEditions.exportimport.repository
+  :members: RepositoryToolXMLAdapter</pre>
+</div>
+<p>Not all documentation is best kept with the code. You should use autodoc
+if:</p>
+<ul class="simple">
+<li>the documentation is reasonably self-contained and relates just to
+that module;</li>
+<li>it's mainly reference material, rather than tutorial-style documentation;</li>
+<li>you think it's more likely to be maintained by the code authors.</li>
+</ul>
+<p>Once you write code documentation:</p>
+<ol class="arabic simple">
+<li>find an appropriate place in this manual to place it. Make sure it flows
+and makes when sense read with the documentation around it;</li>
+<li>include a comment in the docstring mentioning its use in this manual so
+those editing the code can test the manual if changes are made;</li>
+<li>add the module to the autocheckout value in the manual's <tt class="docutils literal"><span class="pre">buildout.cfg</span></tt>.</li>
+</ol>
+<div class="section" id="asking-someone-to-do-changes-for-you">
+<h3><a class="toc-backref" href="#id6">Asking someone to do changes for you</a><a class="headerlink" href="#asking-someone-to-do-changes-for-you" title="Permalink to this headline">¶</a></h3>
+<p>If you do not possess the technical skills to use Subversion or edit reST-format text,
+you can email suggestions to:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">mikko.ohtamaa</span> <span class="pre">(at)</span> <span class="pre">mfabrik</span> <span class="pre">(dot)</span> <span class="pre">com</span></tt></li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The suggestions should contain the text which will be directly placed into
+the documentation. It is rare to get volunteers to write instructions for you
+just because you ask.</p>
+</div>
+</div>
+<div class="section" id="site-update-process-what-happens-after-a-commit">
+<h3><a class="toc-backref" href="#id7">Site update process --- what happens after a commit</a><a class="headerlink" href="#site-update-process-what-happens-after-a-commit" title="Permalink to this headline">¶</a></h3>
+<p>If <tt class="docutils literal"><span class="pre">sphinx-build</span></tt> manages to compile documentation successfully:</p>
+<ul class="simple">
+<li>documentation at <a class="reference external" href="http://collective-docs.plone.org">collective-docs.plone.org</a> is updated nightly;</li>
+<li>documentation at <a class="reference external" href="http://plone.org/documentation/manual/plone-community-developer-documentation">plone.org</a> is updated
+by admins now and then. For this documentation upload, all Sphinx warnings are first cleaned up by hand.</li>
+</ul>
+<p>For more information, contact people on the Plone IRC channels <tt class="docutils literal"><span class="pre">#plone-docs</span></tt> and <tt class="docutils literal"><span class="pre">#plone.org</span></tt>,
+or ask on <tt class="docutils literal"><span class="pre">plone-documentation</span></tt> mailing list.</p>
+</div>
+</div>
+<div class="section" id="document-page-format">
+<h2><a class="toc-backref" href="#id8">Document page format</a><a class="headerlink" href="#document-page-format" title="Permalink to this headline">¶</a></h2>
+<p>Here are some rules the documentation page should follow.</p>
+<div class="section" id="page-structure">
+<h3><a class="toc-backref" href="#id9">Page structure</a><a class="headerlink" href="#page-structure" title="Permalink to this headline">¶</a></h3>
+<p>Each page must contain, in this order:</p>
+<ul>
+<li><p class="first">The main heading. This will be visible in the table of contents:</p>
+<div class="highlight-python"><pre>==================================
+Writing and updating this document
+==================================</pre>
+</div>
+</li>
+<li><p class="first">The description of the page, which will appear in Plone's
+<em>Description</em> Dublin Core metadata field. This created using the reST
+<em>admonition</em> directive. A single paragraph of text consisting of 1-3
+sentences is recommended, so that the same text fits into the search
+engine results (Google):</p>
+<div class="highlight-python"><pre>.. admonition:: Description
+
+        This text will go to Plone's pages description field. It will
+        appear in the search engine listings for the page.</pre>
+</div>
+</li>
+</ul>
+<p>The <em>contents</em> directive will cause Sphinx to generate the <em>Table of
+Contents</em> shortcut links at the start of the page.  Using the <em>local</em>
+option excludes the page itself and ToC title from the listing:</p>
+<div class="highlight-python"><pre>.. contents :: :local:</pre>
+</div>
+<p>Introduction paragraph: A brief overview:</p>
+<div class="highlight-python"><pre>Introduction
+------------
+
+This chapter will describe the basics of how to contribute to this document.</pre>
+</div>
+<p>A number of paragraphs: The actual content of the document page:</p>
+<div class="highlight-python"><pre>Contributions needed
+--------------------
+
+Below is the list of documentation and references we'd like to see</pre>
+</div>
+</div>
+</div>
+<div class="section" id="section-structure">
+<h2><a class="toc-backref" href="#id10">Section structure</a><a class="headerlink" href="#section-structure" title="Permalink to this headline">¶</a></h2>
+<p>Each section (folder) must contain</p>
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">index.txt</span></tt> with:</p>
+<blockquote>
+<ul class="simple">
+<li>Section heading: This will be visible in the table of contents</li>
+<li>A single paragraph summarizing what this section is all about. This will
+be mapped to Plone folder description.</li>
+<li>Sphinx toctree directive, maxdepth 2. Each <tt class="docutils literal"><span class="pre">.txt</span></tt> file in the folder should
+be linked to this toctree.</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<div class="section" id="syntax-highlighting">
+<h3><a class="toc-backref" href="#id11">Syntax highlighting</a><a class="headerlink" href="#syntax-highlighting" title="Permalink to this headline">¶</a></h3>
+<p>Sphinx does syntax highlighting using the <a class="reference external" href="http://pygments.org/">Pygments</a> library.</p>
+<p>You can specify different highlighting for a code block using the following syntax:</p>
+<div class="highlight-python"><pre>With two colons you start a code block using the default highlighter::
+
+    # Some Python code here
+    # The language defaults to Python, we don't need to set it
+    if 1 == 2:
+        pass</pre>
+</div>
+<p>You can specify the language used for syntax highlighting by using <tt class="docutils literal"><span class="pre">code-block</span></tt>:</p>
+<div class="highlight-python"><pre>.. code-block:: python
+
+    if "foo" == "bar":
+        # This is Python code
+        pass</pre>
+</div>
+<p>For example, to specify XML:</p>
+<div class="highlight-python"><pre>.. code-block:: xml
+
+    &lt;somesnippet&gt;Some XML&lt;/somesnippet&gt;</pre>
+</div>
+<p>... or UNIX shell:</p>
+<div class="highlight-python"><pre>.. code-block:: console
+
+    # A comment
+    sh myscript.sh</pre>
+</div>
+<p>Setting the highlighting mode for the whole document:</p>
+<div class="highlight-python"><pre>..highlight\:\: console
+
+ All code blocks in this doc use console highlighting by default::
+
+        some shell commands</pre>
+</div>
+<p>If syntax highlighting is not enabled for your code block, you probably have a
+syntax error and Pygments will fail silently.</p>
+</div>
+<div class="section" id="other-sphinx-and-restructured-text-source-snippets">
+<h3><a class="toc-backref" href="#id12">Other Sphinx and restructured text source snippets</a><a class="headerlink" href="#other-sphinx-and-restructured-text-source-snippets" title="Permalink to this headline">¶</a></h3>
+<p>Italics:</p>
+<div class="highlight-python"><pre>This *word* is italics.</pre>
+</div>
+<p>Strong:</p>
+<div class="highlight-python"><pre>This **word** is in bold text.</pre>
+</div>
+<p>Inline code highlighting:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">This</span> <span class="ow">is</span> <span class="sb">``</span><span class="n">aFunction</span><span class="p">()</span><span class="sb">``</span>
+</pre></div>
+</div>
+<p>Making an external link (note the underscore at the end):</p>
+<div class="highlight-python"><pre>`This is an external link to &lt;http://mfabrik.com&gt;`_</pre>
+</div>
+<p>Making an internal link:</p>
+<div class="highlight-python"><pre>:doc:`This is a link to &lt;/introduction/writing.txt&gt;`</pre>
+</div>
+<p>Bullet list:</p>
+<div class="highlight-python"><pre>* First bullet
+
+* Second bullet with `a link &lt;http://mfabrik.com&gt;`_</pre>
+</div>
+</div>
+<div class="section" id="information-boxes">
+<h3><a class="toc-backref" href="#id13">Information boxes</a><a class="headerlink" href="#information-boxes" title="Permalink to this headline">¶</a></h3>
+<p>Below are some information boxes which are used across this documentation.
+They use Sphinx <em>warning</em> and <em>note</em> formatting directives.</p>
+</div>
+</div>
+<div class="section" id="security-warning">
+<h2><a class="toc-backref" href="#id14">Security warning</a><a class="headerlink" href="#security-warning" title="Permalink to this headline">¶</a></h2>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Security: This box is used when the outcome of a function might depend on
+Plone security features.  It means that the function behaves differently
+depending on who you are logged in as and in which context you call the
+function.</p>
+</div>
+<p>For example:</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Security: <tt class="docutils literal"><span class="pre">invokeFactory()</span></tt> checks the logged-in user permission, whether
+he/she can create the content.</p>
+</div>
+</div>
+<div class="section" id="test-warning">
+<h2><a class="toc-backref" href="#id15">Test warning</a><a class="headerlink" href="#test-warning" title="Permalink to this headline">¶</a></h2>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Testing warning: This box is used when the outcome of a function might be
+different when code is run in unit or functional tests. Usually this is
+because there is no normal HTTP request/response lifecycle and some HTTP
+request specific caches are not being invalidated properly.</p>
+</div>
+<p>Example:</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Testing warning: Unit testing code does not respect RestrictedPython
+restrictions, as no HTTP request traversing is done when fetching the
+object.</p>
+</div>
+</div>
+<div class="section" id="deprecation-warning">
+<h2><a class="toc-backref" href="#id16">Deprecation warning</a><a class="headerlink" href="#deprecation-warning" title="Permalink to this headline">¶</a></h2>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Deprecation: This approach is not recommended anymore and the same
+functionality can be achieved using newer technology.</p>
+</div>
+<p>Example:</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Deprecation: <tt class="docutils literal"><span class="pre">plone_skins</span></tt> based CSS and image files are
+discouraged,&nbsp;and should be replaced by Zope 3 <tt class="docutils literal"><span class="pre">resourceDirectives</span></tt>.</p>
+</div>
+<div class="section" id="unfinished-documentation">
+<h3><a class="toc-backref" href="#id17">Unfinished documentation</a><a class="headerlink" href="#unfinished-documentation" title="Permalink to this headline">¶</a></h3>
+<p>If you are writing something and you can't finish it, please still commit the work.
+Add a note like one below.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">TODO: Check whether metadata can exist with indexes as it looks like it
+does not work like this in Plone 3.3. Or there might be a bug somewhere.</p>
+</div>
+</div>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Writing and updating this document</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#contributions-needed">Contributions needed</a></li>
+<li><a class="reference internal" href="#contributing-methods">Contributing methods</a><ul>
+<li><a class="reference internal" href="#committing-directly-to-plone-collective-on-github">Committing directly to Plone Collective on Github</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#code-documentation">Code documentation</a><ul>
+<li><a class="reference internal" href="#asking-someone-to-do-changes-for-you">Asking someone to do changes for you</a></li>
+<li><a class="reference internal" href="#site-update-process-what-happens-after-a-commit">Site update process --- what happens after a commit</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#document-page-format">Document page format</a><ul>
+<li><a class="reference internal" href="#page-structure">Page structure</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#section-structure">Section structure</a><ul>
+<li><a class="reference internal" href="#syntax-highlighting">Syntax highlighting</a></li>
+<li><a class="reference internal" href="#other-sphinx-and-restructured-text-source-snippets">Other Sphinx and restructured text source snippets</a></li>
+<li><a class="reference internal" href="#information-boxes">Information boxes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#security-warning">Security warning</a></li>
+<li><a class="reference internal" href="#test-warning">Test warning</a></li>
+<li><a class="reference internal" href="#deprecation-warning">Deprecation warning</a><ul>
+<li><a class="reference internal" href="#unfinished-documentation">Unfinished documentation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="preface.html"
+                        title="previous chapter">Preface</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="developermanual.html"
+                        title="next chapter">How to upload Plone community developer documentation to Plone CMS</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/introduction/writing.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="developermanual.html" title="How to upload Plone community developer documentation to Plone CMS"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="preface.html" title="Preface"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Introduction</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

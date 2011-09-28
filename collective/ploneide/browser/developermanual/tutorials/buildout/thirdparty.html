@@ -1,0 +1,376 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Installing a third party product &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../../index.html" />
+    <link rel="up" title="Buildout" href="index.html" />
+    <link rel="next" title="Creating a new package" href="creatingpackage.html" />
+    <link rel="prev" title="Creating a buildout defaults file" href="defaults.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="creatingpackage.html" title="Creating a new package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="defaults.html" title="Creating a buildout defaults file"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Tutorials</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Buildout</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="installing-a-third-party-product">
+<h1>Installing a third party product<a class="headerlink" href="#installing-a-third-party-product" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">How to install a new package using these tools</p>
+</div>
+<p>How to install a new third-party products will depend on whether it
+is packaged as an egg, or a traditional Zope 2 product.</p>
+<div class="section" id="installing-eggs">
+<h2>Installing eggs<a class="headerlink" href="#installing-eggs" title="Permalink to this headline">¶</a></h2>
+<p>So long as an egg has a release in the
+<a class="reference external" href="http://pypi.python.org/pypi">PyPi</a> or elsewhere, buildout can
+download and install it, including any explicitly specified
+dependencies. Simply list the egg, and optionally a version
+(otherwise, you get the latest available), in the <em>eggs</em> option.</p>
+<div class="highlight-python"><pre>[buildout]
+...
+eggs =
+    elementtree
+    borg.project&gt;=1.0b1,&lt;2.0dev</pre>
+</div>
+<p>If you want buildout to search an index other than PyPi's, you can
+add a URL to <em>find-links</em> that contains download links for the
+eggs. In fact, we have already seen an example of this:
+<em>elementtree</em> is found at <em>http://effbot.org/downloads</em>, not in PyPi
+directly. Thus, we have:</p>
+<div class="highlight-python"><pre>[buildout]
+...
+
+find-links =
+    http://dist.plone.org
+    http://download.zope.org/ppix/
+    http://download.zope.org/distribution/
+    http://effbot.org/downloads
+
+eggs =
+    elementtree</pre>
+</div>
+<p>We have also listed some of the download locations for Zope and
+Plone eggs.</p>
+<p>Again - re-run buildout for the changes to take effect:</p>
+<div class="highlight-python"><pre>$ ./bin/buildout</pre>
+</div>
+<div class="section" id="development-eggs">
+<h3>Development eggs<a class="headerlink" href="#development-eggs" title="Permalink to this headline">¶</a></h3>
+<p>If there is not a release for your egg, or you want to track an egg
+in Subversion, check it out to the <em>src/</em> directory. Make sure you
+get the full egg, including the top-level <em>setup.py</em> file. For
+example, to get the <em>plone.portlets</em> trunk development, egg do:</p>
+<div class="highlight-python"><pre>$ cd src
+$ svn co https://svn.plone.org/svn/plone/plone.portlets/trunk plone.portlets</pre>
+</div>
+<p>Then, add the following to <em>buildout.cfg</em>:</p>
+<div class="highlight-python"><pre>[buildout]
+...
+eggs =
+    ...
+    plone.portlets
+
+develop =
+    src/plone.portlets</pre>
+</div>
+<p>Note that:</p>
+<ul class="simple">
+<li>The <em>develop*option contains a relative path to where the source
+egg is installed. Buildout will expect to find a suitable
+*setup.py</em> in this directory.</li>
+<li>Development eggs always take precedence over regular eggs.</li>
+<li>You still need to list the egg name&nbsp; in the <em>eggs</em> option for it
+to be installed.</li>
+<li>If you are overriding an egg that ships with Plone, you may need
+to list it in the eggs section of the <em>[plone]</em> part instead:</li>
+</ul>
+<div class="highlight-python"><pre>[buildout]
+...
+develop =
+    src/plone.portlets
+
+...
+
+[plone]
+recipe = plone.recipe.plone
+eggs =
+    plone.portlets</pre>
+</div>
+<p>This is because <em>plone.recipe.plone</em> is very expilcit about which
+versions of its various eggs to use, to ensure Plone keeps running
+as it was released.</p>
+<p>Buildout recipes (such as <em>plone.recipe.plone</em>) are distributed as
+eggs. You can use a development egg of a recipe by listing it under
+the <em>develop</em> option. There is no need to explicitly list it under
+the <em>eggs</em> option, since it is referenced by the <em>recipe</em> option of
+the relevant part.</p>
+</div>
+</div>
+<div class="section" id="installing-a-traditional-zope-2-product">
+<h2>Installing a traditional Zope 2 product<a class="headerlink" href="#installing-a-traditional-zope-2-product" title="Permalink to this headline">¶</a></h2>
+<p>The easiest way to try out a traditional Zope 2 product is to
+extract it into the <em>products</em>/ folder inside the buildout. If you
+see documentation referring to the <em>Products/</em> folder in a Zope
+instance, this is the same thing.</p>
+<p>However, this approach makes it harder to redistribute your project
+and share it with other developers. It is often more predictable to
+let buildout download and install the package for you. You can do
+this with the <em>[productdistros]</em> section of <em>buildout.cfg</em>. For
+example, here is how you might install a product named
+<em>ExampleProduct</em> and a set of products named
+<em>ExampleProductBundle</em>:</p>
+<div class="highlight-python"><pre>[productdistros]
+recipe = plone.recipe.distros
+urls =
+    http://example.com/dist/ExampleProduct-1.0.tgz
+    http://example.com/dist/ExampleProductBundle-1.0.tgz
+nested-packages =
+    ExampleProductBundle-1.0.tgz
+version-suffix-packages =</pre>
+</div>
+<p>Note that our fictional <em>ExampleProductBundle</em> is distributed as a
+single directory containing a number of products in
+sub-directories, so we list it under <em>nested-packages</em>.</p>
+<p>As always, if you change <em>buildout.cfg</em>, you must re-run buildout:</p>
+<div class="highlight-python"><pre>$ ./bin/buildout</pre>
+</div>
+</div>
+<div class="section" id="managing-zcml-files">
+<h2>Managing ZCML files<a class="headerlink" href="#managing-zcml-files" title="Permalink to this headline">¶</a></h2>
+<p>It is important to realize that Zope will not load <em>configure.zcml</em>
+files automatically for packages that are not in the <em>Products.*</em>
+namespace and lack support for <em>z3c.autoinclude</em> (see next page for
+more on using <em>z3c.autoinclude</em>). Instead, you must explicitly
+reference the package. Buildout can create such a reference (known
+as a ZCML <strong>slug</strong>) with the <em>zcml*option under the *[instance]</em>
+part. Here is how to ensure that <em>borg.project</em> is available to
+Zope:</p>
+<div class="highlight-python"><pre>[buildout]
+...
+eggs =
+    elementtree
+    borg.project
+
+...
+
+[instance]
+...
+zcml =
+    borg.project</pre>
+</div>
+<p>Should you need to load an <em>overrides.zcml</em> or a <em>meta.zcml</em>, you
+can use a syntax like:</p>
+<div class="highlight-python"><pre>zcml =
+    some.package
+    some.package-overrides
+    some.package-meta</pre>
+</div>
+</div>
+<div class="section" id="policy-products">
+<h2>Policy products<a class="headerlink" href="#policy-products" title="Permalink to this headline">¶</a></h2>
+<p>Many developers prefer to create a single &quot;policy product&quot; (also
+known as a &quot;deployment product&quot;) that orchestrates various
+dependencies. If you have such a product, you may want to include
+various dependencies directly from the policy product's
+<em>configure.zcml</em> file, with lines such as:</p>
+<div class="highlight-python"><pre>&lt;configure xmlns="http://namespace.zope.org/zope"&gt;
+
+    &lt;include package="borg.project" /&gt;
+
+&lt;/configure&gt;</pre>
+</div>
+<p>In this case, you may still need one slug (using the <em>zcml</em> option
+as above) for the policy product.</p>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../../index.html"><img src="../../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Installing a third party product</a><ul>
+<li><a class="reference internal" href="#installing-eggs">Installing eggs</a><ul>
+<li><a class="reference internal" href="#development-eggs">Development eggs</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#installing-a-traditional-zope-2-product">Installing a traditional Zope 2 product</a></li>
+<li><a class="reference internal" href="#managing-zcml-files">Managing ZCML files</a></li>
+<li><a class="reference internal" href="#policy-products">Policy products</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="defaults.html"
+                        title="previous chapter">Creating a buildout defaults file</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="creatingpackage.html"
+                        title="next chapter">Creating a new package</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/tutorials/buildout/thirdparty.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="creatingpackage.html" title="Creating a new package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="defaults.html" title="Creating a buildout defaults file"
+             >previous</a> |</li>
+        <li><a href="../../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Tutorials</a> &raquo;</li>
+          <li><a href="index.html" >Buildout</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

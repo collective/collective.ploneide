@@ -1,0 +1,68 @@
+=================================
+ Clocking and asyncronous tasks
+=================================
+
+
+.. admonition:: Description
+
+        How to run background tasks or cron jobs with Zope
+        
+        
+Clock server
+==================
+
+You can make Zope to make regular calls to your views.
+
+Add in buildout.cfg::
+
+        zope-conf-additional =
+                <clock-server>
+                   method /xxx/feed-mega-update
+                   period 3600 
+                   user updater
+                   password 123123
+                   host xxx.com
+                </clock-server>
+        
+                <clock-server>
+                   method /yyy/feed-mega-update
+                   period 3600 
+                   user updater
+                   password 123123
+                   host yyy.com
+                </clock-server>
+                
+Create a corresponding user in ZMI.
+                
+If you are using a public source control repository for your ``buildout.cfg`` you                
+might want to put zope-conf-additional= to ``secret.cfg`` which lies only on the
+production server and is never committed to the version control::
+
+        # Change the number here to change the version of Plone being used
+        extends = 
+                http://dist.plone.org/release/4.1rc3/versions.cfg
+                http://good-py.appspot.com/release/dexterity/1.0?plone=4.1rc3
+                http://plonegomobile.googlecode.com/svn/gomobile.buildout/gomobile.plone-4.trunk.commit-access.cfg
+                secret.cfg
+                
+                        
+        
+Asynchronous
+==================        
+
+Asyncronous tasks are long-running tasks which are run on their own thread.
+
+lovely.remotetask
+-----------------
+
+lovely.remotetask is worked based long-running task manager for Zope 3.
+
+TODO: NO WORKING EXAMPLES HOW TO USE THIS
+
+* `lovely.remotetask package <http://pypi.python.org/pypi/lovely.remotetask>`_ package page
+
+* http://tarekziade.wordpress.com/2007/09/28/a-co-server-for-zope/
+
+* http://swik.net/Zope/Planet+Zope/Trying+lovely.remotetask+for+cron+jobs/c1kfs
+
+* http://archives.free.net.ph/message/20081015.201535.2d147fec.fr.html

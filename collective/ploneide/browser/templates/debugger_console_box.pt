@@ -1,0 +1,8 @@
+<div class="debugger-console-box">
+    <!-- Style for this section should be changed when the theme for the editor is changed -->
+    <table>
+    </table>
+    <!-- XXX: there MUST be a better way of doing this, instead of calling this function for each key
+         to call it just once, when ENTER was pressed -->
+    <input id="debugger-console-input" type="text" onkeypress="runCodeInDebugger(event)"/>
+</div>

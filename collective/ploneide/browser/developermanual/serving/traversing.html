@@ -1,0 +1,699 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Traversing &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Serving HTTP and other protocols" href="index.html" />
+    <link rel="next" title="Publishing" href="publishing.html" />
+    <link rel="prev" title="HTTP request and response" href="http_request_and_response.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="publishing.html" title="Publishing"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="http_request_and_response.html" title="HTTP request and response"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Serving HTTP and other protocols</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="traversing">
+<h1>Traversing<a class="headerlink" href="#traversing" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">Plone content is organized to a tree. Traversing means looking up
+content from this tree by path. When HTTP request hits a Plone
+server, Plone will traverse the corresponding content item
+and its view function by URI.</p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
+<li><a class="reference internal" href="#object-ids" id="id2">Object ids</a></li>
+<li><a class="reference internal" href="#path" id="id3">Path</a></li>
+<li><a class="reference internal" href="#exploring-zope-application-server" id="id4">Exploring Zope application server</a></li>
+<li><a class="reference internal" href="#attribute-traversing" id="id5">Attribute traversing</a></li>
+<li><a class="reference internal" href="#container-traversing" id="id6">Container traversing</a></li>
+<li><a class="reference internal" href="#traversing-by-full-path" id="id7">Traversing by full path</a></li>
+<li><a class="reference internal" href="#getting-object-path" id="id8">Getting object path</a><ul>
+<li><a class="reference internal" href="#getting-physical-path" id="id9">Getting physical path</a></li>
+<li><a class="reference internal" href="#getting-virtual-path" id="id10">Getting virtual path</a></li>
+<li><a class="reference internal" href="#getting-item-path-relative-to-the-site-root" id="id11">Getting item path relative to the site root</a></li>
+<li><a class="reference internal" href="#getting-canonical-object-breadcrumbs-visual-path" id="id12">Getting canonical object (breadcrumbs, visual path)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#getting-object-url" id="id13">Getting object URL</a></li>
+<li><a class="reference internal" href="#getting-the-parent" id="id14">Getting the parent</a><ul>
+<li><a class="reference internal" href="#getting-all-parents" id="id15">Getting all parents</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#getting-the-site-root" id="id16">Getting the site root</a><ul>
+<li><a class="reference internal" href="#using-portal-url-tool" id="id17">Using portal_url tool</a></li>
+<li><a class="reference internal" href="#using-getsite" id="id18">Using getSite()</a></li>
+<li><a class="reference internal" href="#traversing-back-to-the-site-root" id="id19">Traversing back to the site root</a></li>
+<li><a class="reference internal" href="#checking-for-the-site-root" id="id20">Checking for the site root</a></li>
+<li><a class="reference internal" href="#navigation-root" id="id21">Navigation root</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#getting-zope-application-server-handle" id="id22">Getting Zope application server handle</a></li>
+<li><a class="reference internal" href="#acquisition-effect" id="id23">Acquisition effect</a></li>
+<li><a class="reference internal" href="#defaut-content-item" id="id24">Defaut content item</a></li>
+<li><a class="reference internal" href="#custom-traversing" id="id25">Custom traversing</a></li>
+<li><a class="reference internal" href="#advanced-traversing-with-search-conditions" id="id26">Advanced traversing with search conditions</a></li>
+<li><a class="reference internal" href="#other-resources" id="id27">Other resources</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>In Plone, all content is mapped to a single tree: content objects, user objects, templates, etc.
+Even almost all object methods are directly mapped to HTTP visible URIs.</p>
+<p>Each object has a path depending on its location.
+Traversing is a method of getting a handle of a persistent object in ZODB object graph by its path.</p>
+<p>Traversing can happen in two places</p>
+<ul class="simple">
+<li>When a HTTP request hits the server the object method, which will generate the HTTP response,
+is looked up using traversing</li>
+<li>You can manually traverse the ZODB tree in your code to locate objects by their path</li>
+</ul>
+</div>
+<div class="section" id="object-ids">
+<h2><a class="toc-backref" href="#id2">Object ids</a><a class="headerlink" href="#object-ids" title="Permalink to this headline">¶</a></h2>
+<p>Each content object has an id string which identifies the object in the parent container.
+The id string is visible in the browser address bar when you view the object.
+Ids are also visible in the Zope Management interface.</p>
+<p>Besides id strings, the content objects have Unique Identifiers, or <a class="reference external" href="http://pypi.python.org/pypi/Products.CMFUid">UID</a>, which
+does not change even if the object is moved or renamed.</p>
+<p>Id should not contain spaces or slashes.</p>
+</div>
+<div class="section" id="path">
+<h2><a class="toc-backref" href="#id3">Path</a><a class="headerlink" href="#path" title="Permalink to this headline">¶</a></h2>
+<p>The Zope path is the location of the object in the object graph.
+It is a sequence of id components from the parent node(s) to the child separated by slashes.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">documentation</span><span class="o">/</span><span class="n">howTos</span><span class="o">/</span><span class="n">myHowTo</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="exploring-zope-application-server">
+<h2><a class="toc-backref" href="#id4">Exploring Zope application server</a><a class="headerlink" href="#exploring-zope-application-server" title="Permalink to this headline">¶</a></h2>
+<p>You can use the Zope Management interface to explore the content of your Zope application server:</p>
+<ul class="simple">
+<li>Sites</li>
+<li>Folders within the sites</li>
+<li>...and so on</li>
+</ul>
+<p>The ZMI does not expose individual attributes. It only exposes traversable content objects.</p>
+</div>
+<div class="section" id="attribute-traversing">
+<h2><a class="toc-backref" href="#id5">Attribute traversing</a><a class="headerlink" href="#attribute-traversing" title="Permalink to this headline">¶</a></h2>
+<p>Zope exposes child objects as attributes.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># you have obtained the plone.org portal root object somehow and it&#39;s</span>
+<span class="c"># stored in local variable &quot;portal&quot;</span>
+
+<span class="n">documentation</span> <span class="o">=</span> <span class="n">portal</span><span class="o">.</span><span class="n">documentation</span>
+<span class="n">howTos</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">portal</span><span class="p">,</span> <span class="s">&quot;how-to&quot;</span><span class="p">)</span> <span class="c"># note that we need use getattr because dash is invalid in syntax</span>
+<span class="n">myHowTo</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">howTos</span><span class="p">,</span> <span class="s">&quot;manipulating-plone-objects-programmatically&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="container-traversing">
+<h2><a class="toc-backref" href="#id6">Container traversing</a><a class="headerlink" href="#container-traversing" title="Permalink to this headline">¶</a></h2>
+<p>Zope exposes child objects as container accessor.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># you have obtained the plone.org portal root object somehow and it&#39;s</span>
+<span class="c"># stored in a local variable &quot;portal&quot;</span>
+
+<span class="n">documentation</span> <span class="o">=</span> <span class="n">portal</span><span class="p">[</span><span class="s">&quot;documentation&quot;</span><span class="p">]</span>
+<span class="n">howTos</span> <span class="o">=</span> <span class="n">documentation</span><span class="p">[</span><span class="s">&quot;how-to&quot;</span><span class="p">]</span>
+<span class="n">myHowTo</span> <span class="o">=</span> <span class="n">howTos</span><span class="p">[</span><span class="s">&quot;manipulating-plone-objects-programmatically&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="traversing-by-full-path">
+<h2><a class="toc-backref" href="#id7">Traversing by full path</a><a class="headerlink" href="#traversing-by-full-path" title="Permalink to this headline">¶</a></h2>
+<p>Any content object provides the methods <em>restrictedTraverse()</em> and <em>unrestrictedTraverse()</em>.
+See <a class="reference external" href="http://svn.zope.org/Zope/trunk/src/OFS/Traversable.py?rev=96262&amp;view=auto">Traversable</a>.</p>
+<p><strong>Security warning</strong>: restrictedTraverse() uses privileges of the currently logged in user.
+An <a class="reference external" href="http://svn.zope.org/Zope/trunk/src/AccessControl/unauthorized.py?rev=96262&amp;view=auto">Unauthorized</a> exception is raised if the code tries to access an object for which the
+user lacks Access contents information and View permissions.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">myHowTo</span> <span class="o">=</span> <span class="n">portal</span><span class="o">.</span><span class="n">restrictedTraverse</span><span class="p">(</span><span class="s">&quot;documentation/howTos/myHowTo&quot;</span><span class="p">)</span>
+
+<span class="c"># Bypass security</span>
+<span class="n">myHowTo</span> <span class="o">=</span> <span class="n">portal</span><span class="o">.</span><span class="n">unrestrictedTraverse</span><span class="p">(</span><span class="s">&quot;documentation/howTos/myHowTo&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">restrictedTraverse()/unrestrictedTraverse() does not honor IPublishTraverse
+adapters. <a class="reference external" href="http://mail.zope.org/pipermail/zope-dev/2009-May/036665.html">Read more about the issue in this discussion</a>.</p>
+</div>
+</div>
+<div class="section" id="getting-object-path">
+<h2><a class="toc-backref" href="#id8">Getting object path</a><a class="headerlink" href="#getting-object-path" title="Permalink to this headline">¶</a></h2>
+<p>An object has two paths:</p>
+<ul class="simple">
+<li>Physical path is the absolute location in the current ZODB object graph. This includes the site instance name as part of it.</li>
+<li>Virtual path is the object location related to the Plone site root</li>
+</ul>
+<p><strong>Path mangling warning</strong>: Always store paths as virtual paths or persistently stored paths will corrupt
+if you rename your site instance.</p>
+<p>See <a class="reference external" href="http://svn.zope.org/Zope/trunk/src/OFS/Traversable.py?rev=96262&amp;view=auto">Traversable</a>.</p>
+<div class="section" id="getting-physical-path">
+<h3><a class="toc-backref" href="#id9">Getting physical path</a><a class="headerlink" href="#getting-physical-path" title="Permalink to this headline">¶</a></h3>
+<p>Use getPhysicalPath(). Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">path</span> <span class="o">=</span> <span class="n">portal</span><span class="o">.</span><span class="n">getPhysicalPath</span><span class="p">()</span> <span class="c"># returns &quot;plone&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="getting-virtual-path">
+<h3><a class="toc-backref" href="#id10">Getting virtual path</a><a class="headerlink" href="#getting-virtual-path" title="Permalink to this headline">¶</a></h3>
+<p>Map physical path to virtual path using HTTP request object physicalPathToVirtualPath(). Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">request</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span> <span class="c"># HTTPRequest object</span>
+
+<span class="n">path</span> <span class="o">=</span> <span class="n">portal</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">getPhysicalPath</span><span class="p">()</span>
+
+<span class="n">virtual_path</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">physicalPathToVirtualPath</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="c"># returns &quot;document&quot;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Virtual path is not necessarily path relative to the site root,
+depending on the virtual host configuration.</p>
+</div>
+</div>
+<div class="section" id="getting-item-path-relative-to-the-site-root">
+<h3><a class="toc-backref" href="#id11">Getting item path relative to the site root</a><a class="headerlink" href="#getting-item-path-relative-to-the-site-root" title="Permalink to this headline">¶</a></h3>
+<p>There is no a direct, easy, way to accomplish this.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">zope.component</span> <span class="kn">import</span> <span class="n">getMultiAdapter</span>
+
+<span class="k">def</span> <span class="nf">getSiteRootRelativePath</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Get site root relative path to an item</span>
+
+<span class="sd">    @param context: Content item which path is resolved</span>
+
+<span class="sd">    @param request: HTTP request object</span>
+
+<span class="sd">    @return: Path to the context object, relative to site root, prefixed with a slash.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">portal_state</span> <span class="o">=</span> <span class="n">getMultiAdapter</span><span class="p">((</span><span class="n">context</span><span class="p">,</span> <span class="n">request</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s">u&#39;plone_portal_state&#39;</span><span class="p">)</span>
+    <span class="n">site</span> <span class="o">=</span> <span class="n">portal_state</span><span class="o">.</span><span class="n">portal</span><span class="p">()</span>
+
+    <span class="c"># Both of these are tuples</span>
+    <span class="n">site_path</span> <span class="o">=</span> <span class="n">site</span><span class="o">.</span><span class="n">getPhysicalPath</span><span class="p">();</span>
+    <span class="n">context_path</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">getPhysicalPath</span><span class="p">()</span>
+
+    <span class="n">relative_path</span> <span class="o">=</span> <span class="n">context_path</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">site_path</span><span class="p">):]</span>
+
+    <span class="k">return</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="s">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">relative_path</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="getting-canonical-object-breadcrumbs-visual-path">
+<h3><a class="toc-backref" href="#id12">Getting canonical object (breadcrumbs, visual path)</a><a class="headerlink" href="#getting-canonical-object-breadcrumbs-visual-path" title="Permalink to this headline">¶</a></h3>
+<p>Visual path is presented in the breadcrumbs. It is how
+the site visitor sees the object path.</p>
+<p>It may differ from the physical path</p>
+<ul class="simple">
+<li>Default content item is not shown in the visual path</li>
+<li>Default view is not shown in the visual path</li>
+</ul>
+<p>Canonical object is the context object which the user sees from
+the request URL:</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">context_helper</span> <span class="o">=</span> <span class="n">getMultiAdapter</span><span class="p">((</span><span class="n">context</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s">&quot;plone_context_state&quot;</span><span class="p">)</span>
+<span class="n">canonical</span> <span class="o">=</span> <span class="n">context_helper</span><span class="o">.</span><span class="n">canonical_object</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="getting-object-url">
+<h2><a class="toc-backref" href="#id13">Getting object URL</a><a class="headerlink" href="#getting-object-url" title="Permalink to this headline">¶</a></h2>
+<p>Use absolute_url(). See <a class="reference external" href="http://svn.zope.org/Zope/trunk/src/OFS/Traversable.py?rev=96262&amp;view=auto">Traversable</a>.</p>
+<p><strong>URL mangling warning</strong>: absolute_url() is sensitive to virtual host URL mappings. absolute_url()
+will return different results depending on if you access your site from URLs <a class="reference external" href="http://yourhost/">http://yourhost/</a> or <a class="reference external" href="http://yourhost:8080/Plone">http://yourhost:8080/Plone</a>.
+Do not persistently store the result of absolute_url().</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">url</span> <span class="o">=</span> <span class="n">portal</span><span class="o">.</span><span class="n">absolute_url</span><span class="p">()</span> <span class="c"># http://nohost/plone in unit tests</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="getting-the-parent">
+<h2><a class="toc-backref" href="#id14">Getting the parent</a><a class="headerlink" href="#getting-the-parent" title="Permalink to this headline">¶</a></h2>
+<p>Object parent is accessible is <a class="reference external" href="http://docs.zope.org/zope2/zope2book/source/Acquisition.html">acquisition</a> chain for the object is set.</p>
+<p>Use aq_parent.</p>
+<blockquote>
+parent = object.aq_parent</blockquote>
+<p>Parent is defined as __parent__ attribute of the object instance.</p>
+<blockquote>
+object.__parent__ = object.aq_parent.</blockquote>
+<p>__parent__ is set when object's __of__() method is called.</p>
+<blockquote>
+<p>view = MyBrowserView(context, request)</p>
+<p>view = view.__of__(context) # Inserts view into acquisition chain and acquistion functions become available</p>
+</blockquote>
+<div class="section" id="getting-all-parents">
+<h3><a class="toc-backref" href="#id15">Getting all parents</a><a class="headerlink" href="#getting-all-parents" title="Permalink to this headline">¶</a></h3>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">getAcquisitionChain</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    @return: List of objects from context, its parents to the portal root</span>
+
+<span class="sd">    Example::</span>
+
+<span class="sd">        chain = getAcquisitionChain(self.context)</span>
+<span class="sd">        print &quot;I will look up objects:&quot; + str(list(chain))</span>
+
+<span class="sd">    @param object: Any content object</span>
+<span class="sd">    @return: Iterable of all parents from the direct parent to the site root</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c"># It is important to use inner to bootstrap the traverse,</span>
+    <span class="c"># or otherwise we might get surprising parents</span>
+    <span class="c"># E.g. the context of the view has the view as the parent</span>
+    <span class="c"># unless inner is used</span>
+    <span class="n">inner</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="n">aq_inner</span>
+
+    <span class="nb">iter</span> <span class="o">=</span> <span class="n">inner</span>
+
+    <span class="k">while</span> <span class="nb">iter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="nb">iter</span>
+
+        <span class="k">if</span> <span class="n">ISiteRoot</span><span class="o">.</span><span class="n">providedBy</span><span class="p">(</span><span class="nb">iter</span><span class="p">):</span>
+           <span class="k">break</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="nb">iter</span><span class="p">,</span> <span class="s">&quot;aq_parent&quot;</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&quot;Parent traversing interrupted by object: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">parent</span><span class="p">))</span>
+
+        <span class="nb">iter</span> <span class="o">=</span> <span class="nb">iter</span><span class="o">.</span><span class="n">aq_parent</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="getting-the-site-root">
+<h2><a class="toc-backref" href="#id16">Getting the site root</a><a class="headerlink" href="#getting-the-site-root" title="Permalink to this headline">¶</a></h2>
+<p>You can resolve the site root if you have the handle to any context object.</p>
+<div class="section" id="using-portal-url-tool">
+<h3><a class="toc-backref" href="#id17">Using portal_url tool</a><a class="headerlink" href="#using-portal-url-tool" title="Permalink to this headline">¶</a></h3>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">Products.CMFCore.utils</span> <span class="kn">import</span> <span class="n">getToolByName</span>
+
+<span class="c"># you know some object which is refered as &quot;context&quot;</span>
+<span class="n">portal_url</span> <span class="o">=</span> <span class="n">getToolByName</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="s">&quot;portal_url&quot;</span><span class="p">)</span>
+<span class="n">portal</span> <span class="o">=</span> <span class="n">portal_url</span><span class="o">.</span><span class="n">getPortalObject</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>You can also do shortcut using acquisition (not recommended if you can avoid this):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">portal</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">portal_url</span><span class="o">.</span><span class="n">getPortalObject</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="using-getsite">
+<h3><a class="toc-backref" href="#id18">Using getSite()</a><a class="headerlink" href="#using-getsite" title="Permalink to this headline">¶</a></h3>
+<p>Site is also stored a thread local variable. In Zope each request is
+processed in its own thread. Site thread local is set when the request processing starts.</p>
+<p>You can use this method even if you do not have the context object available,
+assuming that your code is called after Zope has traversed the context object once.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">zope.app.component.hooks</span> <span class="kn">import</span> <span class="n">getSite</span>
+
+<span class="n">site</span> <span class="o">=</span> <span class="n">getSite</span><span class="p">()</span> <span class="c"># returns portal root from thread local storage</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Due to Plone's Display -&gt; Default content item behavior the page
+you are viewing in the browser from the site root URL is not necessary
+the root item itself. For example, in the default Plone installation
+this URL internally maps to Page whose id is &quot;front-page&quot; and
+you still can query the actual parent object which is the site root.
+If you need to traverse using user visible breadcrumbs, see
+how breadcrumbs viewlet code does it.</p>
+</div>
+</div>
+<div class="section" id="traversing-back-to-the-site-root">
+<h3><a class="toc-backref" href="#id19">Traversing back to the site root</a><a class="headerlink" href="#traversing-back-to-the-site-root" title="Permalink to this headline">¶</a></h3>
+<p>Sometimes <tt class="docutils literal"><span class="pre">getSite()</span></tt> or <tt class="docutils literal"><span class="pre">portal_url</span></tt> are not available, but you still
+have acquisition chain intact. In these cases you can simply traverse
+parent objects back to the site root using <tt class="docutils literal"><span class="pre">aq_parent</span></tt> accessor:</p>
+<div class="highlight-python"><pre>from Products.CMFCore.interfaces import ISiteRoot
+
+@@grok.provider(IContextSourceBinder)
+def languages(context):
+
+    # z3c.form KSS inline validation hack
+    if not ISiteRoot.providedBy(context):
+        for item in getSite().aq_chain:
+            if ISiteRoot.providedBy(item):
+                context = item
+
+    ltool = getToolByName(context, 'portal_languages')
+    lang_items = ltool.listAvailableLanguageInformation()
+    return SimpleVocabulary(
+        [SimpleTerm(value=item['code'], token=item['code'], title=item[u'native']) for item in lang_items]
+    )</pre>
+</div>
+</div>
+<div class="section" id="checking-for-the-site-root">
+<h3><a class="toc-backref" href="#id20">Checking for the site root</a><a class="headerlink" href="#checking-for-the-site-root" title="Permalink to this headline">¶</a></h3>
+<p>You can check if the current context object is Plone site root:</p>
+<div class="highlight-python"><pre>from Products.CMFCore.interfaces import ISiteRoot
+
+if ISiteRoot.providedBy(context):
+        # Special case
+else:
+        # Subfolder or or a page</pre>
+</div>
+</div>
+<div class="section" id="navigation-root">
+<h3><a class="toc-backref" href="#id21">Navigation root</a><a class="headerlink" href="#navigation-root" title="Permalink to this headline">¶</a></h3>
+<p>In Plone, the Plone site root is not necessarily the navigation root (one site can contain
+many navigation trees for example for the nested subsites).</p>
+<p>The navigation root check has the same mechanism as the site root check.</p>
+<blockquote>
+<p>from plone.app.layout.navigation.interfaces import INavigationRoot</p>
+<dl class="docutils">
+<dt>if INavigationRoot.providedBy(context):</dt>
+<dd># Top level, no up navigation</dd>
+<dt>else:</dt>
+<dd># Up navigation and breadcrumbs</dd>
+</dl>
+</blockquote>
+<p>More info</p>
+<ul class="simple">
+<li><a class="reference external" href="http://plone.org/products/plone/roadmap/234">http://plone.org/products/plone/roadmap/234</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="getting-zope-application-server-handle">
+<h2><a class="toc-backref" href="#id22">Getting Zope application server handle</a><a class="headerlink" href="#getting-zope-application-server-handle" title="Permalink to this headline">¶</a></h2>
+<p>You can also access other sites within the same application server from your code.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">app</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">restrictedTraverse</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">)</span> <span class="c"># Zope application server root</span>
+<span class="n">site</span> <span class="o">=</span> <span class="n">app</span><span class="p">[</span><span class="s">&quot;plone&quot;</span><span class="p">]</span> <span class="c"># your plone instance</span>
+<span class="n">site2</span> <span class="o">=</span> <span class="n">app</span><span class="p">[</span><span class="s">&quot;mysiteid&quot;</span><span class="p">]</span> <span class="c"># another site</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="acquisition-effect">
+<h2><a class="toc-backref" href="#id23">Acquisition effect</a><a class="headerlink" href="#acquisition-effect" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes traversing can give you attributes which actually do not exist on the object, but are inherited from the parent objects
+in the persistent object graph. See <a class="reference external" href="http://docs.zope.org/zope2/zope2book/source/Acquisition.html">acquisition</a>.</p>
+</div>
+<div class="section" id="defaut-content-item">
+<h2><a class="toc-backref" href="#id24">Defaut content item</a><a class="headerlink" href="#defaut-content-item" title="Permalink to this headline">¶</a></h2>
+<p>Default content item or view sets some challenges for the traversing, as the
+object published path and internal path differ.</p>
+<p>Below is an example to get the folder of the published object (parent folder for the default item)
+in page template</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">tal:define=</span><span class="s">&quot;folder context/@@plone_context_state/canonical_object&quot;</span> <span class="na">tal:condition=</span><span class="s">&quot;python:hasattr(folder, &#39;carousel&#39;) and hasattr(folder[&#39;carousel&#39;], &#39;carouselText&#39;)&quot;</span><span class="nt">&gt;</span>xxx<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+</div>
+<p>More info</p>
+<ul class="simple">
+<li>See <a class="reference internal" href="../misc/context.html"><em>plone_context_state helper</em></a></li>
+</ul>
+</div>
+<div class="section" id="custom-traversing">
+<h2><a class="toc-backref" href="#id25">Custom traversing</a><a class="headerlink" href="#custom-traversing" title="Permalink to this headline">¶</a></h2>
+<p>There exist many ways to make your objects traversable</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">__getitem__()</span></tt> which makes your objects act like Python dictionary. This is the simplest method and recommended.</li>
+<li><tt class="docutils literal"><span class="pre">__bobo_traverse__()</span></tt> which is archaid way from early 00s</li>
+<li><tt class="docutils literal"><span class="pre">ITraversable</span></tt> interface. You can create your own traversing hooks. <tt class="docutils literal"><span class="pre">zope.traversing.interfaces.ITraversable</span></tt>
+provides an interface traversable objects must provider. You need to register ITraversable as adapter for your content types.
+This is only for publishing methods for HTTP requests.</li>
+</ul>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Zope traversing is a mine field. There are different traversers.
+One is ZPublisher traverser which does HTTP request looks.
+One is OFS.Traversable.unrestrictedTraverse() which happens
+when you call traverse from Python code. Then another
+case is zope.tales.expression.PathExpr which uses
+really simple traverser.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">If AttributeError is risen inside traverse() function bad things happen,
+as Zope publisher specially handles this and raises NotFound exception.</p>
+</div>
+<p>Example using <tt class="docutils literal"><span class="pre">__getitem__()</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Viewlets</span><span class="p">(</span><span class="n">BrowserView</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Expose arbitary viewlets to traversing by name.</span>
+
+<span class="sd">    Exposes viewlets to templates by names.</span>
+
+<span class="sd">    Example how to render plone.logo viewlet in arbitary template code point::</span>
+
+<span class="sd">        &lt;div tal:content=&quot;context/@@viewlets/plone.logo&quot; /&gt;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="o">...</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Allow travering intoviewlets by viewlet name.</span>
+
+<span class="sd">        @return: Viewlet HTML output</span>
+
+<span class="sd">        @raise: ViewletNotFoundException if viewlet is not found</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">viewlet</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">setupViewletByName</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">viewlet</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">active_layers</span> <span class="o">=</span> <span class="p">[</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">__provides__</span><span class="o">.</span><span class="n">__iro__</span> <span class="p">]</span>
+            <span class="n">active_layers</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">active_layers</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">ViewletNotFoundException</span><span class="p">(</span><span class="s">&quot;Viewlet does not exist by name </span><span class="si">%s</span><span class="s"> for the active theme layer set </span><span class="si">%s</span><span class="s">. Probably theme interface not registered in plone.browserlayers. Try reinstalling the theme.&quot;</span>  <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">active_layers</span><span class="p">)))</span>
+
+        <span class="n">viewlet</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">viewlet</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>More information</p>
+<ul class="simple">
+<li><a class="reference external" href="http://play.pixelblaster.ro/blog/archive/2006/10/21/custom-traversing-with-five-and-itraversable">http://play.pixelblaster.ro/blog/archive/2006/10/21/custom-traversing-with-five-and-itraversable</a></li>
+</ul>
+</div>
+<div class="section" id="advanced-traversing-with-search-conditions">
+<h2><a class="toc-backref" href="#id26">Advanced traversing with search conditions</a><a class="headerlink" href="#advanced-traversing-with-search-conditions" title="Permalink to this headline">¶</a></h2>
+<p>All Plone content should exist in <a class="reference internal" href="../searching_and_indexing/query.html"><em>portal_catalog</em></a>.
+Catalog provides fast query access with various indexes to the Plone content.</p>
+</div>
+<div class="section" id="other-resources">
+<h2><a class="toc-backref" href="#id27">Other resources</a><a class="headerlink" href="#other-resources" title="Permalink to this headline">¶</a></h2>
+<p>See object <a class="reference external" href="http://docs.zope.org/zope2/zope2book/source/ZopeArchitecture.html#fundamental-zope-concepts">publishing</a>.</p>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Traversing</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#object-ids">Object ids</a></li>
+<li><a class="reference internal" href="#path">Path</a></li>
+<li><a class="reference internal" href="#exploring-zope-application-server">Exploring Zope application server</a></li>
+<li><a class="reference internal" href="#attribute-traversing">Attribute traversing</a></li>
+<li><a class="reference internal" href="#container-traversing">Container traversing</a></li>
+<li><a class="reference internal" href="#traversing-by-full-path">Traversing by full path</a></li>
+<li><a class="reference internal" href="#getting-object-path">Getting object path</a><ul>
+<li><a class="reference internal" href="#getting-physical-path">Getting physical path</a></li>
+<li><a class="reference internal" href="#getting-virtual-path">Getting virtual path</a></li>
+<li><a class="reference internal" href="#getting-item-path-relative-to-the-site-root">Getting item path relative to the site root</a></li>
+<li><a class="reference internal" href="#getting-canonical-object-breadcrumbs-visual-path">Getting canonical object (breadcrumbs, visual path)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#getting-object-url">Getting object URL</a></li>
+<li><a class="reference internal" href="#getting-the-parent">Getting the parent</a><ul>
+<li><a class="reference internal" href="#getting-all-parents">Getting all parents</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#getting-the-site-root">Getting the site root</a><ul>
+<li><a class="reference internal" href="#using-portal-url-tool">Using portal_url tool</a></li>
+<li><a class="reference internal" href="#using-getsite">Using getSite()</a></li>
+<li><a class="reference internal" href="#traversing-back-to-the-site-root">Traversing back to the site root</a></li>
+<li><a class="reference internal" href="#checking-for-the-site-root">Checking for the site root</a></li>
+<li><a class="reference internal" href="#navigation-root">Navigation root</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#getting-zope-application-server-handle">Getting Zope application server handle</a></li>
+<li><a class="reference internal" href="#acquisition-effect">Acquisition effect</a></li>
+<li><a class="reference internal" href="#defaut-content-item">Defaut content item</a></li>
+<li><a class="reference internal" href="#custom-traversing">Custom traversing</a></li>
+<li><a class="reference internal" href="#advanced-traversing-with-search-conditions">Advanced traversing with search conditions</a></li>
+<li><a class="reference internal" href="#other-resources">Other resources</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="http_request_and_response.html"
+                        title="previous chapter">HTTP request and response</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="publishing.html"
+                        title="next chapter">Publishing</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/serving/traversing.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="publishing.html" title="Publishing"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="http_request_and_response.html" title="HTTP request and response"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Serving HTTP and other protocols</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

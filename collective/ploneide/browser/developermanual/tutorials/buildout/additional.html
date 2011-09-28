@@ -1,0 +1,565 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Additional information &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../../index.html" />
+    <link rel="up" title="Buildout" href="index.html" />
+    <link rel="next" title="Zopeskel templates" href="../paste.html" />
+    <link rel="prev" title="Installing products from Subversion" href="subversion.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../paste.html" title="Zopeskel templates"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="subversion.html" title="Installing products from Subversion"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Tutorials</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Buildout</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="additional-information">
+<h1>Additional information<a class="headerlink" href="#additional-information" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">Further in-depth information about dealing with buildout
+in Plone context</p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#recipes" id="id1">Recipes</a></li>
+<li><a class="reference internal" href="#buildout-folder-structure" id="id2">Buildout folder structure</a></li>
+<li><a class="reference internal" href="#running-buildout-on-windows" id="id3">Running buildout on Windows</a></li>
+<li><a class="reference internal" href="#running-buildout-behind-proxy" id="id4">Running buildout behind proxy</a></li>
+<li><a class="reference internal" href="#buildout-cache-folder" id="id5">Buildout cache folder</a><ul>
+<li><a class="reference internal" href="#buildout-defaults" id="id6">Buildout defaults</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#manually-picking-dowloaded-and-active-component-versions" id="id7">Manually picking dowloaded and active component versions</a></li>
+<li><a class="reference internal" href="#migrating-buildout-to-different-python-interpreter" id="id8">Migrating buildout to different Python interpreter</a></li>
+<li><a class="reference internal" href="#setting-up-plone-site-from-buildout-cfg-and-data-fs" id="id9">Setting up Plone site from buildout.cfg and Data.fs</a></li>
+<li><a class="reference internal" href="#configuring-plone-products-from-buildout" id="id10">Configuring plone products from buildout</a></li>
+<li><a class="reference internal" href="#setting-ld-library-path" id="id11">Setting LD_LIBRARY_PATH</a></li>
+<li><a class="reference internal" href="#paste-factory" id="id12">Paste factory</a></li>
+<li><a class="reference internal" href="#troubleshooting" id="id13">Troubleshooting</a></li>
+</ul>
+</div>
+<div class="section" id="recipes">
+<h2><a class="toc-backref" href="#id1">Recipes</a><a class="headerlink" href="#recipes" title="Permalink to this headline">¶</a></h2>
+<p>Buildout consists of recipes. A recipe consists of</p>
+<ul class="simple">
+<li>Python package distributed in pypi.python.org</li>
+<li>Declaration in [buildout] parts=partname</li>
+<li>[partname] section with recipe= telling the pypi.python.org name</li>
+</ul>
+<p>Recipes are automatically downloaded from pypi as Python eggs.</p>
+</div>
+<div class="section" id="buildout-folder-structure">
+<h2><a class="toc-backref" href="#id2">Buildout folder structure</a><a class="headerlink" href="#buildout-folder-structure" title="Permalink to this headline">¶</a></h2>
+<p>Plone buildout's have folderes which have predefined purposes</p>
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">bin/</span></tt> - add Python scripts and shell scripts installed by various eggs. Also <tt class="docutils literal"><span class="pre">buildout</span></tt> command itself.
+The default Plone start script <tt class="docutils literal"><span class="pre">bin/instance</span></tt> is here.</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">parts/</span></tt> - constructed the source tree. This is wiped between buildout runs. You should not store
+any persistent information here (note: some broken recipes store things like pid files here). Generated
+configuration files are stored here and usually it is no help to change them,</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">src/</span></tt> source code you are developing yourself</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">eggs/</span></tt> extracted Python eggs</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">downloads/</span></tt> Python egg download cache (may be elsewhere depending on the system config)</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">var/</span></tt> database like data. Zope's Data.fs,</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">bootstrap.py</span></tt> - installs buildout command</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">buildout.cfg</span></tt> - basic buildout file. May extend other .cfg files. Sometimes there are many files
+and you need to pick one for buildout command. E.g.:</p>
+<div class="highlight-python"><pre>bin/buildout -c production.cfg</pre>
+</div>
+</li>
+</ul>
+</div>
+<div class="section" id="running-buildout-on-windows">
+<h2><a class="toc-backref" href="#id3">Running buildout on Windows</a><a class="headerlink" href="#running-buildout-on-windows" title="Permalink to this headline">¶</a></h2>
+<p>Windows Plone installer supplies <tt class="docutils literal"><span class="pre">buildout.exe</span></tt>.
+This executable uses system Python installation.
+This installation is not necessary the correct Python
+version if multiple Pythons are installed on the computer.</p>
+<p>A lot of Windows Python software use
+wrapper .exe files which pick the Python interpreter
+based on this registry settings. One notable exe is buildout.exe,
+which is used to run buildout.</p>
+<p>If you install multiple Pythons,
+the latter installations might not become active in the registry automatically,
+and your Python wrapper still rely on the old version. This leads to
+version incompatibilities and you are unable to start the Python applications.</p>
+<p>Since only one Python interpreter can be activate at a time,
+it is little bit difficult to develop multi-version Python code Windows.
+This kind of situation could be that you develop Plone 3 sites
+(Python 2.4) and Plone 4 sites (Python 2.6) simultaneously.</p>
+<p>Below is regpy.py code which changes the active Python interpreter.
+The orignal author is unknown, I picked up this code from some paste board
+long time ago. Just run this code with your Python and the running
+interpreter becomes active.</p>
+<p>Example:</p>
+<div class="highlight-python"><pre>C:\Plone\python\python.exe regpy.py</pre>
+</div>
+<p>Code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">from</span> <span class="nn">_winreg</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c"># tweak as necessary</span>
+<span class="n">version</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">version</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">installpath</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">prefix</span>
+
+<span class="n">regpath</span> <span class="o">=</span> <span class="s">&quot;SOFTWARE</span><span class="se">\\</span><span class="s">Python</span><span class="se">\\</span><span class="s">Pythoncore</span><span class="se">\\</span><span class="si">%s</span><span class="se">\\</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">version</span><span class="p">)</span>
+<span class="n">installkey</span> <span class="o">=</span> <span class="s">&quot;InstallPath&quot;</span>
+<span class="n">pythonkey</span> <span class="o">=</span> <span class="s">&quot;PythonPath&quot;</span>
+<span class="n">pythonpath</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">;</span><span class="si">%s</span><span class="se">\\</span><span class="s">Lib</span><span class="se">\\</span><span class="s">;</span><span class="si">%s</span><span class="se">\\</span><span class="s">DLLs</span><span class="se">\\</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+    <span class="n">installpath</span><span class="p">,</span> <span class="n">installpath</span><span class="p">,</span> <span class="n">installpath</span>
+<span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">RegisterPy</span><span class="p">():</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">reg</span> <span class="o">=</span> <span class="n">OpenKey</span><span class="p">(</span><span class="n">HKEY_LOCAL_MACHINE</span><span class="p">,</span> <span class="n">regpath</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">EnvironmentError</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">reg</span> <span class="o">=</span> <span class="n">CreateKey</span><span class="p">(</span><span class="n">HKEY_LOCAL_MACHINE</span><span class="p">,</span> <span class="n">regpath</span><span class="p">)</span>
+            <span class="n">SetValue</span><span class="p">(</span><span class="n">reg</span><span class="p">,</span> <span class="n">installkey</span><span class="p">,</span> <span class="n">REG_SZ</span><span class="p">,</span> <span class="n">installpath</span><span class="p">)</span>
+            <span class="n">SetValue</span><span class="p">(</span><span class="n">reg</span><span class="p">,</span> <span class="n">pythonkey</span><span class="p">,</span> <span class="n">REG_SZ</span><span class="p">,</span> <span class="n">pythonpath</span><span class="p">)</span>
+            <span class="n">CloseKey</span><span class="p">(</span><span class="n">reg</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;*** Unable to register!&quot;</span>
+            <span class="k">return</span>
+        <span class="k">print</span> <span class="s">&quot;--- Python&quot;</span><span class="p">,</span> <span class="n">version</span><span class="p">,</span> <span class="s">&quot;is now registered!&quot;</span>
+        <span class="k">return</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">QueryValue</span><span class="p">(</span><span class="n">reg</span><span class="p">,</span> <span class="n">installkey</span><span class="p">)</span> <span class="o">==</span> <span class="n">installpath</span> <span class="ow">and</span>
+        <span class="n">QueryValue</span><span class="p">(</span><span class="n">reg</span><span class="p">,</span> <span class="n">pythonkey</span><span class="p">)</span> <span class="o">==</span> <span class="n">pythonpath</span><span class="p">):</span>
+        <span class="n">CloseKey</span><span class="p">(</span><span class="n">reg</span><span class="p">)</span>
+        <span class="k">print</span> <span class="s">&quot;=== Python&quot;</span><span class="p">,</span> <span class="n">version</span><span class="p">,</span> <span class="s">&quot;is already registered!&quot;</span>
+        <span class="k">return</span>
+    <span class="n">CloseKey</span><span class="p">(</span><span class="n">reg</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;*** Unable to register!&quot;</span>
+    <span class="k">print</span> <span class="s">&quot;*** You probably have another Python installation!&quot;</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">RegisterPy</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Example error when going from Plone 3 to Plone 4:</p>
+<div class="highlight-python"><pre>Traceback (most recent call last):
+
+  File "C:\xxx\bin\idelauncher.py", line 99, in ?
+
+    exec(data, globals())
+
+  File "&lt;string&gt;", line 419, in ?
+
+  File "c:\xxx\buildout-cache\eggs\plone.recipe.zope2instance-4.0.3-py2.6.egg\plone\recipe\zope2instance\__init__.py", line 27, in ?
+
+    from plone.recipe.zope2instance import make
+
+  File "c:\xxx\buildout-cache\eggs\plone.recipe.zope2instance-4.0.3-py2.6.egg\plone\recipe\zope2instance\make.py", line 5, in ?
+
+    from hashlib import sha1
+
+ImportError: No module named hashlib</pre>
+</div>
+<p>More info</p>
+<ul class="simple">
+<li><a class="reference external" href="http://blog.mfabrik.com/2011/02/22/changing-the-active-python-interpreter-on-windows/">http://blog.mfabrik.com/2011/02/22/changing-the-active-python-interpreter-on-windows/</a></li>
+</ul>
+</div>
+<div class="section" id="running-buildout-behind-proxy">
+<h2><a class="toc-backref" href="#id4">Running buildout behind proxy</a><a class="headerlink" href="#running-buildout-behind-proxy" title="Permalink to this headline">¶</a></h2>
+<p>Buildout uses setuptools which uses urllib which allows you to set
+proxy using http_proxy (lowecase!) environment variable.</p>
+<p>Example for UNIX shell (bash)</p>
+<div class="highlight-python"><pre># Set proxy address as environment varoable.
+# In this case we use Polipo server running on the same compuer.
+http_proxy=http://localhost:8123/
+
+# This is Bash shell specific command to export environment variable
+# to processes started from the shell
+export http_proxy
+
+# Run buildout normally
+bin/buildout</pre>
+</div>
+<p>You can also SSH tunnel the proxy from a remote server:</p>
+<div class="highlight-python"><pre># Make Polipo proxy yourserver.com:8123
+# made to be available at local port 8123
+# through SSH tunnel
+ssh -L 8123:localhost:8123 yourserver.com</pre>
+</div>
+</div>
+<div class="section" id="buildout-cache-folder">
+<h2><a class="toc-backref" href="#id5">Buildout cache folder</a><a class="headerlink" href="#buildout-cache-folder" title="Permalink to this headline">¶</a></h2>
+<p>If you are running several buildouts on the same user you should
+consider setting the cache folder. All downloaded eggs are cached here.</p>
+<p>There are two ways to set the cache folder</p>
+<ul class="simple">
+<li>PYTHON_EGG_CACHE environment variable</li>
+<li>download-cache variable in [buildout] - only recommended if the buildout.cfg
+file is not shared between different configurations</li>
+</ul>
+<p>Example:</p>
+<div class="highlight-python"><pre># Create a cache directory
+mkdir ~/python-egg-cache
+
+# Set buildout cache directory for this shell session
+export PYTHON_EGG_CACHE=~/python-egg-cache</pre>
+</div>
+<div class="section" id="buildout-defaults">
+<h3><a class="toc-backref" href="#id6">Buildout defaults</a><a class="headerlink" href="#buildout-defaults" title="Permalink to this headline">¶</a></h3>
+<p>You can set user wide buildout settings in the following file:</p>
+<div class="highlight-python"><pre>$HOME/.buildout/default.cfg</pre>
+</div>
+<p>This is especially useful if you are running many Plone development buildouts on your computer
+and you want them to share the same buildout egg cache settings.</p>
+</div>
+</div>
+<div class="section" id="manually-picking-dowloaded-and-active-component-versions">
+<h2><a class="toc-backref" href="#id7">Manually picking dowloaded and active component versions</a><a class="headerlink" href="#manually-picking-dowloaded-and-active-component-versions" title="Permalink to this headline">¶</a></h2>
+<p>This is also known as pindowning. You can manually choose what Python egg versions
+of each component are used. This is often needed to resolve version conflict issues.</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.uwosh.edu/ploneprojects/documentation/how-tos/how-to-use-buildout-to-pin-product-versions">http://www.uwosh.edu/ploneprojects/documentation/how-tos/how-to-use-buildout-to-pin-product-versions</a></li>
+</ul>
+</div>
+<div class="section" id="migrating-buildout-to-different-python-interpreter">
+<h2><a class="toc-backref" href="#id8">Migrating buildout to different Python interpreter</a><a class="headerlink" href="#migrating-buildout-to-different-python-interpreter" title="Permalink to this headline">¶</a></h2>
+<p>You are either</p>
+<ul class="simple">
+<li>Copying the whole buildout folder to a new computer (not recommended)</li>
+<li>Changing Python interpreter on the same computer</li>
+</ul>
+<p>First you need to clear existing eggs as they might contain binary compilations
+for wrong Python version or CPU architecture</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">rm -rf eggs/*</span>
+</pre></div>
+</div>
+<p>Clear also src/ folder if you are developing any binary eggs.</p>
+<p>Buildout can be made aware of new Python interpreter by rerunning bootstrap.py.</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">source ~/code/python/python-2.4/bin/activate</span>
+<span class="go">python bootstrap.py</span>
+</pre></div>
+</div>
+<p>Then run buildout again and it will fetch all Python eggs for the new Python interpreter</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">bin/buildout</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="setting-up-plone-site-from-buildout-cfg-and-data-fs">
+<h2><a class="toc-backref" href="#id9">Setting up Plone site from buildout.cfg and Data.fs</a><a class="headerlink" href="#setting-up-plone-site-from-buildout-cfg-and-data-fs" title="Permalink to this headline">¶</a></h2>
+<p>This is often needed when you are copying or moving Plone site.
+If repeatable deployment strategy is done right, everything
+needed to establish a Plone site is</p>
+<ul class="simple">
+<li>buildout.cfg which described Plone site and its add-on products and how they are downloaded or checked out from version control</li>
+<li>Data.fs which contains the site database</li>
+</ul>
+<p>Below is an example process.</p>
+<p>Activate Python 2.6 for Plone (see <a class="reference internal" href="../python.html"><em>how to use virtualenv controlled non-system wide Python</em></a>:</p>
+<div class="highlight-python"><pre>source ~/code/python/python-2.6/bin/activate</pre>
+</div>
+<p>Install ZopeSkel templates which contains a buildout and folder structure template for Plone site (plone3_buildout
+works also for Plone 4 as long as you type in the correct version when paster template engine asks for it):</p>
+<div class="highlight-python"><pre>easy_install ZopeSkel # creates paster command under virtual bin/ folder and downloads Plone/Zope templates
+paster create -t plone3_buildout
+
+
+paster create -t plone3_buildout newprojectfoldername
+...
+Selected and implied templates:
+  ZopeSkel#plone3_buildout  A buildout for Plone 3 installation
+...
+
+Expert Mode? (What question mode would you like? (easy/expert/all)?) ['easy']:
+Plone Version (Plone version # to install) ['3.3.4']: 4.0
+Zope2 Install Path (Path to Zope2 installation; leave blank to fetch one!) ['']:
+Plone Products Directory (Path to Plone products; leave blank to fetch [Plone 3.0/3.1 only]) ['']:
+Initial Zope Username (Username for Zope root admin user) ['admin']: admin
+Initial User Password (Password for Zope root admin user) ['']: admin
+HTTP Port (Port that Zope will use for serving HTTP) ['8080']:
+Debug Mode (Should debug mode be "on" or "off"?) ['off']: on
+Verbose Security? (Should verbose security be "on" or "off"?) ['off']: on</pre>
+</div>
+<p>Then you can add copy buildout.cfg from the existing site to your new project</p>
+<div class="highlight-python"><pre>copy buildout.cfg newproject # Copy the existing site configuration file to new project
+cd newproject
+python bootstrap.py # Creates bin/buildout command for buildout
+bin/buildout # Run buildout - will download and install necessary add-ons to run Plone site</pre>
+</div>
+<p>Assuming buildout completes succesfully, test that the site starts (without database):</p>
+<div class="highlight-python"><pre>bin/instance fg # Start Zope in foreground debug mode</pre>
+</div>
+<p>Press CTRL+C to stop the instance.</p>
+<p>Now copy the existing database Data.fs to buildout:</p>
+<div class="highlight-python"><pre>cp Data.fs var/filestorage/Data.fs # There should be existing Data.fs file here, created by site test launch</pre>
+</div>
+<p>If you do not know the admin user account for the database, you can create additional admin user:</p>
+<div class="highlight-python"><pre>bin/instance adduser admin2 admin # create user admin2 with password admin</pre>
+</div>
+<p>Check Zope start up message in which port the instance is running (default port is 8080):</p>
+<div class="highlight-python"><pre>2010-09-06 12:55:17 INFO ZServer HTTP server started at Mon Sep  6 12:55:17 2010
+Hostname: 0.0.0.0
+Port: 20001</pre>
+</div>
+<p>Then log in to Zope Management Interface by going with your browser:</p>
+<div class="highlight-python"><pre>http://localhost:8080</pre>
+</div>
+</div>
+<div class="section" id="configuring-plone-products-from-buildout">
+<span id="configuring-products-from-buildout"></span><h2><a class="toc-backref" href="#id10">Configuring plone products from buildout</a><a class="headerlink" href="#configuring-plone-products-from-buildout" title="Permalink to this headline">¶</a></h2>
+<p>You can configure add-on products with the zope-conf-additional section of the plone.recipe.zope2instance part:</p>
+<div class="highlight-python"><pre>[instance]
+recipe = plone.recipe.zope2instance
+...
+zope-conf-additional =
+&lt;product-config foobar&gt;
+    spam eggs
+&lt;/product-config&gt;</pre>
+</div>
+<p>This adds the configuration sections to your zope.conf file.</p>
+<p>Any named product-config section is then available as a simple dictionary to any python product that cares to look for it.
+The above example creates a 'foobar' entry which is a dict with a 'spam': 'eggs' mapping.</p>
+<p>Here is how you then access that from your code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">App.config</span> <span class="kn">import</span> <span class="n">getConfiguration</span>
+
+<span class="n">config</span> <span class="o">=</span> <span class="n">getConfiguration</span><span class="p">()</span>
+<span class="n">configuration</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">product_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;foobar&#39;</span><span class="p">,</span> <span class="nb">dict</span><span class="p">())</span>
+<span class="n">spamvalue</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;spam&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>A similar method is used to configure the built-in Zope ClockServer enabling you to trigger scripts:</p>
+<div class="highlight-python"><pre>zope-conf-additional =
+    &lt;clock-server&gt;
+        method /mysite/do_stuff
+        period 60
+        user admin
+        password secret
+        host www.mysite.com
+    &lt;/clock-server&gt;</pre>
+</div>
+</div>
+<div class="section" id="setting-ld-library-path">
+<h2><a class="toc-backref" href="#id11">Setting LD_LIBRARY_PATH</a><a class="headerlink" href="#setting-ld-library-path" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">LD_LIBRARY_PATH</span></tt> is UNIX environment variable tell from which folders load native dynamic linked libraries (.so files).
+You might want to override your system-wide libraries, because operating systems may ship with old, incompatible, versions.</p>
+<p>You can use <tt class="docutils literal"><span class="pre">environment-vars</span></tt> of <a class="reference external" href="http://pypi.python.org/pypi/plone.recipe.zope2instance">zope2instance</a> recipe.</p>
+<p>Example in buildout.cfg</p>
+<div class="highlight-cfg"><pre>[instance]
+# Use statically compiled libxml2
+environment-vars =
+        LD_LIBRARY_PATH ${buildout:directory}/parts/lxml/libxml2/lib:${buildout:directory}/parts/lxml/libxslt/lib</pre>
+</div>
+</div>
+<div class="section" id="paste-factory">
+<h2><a class="toc-backref" href="#id12">Paste factory</a><a class="headerlink" href="#paste-factory" title="Permalink to this headline">¶</a></h2>
+<p>Web based user interface to create different buildouts</p>
+<ul class="simple">
+<li><a class="reference external" href="http://pypi.python.org/pypi/collective.generic.webbuilder">http://pypi.python.org/pypi/collective.generic.webbuilder</a></li>
+</ul>
+</div>
+<div class="section" id="troubleshooting">
+<h2><a class="toc-backref" href="#id13">Troubleshooting</a><a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h2>
+<p>See <a class="reference internal" href="../../troubleshooting/buildout.html"><em>Buildout troubleshooting</em></a> chapter.</p>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../../index.html"><img src="../../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Additional information</a><ul>
+<li><a class="reference internal" href="#recipes">Recipes</a></li>
+<li><a class="reference internal" href="#buildout-folder-structure">Buildout folder structure</a></li>
+<li><a class="reference internal" href="#running-buildout-on-windows">Running buildout on Windows</a></li>
+<li><a class="reference internal" href="#running-buildout-behind-proxy">Running buildout behind proxy</a></li>
+<li><a class="reference internal" href="#buildout-cache-folder">Buildout cache folder</a><ul>
+<li><a class="reference internal" href="#buildout-defaults">Buildout defaults</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#manually-picking-dowloaded-and-active-component-versions">Manually picking dowloaded and active component versions</a></li>
+<li><a class="reference internal" href="#migrating-buildout-to-different-python-interpreter">Migrating buildout to different Python interpreter</a></li>
+<li><a class="reference internal" href="#setting-up-plone-site-from-buildout-cfg-and-data-fs">Setting up Plone site from buildout.cfg and Data.fs</a></li>
+<li><a class="reference internal" href="#configuring-plone-products-from-buildout">Configuring plone products from buildout</a></li>
+<li><a class="reference internal" href="#setting-ld-library-path">Setting LD_LIBRARY_PATH</a></li>
+<li><a class="reference internal" href="#paste-factory">Paste factory</a></li>
+<li><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="subversion.html"
+                        title="previous chapter">Installing products from Subversion</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../paste.html"
+                        title="next chapter">Zopeskel templates</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/tutorials/buildout/additional.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../paste.html" title="Zopeskel templates"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="subversion.html" title="Installing products from Subversion"
+             >previous</a> |</li>
+        <li><a href="../../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Tutorials</a> &raquo;</li>
+          <li><a href="index.html" >Buildout</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

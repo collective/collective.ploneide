@@ -1,0 +1,773 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Reading member records &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Users and members" href="index.html" />
+    <link rel="next" title="Member profiles" href="member_profile.html" />
+    <link rel="prev" title="Users and members" href="index.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="member_profile.html" title="Member profiles"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Users and members"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Users and members</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="reading-member-records">
+<h1>Reading member records<a class="headerlink" href="#reading-member-records" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
+<li><a class="reference internal" href="#getting-the-logged-in-member" id="id2">Getting the logged-in member</a></li>
+<li><a class="reference internal" href="#getting-any-member" id="id3">Getting any member</a></li>
+<li><a class="reference internal" href="#iterating-all-site-users" id="id4">Iterating all site users</a></li>
+<li><a class="reference internal" href="#getting-all-members-for-a-given-role" id="id5">Getting all <em>Members</em> for a given <em>Role</em></a></li>
+<li><a class="reference internal" href="#groups" id="id6">Groups</a><ul>
+<li><a class="reference internal" href="#creating-a-group" id="id7">Creating a group</a></li>
+<li><a class="reference internal" href="#add-local-roles-to-a-group" id="id8">Add local roles to a group</a></li>
+<li><a class="reference internal" href="#update-properties-for-a-group" id="id9">Update properties for a group</a></li>
+<li><a class="reference internal" href="#getting-available-groups" id="id10">Getting available groups</a></li>
+<li><a class="reference internal" href="#adding-a-user-to-a-group" id="id11">Adding a user to a group</a></li>
+<li><a class="reference internal" href="#getting-groups-for-a-certain-user" id="id12">Getting groups for a certain user</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#checking-whether-a-user-exists" id="id13">Checking whether a user exists</a></li>
+<li><a class="reference internal" href="#creating-users" id="id14">Creating users</a><ul>
+<li><a class="reference internal" href="#batch-member-creation" id="id15">Batch member creation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#email-login" id="id16">Email login</a></li>
+<li><a class="reference internal" href="#custom-member-creation-form-complex-example" id="id17">Custom member creation form: complex example</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>In Plone, there are two loosely coupled member related subsystems:</p>
+<ul class="simple">
+<li><em>Authentication and permission</em> information (<tt class="docutils literal"><span class="pre">acl_users</span></tt> under site
+root), managed by the Pluggable Authentication System (PAS).</li>
+<li><em>Member profile</em> information, accessible through the <tt class="docutils literal"><span class="pre">portal_membership</span></tt>
+tool.</li>
+</ul>
+</div>
+<div class="section" id="getting-the-logged-in-member">
+<h2><a class="toc-backref" href="#id2">Getting the logged-in member</a><a class="headerlink" href="#getting-the-logged-in-member" title="Permalink to this headline">¶</a></h2>
+<p>The following view-method code will get the username for the logged-in user:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">Products.CMFCore.utils</span>  <span class="kn">import</span> <span class="n">getToolByName</span>
+
+<span class="k">def</span> <span class="nf">getActiveUserName</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Return the username of the current user, or None.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">mt</span> <span class="o">=</span> <span class="n">getToolByName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="s">&#39;portal_membership&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">mt</span><span class="o">.</span><span class="n">isAnonymousUser</span><span class="p">():</span> <span class="c"># the user has not logged in</span>
+        <span class="k">return</span> <span class="bp">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">member</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">getAuthenticatedMember</span><span class="p">()</span>
+        <span class="n">username</span> <span class="o">=</span> <span class="n">member</span><span class="o">.</span><span class="n">getUserName</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">username</span>
+</pre></div>
+</div>
+<p>or from a template</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">tal:define=</span><span class="s">&quot;username context/portal_membership/getAuthenticatedMember/getUserName&quot;</span><span class="nt">&gt;</span>
+    ...
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="getting-any-member">
+<h2><a class="toc-backref" href="#id3">Getting any member</a><a class="headerlink" href="#getting-any-member" title="Permalink to this headline">¶</a></h2>
+<p>To get a member by username (you must have 'manager' role):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">member</span> <span class="o">=</span> <span class="n">getToolByName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="s">&#39;acl_users&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">getUserById</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To get all usernames:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">memberIds</span> <span class="o">=</span> <span class="n">getToolByName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="s">&#39;acl_users&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">getUserIds</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="iterating-all-site-users">
+<h2><a class="toc-backref" href="#id4">Iterating all site users</a><a class="headerlink" href="#iterating-all-site-users" title="Permalink to this headline">¶</a></h2>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">buffer</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+
+<span class="c"># Returns list of site usernames</span>
+<span class="n">users</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">acl_users</span><span class="o">.</span><span class="n">getUserNames</span><span class="p">()</span>
+<span class="c"># alternative: get user objects</span>
+<span class="c">#users = context.acl_users.getUsers()</span>
+
+<span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">users</span><span class="p">:</span>
+   <span class="k">print</span> <span class="s">&quot;Got username:&quot;</span> <span class="o">+</span> <span class="n">user</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Zope users, such as <em>admin</em>, are not included in this list.</p>
+</div>
+</div>
+<div class="section" id="getting-all-members-for-a-given-role">
+<h2><a class="toc-backref" href="#id5">Getting all <em>Members</em> for a given <em>Role</em></a><a class="headerlink" href="#getting-all-members-for-a-given-role" title="Permalink to this headline">¶</a></h2>
+<p>In this example we use the <tt class="docutils literal"><span class="pre">portal_membership</span></tt> tool.
+We assume that a role called 'Agent' exists and that we already
+have the context:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">Products.CMFCore.utils</span> <span class="kn">import</span> <span class="n">getToolByName</span>
+
+<span class="n">membership_tool</span> <span class="o">=</span> <span class="n">getToolByName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;portal_membership&#39;</span><span class="p">)</span>
+<span class="n">agents</span> <span class="o">=</span> <span class="p">[</span><span class="n">member</span> <span class="k">for</span> <span class="n">member</span> <span class="ow">in</span> <span class="n">membership_tool</span><span class="o">.</span><span class="n">listMembers</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">member</span><span class="o">.</span><span class="n">has_role</span><span class="p">(</span><span class="s">&#39;Agent&#39;</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="groups">
+<h2><a class="toc-backref" href="#id6">Groups</a><a class="headerlink" href="#groups" title="Permalink to this headline">¶</a></h2>
+<p>Groups are stored as <tt class="docutils literal"><span class="pre">PloneGroup</span></tt> objects. <tt class="docutils literal"><span class="pre">PloneGroup</span></tt> is a subclass of
+<tt class="docutils literal"><span class="pre">PloneUser</span></tt>.  Groups are managed by the <tt class="docutils literal"><span class="pre">portal_groups</span></tt> tool.</p>
+<ul class="simple">
+<li><a class="reference external" href="https://svn.plone.org/svn/collective/Products.PlonePAS/trunk/Products/PlonePAS/plugins/ufactory.py">https://svn.plone.org/svn/collective/Products.PlonePAS/trunk/Products/PlonePAS/plugins/ufactory.py</a></li>
+<li><a class="reference external" href="https://svn.plone.org/svn/collective/Products.PlonePAS/trunk/Products/PlonePAS/plugins/group.py">https://svn.plone.org/svn/collective/Products.PlonePAS/trunk/Products/PlonePAS/plugins/group.py</a></li>
+</ul>
+<div class="section" id="creating-a-group">
+<h3><a class="toc-backref" href="#id7">Creating a group</a><a class="headerlink" href="#creating-a-group" title="Permalink to this headline">¶</a></h3>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">groups_tool</span> <span class="o">=</span> <span class="n">getToolByName</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="s">&#39;portal_groups&#39;</span><span class="p">)</span>
+
+<span class="n">group_id</span> <span class="o">=</span> <span class="s">&quot;companies&quot;</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">group_id</span> <span class="ow">in</span> <span class="n">groups_tool</span><span class="o">.</span><span class="n">getGroupIds</span><span class="p">():</span>
+    <span class="n">groups_tool</span><span class="o">.</span><span class="n">addGroup</span><span class="p">(</span><span class="n">group_id</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For more information, see:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://svn.plone.org/svn/collective/Products.PlonePAS/trunk/Products/PlonePAS/tests/test_groupstool.py">http://svn.plone.org/svn/collective/Products.PlonePAS/trunk/Products/PlonePAS/tests/test_groupstool.py</a></li>
+<li><a class="reference external" href="http://svn.plone.org/svn/collective/Products.PlonePAS/trunk/Products/PlonePAS/plugins/group.py">http://svn.plone.org/svn/collective/Products.PlonePAS/trunk/Products/PlonePAS/plugins/group.py</a></li>
+</ul>
+</div>
+<div class="section" id="add-local-roles-to-a-group">
+<h3><a class="toc-backref" href="#id8">Add local roles to a group</a><a class="headerlink" href="#add-local-roles-to-a-group" title="Permalink to this headline">¶</a></h3>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">AccessControl.interfaces</span> <span class="kn">import</span> <span class="n">IRoleManager</span>
+<span class="k">if</span> <span class="n">IRoleManager</span><span class="o">.</span><span class="n">providedBy</span><span class="p">(</span><span class="n">context</span><span class="p">):</span>
+    <span class="n">context</span><span class="o">.</span><span class="n">manage_addLocalRoles</span><span class="p">(</span><span class="n">groupid</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;Manager&#39;</span><span class="p">,])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="update-properties-for-a-group">
+<h3><a class="toc-backref" href="#id9">Update properties for a group</a><a class="headerlink" href="#update-properties-for-a-group" title="Permalink to this headline">¶</a></h3>
+<p>The <tt class="docutils literal"><span class="pre">editGroup</span></tt> method modifies the title and description in the
+<tt class="docutils literal"><span class="pre">source_groups</span></tt> plugin, and subsequently calls <tt class="docutils literal"><span class="pre">setGroupProperties(kw)</span></tt>
+which sets the properties on the <tt class="docutils literal"><span class="pre">mutable_properties</span></tt> plugin.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">portal_groups</span><span class="o">.</span><span class="n">editGroup</span><span class="p">(</span><span class="n">groupid</span><span class="p">,</span> <span class="o">**</span><span class="n">properties</span><span class="p">)</span>
+<span class="n">portal_groups</span><span class="o">.</span><span class="n">editGroup</span><span class="p">(</span><span class="n">groupid</span><span class="p">,</span> <span class="n">roles</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;Manager&#39;</span><span class="p">,])</span>
+<span class="n">portal_groups</span><span class="o">.</span><span class="n">editGroup</span><span class="p">(</span><span class="n">groupid</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="s">u&#39;my group title&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="getting-available-groups">
+<h3><a class="toc-backref" href="#id10">Getting available groups</a><a class="headerlink" href="#getting-available-groups" title="Permalink to this headline">¶</a></h3>
+<p>Getting all groups on the site is possible through <tt class="docutils literal"><span class="pre">acl_users</span></tt> and the
+<tt class="docutils literal"><span class="pre">source_groups</span></tt> plugin, which provides the functionality to manipulate
+Plone groups.</p>
+<p>Example to get only ids:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">acl_users</span> <span class="o">=</span> <span class="n">getToolByName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;acl_users&#39;</span><span class="p">)</span>
+<span class="n">groups</span> <span class="o">=</span> <span class="n">acl</span><span class="o">.</span><span class="n">source_groups</span><span class="o">.</span><span class="n">getGroupIds</span><span class="p">()</span> <span class="c"># Iterable returning id strings</span>
+</pre></div>
+</div>
+<p>Example to get full group information:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">site</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">portal_url</span><span class="o">.</span><span class="n">getPortalObject</span><span class="p">()</span>
+<span class="n">users</span> <span class="o">=</span> <span class="n">site</span><span class="o">.</span><span class="n">acl_users</span>
+<span class="n">group_list</span> <span class="o">=</span> <span class="n">users</span><span class="o">.</span><span class="n">source_groups</span><span class="o">.</span><span class="n">getGroups</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">group_list</span><span class="p">:</span>
+    <span class="c"># group is PloneGroup object</span>
+    <span class="k">yield</span> <span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">getName</span><span class="p">(),</span> <span class="n">group</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="adding-a-user-to-a-group">
+<h3><a class="toc-backref" href="#id11">Adding a user to a group</a><a class="headerlink" href="#adding-a-user-to-a-group" title="Permalink to this headline">¶</a></h3>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Add user to group &quot;companies&quot;</span>
+<span class="n">portal_groups</span> <span class="o">=</span> <span class="n">site</span><span class="o">.</span><span class="n">portal_groups</span>
+<span class="n">portal_groups</span><span class="o">.</span><span class="n">addPrincipalToGroup</span><span class="p">(</span><span class="n">member</span><span class="o">.</span><span class="n">getUserName</span><span class="p">(),</span> <span class="s">&quot;companies&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="getting-groups-for-a-certain-user">
+<h3><a class="toc-backref" href="#id12">Getting groups for a certain user</a><a class="headerlink" href="#getting-groups-for-a-certain-user" title="Permalink to this headline">¶</a></h3>
+<p>Below is an example of getting groups for the logged-in user (Plone 3 and
+earlier):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">portal</span><span class="o">.</span><span class="n">portal_membership</span><span class="o">.</span><span class="n">getAuthenticatedMember</span><span class="p">()</span><span class="o">.</span><span class="n">getGroups</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>In Plone 4 you have to use:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">groups_tool</span> <span class="o">=</span> <span class="n">getToolByName</span><span class="p">(</span><span class="n">portal</span><span class="p">,</span> <span class="s">&quot;portal_groups&quot;</span><span class="p">)</span>
+<span class="n">groups_tool</span><span class="o">.</span><span class="n">getGroupsByUserId</span><span class="p">(</span><span class="s">&#39;admin&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="checking-whether-a-user-exists">
+<h2><a class="toc-backref" href="#id13">Checking whether a user exists</a><a class="headerlink" href="#checking-whether-a-user-exists" title="Permalink to this headline">¶</a></h2>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">membership</span> <span class="o">=</span> <span class="n">getToolByName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;portal_membership&#39;</span><span class="p">)</span>
+<span class="k">return</span> <span class="n">membership</span><span class="o">.</span><span class="n">getMemberById</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+</pre></div>
+</div>
+<p>See also:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://svn.zope.org/Products.CMFCore/trunk/Products/CMFCore/RegistrationTool.py?rev=110418&amp;view=auto">http://svn.zope.org/Products.CMFCore/trunk/Products/CMFCore/RegistrationTool.py?rev=110418&amp;view=auto</a></li>
+</ul>
+</div>
+<div class="section" id="creating-users">
+<h2><a class="toc-backref" href="#id14">Creating users</a><a class="headerlink" href="#creating-users" title="Permalink to this headline">¶</a></h2>
+<p>Use the <tt class="docutils literal"><span class="pre">portal_registration</span></tt> tool. Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">createCompany</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">site</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">email</span><span class="p">,</span> <span class="n">passwd</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Utility function which performs the actual creation, role and permission magic.</span>
+
+<span class="sd">    @param username: Unicode string</span>
+
+<span class="sd">    @param title: Fullname of user, unicode string</span>
+
+<span class="sd">    @return: Created company content item or None if the creation fails</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c"># If we use custom member properties they must be intiialized</span>
+    <span class="c"># before regtool is called</span>
+    <span class="n">prepareMemberProperties</span><span class="p">(</span><span class="n">site</span><span class="p">)</span>
+
+    <span class="c"># portal_registration manages new user creation</span>
+    <span class="n">regtool</span> <span class="o">=</span> <span class="n">getToolByName</span><span class="p">(</span><span class="n">site</span><span class="p">,</span> <span class="s">&#39;portal_registration&#39;</span><span class="p">)</span>
+
+    <span class="c"># Default password to the username</span>
+    <span class="c"># ... don&#39;t do this on the production server!</span>
+    <span class="k">if</span> <span class="n">passwd</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">passwd</span> <span class="o">=</span> <span class="n">username</span>
+
+    <span class="c"># Only lowercase allowed</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">username</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+    <span class="c"># Username must be ASCII string</span>
+    <span class="c"># or Plone will choke when the user tries to log in</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">is_ascii</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">ord</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">128</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">False</span>
+
+        <span class="k">return</span> <span class="bp">True</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">is_ascii</span><span class="p">(</span><span class="n">username</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; &quot;&quot;&quot;</span>
+        <span class="n">IStatusMessage</span><span class="p">(</span><span class="n">request</span><span class="p">)</span><span class="o">.</span><span class="n">addStatusMessage</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">u&quot;Username must contain only characters a-z&quot;</span><span class="p">),</span> <span class="s">&quot;error&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="c"># This is minimum required information set</span>
+    <span class="c"># to create a working member</span>
+    <span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+
+        <span class="s">&#39;username&#39;</span> <span class="p">:</span> <span class="n">username</span><span class="p">,</span>
+
+        <span class="c"># Full name must be always as utf-8 encoded</span>
+        <span class="s">&#39;fullname&#39;</span> <span class="p">:</span> <span class="n">title</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&quot;utf-8&quot;</span><span class="p">),</span>
+        <span class="s">&#39;email&#39;</span> <span class="p">:</span> <span class="n">email</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c"># addMember() returns MemberData object</span>
+        <span class="n">member</span> <span class="o">=</span> <span class="n">regtool</span><span class="o">.</span><span class="n">addMember</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">passwd</span><span class="p">,</span> <span class="n">properties</span><span class="o">=</span><span class="n">properties</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+        <span class="c"># Give user visual feedback what went wrong</span>
+        <span class="n">IStatusMessage</span><span class="p">(</span><span class="n">request</span><span class="p">)</span><span class="o">.</span><span class="n">addStatusMessage</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">u&quot;Could not create the user:&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">e</span><span class="p">),</span> <span class="s">&quot;error&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">None</span>
+</pre></div>
+</div>
+<div class="section" id="batch-member-creation">
+<h3><a class="toc-backref" href="#id15">Batch member creation</a><a class="headerlink" href="#batch-member-creation" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference external" href="http://plone.org/documentation/kb/batch-adding-users">http://plone.org/documentation/kb/batch-adding-users</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="email-login">
+<h2><a class="toc-backref" href="#id16">Email login</a><a class="headerlink" href="#email-login" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><dl class="first docutils">
+<dt>Plone 3 does not allow a dot in the username.</dt>
+<dd><ul class="first last simple">
+<li>This is available as an add-on; see <a class="reference external" href="http://plone.org/products/betahaus.emaillogin">http://plone.org/products/betahaus.emaillogin</a></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">In Plone 4, it is a default feature.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="custom-member-creation-form-complex-example">
+<h2><a class="toc-backref" href="#id17">Custom member creation form: complex example</a><a class="headerlink" href="#custom-member-creation-form-complex-example" title="Permalink to this headline">¶</a></h2>
+<p>Below is an example of a Grok form which the administrator can use to create
+new users. New users will receive special properties and a folder for which
+they have ownership access.  The password is set to be the same as the
+username.  The user is added to a group named &quot;companies&quot;.</p>
+<p>Example <tt class="docutils literal"><span class="pre">company.py</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># -*- coding: utf-8 -*-</span>
+
+<span class="sd">&quot;&quot;&quot; Add companies.</span>
+
+<span class="sd">    Create user account + associated &quot;home folder&quot; content type</span>
+<span class="sd">    for a company user.</span>
+<span class="sd">    User accounts have a special role.</span>
+
+<span class="sd">    Note: As writing of this 2010-04, needs</span>
+<span class="sd">    plone.app.directives trunk version which</span>
+<span class="sd">    contains unreleased validation decorator</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c"># Core Zope 2 + Zope 3 + Plone</span>
+<span class="kn">from</span> <span class="nn">zope.interface</span> <span class="kn">import</span> <span class="n">Interface</span>
+<span class="kn">from</span> <span class="nn">zope</span> <span class="kn">import</span> <span class="n">schema</span>
+<span class="kn">from</span> <span class="nn">five</span> <span class="kn">import</span> <span class="n">grok</span>
+<span class="kn">from</span> <span class="nn">Products.CMFCore.interfaces</span> <span class="kn">import</span> <span class="n">ISiteRoot</span>
+<span class="kn">from</span> <span class="nn">Products.CMFCore.utils</span> <span class="kn">import</span> <span class="n">getToolByName</span>
+<span class="kn">from</span> <span class="nn">Products.CMFCore</span> <span class="kn">import</span> <span class="n">permissions</span>
+<span class="kn">from</span> <span class="nn">Products.statusmessages.interfaces</span> <span class="kn">import</span> <span class="n">IStatusMessage</span>
+
+<span class="c"># Form and validation</span>
+<span class="kn">from</span> <span class="nn">z3c.form</span> <span class="kn">import</span> <span class="n">field</span>
+<span class="kn">import</span> <span class="nn">z3c.form.button</span>
+<span class="kn">from</span> <span class="nn">plone.directives</span> <span class="kn">import</span> <span class="n">form</span>
+<span class="kn">from</span> <span class="nn">collective.z3cform.grok.grok</span> <span class="kn">import</span> <span class="n">PloneFormWrapper</span>
+<span class="kn">import</span> <span class="nn">plone.autoform.form</span>
+
+<span class="c"># Products.validation use some ugly ZService magic which I can&#39;t quite comprehend</span>
+<span class="kn">from</span> <span class="nn">Products.validation</span> <span class="kn">import</span> <span class="n">validation</span>
+
+<span class="c"># Our translation catalog</span>
+<span class="kn">from</span> <span class="nn">isleofback.app</span> <span class="kn">import</span> <span class="n">appMessageFactory</span> <span class="k">as</span> <span class="n">_</span>
+
+<span class="n">grok</span><span class="o">.</span><span class="n">templatedir</span><span class="p">(</span><span class="s">&quot;templates&quot;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">ICompanyCreationFormSchema</span><span class="p">(</span><span class="n">form</span><span class="o">.</span><span class="n">Schema</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Define fields used on the form &quot;&quot;&quot;</span>
+
+    <span class="n">username</span> <span class="o">=</span> <span class="n">schema</span><span class="o">.</span><span class="n">TextLine</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">u&quot;Username&quot;</span><span class="p">)</span>
+
+    <span class="n">company_name</span> <span class="o">=</span> <span class="n">schema</span><span class="o">.</span><span class="n">TextLine</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">u&quot;Company name&quot;</span><span class="p">)</span>
+
+    <span class="n">email</span> <span class="o">=</span> <span class="n">schema</span><span class="o">.</span><span class="n">TextLine</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">u&quot;Email&quot;</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">CompanyCreationForm</span><span class="p">(</span><span class="n">plone</span><span class="o">.</span><span class="n">autoform</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">AutoExtensibleForm</span><span class="p">,</span> <span class="n">form</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Form action controller.</span>
+
+<span class="sd">    form.DisplayForm will automatically expose the form</span>
+<span class="sd">    as a view, no wrapping view creation needed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c"># Form label</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s">u&quot;Create Company&quot;</span><span class="p">)</span>
+
+    <span class="c"># Which schema is used by AutoExtensibleForm</span>
+    <span class="n">schema</span> <span class="o">=</span> <span class="n">ICompanyCreationFormSchema</span>
+
+    <span class="c"># The form does not care about the context object</span>
+    <span class="c"># and should not try to extract field value</span>
+    <span class="c"># defaults out of it</span>
+    <span class="n">ignoreContext</span> <span class="o">=</span> <span class="bp">True</span>
+
+    <span class="c"># This form is available at the site root only</span>
+    <span class="n">grok</span><span class="o">.</span><span class="n">context</span><span class="p">(</span><span class="n">ISiteRoot</span><span class="p">)</span>
+
+
+    <span class="c"># z3c.form has a function decorator</span>
+    <span class="c"># which turns the function to a form button action handler</span>
+
+    <span class="nd">@z3c.form.button.buttonAndHandler</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">&#39;Create Company&#39;</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;create&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">createCompanyAction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">data</span><span class="p">,</span> <span class="n">errors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extractData</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">errors</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">formErrorsMessage</span>
+            <span class="k">return</span>
+
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">createCompany</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s">&quot;username&quot;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s">&quot;company_name&quot;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s">&quot;email&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="c"># mark only as finished if we get the new object</span>
+            <span class="n">IStatusMessage</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">)</span><span class="o">.</span><span class="n">addStatusMessage</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">u&quot;Company created&quot;</span><span class="p">),</span> <span class="s">&quot;info&quot;</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">CompanyCreationView</span><span class="p">(</span><span class="n">PloneFormWrapper</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; View which exposes form as URL &quot;&quot;&quot;</span>
+
+    <span class="n">form</span> <span class="o">=</span> <span class="n">CompanyCreationForm</span>
+
+    <span class="c"># Set up security barrier -</span>
+    <span class="c"># non-priviledged users can&#39;t access this form</span>
+    <span class="n">grok</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="s">&quot;cmf.ManagePortal&quot;</span><span class="p">)</span>
+
+    <span class="c"># Use http://yourhost/@@create_company URL to access this form</span>
+    <span class="n">grok</span><span class="o">.</span><span class="n">name</span><span class="p">(</span><span class="s">&quot;create_company&quot;</span><span class="p">)</span>
+
+    <span class="c"># This view is available at the site root only</span>
+    <span class="n">grok</span><span class="o">.</span><span class="n">context</span><span class="p">(</span><span class="n">ISiteRoot</span><span class="p">)</span>
+
+    <span class="c"># Which template is used to decorate the form</span>
+    <span class="c"># -&gt; forms.pt in template directory</span>
+    <span class="n">grok</span><span class="o">.</span><span class="n">template</span><span class="p">(</span><span class="s">&quot;form&quot;</span><span class="p">)</span>
+
+
+<span class="nd">@form.validator</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">ICompanyCreationFormSchema</span><span class="p">[</span><span class="s">&#39;email&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">validateEmail</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Use old Products.validation validators to perform the validation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">validator_function</span> <span class="o">=</span> <span class="n">validation</span><span class="o">.</span><span class="n">validatorFor</span><span class="p">(</span><span class="s">&#39;isEmail&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">validator_function</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">schema</span><span class="o">.</span><span class="n">ValidationError</span><span class="p">(</span><span class="s">u&quot;Entered email address is not good:&quot;</span> <span class="o">+</span> <span class="n">value</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">prepareMemberProperties</span><span class="p">(</span><span class="n">site</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Adjust site for custom member properties &quot;&quot;&quot;</span>
+
+    <span class="c"># Need to use ancient Z2 property sheet API here...</span>
+    <span class="n">portal_memberdata</span> <span class="o">=</span> <span class="n">getToolByName</span><span class="p">(</span><span class="n">site</span><span class="p">,</span> <span class="s">&quot;portal_memberdata&quot;</span><span class="p">)</span>
+
+    <span class="c"># When new member is created, it&#39;s MemberData</span>
+    <span class="c"># is populated with the values from portal_memberdata property sheet,</span>
+    <span class="c"># so value=&quot;&quot; will be the default value for users&#39; home_folder_uid</span>
+    <span class="c"># member property</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">portal_memberdata</span><span class="o">.</span><span class="n">hasProperty</span><span class="p">(</span><span class="s">&quot;home_folder_uid&quot;</span><span class="p">):</span>
+        <span class="n">portal_memberdata</span><span class="o">.</span><span class="n">manage_addProperty</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s">&quot;home_folder_uid&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s">&quot;string&quot;</span><span class="p">)</span>
+
+
+    <span class="c"># Create a group &quot;companies&quot; where newly created members will be added</span>
+    <span class="n">acl_users</span> <span class="o">=</span> <span class="n">site</span><span class="o">.</span><span class="n">acl_users</span>
+    <span class="c">#groups = acl_users.source_groups.getGroupIds()</span>
+    <span class="n">gr</span> <span class="o">=</span> <span class="n">site</span><span class="o">.</span><span class="n">portal_groups</span>
+
+    <span class="n">group_id</span> <span class="o">=</span> <span class="s">&quot;companies&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">group_id</span> <span class="ow">in</span> <span class="n">gr</span><span class="o">.</span><span class="n">getGroupIds</span><span class="p">():</span>
+        <span class="n">gr</span><span class="o">.</span><span class="n">addGroup</span><span class="p">(</span><span class="n">group_id</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[],</span>
+                    <span class="p">{</span> <span class="s">&#39;title&#39;</span><span class="p">:</span> <span class="s">&#39;Companies&#39;</span><span class="p">})</span>
+
+<span class="k">def</span> <span class="nf">createCompany</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">site</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">email</span><span class="p">,</span> <span class="n">passwd</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Utility function which performs the actual creation, role and permission magic.</span>
+
+<span class="sd">    @param username: Unicode string</span>
+
+<span class="sd">    @param title: Fullname of user, unicode string</span>
+
+<span class="sd">    @return: Created company content item or None if the creation fails</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c"># If we use custom member properties</span>
+    <span class="c"># they must be intiialized before regtool is called</span>
+    <span class="n">prepareMemberProperties</span><span class="p">(</span><span class="n">site</span><span class="p">)</span>
+
+    <span class="c"># portal_registrations manages new user creation</span>
+    <span class="n">regtool</span> <span class="o">=</span> <span class="n">getToolByName</span><span class="p">(</span><span class="n">site</span><span class="p">,</span> <span class="s">&#39;portal_registration&#39;</span><span class="p">)</span>
+
+    <span class="c"># Default password to the username</span>
+    <span class="c"># ... don&#39;t do this on the production server!</span>
+    <span class="k">if</span> <span class="n">passwd</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">passwd</span> <span class="o">=</span> <span class="n">username</span>
+
+    <span class="c"># Only lowercase allowed</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">username</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+    <span class="c"># Username must be ASCII string</span>
+    <span class="c"># or Plone will choke when the user tries to log in</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">is_ascii</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">ord</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">128</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">False</span>
+
+        <span class="k">return</span> <span class="bp">True</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">is_ascii</span><span class="p">(</span><span class="n">username</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; &quot;&quot;&quot;</span>
+        <span class="n">IStatusMessage</span><span class="p">(</span><span class="n">request</span><span class="p">)</span><span class="o">.</span><span class="n">addStatusMessage</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">u&quot;Username must contain only characters a-z&quot;</span><span class="p">),</span> <span class="s">&quot;error&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="c"># This is minimum required information set</span>
+    <span class="c"># to create a working member</span>
+    <span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+
+        <span class="s">&#39;username&#39;</span> <span class="p">:</span> <span class="n">username</span><span class="p">,</span>
+
+        <span class="c"># Full name must be always as utf-8 encoded</span>
+        <span class="s">&#39;fullname&#39;</span> <span class="p">:</span> <span class="n">title</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&quot;utf-8&quot;</span><span class="p">),</span>
+        <span class="s">&#39;email&#39;</span> <span class="p">:</span> <span class="n">email</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c"># addMember() returns MemberData object</span>
+        <span class="n">member</span> <span class="o">=</span> <span class="n">regtool</span><span class="o">.</span><span class="n">addMember</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">passwd</span><span class="p">,</span> <span class="n">properties</span><span class="o">=</span><span class="n">properties</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+        <span class="c"># Give user visual feedback what went wrong</span>
+        <span class="n">IStatusMessage</span><span class="p">(</span><span class="n">request</span><span class="p">)</span><span class="o">.</span><span class="n">addStatusMessage</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">u&quot;Could not create the user:&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">e</span><span class="p">),</span> <span class="s">&quot;error&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">None</span>
+
+
+    <span class="c"># Add user to group &quot;companies&quot;</span>
+    <span class="n">portal_groups</span> <span class="o">=</span> <span class="n">site</span><span class="o">.</span><span class="n">portal_groups</span>
+    <span class="n">portal_groups</span><span class="o">.</span><span class="n">addPrincipalToGroup</span><span class="p">(</span><span class="n">member</span><span class="o">.</span><span class="n">getUserName</span><span class="p">(),</span> <span class="s">&quot;companies&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">createMatchingHomeFolder</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">site</span><span class="p">,</span> <span class="n">member</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">createMatchingHomeFolder</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">site</span><span class="p">,</span> <span class="n">member</span><span class="p">,</span> <span class="n">target_folder</span><span class="o">=</span><span class="s">&quot;yritykset&quot;</span><span class="p">,</span> <span class="n">target_type</span><span class="o">=</span><span class="s">&quot;IsleofbackCompany&quot;</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="s">&quot;fi&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Creates a folder, sets its ownership for the member and stores the folder UID in the member data.</span>
+
+<span class="sd">    @param member: MemberData object</span>
+
+<span class="sd">    @param target_folder: Under which folder a new content item is created</span>
+
+<span class="sd">    @param language: Initial two language code of the item</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">parent_folder</span> <span class="o">=</span> <span class="n">site</span><span class="o">.</span><span class="n">restrictedTraverse</span><span class="p">(</span><span class="n">target_folder</span><span class="p">)</span>
+
+    <span class="c"># Cannot add custom memberdata properties unless explicitly declared</span>
+
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">member</span><span class="o">.</span><span class="n">getUserName</span><span class="p">()</span>
+
+    <span class="n">parent_folder</span><span class="o">.</span><span class="n">invokeFactory</span><span class="p">(</span><span class="n">target_type</span><span class="p">,</span> <span class="nb">id</span><span class="p">)</span>
+
+    <span class="n">home_folder</span> <span class="o">=</span> <span class="n">parent_folder</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">member</span><span class="o">.</span><span class="n">getProperty</span><span class="p">(</span><span class="s">&quot;fullname&quot;</span><span class="p">)</span>
+
+    <span class="n">home_folder</span><span class="o">.</span><span class="n">setTitle</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">home_folder</span><span class="o">.</span><span class="n">setLanguage</span><span class="p">(</span><span class="n">language</span><span class="p">)</span>
+
+    <span class="n">email</span> <span class="o">=</span> <span class="n">member</span><span class="o">.</span><span class="n">getProperty</span><span class="p">(</span><span class="s">&quot;email&quot;</span><span class="p">)</span>
+    <span class="n">home_folder</span><span class="o">.</span><span class="n">setEmail</span><span class="p">(</span><span class="n">email</span><span class="p">)</span>
+
+    <span class="c"># Unset the Archetypes object creation flag</span>
+    <span class="n">home_folder</span><span class="o">.</span><span class="n">processForm</span><span class="p">()</span>
+
+    <span class="c"># Store UID of the created folder in memberdata so we can</span>
+    <span class="c"># look it up later to e.g. generate the link to the member folder</span>
+    <span class="n">member</span><span class="o">.</span><span class="n">setMemberProperties</span><span class="p">(</span><span class="n">mapping</span><span class="o">=</span><span class="p">{</span><span class="s">&quot;home_folder_uid&quot;</span><span class="p">:</span> <span class="n">home_folder</span><span class="o">.</span><span class="n">UID</span><span class="p">()})</span>
+
+    <span class="c"># Get the user handle from member data object</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">member</span><span class="o">.</span><span class="n">getUser</span><span class="p">()</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">getUserName</span><span class="p">()</span>
+
+    <span class="n">home_folder</span><span class="o">.</span><span class="n">manage_setLocalRoles</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="p">[</span><span class="s">&quot;Owner&quot;</span><span class="p">,])</span>
+    <span class="n">home_folder</span><span class="o">.</span><span class="n">reindexObjectSecurity</span><span class="p">()</span>
+
+
+    <span class="k">return</span> <span class="n">home_folder</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Reading member records</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#getting-the-logged-in-member">Getting the logged-in member</a></li>
+<li><a class="reference internal" href="#getting-any-member">Getting any member</a></li>
+<li><a class="reference internal" href="#iterating-all-site-users">Iterating all site users</a></li>
+<li><a class="reference internal" href="#getting-all-members-for-a-given-role">Getting all <em>Members</em> for a given <em>Role</em></a></li>
+<li><a class="reference internal" href="#groups">Groups</a><ul>
+<li><a class="reference internal" href="#creating-a-group">Creating a group</a></li>
+<li><a class="reference internal" href="#add-local-roles-to-a-group">Add local roles to a group</a></li>
+<li><a class="reference internal" href="#update-properties-for-a-group">Update properties for a group</a></li>
+<li><a class="reference internal" href="#getting-available-groups">Getting available groups</a></li>
+<li><a class="reference internal" href="#adding-a-user-to-a-group">Adding a user to a group</a></li>
+<li><a class="reference internal" href="#getting-groups-for-a-certain-user">Getting groups for a certain user</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#checking-whether-a-user-exists">Checking whether a user exists</a></li>
+<li><a class="reference internal" href="#creating-users">Creating users</a><ul>
+<li><a class="reference internal" href="#batch-member-creation">Batch member creation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#email-login">Email login</a></li>
+<li><a class="reference internal" href="#custom-member-creation-form-complex-example">Custom member creation form: complex example</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Users and members</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="member_profile.html"
+                        title="next chapter">Member profiles</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/members/member_basics.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="member_profile.html" title="Member profiles"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Users and members"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Users and members</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

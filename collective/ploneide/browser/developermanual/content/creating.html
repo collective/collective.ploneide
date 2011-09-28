@@ -1,0 +1,580 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Creating objects &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Content management" href="index.html" />
+    <link rel="next" title="Listing objects" href="listing.html" />
+    <link rel="prev" title="Content management" href="index.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="listing.html" title="Listing objects"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Content management"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Content management</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="creating-objects">
+<h1>Creating objects<a class="headerlink" href="#creating-objects" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">Creating and controlling creation of Plone content items programmatically.</p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#creating-content-objects" id="id1">Creating content objects</a><ul>
+<li><a class="reference internal" href="#permission-aware-way-dexterity" id="id2">Permission aware way (Dexterity)</a></li>
+<li><a class="reference internal" href="#permission-aware-way-archetypes" id="id3">Permission aware way (Archetypes)</a></li>
+<li><a class="reference internal" href="#bypassing-permissions-when-creating-content-item" id="id4">Bypassing permissions when creating content item</a></li>
+<li><a class="reference internal" href="#portalfactory" id="id5">PortalFactory</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#restricting-creating-on-content-types" id="id6">Restricting creating on content types</a><ul>
+<li><a class="reference internal" href="#restricting-available-types-per-content-type" id="id7">Restricting available types per content type</a></li>
+<li><a class="reference internal" href="#restricting-available-types-per-folder-instance" id="id8">Restricting available types per folder instance</a></li>
+<li><a class="reference internal" href="#other-restrictions" id="id9">Other restrictions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#creating-ofs-objects" id="id10">Creating OFS objects</a></li>
+<li><a class="reference internal" href="#oject-construction-life-cycle" id="id11">Oject construction life cycle</a><ul>
+<li><a class="reference internal" href="#rename-after-creation" id="id12">Rename after creation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#factory-type-information" id="id13">Factory type information</a></li>
+<li><a class="reference internal" href="#content-does-not-show-in-add-menu-or-unauthorized-errors" id="id14">Content does not show in Add Menu or Unauthorized errors</a></li>
+<li><a class="reference internal" href="#link-to-creation-page" id="id15">Link to creation page</a></li>
+<li><a class="reference internal" href="#populating-folder-on-creation" id="id16">Populating folder on creation</a></li>
+<li><a class="reference internal" href="#creating-content-from-ploneformgen" id="id17">Creating content from PloneFormGen</a></li>
+</ul>
+</div>
+<div class="section" id="creating-content-objects">
+<h2><a class="toc-backref" href="#id1">Creating content objects</a><a class="headerlink" href="#creating-content-objects" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="permission-aware-way-dexterity">
+<h3><a class="toc-backref" href="#id2">Permission aware way (Dexterity)</a><a class="headerlink" href="#permission-aware-way-dexterity" title="Permalink to this headline">¶</a></h3>
+<p>These instructions apply for <a class="reference internal" href="dexterity.html"><em>Dexterity</em></a> content types.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">plone.dexterity.utils</span> <span class="kn">import</span> <span class="n">createContentInContainer</span>
+
+
+<span class="c"># Factory-type information id is the same as in types.xml</span>
+<span class="c"># optionally you can set checkConstraints=False to skip permission checks</span>
+<span class="n">item</span> <span class="o">=</span> <span class="n">createContentInContainer</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="s">&quot;your.app.dexterity.fti.information&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="permission-aware-way-archetypes">
+<h3><a class="toc-backref" href="#id3">Permission aware way (Archetypes)</a><a class="headerlink" href="#permission-aware-way-archetypes" title="Permalink to this headline">¶</a></h3>
+<p>Use <tt class="docutils literal"><span class="pre">invokeFactory(portal_type,</span> <span class="pre">constructred_object_id)</span></tt>. <tt class="docutils literal"><span class="pre">invokeFactory()</span></tt> is available on all folderish content objects.
+<tt class="docutils literal"><span class="pre">invokeFactory()</span></tt> calls <tt class="docutils literal"><span class="pre">portal_factory</span></tt> persistent utility to create content item.</p>
+<p>Example (from unit tests):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="bp">self</span><span class="o">.</span><span class="n">loginAsPortalOwner</span><span class="p">()</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">portal</span><span class="o">.</span><span class="n">invokeFactory</span><span class="p">(</span><span class="s">&quot;Folder&quot;</span><span class="p">,</span> <span class="s">&quot;folder&quot;</span><span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">portal</span><span class="o">.</span><span class="n">folder</span><span class="o">.</span><span class="n">invokeFactory</span><span class="p">(</span><span class="s">&quot;Folder&quot;</span><span class="p">,</span> <span class="s">&quot;subfolder&quot;</span><span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">portal</span><span class="o">.</span><span class="n">folder</span><span class="o">.</span><span class="n">subfolder</span><span class="o">.</span><span class="n">invokeFactory</span><span class="p">(</span><span class="s">&quot;Document&quot;</span><span class="p">,</span> <span class="s">&quot;doc&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">invokeFactory()</span></tt> will raise an <tt class="docutils literal"><span class="pre">Unauthorized</span></tt> exception if the logged in user does not have permission to create
+content in the folder (lacks type specific creation permission and <tt class="docutils literal"><span class="pre">Add</span> <span class="pre">portal</span> <span class="pre">content</span></tt> permissions).
+This exception is defined as:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">Products.Archetypes.exceptions</span> <span class="kn">import</span> <span class="n">AccessControl_Unauthorized</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If the content class has  _at_rename_after_creation = True (Archetypes based content)
+the next call to obj.update() (edit form post) will automatically generate a friendly id
+for the object based on the title of the object.</p>
+</div>
+</div>
+<div class="section" id="bypassing-permissions-when-creating-content-item">
+<h3><a class="toc-backref" href="#id4">Bypassing permissions when creating content item</a><a class="headerlink" href="#bypassing-permissions-when-creating-content-item" title="Permalink to this headline">¶</a></h3>
+<p>If you need to have special workflows where you bypass the workflow and logged
+in users when creating the content item, do as following:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">construct_without_permission_check</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">type_name</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Construct a new content item bypassing creation and content add permissios checks.</span>
+
+
+<span class="sd">    @param folder: Folderish content item where to place the new content item</span>
+
+<span class="sd">    @param type_name: Content type id in portal_types</span>
+
+<span class="sd">    @param id: Traversing id for the new content</span>
+
+<span class="sd">    @param args: Optional arguments for the construction (will be passed to the creation method if the type has one)</span>
+
+<span class="sd">    @param kwargs: Optional arguments for the construction (will be passed to the creation method if the type has one)</span>
+
+<span class="sd">    @return: Reference to newly created content item</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">portal_types</span> <span class="o">=</span> <span class="n">getToolByName</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="s">&quot;portal_types&quot;</span><span class="p">)</span>
+
+    <span class="c"># Get this content type definition from content types registry</span>
+    <span class="n">type_info</span> <span class="o">=</span> <span class="n">portal_types</span><span class="o">.</span><span class="n">getTypeInfo</span><span class="p">(</span><span class="n">type_name</span><span class="p">)</span>
+
+    <span class="c"># _constructInstance takes optional *args, **kw parameters too</span>
+    <span class="n">new_content_item</span> <span class="o">=</span> <span class="n">type_info</span><span class="o">.</span><span class="n">_constructInstance</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="nb">id</span><span class="p">)</span>
+
+    <span class="c"># Return reference to justly created content</span>
+    <span class="k">return</span> <span class="n">new_content_item</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The function above only bypasses the content item contruction permission check.
+It does not bypass checks for setting field values for initially created content.</p>
+</div>
+<p>Here is also alternative way:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Note that by default Add portal member permissions</span>
+<span class="c"># is only for the owner, so we need to by bass it here</span>
+<span class="kn">from</span> <span class="nn">Products.CMFPlone.utils</span> <span class="kn">import</span> <span class="n">_createObjectByType</span>
+<span class="n">_createObjectByType</span><span class="p">(</span><span class="s">&quot;YourContentType&quot;</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="nb">id</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="portalfactory">
+<h3><a class="toc-backref" href="#id5">PortalFactory</a><a class="headerlink" href="#portalfactory" title="Permalink to this headline">¶</a></h3>
+<p>PortalFactory (only for archetype) creates the object in a temporary folder and only moves it to the real folder when it is first saved</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">to see if content is still temporary use portal_factory.isTemporary(obj)</p>
+</div>
+</div>
+</div>
+<div class="section" id="restricting-creating-on-content-types">
+<h2><a class="toc-backref" href="#id6">Restricting creating on content types</a><a class="headerlink" href="#restricting-creating-on-content-types" title="Permalink to this headline">¶</a></h2>
+<p>Plone can restrict available content types which you can create in folder
+through <em>Add...</em> menu.</p>
+<div class="section" id="restricting-available-types-per-content-type">
+<h3><a class="toc-backref" href="#id7">Restricting available types per content type</a><a class="headerlink" href="#restricting-available-types-per-content-type" title="Permalink to this headline">¶</a></h3>
+<p>portal_types defines which content types can be created inside folderish content type.
+By default, all content types which have <tt class="docutils literal"><span class="pre">global_allow</span></tt> property set can be added.</p>
+<p>The behavior can be controlled with <tt class="docutils literal"><span class="pre">allowed_content_types</span></tt> setting.</p>
+<ul class="simple">
+<li>You can change it through portal_types management interface</li>
+<li>You can change it in your add-on installer <a class="reference internal" href="../components/genericsetup.html"><em>GenericSetup</em></a> profile</li>
+</ul>
+<p>Example for <a class="reference internal" href="dexterity.html"><em>Dexterity content type</em></a>. The file would be something like profiles/default/types/yourcompany.app.typeid.xml:</p>
+<div class="highlight-python"><pre>&lt;!-- List content types we allow here --&gt;
+&lt;property name="filter_content_types"&gt;True&lt;/property&gt;
+&lt;property name="allowed_content_types"&gt;
+      &lt;element value="yourcompany.app.courseinfo" /&gt;
+&lt;/property&gt;
+&lt;property name="allow_discussion"&gt;False&lt;/property&gt;</pre>
+</div>
+<p>Example for <a class="reference internal" href="archetypes/index.html"><em>Archetypes content</em></a>. The file would be something like <cite>profiles/default/types/YourType.xml</cite>:</p>
+<div class="highlight-python"><pre>&lt;property name="filter_content_types"&gt;True&lt;/property&gt;
+
+&lt;property name="allowed_content_types"&gt;
+        &lt;element value="YourContentTypeName" /&gt;
+        &lt;element value="Image" /&gt;
+        &lt;element value="News Item" /&gt;
+        ...
+&lt;/property&gt;</pre>
+</div>
+</div>
+<div class="section" id="restricting-available-types-per-folder-instance">
+<h3><a class="toc-backref" href="#id8">Restricting available types per folder instance</a><a class="headerlink" href="#restricting-available-types-per-folder-instance" title="Permalink to this headline">¶</a></h3>
+<p>In UI, you can access this feature through <em>Add...</em> menu <em>Restrict</em> option.</p>
+<p>Type contraining is managed by ATContentTypes product</p>
+<ul class="simple">
+<li><a class="reference external" href="http://svn.plone.org/svn/collective/Products.ATContentTypes/trunk/Products/ATContentTypes/lib/constraintypes.py">http://svn.plone.org/svn/collective/Products.ATContentTypes/trunk/Products/ATContentTypes/lib/constraintypes.py</a></li>
+</ul>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Set allowed content types</span>
+<span class="kn">from</span> <span class="nn">Products.ATContentTypes.lib</span> <span class="kn">import</span> <span class="n">constraintypes</span>
+
+<span class="c"># Enable contstraining</span>
+<span class="n">folder</span><span class="o">.</span><span class="n">setConstrainTypesMode</span><span class="p">(</span><span class="n">constraintypes</span><span class="o">.</span><span class="n">ENABLED</span><span class="p">)</span>
+
+<span class="c"># Types for which we perform Unauthorized check</span>
+<span class="n">folder</span><span class="o">.</span><span class="n">setLocallyAllowedTypes</span><span class="p">([</span><span class="s">&quot;ExperienceEducator&quot;</span><span class="p">])</span>
+
+<span class="c"># Add new... menu  listing</span>
+<span class="n">folder</span><span class="o">.</span><span class="n">setImmediatelyAddableTypes</span><span class="p">([</span><span class="s">&quot;ExperienceEducator&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>You can also override contraintypes accessor method to have programmable logic which types are addable and which not.</p>
+<p>More info</p>
+<ul class="simple">
+<li><a class="reference external" href="http://plone.org/documentation/kb/restrict-addable-types">http://plone.org/documentation/kb/restrict-addable-types</a></li>
+</ul>
+</div>
+<div class="section" id="other-restrictions">
+<h3><a class="toc-backref" href="#id9">Other restrictions</a><a class="headerlink" href="#other-restrictions" title="Permalink to this headline">¶</a></h3>
+<p>See this discussion thread</p>
+<ul class="simple">
+<li><a class="reference external" href="http://plone.293351.n2.nabble.com/Folder-constraints-not-applicable-to-custom-content-types-tp6073100p6074327.html">http://plone.293351.n2.nabble.com/Folder-constraints-not-applicable-to-custom-content-types-tp6073100p6074327.html</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="creating-ofs-objects">
+<h2><a class="toc-backref" href="#id10">Creating OFS objects</a><a class="headerlink" href="#creating-ofs-objects" title="Permalink to this headline">¶</a></h2>
+<p>Zope has facilities for basic folder and contained objects by <a class="reference external" href="`IObjectManagerdefinition&lt;http://svn.zope.org/Zope/trunk/src/OFS/interfaces.py?rev=96262&amp;view=auto&gt;`_.">OFS</a> subsystem. You do not
+need to work with raw objects unless you are doing your custom lightweight, Plone free, persistent data.</p>
+<p>More examples in</p>
+<ul class="simple">
+<li><a class="reference external" href="https://svn.plone.org/svn/collective/collective.dancing/trunk/collective/dancing/channel.py">Singing &amp; Dancing</a>.</li>
+</ul>
+</div>
+<div class="section" id="oject-construction-life-cycle">
+<h2><a class="toc-backref" href="#id11">Oject construction life cycle</a><a class="headerlink" href="#oject-construction-life-cycle" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The following applies to Archetypes based objects only. The process might be different
+for Dexterity based content.</p>
+</div>
+<p>Archetypes content contruction has two phases</p>
+<ol class="arabic simple">
+<li>Object is created using ?createType= URL or Folder.invokeFactory() call. If createType is used
+then the object is given a temporary id. Object has a &quot;in creationg&quot; flag set.</li>
+<li>Object is saved for the first time and the final id is generated based on the object title.
+Object id is renamed. Creation flag is cleared.</li>
+</ol>
+<p>You are supposed to call either object.unmarkCreationFlag() or
+object.processForm() after content is created manually using
+invokeFactory().</p>
+<p>processForm() will perform following tasks:</p>
+<ul class="simple">
+<li>unmarks creation flag</li>
+<li>renames object according to title</li>
+<li>reindexes object</li>
+<li>invokes after_creation script and fires ObjectInitialzed event</li>
+</ul>
+<p>If you don't want to do particular step, look to
+Archetypes/BaseObject.py and call only what you really want.
+But unless unmarkCreationFlag() is called the object will behave strangely
+after the first edit.</p>
+<div class="section" id="rename-after-creation">
+<h3><a class="toc-backref" href="#id12">Rename after creation</a><a class="headerlink" href="#rename-after-creation" title="Permalink to this headline">¶</a></h3>
+<p>To prevent the automatic content id rename on the first through-the-web save, put your class code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">_at_rename_after_creation</span> <span class="o">=</span> <span class="bp">False</span>
+</pre></div>
+</div>
+<p>See</p>
+<ul class="simple">
+<li><a class="reference external" href="http://plone.org/documentation/kb/richdocument/controlling-creation">http://plone.org/documentation/kb/richdocument/controlling-creation</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="factory-type-information">
+<h2><a class="toc-backref" href="#id13">Factory type information</a><a class="headerlink" href="#factory-type-information" title="Permalink to this headline">¶</a></h2>
+<p>Factory type information (FTI) is responsible for content creation in the portal.
+It is independend from content type (Archetypes, Dexteriry) subsystems.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">FTI codebase is historical (updated circa 2001). Useful documentation might be hard to find.</p>
+</div>
+<p>FTI is responsible for</p>
+<ul class="simple">
+<li>Which function is called when new content type is added</li>
+<li>Icons available for content types</li>
+<li>Creation views for content types</li>
+<li>Permission and security</li>
+<li>Whether discussion is enabled</li>
+<li>factory_type_information is a dictionary that is used elsewhere in the code (often in __init__.py of a product) to set the initial values for a ZODB Factory Type Information object (an object in the portal_types tool)</li>
+</ul>
+<p>See</p>
+<ul class="simple">
+<li><a class="reference external" href="http://svn.zope.org/Products.CMFCore/trunk/Products/CMFCore/TypesTool.py?rev=101748&amp;view=auto">FTI source code</a>.</li>
+<li><a class="reference external" href="http://www.zope.org/Products/CMF/docs/devel/using_scriptable_type_info/view">Scriptable Types Information HOW TO</a></li>
+<li><a class="reference external" href="http://www.zope.org/Products/CMF/docs/devel/taming_types_tool/view">Notes Zope types mechanism</a></li>
+</ul>
+</div>
+<div class="section" id="content-does-not-show-in-add-menu-or-unauthorized-errors">
+<h2><a class="toc-backref" href="#id14">Content does not show in Add Menu or Unauthorized errors</a><a class="headerlink" href="#content-does-not-show-in-add-menu-or-unauthorized-errors" title="Permalink to this headline">¶</a></h2>
+<p>When creating new content types, many factors can silently fail due to human errors in the complex content type setup chain and security limitations.
+The effect is that you don't see your content type in Add drop down menu. Here are tips for debugging.</p>
+<ul class="simple">
+<li>Is your product broken due to Python import time errors? Check Zope Management Interface -&gt; Control panel -&gt; Products. Turn on Zope debugging mode to trace import errors.</li>
+<li>Have you rerun the quick installer (GenericSetup) after creating/modifying the content type?</li>
+<li>Do you have a correct Add permission for the product? Check __init__.py ContentInit() call.</li>
+<li>Does it show up in the portal factory? Check ZMI -&gt; portal_factory and factorytool.xml.</li>
+<li>Is it corretly registered as a portal type and implictly addable? Check ZMI -&gt; portal_types. Check default/profiles/type/yourtype.xml</li>
+<li>Does it have correct product name defined? Check ZMI -&gt; portal_types.</li>
+<li>Does it have a proper factory method? Check ZMI -&gt; types_tool. Check Zope logs for _queryFactory and import errors.</li>
+<li>Does it register itself with Archetypes? Check ZMI -&gt; archetypes_tool. Make sure that you have ContentInit properly run in your __init__.py. Make sure that all modules having Archetypes content types defined and registerType() call are imported in __init__py.</li>
+</ul>
+</div>
+<div class="section" id="link-to-creation-page">
+<h2><a class="toc-backref" href="#id15">Link to creation page</a><a class="headerlink" href="#link-to-creation-page" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Add... menu contains links how ot create individual content types. Copy URLs there.</li>
+<li>If you want to the user to have a choice which content type to create,
+you can link to /folder_factories page (creation page when Javascript is disabled).</li>
+</ul>
+</div>
+<div class="section" id="populating-folder-on-creation">
+<h2><a class="toc-backref" href="#id16">Populating folder on creation</a><a class="headerlink" href="#populating-folder-on-creation" title="Permalink to this headline">¶</a></h2>
+<p>Archetypes have a hook called initializeArchetype(). Your content type
+subclass can override this.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">LandingPage</span><span class="p">(</span><span class="n">folder</span><span class="o">.</span><span class="n">ATFolder</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Landing page&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">initializeArchetype</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prepopulate folder during the creation.</span>
+
+<span class="sd">        Create five subfolders of &quot;BigBlock&quot; type, with title and id preset.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">folder</span><span class="o">.</span><span class="n">ATFolder</span><span class="o">.</span><span class="n">initializeArchetype</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">):</span>
+            <span class="nb">id</span> <span class="o">=</span> <span class="s">&quot;container&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">invokeFactory</span><span class="p">(</span><span class="s">&quot;BigBlock&quot;</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;Big block &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+            <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span>
+
+            <span class="c"># Clear creation flag so that edit screen</span>
+            <span class="n">item</span><span class="o">.</span><span class="n">markCreationFlag</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="creating-content-from-ploneformgen">
+<h2><a class="toc-backref" href="#id17">Creating content from PloneFormGen</a><a class="headerlink" href="#creating-content-from-ploneformgen" title="Permalink to this headline">¶</a></h2>
+<p>PloneFormGen is a popular add-on for Plone.</p>
+<p>Below is a snippet for <tt class="docutils literal"><span class="pre">Custom</span> <span class="pre">Script</span> <span class="pre">Adapter</span></tt> which allows to create content
+straight out of PloneFormGen in <em>pending</em> review state (it is not public and
+will appear in the review list).</p>
+<blockquote>
+<p># Folder id where we create content is &quot;directory&quot; under site root
+target = context.portal_url.getPortalObject()[&quot;directory&quot;]</p>
+<p># The request object has an dictionary attribute named
+# form that contains the submitted form content, keyed
+# by field name
+form = request.form</p>
+<p># We need to engineer a unique ID for the object we're
+# going to create. If your form submit contained a field
+# that was guaranteed unique, you could use that instead.
+from DateTime import DateTime
+uid = str(DateTime().millis())</p>
+<p># We use the &quot;invokeFactory&quot; method of the target folder
+# to create a content object of type &quot;Document&quot; with our
+# unique ID for an id and the form submission's topic
+# field for a title.</p>
+<p># Field id have been set in Form Folder Contents view,
+# using rename functionality
+target.invokeFactory(&quot;Link&quot;, id=uid,</p>
+<blockquote>
+title=form['site-name'],
+description=form['site-description'],
+remoteUrl=form[&quot;link&quot;]
+)</blockquote>
+<p># Find our new object in the target folder
+obj = target[uid]</p>
+<p># Trigger rename-after-creation behavior
+# where actual id is generated from the title
+obj.processForm()</p>
+<p># Make item to pending state
+portal_workflow = context.portal_workflow
+portal_workflow.doActionFor(obj, &quot;submit&quot;)</p>
+</blockquote>
+<p>More info</p>
+<ul class="simple">
+<li><a class="reference external" href="http://plone.org/products/ploneformgen/documentation/how-to/creating-content-from-pfg">http://plone.org/products/ploneformgen/documentation/how-to/creating-content-from-pfg</a></li>
+<li><a class="reference external" href="http://plone.org/products/ploneformgen/documentation/how-to/creating-content-from-pfg">http://plone.org/products/ploneformgen/documentation/how-to/creating-content-from-pfg</a></li>
+</ul>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Creating objects</a><ul>
+<li><a class="reference internal" href="#creating-content-objects">Creating content objects</a><ul>
+<li><a class="reference internal" href="#permission-aware-way-dexterity">Permission aware way (Dexterity)</a></li>
+<li><a class="reference internal" href="#permission-aware-way-archetypes">Permission aware way (Archetypes)</a></li>
+<li><a class="reference internal" href="#bypassing-permissions-when-creating-content-item">Bypassing permissions when creating content item</a></li>
+<li><a class="reference internal" href="#portalfactory">PortalFactory</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#restricting-creating-on-content-types">Restricting creating on content types</a><ul>
+<li><a class="reference internal" href="#restricting-available-types-per-content-type">Restricting available types per content type</a></li>
+<li><a class="reference internal" href="#restricting-available-types-per-folder-instance">Restricting available types per folder instance</a></li>
+<li><a class="reference internal" href="#other-restrictions">Other restrictions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#creating-ofs-objects">Creating OFS objects</a></li>
+<li><a class="reference internal" href="#oject-construction-life-cycle">Oject construction life cycle</a><ul>
+<li><a class="reference internal" href="#rename-after-creation">Rename after creation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#factory-type-information">Factory type information</a></li>
+<li><a class="reference internal" href="#content-does-not-show-in-add-menu-or-unauthorized-errors">Content does not show in Add Menu or Unauthorized errors</a></li>
+<li><a class="reference internal" href="#link-to-creation-page">Link to creation page</a></li>
+<li><a class="reference internal" href="#populating-folder-on-creation">Populating folder on creation</a></li>
+<li><a class="reference internal" href="#creating-content-from-ploneformgen">Creating content from PloneFormGen</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Content management</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="listing.html"
+                        title="next chapter">Listing objects</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/content/creating.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="listing.html" title="Listing objects"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Content management"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Content management</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

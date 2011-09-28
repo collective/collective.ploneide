@@ -1,0 +1,376 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ZODB Database &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Persistency and transactions" href="index.html" />
+    <link rel="next" title="Storage" href="storage.html" />
+    <link rel="prev" title="Object lifecycles" href="lifecycle.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="storage.html" title="Storage"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="lifecycle.html" title="Object lifecycles"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Persistency and transactions</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="zodb-database">
+<h1>ZODB Database<a class="headerlink" href="#zodb-database" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">Plone uses the ZODB object database to store its data.  The ZODB can act
+independently in-process, clustered over network or over another database
+engine, like SQL.</p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
+<li><a class="reference internal" href="#object-database-constraints" id="id2">Object database constraints</a><ul>
+<li><a class="reference internal" href="#query-and-searching" id="id3">Query and searching</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#data-model" id="id4">Data model</a></li>
+<li><a class="reference internal" href="#browsing" id="id5">Browsing</a></li>
+<li><a class="reference internal" href="#zodb-versions" id="id6">ZODB versions</a></li>
+<li><a class="reference internal" href="#zodb-tips-and-tricks" id="id7">ZODB tips and tricks</a></li>
+<li><a class="reference internal" href="#packing-the-database-offline" id="id8">Packing the database offline</a></li>
+<li><a class="reference internal" href="#visualizing-database-object-graphs" id="id9">Visualizing database object graphs</a></li>
+<li><a class="reference internal" href="#cache-size" id="id10">Cache size</a></li>
+<li><a class="reference internal" href="#integrity-checks" id="id11">Integrity checks</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Plone uses the ZODB database.  The ZODB happily stores any Python object with
+any attributes — there is no need to write &quot;database schemas&quot; as there is
+with SQL-based systems.</p>
+<p>Subclasses of <tt class="docutils literal"><span class="pre">persistent.Persistent</span></tt> will have all their attributes
+written to the database.  Lists and dictionaries will be automatically
+converted to persistent versions.</p>
+<p>This chapter is about the basics of the ZODB, working with the ZODB database
+directly, like tuning database settings.</p>
+</div>
+<div class="section" id="object-database-constraints">
+<h2><a class="toc-backref" href="#id2">Object database constraints</a><a class="headerlink" href="#object-database-constraints" title="Permalink to this headline">¶</a></h2>
+<p>The ZODB is an object database.  It makes very easy to store different kinds of
+contentish data in a graph, supporting subclassing (something which SQL often
+does poorly).</p>
+<p>Since the database stores objects, and the objects are defined in Python code,
+you always need the corresponding Python source code to instantiate the objects
+stored inside the ZODB.  This might feel awkward at first, but you need to have
+MySQL running to read what's inside MySQL files stored on your disk and so on ...</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The ZODB database is not usable without the Python source code used to
+create the data. The data is not readable using any SQL-based tools, and
+there exist little tools to deal with the raw data. The way to access Plone
+data is running Plone itself and performing queries through it.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Since correct source code is needed to read ZODB data, this poses a problem
+for versioning. Even if you use the correct add-on product with proper
+source code, if the source code version is wrong, it might not work.  Data
+model attributes might be added, modified or deleted between source code
+revisions, making data operations on the existing database fail by raising
+Python exceptions (<tt class="docutils literal"><span class="pre">AttributeError</span></tt>, <tt class="docutils literal"><span class="pre">KeyError</span></tt>).</p>
+</div>
+<p>To work around the ZODB interoperatibility problems, products like
+<em>ore.contentmirror</em> exist to duplicate Plone content data to read-only SQL
+database.</p>
+<div class="section" id="query-and-searching">
+<h3><a class="toc-backref" href="#id3">Query and searching</a><a class="headerlink" href="#query-and-searching" title="Permalink to this headline">¶</a></h3>
+<p>ZODB does not provide query services as is
+i.e. there is no SELECT statement.</p>
+<p>Plone provides <a class="reference internal" href="../searching_and_indexing/catalog.html"><em>cataloging</em></a>
+service for this purpose.</p>
+<p>This gives some benefits</p>
+<ul class="simple">
+<li>You define yourself how data is indexed</li>
+<li>The backend to perform queries is flexible - you
+can plug-in custom indexes</li>
+<li>portal_catalog default catalog is used to all content items
+to provide basic CMS functionality easily</li>
+<li>You can have optimized catalogs for specialized data (e.g. reference look-ups
+using reference_catalog)</li>
+</ul>
+</div>
+</div>
+<div class="section" id="data-model">
+<h2><a class="toc-backref" href="#id4">Data model</a><a class="headerlink" href="#data-model" title="Permalink to this headline">¶</a></h2>
+<p>There is no hardwired way for desceribe
+data in ZODB database.</p>
+<p>There are currently three primary ways to define data models in Plone</p>
+<ul class="simple">
+<li>Using Archetypes content type subsystem (all Plone 3 content)</li>
+<li>Using zope.schema package (modern way)</li>
+<li>Not defining the model, but relying</li>
+</ul>
+<p>Read about <a class="reference internal" href="../models/schemas.html"><em>zope.schema</em></a>
+how to define a model for the data to be stored
+in ZODB database.</p>
+</div>
+<div class="section" id="browsing">
+<h2><a class="toc-backref" href="#id5">Browsing</a><a class="headerlink" href="#browsing" title="Permalink to this headline">¶</a></h2>
+<p>You can explore ZODB outside Plone, assuming you have related Python code available</p>
+<ul class="simple">
+<li><a class="reference external" href="http://robertoallende.com/en/zodbbrowser-released">http://robertoallende.com/en/zodbbrowser-released</a></li>
+</ul>
+</div>
+<div class="section" id="zodb-versions">
+<h2><a class="toc-backref" href="#id6">ZODB versions</a><a class="headerlink" href="#zodb-versions" title="Permalink to this headline">¶</a></h2>
+<p>Plone uses ZODB database. The default ZODB version with Plone 3.x is ZODB 3.7.x.
+ZODB 3.8.x is not officially supported, but has been reported to work to work
+with Plone 3. ZODB 3.9.x is to be used with Plone 4.</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.zodb.org/documentation/articles/ZODB-overview.html">ZODB overview</a></li>
+<li><a class="reference external" href="http://www.zodb.org/documentation/guide/index.html">ZODB programming guide</a></li>
+<li><a class="reference external" href="http://www.ibm.com/developerworks/aix/library/au-zodb/">http://www.ibm.com/developerworks/aix/library/au-zodb/</a></li>
+</ul>
+</div>
+<div class="section" id="zodb-tips-and-tricks">
+<h2><a class="toc-backref" href="#id7">ZODB tips and tricks</a><a class="headerlink" href="#zodb-tips-and-tricks" title="Permalink to this headline">¶</a></h2>
+<p>Please see</p>
+<ul class="simple">
+<li><a class="reference external" href="http://plone.org/events/regional/nola05/collateral/Chris%20McDonough-ZODB%20Tips%20and%20Tricks.pdf">http://plone.org/events/regional/nola05/collateral/Chris%20McDonough-ZODB%20Tips%20and%20Tricks.pdf</a></li>
+</ul>
+</div>
+<div class="section" id="packing-the-database-offline">
+<h2><a class="toc-backref" href="#id8">Packing the database offline</a><a class="headerlink" href="#packing-the-database-offline" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="http://blog.twinapex.fi/2009/09/01/packing-and-copying-data-fs-from-production-server-for-local-development/">See this blog post</a>.</p>
+<p>Example how to pack a copy of Data.fs in offline using Python snippet:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">ZODB.FileStorage</span>
+<span class="kn">import</span> <span class="nn">ZODB.serialize</span>
+
+<span class="n">storage</span><span class="o">=</span><span class="n">ZODB</span><span class="o">.</span><span class="n">FileStorage</span><span class="o">.</span><span class="n">FileStorage</span><span class="p">(</span><span class="s">&#39;/tmp/Data.fs.copy&#39;</span><span class="p">)</span>
+<span class="n">storage</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">(),</span><span class="n">ZODB</span><span class="o">.</span><span class="n">serialize</span><span class="o">.</span><span class="n">referencesf</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>As this depends on ZODB egg, the easiest way to run the snippet is to <tt class="docutils literal"><span class="pre">zopepy</span></tt>
+script from your <tt class="docutils literal"><span class="pre">buildout/bin</span></tt> folder:</p>
+<div class="highlight-python"><pre>bin/zopepy pack.py</pre>
+</div>
+<p>For more information, see <a class="reference internal" href="../misc/commandline.html"><em>command-line scripts</em></a>.</p>
+</div>
+<div class="section" id="visualizing-database-object-graphs">
+<h2><a class="toc-backref" href="#id9">Visualizing database object graphs</a><a class="headerlink" href="#visualizing-database-object-graphs" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://blog.hannosch.eu/2009/05/visualizing-persistent-structure-of.html">http://blog.hannosch.eu/2009/05/visualizing-persistent-structure-of.html</a></li>
+<li><a class="reference external" href="http://david.wglick.org/2009/visualizing-the-zodb-with-graphviz/">http://david.wglick.org/2009/visualizing-the-zodb-with-graphviz/</a></li>
+</ul>
+</div>
+<div class="section" id="cache-size">
+<h2><a class="toc-backref" href="#id10">Cache size</a><a class="headerlink" href="#cache-size" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="https://mail.zope.org/pipermail/zodb-dev/2010-March/013199.html">Understanding ZODB cache size option</a></li>
+</ul>
+</div>
+<div class="section" id="integrity-checks">
+<h2><a class="toc-backref" href="#id11">Integrity checks</a><a class="headerlink" href="#integrity-checks" title="Permalink to this headline">¶</a></h2>
+<p>Especially when you back-up a Data.fs file, it is useful to run integrity checks for the transferred files.</p>
+<p>ZODB provides scripts <tt class="docutils literal"><span class="pre">fstest</span></tt> and <tt class="docutils literal"><span class="pre">fsrefs</span></tt> to check if Data.fs data is intact
+and there are no problems due to low level disk corruption or bit flip.</p>
+<ul class="simple">
+<li><a class="reference external" href="http://wiki.zope.org/ZODB/FileStorageBackup">http://wiki.zope.org/ZODB/FileStorageBackup</a></li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It is recommended best practice to run integrity against your Data.fs regularly.
+This is the only way to detect corruption which would otherwise go unnoticed
+for a long time.</p>
+</div>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">ZODB Database</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#object-database-constraints">Object database constraints</a><ul>
+<li><a class="reference internal" href="#query-and-searching">Query and searching</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#data-model">Data model</a></li>
+<li><a class="reference internal" href="#browsing">Browsing</a></li>
+<li><a class="reference internal" href="#zodb-versions">ZODB versions</a></li>
+<li><a class="reference internal" href="#zodb-tips-and-tricks">ZODB tips and tricks</a></li>
+<li><a class="reference internal" href="#packing-the-database-offline">Packing the database offline</a></li>
+<li><a class="reference internal" href="#visualizing-database-object-graphs">Visualizing database object graphs</a></li>
+<li><a class="reference internal" href="#cache-size">Cache size</a></li>
+<li><a class="reference internal" href="#integrity-checks">Integrity checks</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="lifecycle.html"
+                        title="previous chapter">Object lifecycles</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="storage.html"
+                        title="next chapter">Storage</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/persistency/database.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="storage.html" title="Storage"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="lifecycle.html" title="Object lifecycles"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Persistency and transactions</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

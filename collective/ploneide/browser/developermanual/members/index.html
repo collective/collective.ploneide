@@ -1,0 +1,251 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Users and members &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="next" title="Reading member records" href="member_basics.html" />
+    <link rel="prev" title="Internationalization and cache" href="../i18n/cache.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="member_basics.html" title="Reading member records"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../i18n/cache.html" title="Internationalization and cache"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="users-and-members">
+<h1>Users and members<a class="headerlink" href="#users-and-members" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="member_basics.html">Reading member records</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="member_basics.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="member_basics.html#getting-the-logged-in-member">Getting the logged-in member</a></li>
+<li class="toctree-l2"><a class="reference internal" href="member_basics.html#getting-any-member">Getting any member</a></li>
+<li class="toctree-l2"><a class="reference internal" href="member_basics.html#iterating-all-site-users">Iterating all site users</a></li>
+<li class="toctree-l2"><a class="reference internal" href="member_basics.html#getting-all-members-for-a-given-role">Getting all <em>Members</em> for a given <em>Role</em></a></li>
+<li class="toctree-l2"><a class="reference internal" href="member_basics.html#groups">Groups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="member_basics.html#checking-whether-a-user-exists">Checking whether a user exists</a></li>
+<li class="toctree-l2"><a class="reference internal" href="member_basics.html#creating-users">Creating users</a></li>
+<li class="toctree-l2"><a class="reference internal" href="member_basics.html#email-login">Email login</a></li>
+<li class="toctree-l2"><a class="reference internal" href="member_basics.html#custom-member-creation-form-complex-example">Custom member creation form: complex example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="member_profile.html">Member profiles</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="member_profile.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="member_profile.html#getting-member-profile-properties">Getting member profile properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="member_profile.html#setting-member-profile-properties">Setting member profile properties</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pluggable_authentication_service/index.html">Pluggable Authentication Service</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pluggable_authentication_service/introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pluggable_authentication_service/features-and-interfaces.html">Features and interfaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pluggable_authentication_service/the-important-interfaces.html">The important interfaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pluggable_authentication_service/configuring-pas.html">Configuring PAS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pluggable_authentication_service/configuring-an-individual-pas-plugin.html">Configuring an individual PAS plugin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pluggable_authentication_service/concepts.html">Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pluggable_authentication_service/the-user-object.html">The user object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pluggable_authentication_service/user-creation.html">User creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pluggable_authentication_service/user-factory-plugin.html">User factory plugin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pluggable_authentication_service/properties-plugins.html">Properties plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pluggable_authentication_service/group-plugins.html">Group plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pluggable_authentication_service/roles-plugin.html">Roles plugin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pluggable_authentication_service/authorisation-algorithm.html">Authorisation algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pluggable_authentication_service/credential-extraction.html">Credential extraction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pluggable_authentication_service/credential-authentication.html">Credential authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pluggable_authentication_service/challenges.html">Challenges</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pluggable_authentication_service/pas-eats-exceptions.html">PAS eats exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pluggable_authentication_service/plugins/index.html">Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pluggable_authentication_service/repositories.html">Repositories</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="membrane.html">Members as content</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="membrane.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="membrane.html#basics">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="membrane.html#getting-member-by-username">Getting member by username</a></li>
+<li class="toctree-l2"><a class="reference internal" href="membrane.html#getting-member-from-membraneuser-or-owner-record">Getting member from MembraneUser or owner record</a></li>
+<li class="toctree-l2"><a class="reference internal" href="membrane.html#creating-a-member">Creating a member</a></li>
+<li class="toctree-l2"><a class="reference internal" href="membrane.html#populating-member-fields-automatically">Populating member fields automatically</a></li>
+<li class="toctree-l2"><a class="reference internal" href="membrane.html#checking-member-validy">Checking member validy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="membrane.html#setting-user-password">Setting user password</a></li>
+<li class="toctree-l2"><a class="reference internal" href="membrane.html#moving-members">Moving members</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sharing_tab.html">Sharing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sharing_tab.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sharing_tab.html#setting-sharing-rights-programmatically">Setting sharing rights programmatically</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sharing_tab.html#add-sharing-tab-to-a-custom-content-type">Add sharing tab to a custom content type</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../i18n/cache.html"
+                        title="previous chapter">Internationalization and cache</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="member_basics.html"
+                        title="next chapter">Reading member records</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/members/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="member_basics.html" title="Reading member records"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../i18n/cache.html" title="Internationalization and cache"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

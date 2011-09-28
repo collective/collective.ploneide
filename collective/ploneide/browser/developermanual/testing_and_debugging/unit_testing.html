@@ -1,0 +1,620 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Unit testing &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Testing and debugging" href="index.html" />
+    <link rel="next" title="Functional testing" href="functional_testing.html" />
+    <link rel="prev" title="Python debugging" href="pdb.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="functional_testing.html" title="Functional testing"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pdb.html" title="Python debugging"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Testing and debugging</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="unit-testing">
+<h1>Unit testing<a class="headerlink" href="#unit-testing" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
+<li><a class="reference internal" href="#running-unit-tests" id="id2">Running unit tests</a><ul>
+<li><a class="reference internal" href="#attributeerror-module-object-has-no-attribute-test-suite" id="id3">AttributeError: 'module' object has no attribute 'test_suite'</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#test-coverage" id="id4">Test coverage</a></li>
+<li><a class="reference internal" href="#creating-unit-tests" id="id5">Creating unit tests</a></li>
+<li><a class="reference internal" href="#base-test-class-skeleton" id="id6">Base test class skeleton</a></li>
+<li><a class="reference internal" href="#posing-as-different-users" id="id7">Posing as different users</a></li>
+<li><a class="reference internal" href="#unit-tests-and-themes" id="id8">Unit tests and themes</a></li>
+<li><a class="reference internal" href="#running-add-on-installers-and-extensions-profiles-for-unit-tests" id="id9">Running add-on installers and extensions profiles for unit tests</a><ul>
+<li><a class="reference internal" href="#tested-package-not-found-warning" id="id10">Tested package not found warning</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#load-zcml-for-testing" id="id11">Load zcml for testing</a></li>
+<li><a class="reference internal" href="#setting-log-level-in-unit-tests" id="id12">Setting log level in unit tests</a></li>
+<li><a class="reference internal" href="#http-request" id="id13">HTTP request</a><ul>
+<li><a class="reference internal" href="#setting-a-real-http-request" id="id14">Setting a real http request</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#grabbing-emails" id="id15">Grabbing emails</a></li>
+<li><a class="reference internal" href="#unit-testing-and-zope-component-architecture" id="id16">Unit testing and Zope component architecture</a></li>
+<li><a class="reference internal" href="#zcml" id="id17">ZCML</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Unit tests are automated tests created by developer to ensure that the add-on product is
+intact in the current product configuration. Unit tests are regression tests and
+are designed to catch broken functionality over the code evolution.</p>
+<p><a class="reference external" href="http://plone.org/documentation/tutorial/richdocument/unit-testing">Plone unit testing tutorial</a>.</p>
+</div>
+<div class="section" id="running-unit-tests">
+<h2><a class="toc-backref" href="#id2">Running unit tests</a><a class="headerlink" href="#running-unit-tests" title="Permalink to this headline">¶</a></h2>
+<p>Since Plone 4, <tt class="docutils literal"><span class="pre">zc.testrunner</span></tt> is recommended to use to run the test suites.
+You need to add it to your <tt class="docutils literal"><span class="pre">buildout.cfg</span></tt> to generate <tt class="docutils literal"><span class="pre">test</span></tt> command.</p>
+<div class="highlight-cfg"><pre>parts =
+   ...
+   test
+
+[test]
+recipe = zc.recipe.testrunner
+defaults = ['--auto-color', '--auto-progress']
+eggs =
+    ${instance:eggs}</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On Plone 3 you can run tests with &quot;bin/instance test&quot;
+command, which corresponds &quot;bin/test&quot;.</p>
+</div>
+<p>Running tests for one package
+conver
+.. code-block:: console</p>
+<blockquote>
+bin/test -s package.subpackage</blockquote>
+<p>Running tests for one test case</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">bin/test -s package.subpackage -t TestCaseClassName</span>
+</pre></div>
+</div>
+<p>Running tests for two test cases</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">bin/test -s package.subpackage -t TestClass1|TestClass2</span>
+</pre></div>
+</div>
+<p>To drop in pdb debugger after each test failure</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">bin/test -s package.subpackage -D</span>
+</pre></div>
+</div>
+<p>To exclude tests</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">bin/test -s package.subpackage -t !test_name</span>
+</pre></div>
+</div>
+<p>To list tests that will be run</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">bin/test -s package.subpackage --list-tests</span>
+</pre></div>
+</div>
+<p>The following will run tests for <em>all</em> Plone and -ons -
+useful to check whether you have a good component set</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">bin/test</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Test runner does not give an error if you supply invalid package and test case name.
+Instead it just simply doesn't execute tests.</p>
+</div>
+<p>More information</p>
+<ul class="simple">
+<li><a class="reference external" href="http://plone.org/documentation/manual/upgrade-guide/version/upgrading-plone-3-x-to-4.0/updating-add-on-products-for-plone-4.0/no-longer-bin-instance-test-use-zc.recipe.testrunner">http://plone.org/documentation/manual/upgrade-guide/version/upgrading-plone-3-x-to-4.0/updating-add-on-products-for-plone-4.0/no-longer-bin-instance-test-use-zc.recipe.testrunner</a></li>
+</ul>
+<div class="section" id="attributeerror-module-object-has-no-attribute-test-suite">
+<h3><a class="toc-backref" href="#id3">AttributeError: 'module' object has no attribute 'test_suite'</a><a class="headerlink" href="#attributeerror-module-object-has-no-attribute-test-suite" title="Permalink to this headline">¶</a></h3>
+<p>If you get the above error message there are potential reasons</p>
+<ul class="simple">
+<li>Having both tests.py and tests folder</li>
+<li>Old version: Zope version X unit test framework was updated not to need
+anymore explicit test_suite declaration in test module.
+Instead, all classes subclasses TestCase are automatically picked.
+However, this change is backwards incompatible.
+<a class="reference external" href="http://wiki.zope.org/zope2/HowToRunZopeUnitTests">http://wiki.zope.org/zope2/HowToRunZopeUnitTests</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="test-coverage">
+<h2><a class="toc-backref" href="#id4">Test coverage</a><a class="headerlink" href="#test-coverage" title="Permalink to this headline">¶</a></h2>
+<p>Zope test running can show how much your code is covered by automatic tests.</p>
+<ul class="simple">
+<li><a class="reference external" href="http://plone.org/documentation/kb/testing/code-coverage">http://plone.org/documentation/kb/testing/code-coverage</a></li>
+</ul>
+</div>
+<div class="section" id="creating-unit-tests">
+<h2><a class="toc-backref" href="#id5">Creating unit tests</a><a class="headerlink" href="#creating-unit-tests" title="Permalink to this headline">¶</a></h2>
+<p>Pointers</p>
+<ul class="simple">
+<li><a class="reference external" href="http://plone.org/documentation/kb/testing">http://plone.org/documentation/kb/testing</a></li>
+<li><a class="reference external" href="http://pypi.python.org/pypi/Products.PloneTestCase">http://pypi.python.org/pypi/Products.PloneTestCase</a></li>
+<li><a class="reference external" href="http://www.zope.org/Members/shh/ZopeTestCaseWiki/ApiReference">http://www.zope.org/Members/shh/ZopeTestCaseWiki/ApiReference</a></li>
+</ul>
+</div>
+<div class="section" id="base-test-class-skeleton">
+<h2><a class="toc-backref" href="#id6">Base test class skeleton</a><a class="headerlink" href="#base-test-class-skeleton" title="Permalink to this headline">¶</a></h2>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Zope imports</span>
+<span class="kn">from</span> <span class="nn">Testing</span> <span class="kn">import</span> <span class="n">ZopeTestCase</span>
+
+<span class="c"># Plone imports -&gt; PloneTestCase load zcml layer and install product</span>
+<span class="kn">from</span> <span class="nn">Products.PloneTestCase</span> <span class="kn">import</span> <span class="n">PloneTestCase</span>
+
+<span class="c"># For loading zcml</span>
+<span class="kn">from</span> <span class="nn">Products.Five</span> <span class="kn">import</span> <span class="n">zcml</span>
+
+<span class="c">## Import all module that you want load zcml</span>
+<span class="kn">import</span> <span class="nn">Products.PloneFormGen</span>
+<span class="kn">import</span> <span class="nn">Products.Five</span>
+<span class="kn">import</span> <span class="nn">Products.GenericSetup</span>
+<span class="kn">import</span> <span class="nn">Products.CMFPlone</span>
+<span class="kn">import</span> <span class="nn">myapp.content</span>
+
+<span class="c">## Install all product requirement</span>
+<span class="n">PloneTestCase</span><span class="o">.</span><span class="n">installProduct</span><span class="p">(</span><span class="s">&#39;PloneLanguageTool&#39;</span><span class="p">)</span>
+<span class="c">## ....</span>
+<span class="n">PloneTestCase</span><span class="o">.</span><span class="n">installProduct</span><span class="p">(</span><span class="s">&#39;collective.dancing&#39;</span><span class="p">)</span>
+<span class="c">## Install a Python package registered via five:registerPackage</span>
+<span class="n">PloneTestCase</span><span class="o">.</span><span class="n">installPackage</span><span class="p">(</span><span class="s">&#39;myapp.content&#39;</span><span class="p">)</span>
+
+<span class="c">## load zcml</span>
+<span class="n">zcml</span><span class="o">.</span><span class="n">load_config</span><span class="p">(</span><span class="s">&#39;meta.zcml&#39;</span> <span class="p">,</span> <span class="n">Products</span><span class="o">.</span><span class="n">CMFPlone</span><span class="p">)</span>
+<span class="n">zcml</span><span class="o">.</span><span class="n">load_config</span><span class="p">(</span><span class="s">&#39;meta.zcml&#39;</span> <span class="p">,</span> <span class="n">Products</span><span class="o">.</span><span class="n">Five</span><span class="p">)</span>
+<span class="n">zcml</span><span class="o">.</span><span class="n">load_config</span><span class="p">(</span><span class="s">&#39;meta.zcml&#39;</span> <span class="p">,</span> <span class="n">Products</span><span class="o">.</span><span class="n">GenericSetup</span><span class="p">)</span>
+<span class="n">zcml</span><span class="o">.</span><span class="n">load_config</span><span class="p">(</span><span class="s">&#39;configure.zcml&#39;</span> <span class="p">,</span> <span class="n">Products</span><span class="o">.</span><span class="n">Five</span><span class="p">)</span>
+<span class="n">zcml</span><span class="o">.</span><span class="n">load_config</span><span class="p">(</span><span class="s">&#39;configure.zcml&#39;</span><span class="p">,</span><span class="n">Products</span><span class="o">.</span><span class="n">Five</span><span class="p">)</span>
+<span class="c">## ....</span>
+<span class="n">zcml</span><span class="o">.</span><span class="n">load_config</span><span class="p">(</span><span class="s">&#39;configure.zcml&#39;</span><span class="p">,</span><span class="n">Products</span><span class="o">.</span><span class="n">PloneFormGen</span><span class="p">)</span>
+<span class="n">zcml</span><span class="o">.</span><span class="n">load_config</span><span class="p">(</span><span class="s">&#39;configure.zcml&#39;</span><span class="p">,</span><span class="n">myapp</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+
+<span class="c"># Setup Plone site</span>
+<span class="n">PloneTestCase</span><span class="o">.</span><span class="n">setupPloneSite</span><span class="p">(</span><span class="n">products</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;PloneLanguageTool&#39;</span><span class="p">,</span> <span class="s">&#39;myapp.content&#39;</span><span class="p">],</span><span class="n">extension_profiles</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;myapp.content:default&#39;</span><span class="p">,])</span>
+
+
+<span class="k">class</span> <span class="nc">MySiteTestCase</span><span class="p">(</span><span class="n">PloneTestCase</span><span class="o">.</span><span class="n">PloneTestCase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base class for all class with test cases&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">afterSetUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; some tasks after setup the site &quot;&quot;&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="posing-as-different-users">
+<h2><a class="toc-backref" href="#id7">Posing as different users</a><a class="headerlink" href="#posing-as-different-users" title="Permalink to this headline">¶</a></h2>
+<p>There is a shortcut to priviledge you from all security checks:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="bp">self</span><span class="o">.</span><span class="n">loginAsPortalOwner</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This priviledges are effective only in the context
+where permissions are checked manually. They do
+not affect traversing related permissions:
+looking up views or pages in unit test Python code.
+For that kind of testing, use functional testing.</p>
+</div>
+</div>
+<div class="section" id="unit-tests-and-themes">
+<h2><a class="toc-backref" href="#id8">Unit tests and themes</a><a class="headerlink" href="#unit-tests-and-themes" title="Permalink to this headline">¶</a></h2>
+<p>If your test code modifies skin registries you need to force skin data reload.</p>
+<p>Example (self = unit test):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="bp">self</span><span class="o">.</span><span class="n">_refreshSkinData</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="running-add-on-installers-and-extensions-profiles-for-unit-tests">
+<h2><a class="toc-backref" href="#id9">Running add-on installers and extensions profiles for unit tests</a><a class="headerlink" href="#running-add-on-installers-and-extensions-profiles-for-unit-tests" title="Permalink to this headline">¶</a></h2>
+<p>By default, no add-on installers or extension profiles are installed.</p>
+<p>You need to modify PloneTestCase.setupPloneSite() call in your
+base unit tests.</p>
+<p>Simple example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ptc</span><span class="o">.</span><span class="n">setupPloneSite</span><span class="p">(</span><span class="n">products</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;namespace.yourproduct&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Complex example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ptc</span><span class="o">.</span><span class="n">setupPloneSite</span><span class="p">(</span><span class="n">products</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;harvinaiset.app&#39;</span><span class="p">,</span> <span class="s">&#39;TickingMachine&#39;</span><span class="p">],</span> <span class="n">extension_profiles</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;harvinaiset.app:tests&quot;</span><span class="p">,</span><span class="s">&quot;harvinaiset.app:default&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="section" id="tested-package-not-found-warning">
+<h3><a class="toc-backref" href="#id10">Tested package not found warning</a><a class="headerlink" href="#tested-package-not-found-warning" title="Permalink to this headline">¶</a></h3>
+<p>Installers may fail without interrupting the test run. Monitor Zope start up messages. If you get error like:</p>
+<div class="highlight-python"><pre>Installing gomobiletheme.basic ... NOT FOUND</pre>
+</div>
+<p>You might be missing this from your configure.zcml</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;five:registerPackage</span> <span class="na">package=</span><span class="s">&quot;.&quot;</span> <span class="na">initialize=</span><span class="s">&quot;.initialize&quot;</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<p>... or you have spelling error in your test setup code.</p>
+</div>
+</div>
+<div class="section" id="load-zcml-for-testing">
+<h2><a class="toc-backref" href="#id11">Load zcml for testing</a><a class="headerlink" href="#load-zcml-for-testing" title="Permalink to this headline">¶</a></h2>
+<p>For loading fs zcml in test you can use Five API</p>
+<div class="highlight-python"><pre>import &lt;your fabulous module&gt;
+from Products.Five import zcml
+zcml.load_config('configure.zcml', &lt;your fabulous module&gt;)</pre>
+</div>
+</div>
+<div class="section" id="setting-log-level-in-unit-tests">
+<h2><a class="toc-backref" href="#id12">Setting log level in unit tests</a><a class="headerlink" href="#setting-log-level-in-unit-tests" title="Permalink to this headline">¶</a></h2>
+<p>Many components use debug output level and unit testing default output level is info.
+Import messages may go unnoticed during the unit test development.</p>
+<p>Add this to your unit test code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">enableDebugLog</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Enable context.plone_log() output from Python scripts &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">logging</span>
+    <span class="kn">from</span> <span class="nn">Products.CMFPlone.log</span> <span class="kn">import</span> <span class="n">logger</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="http-request">
+<h2><a class="toc-backref" href="#id13">HTTP request</a><a class="headerlink" href="#http-request" title="Permalink to this headline">¶</a></h2>
+<p>Zope unit tests have faux HTTPRequest object set up.</p>
+<p>You can access it:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="bp">self</span><span class="o">.</span><span class="n">portal</span><span class="o">.</span><span class="n">REQUEST</span> <span class="c"># Faux HTTPRequest object</span>
+</pre></div>
+</div>
+<div class="section" id="setting-a-real-http-request">
+<h3><a class="toc-backref" href="#id14">Setting a real http request</a><a class="headerlink" href="#setting-a-real-http-request" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Testing</span> <span class="kn">import</span> <span class="n">makerequest</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="bp">self</span><span class="o">.</span><span class="n">app</span> <span class="o">=</span> <span class="n">makerequest</span><span class="o">.</span><span class="n">makerequest</span><span class="p">(</span><span class="n">Zope</span><span class="o">.</span><span class="n">app</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">request</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">portal</span><span class="o">.</span><span class="n">REQUEST</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="grabbing-emails">
+<h2><a class="toc-backref" href="#id15">Grabbing emails</a><a class="headerlink" href="#grabbing-emails" title="Permalink to this headline">¶</a></h2>
+<p>To debug outgoing email traffic you can create a dummy mailhost.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">MailHost code has been changed in Plone 4. This instructions apply for Plone 3.</p>
+</div>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">zope.component</span> <span class="kn">import</span> <span class="n">getUtility</span><span class="p">,</span> <span class="n">getMultiAdapter</span><span class="p">,</span> <span class="n">getSiteManager</span>
+<span class="kn">from</span> <span class="nn">Products.MailHost.interfaces</span> <span class="kn">import</span> <span class="n">IMailHost</span>
+<span class="kn">from</span> <span class="nn">Products.SecureMailHost.SecureMailHost</span> <span class="kn">import</span> <span class="n">SecureMailHost</span>
+<span class="kn">from</span> <span class="nn">Products.CMFCore.utils</span> <span class="kn">import</span> <span class="n">getToolByName</span>
+
+
+<span class="k">class</span> <span class="nc">DummySecureMailHost</span><span class="p">(</span><span class="n">SecureMailHost</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Grab outgoing emails&quot;&quot;&quot;</span>
+
+    <span class="n">meta_type</span> <span class="o">=</span> <span class="s">&#39;Dummy secure Mail Host&#39;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+
+        <span class="c"># Use these two instance attributes to check what email has been sent</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sent</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mto</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">_send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mfrom</span><span class="p">,</span> <span class="n">mto</span><span class="p">,</span> <span class="n">messageText</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sent</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">messageText</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mto</span> <span class="o">=</span> <span class="n">mto</span>
+
+
+<span class="o">...</span>
+
+<span class="k">def</span> <span class="nf">afterSetUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">loginAsPortalOwner</span><span class="p">()</span>
+    <span class="n">sm</span> <span class="o">=</span> <span class="n">getSiteManager</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">portal</span><span class="p">)</span>
+    <span class="n">sm</span><span class="o">.</span><span class="n">unregisterUtility</span><span class="p">(</span><span class="n">provided</span><span class="o">=</span><span class="n">IMailHost</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">dummyMailHost</span> <span class="o">=</span> <span class="n">DummySecureMailHost</span><span class="p">(</span><span class="s">&#39;dMailhost&#39;</span><span class="p">)</span>
+    <span class="n">sm</span><span class="o">.</span><span class="n">manage_changeProperties</span><span class="p">({</span><span class="s">&#39;email_from_address&#39;</span><span class="p">:</span> <span class="s">&#39;moo@isthemasteofuniverse.com&#39;</span><span class="p">})</span>
+    <span class="n">sm</span><span class="o">.</span><span class="n">registerUtility</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dummyMailHost</span><span class="p">,</span> <span class="n">IMailHost</span><span class="p">)</span>
+
+    <span class="c"># Set mail host for tools which use getToolByName() look up</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">MailHost</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dummyMailHost</span>
+
+    <span class="c"># Make sure that registration tool uses mail host mock</span>
+    <span class="n">rtool</span> <span class="o">=</span> <span class="n">getToolByName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">portal</span><span class="p">,</span> <span class="s">&#39;portal_registration&#39;</span><span class="p">)</span>
+    <span class="n">rtool</span><span class="o">.</span><span class="n">MailHost</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dummyMailHost</span>
+
+<span class="o">....</span>
+
+<span class="k">def</span> <span class="nf">test_xxx</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="c"># Reset outgoing emails</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">dummyMailHost</span><span class="o">.</span><span class="n">sent</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c"># Do a workflow state change which should trigger content rule</span>
+    <span class="c"># sending out email</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">workflow</span><span class="o">.</span><span class="n">doActionFor</span><span class="p">(</span><span class="n">member</span><span class="p">,</span> <span class="s">&quot;approve_by_sits&quot;</span><span class="p">)</span>
+    <span class="n">review_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">workflow</span><span class="o">.</span><span class="n">getInfoFor</span><span class="p">(</span><span class="n">member</span><span class="p">,</span> <span class="s">&#39;review_state&#39;</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">review_state</span><span class="p">,</span> <span class="s">&quot;approved_by_sits&quot;</span><span class="p">)</span>
+
+    <span class="c"># Check that email has been sent</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dummyMailHost</span><span class="o">.</span><span class="n">sent</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="unit-testing-and-zope-component-architecture">
+<h2><a class="toc-backref" href="#id16">Unit testing and Zope component architecture</a><a class="headerlink" href="#unit-testing-and-zope-component-architecture" title="Permalink to this headline">¶</a></h2>
+<p>If you are dealing with low level Zope component architecture in your unit tests,
+there are some things to note.
+Global site manager doesn't behave properly in the unit tests.</p>
+<p>See discussion: <a class="reference external" href="http://n2.nabble.com/PTC-global-components-bug--tp3413057p3413057.html">http://n2.nabble.com/PTC-global-components-bug--tp3413057p3413057.html</a></p>
+</div>
+<div class="section" id="zcml">
+<h2><a class="toc-backref" href="#id17">ZCML</a><a class="headerlink" href="#zcml" title="Permalink to this headline">¶</a></h2>
+<p>Below are examples how to run special ZCML snippets for your unit tests.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">from</span> <span class="nn">base</span> <span class="kn">import</span> <span class="n">PaymentProcessorTestCase</span>
+<span class="kn">from</span> <span class="nn">Products.Five</span> <span class="kn">import</span> <span class="n">zcml</span>
+<span class="kn">from</span> <span class="nn">zope.configuration.exceptions</span> <span class="kn">import</span> <span class="n">ConfigurationError</span>
+<span class="kn">from</span> <span class="nn">getpaid.paymentprocessors.registry</span> <span class="kn">import</span> <span class="n">paymentProcessorRegistry</span>
+
+<span class="n">configure_zcml</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;</span>
+<span class="s">&lt;configure</span>
+<span class="s">    xmlns=&quot;http://namespaces.zope.org/zope&quot;</span>
+<span class="s">    xmlns:five=&quot;http://namespaces.zope.org/five&quot;</span>
+<span class="s">    xmlns:paymentprocessors=&quot;http://namespaces.plonegetpaid.com/paymentprocessors&quot;</span>
+<span class="s">    i18n_domain=&quot;foo&quot;&gt;</span>
+
+
+<span class="s">    &lt;paymentprocessors:registerProcessor</span>
+<span class="s">       name=&quot;dummy&quot;</span>
+<span class="s">       processor=&quot;getpaid.paymentprocessors.tests.dummies.DummyProcessor&quot;</span>
+<span class="s">       selection_view=&quot;getpaid.paymentprocessors.tests.dummies.DummyButton&quot;</span>
+<span class="s">       thank_you_view=&quot;getpaid.paymentprocessors.tests.dummies.DummyThankYou&quot;</span>
+<span class="s">       /&gt;</span>
+
+<span class="s">&lt;/configure&gt;&#39;&#39;&#39;</span>
+
+
+<span class="n">bad_processor_zcml</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;</span>
+<span class="s">&lt;configure</span>
+<span class="s">    xmlns=&quot;http://namespaces.zope.org/zope&quot;</span>
+<span class="s">    xmlns:five=&quot;http://namespaces.zope.org/five&quot;</span>
+<span class="s">    xmlns:paymentprocessors=&quot;http://namespaces.plonegetpaid.com/paymentprocessors&quot;</span>
+<span class="s">    i18n_domain=&quot;foo&quot;&gt;</span>
+
+
+<span class="s">    &lt;paymentprocessors:registerProcessor</span>
+<span class="s">       name=&quot;dummy&quot;</span>
+<span class="s">       selection_view=&quot;getpaid.paymentprocessors.tests.dummies.DummyButton&quot;</span>
+<span class="s">       thank_you_view=&quot;getpaid.paymentprocessors.tests.dummies.DummyThankYou&quot;</span>
+<span class="s">       /&gt;</span>
+
+
+<span class="s">&lt;/configure&gt;&#39;&#39;&#39;</span>
+
+
+
+
+<span class="k">class</span> <span class="nc">TestZCML</span><span class="p">(</span><span class="n">PaymentProcessorTestCase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Test ZCML directives &quot;&quot;&quot;</span>
+
+
+    <span class="k">def</span> <span class="nf">test_register</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Check that ZCML entry gets added to our processor registry &quot;&quot;&quot;</span>
+        <span class="n">zcml</span><span class="o">.</span><span class="n">load_string</span><span class="p">(</span><span class="n">configure_zcml</span><span class="p">)</span>
+
+
+        <span class="c"># See that our processor got registered</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">papaymentProcessorRegistryistry</span><span class="o">.</span><span class="n">items</span><span class="p">()),</span> <span class="mi">1</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">test_bad_processor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Check that ZCML entry which has bad processor declaration is caught &quot;&quot;&quot;</span>
+
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">zcml</span><span class="o">.</span><span class="n">load_string</span><span class="p">(</span><span class="n">bad_processor_zcml</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s">&quot;Should not be never reached&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">ConfigurationError</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">pass</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Unit testing</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#running-unit-tests">Running unit tests</a><ul>
+<li><a class="reference internal" href="#attributeerror-module-object-has-no-attribute-test-suite">AttributeError: 'module' object has no attribute 'test_suite'</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#test-coverage">Test coverage</a></li>
+<li><a class="reference internal" href="#creating-unit-tests">Creating unit tests</a></li>
+<li><a class="reference internal" href="#base-test-class-skeleton">Base test class skeleton</a></li>
+<li><a class="reference internal" href="#posing-as-different-users">Posing as different users</a></li>
+<li><a class="reference internal" href="#unit-tests-and-themes">Unit tests and themes</a></li>
+<li><a class="reference internal" href="#running-add-on-installers-and-extensions-profiles-for-unit-tests">Running add-on installers and extensions profiles for unit tests</a><ul>
+<li><a class="reference internal" href="#tested-package-not-found-warning">Tested package not found warning</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#load-zcml-for-testing">Load zcml for testing</a></li>
+<li><a class="reference internal" href="#setting-log-level-in-unit-tests">Setting log level in unit tests</a></li>
+<li><a class="reference internal" href="#http-request">HTTP request</a><ul>
+<li><a class="reference internal" href="#setting-a-real-http-request">Setting a real http request</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#grabbing-emails">Grabbing emails</a></li>
+<li><a class="reference internal" href="#unit-testing-and-zope-component-architecture">Unit testing and Zope component architecture</a></li>
+<li><a class="reference internal" href="#zcml">ZCML</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pdb.html"
+                        title="previous chapter">Python debugging</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="functional_testing.html"
+                        title="next chapter">Functional testing</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/testing_and_debugging/unit_testing.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="functional_testing.html" title="Functional testing"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pdb.html" title="Python debugging"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Testing and debugging</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

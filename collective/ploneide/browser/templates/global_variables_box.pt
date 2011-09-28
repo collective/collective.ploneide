@@ -1,0 +1,6 @@
+<p> Global scope </p>
+<div class="debugger-scope-box global-variable-box">
+    <!-- Style for this section should be changed when the theme for the editor is changed -->
+    <table>
+    </table>
+</div>

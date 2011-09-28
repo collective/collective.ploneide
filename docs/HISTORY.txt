@@ -1,0 +1,30 @@
+Changelog
+=========
+
+0.1
+---
+
+- Initial release
+
+- Integration with Ace editor [frapell]
+
+- Added support for open, save and save-as for files [frapell]
+
+- Added support for managing multiple edit sessions [frapell]
+
+- Added support for storing sessions using localStorage [frapell]
+
+- Integration with plone.reload and added a "restart Plone" [frapell]
+
+- Added support for changing font size [frapell]
+
+- Added support for vertical and horizontal editor splitting [frapell]
+
+- Included the Plone Developer Manual 1.0 [frapell]
+
+- Added support for live debugging [frapell]
+
+- Added an initial contextual view [frapell]
+
+- UI design and implementation [shuens]
+

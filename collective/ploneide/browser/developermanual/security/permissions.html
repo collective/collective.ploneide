@@ -1,0 +1,576 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Permissions &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Security" href="index.html" />
+    <link rel="next" title="Available permissions in Plone" href="permission_lists.html" />
+    <link rel="prev" title="Security" href="index.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="permission_lists.html" title="Available permissions in Plone"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Security"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Security</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="permissions">
+<h1>Permissions<a class="headerlink" href="#permissions" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">How to deal with permissions making your code permission aware in Plone</p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id2">Introduction</a></li>
+<li><a class="reference internal" href="#checking-if-the-logged-in-user-has-a-permission" id="id3">Checking if the logged in user has a permission</a></li>
+<li><a class="reference internal" href="#checking-if-a-specific-role-has-a-permission" id="id4">Checking if a specific role has a permission</a></li>
+<li><a class="reference internal" href="#permission-access" id="id5">Permission Access</a></li>
+<li><a class="reference internal" href="#bypassing-permission-checks" id="id6">Bypassing permission checks</a></li>
+<li><a class="reference internal" href="#catching-unauthorized" id="id7">Catching Unauthorized</a></li>
+<li><a class="reference internal" href="#creating-permissions" id="id8">Creating permissions</a></li>
+<li><a class="reference internal" href="#assigning-permissions-to-users-roles" id="id9">Assigning permissions to users (roles)</a></li>
+<li><a class="reference internal" href="#manually-fix-permission-problems" id="id10">Manually fix permission problems</a></li>
+<li><a class="reference internal" href="#id1" id="id11">Creating permissions</a><ul>
+<li><a class="reference internal" href="#define-both-zope-permissions-in-one-step-in-zcml" id="id12">Define both Zope permissions in one Step in ZCML</a></li>
+<li><a class="reference internal" href="#define-zope-2-permissions-in-python-code-old-style" id="id13">Define Zope 2 permissions in Python code (old style)</a></li>
+<li><a class="reference internal" href="#making-permission-available-as-zope-3-permission" id="id14">Making permission available as Zope 3 permission</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id2">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Permissions control whether the logged in / anonymous users can execute code paths.</p>
+<p>Permission check is done for</p>
+<ul class="simple">
+<li>For every view/method which is hit by incoming HTTP request (Plone automatically exports
+traversable methods over HTTP interface)</li>
+<li>For every called method for <a class="reference internal" href="sandboxing.html"><em>RestrictedPython scripts</em></a></li>
+</ul>
+<p>The basic way of dealing with permissions is setting the <tt class="docutils literal"><span class="pre">permission</span></tt>
+attribute of view declaration. For more information see <a class="reference internal" href="../views/browserviews.html"><em>views</em></a>.</p>
+</div>
+<div class="section" id="checking-if-the-logged-in-user-has-a-permission">
+<h2><a class="toc-backref" href="#id3">Checking if the logged in user has a permission</a><a class="headerlink" href="#checking-if-the-logged-in-user-has-a-permission" title="Permalink to this headline">¶</a></h2>
+<p>The following code checks whether the logged in user
+has a certain permission for the some object.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">AccessControl</span> <span class="kn">import</span> <span class="n">getSecurityManager</span>
+<span class="kn">from</span> <span class="nn">AccessControl</span> <span class="kn">import</span> <span class="n">Unauthorized</span>
+
+<span class="c"># Import permission names as pseudo-constants strings from somewhere... see security doc for more info</span>
+<span class="kn">from</span> <span class="nn">Products.CMFCore</span> <span class="kn">import</span> <span class="n">permissions</span>
+
+<span class="k">def</span> <span class="nf">some_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">):</span>
+
+
+    <span class="c"># This will</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">getSecurityManager</span><span class="p">()</span><span class="o">.</span><span class="n">checkPermission</span><span class="p">(</span><span class="n">permissions</span><span class="o">.</span><span class="n">ModifyPortalContent</span><span class="p">,</span> <span class="nb">object</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">Unauthorized</span><span class="p">(</span><span class="s">&quot;You need ModifyPortalContent permission to edit header animations&quot;</span><span class="p">)</span>
+
+     <span class="c"># ...</span>
+     <span class="c"># we have security clearance here</span>
+     <span class="c">#</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="checking-if-a-specific-role-has-a-permission">
+<h2><a class="toc-backref" href="#id4">Checking if a specific role has a permission</a><a class="headerlink" href="#checking-if-a-specific-role-has-a-permission" title="Permalink to this headline">¶</a></h2>
+<p>Example which checks if Authenticated role has a permission on a certain folder on the site using <tt class="docutils literal"><span class="pre">rolesOfPermission()</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">checkDBPermission</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="kn">from</span> <span class="nn">zope.app.component.hooks</span> <span class="kn">import</span> <span class="n">getSite</span>
+
+        <span class="n">site</span> <span class="o">=</span> <span class="n">getSite</span><span class="p">()</span>
+
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">site</span><span class="o">.</span><span class="n">intranet</span>
+
+        <span class="n">perms</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">rolesOfPermission</span><span class="p">(</span><span class="s">&quot;View&quot;</span><span class="p">)</span>
+
+        <span class="n">found</span> <span class="o">=</span> <span class="bp">False</span>
+
+        <span class="k">for</span> <span class="n">perm</span> <span class="ow">in</span> <span class="n">perms</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">perm</span><span class="p">[</span><span class="s">&quot;name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&quot;Authenticated&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">perm</span><span class="p">[</span><span class="s">&quot;selected&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s">&quot;&quot;</span><span class="p">:</span> <span class="c"># will be SELECTED if the permission is granted</span>
+                    <span class="n">found</span> <span class="o">=</span> <span class="bp">True</span>
+                    <span class="k">break</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">found</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">Products.statusmessages.interfaces</span> <span class="kn">import</span> <span class="n">IStatusMessage</span>
+            <span class="n">messages</span> <span class="o">=</span> <span class="n">IStatusMessage</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">)</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">addStatusMessage</span><span class="p">(</span><span class="s">u&quot;Possibe permission access problem with the intranet. Errors on creation form may happen.&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s">&quot;info&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="permission-access">
+<h2><a class="toc-backref" href="#id5">Permission Access</a><a class="headerlink" href="#permission-access" title="Permalink to this headline">¶</a></h2>
+<p>Object that are manageable ttw inherit of <a class="reference external" href="http://api.plone.org/CMF/1.5.4/private/AccessControl.Role.RoleManager-class.html">RoleManager</a>. API class provided by this class permit you to manage permission.</p>
+<p>Example :</p>
+<ul class="simple">
+<li>see all possibles  permissions</li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">object</span><span class="o">.</span><span class="n">possible_permissions</span><span class="p">()</span>
+<span class="go">[&#39;ATContentTypes Topic: Add ATBooleanCriterion&#39;, &#39;ATContentTypes Topic: Add ATCurrentAuthorCriterion&#39;,...</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>Show the security matrix of permission</li>
+</ul>
+<div class="highlight-python"><pre> &gt;&gt;&gt; self.portal.rolesOfPermission('Modify portal content')
+[{'selected': '', 'name': 'Anonymous'}, {'selected': '', 'name': 'Authenticated'}, {'selected': '', 'name': 'Contributor'}, {'selected': '', 'name': 'Editor'}, {'selected': 'SELECTED', 'name': 'GroupAdmin'}, {'selected': '', 'name': 'GroupContributor'}, {'selected': '', 'name': 'GroupEditor'}, {'selected': '', 'name': 'GroupLeader'}, {'selected': '', 'name': 'GroupMember'}, {'selected': '', 'name': 'GroupReader'}, {'selected': '', 'name': 'GroupVisitor'}, {'selected': 'SELECTED', 'name': 'Manager'}, {'selected': '', 'name': 'Member'}, {'selected': 'SELECTED', 'name': 'Owner'}, {'selected': '', 'name': 'Reader'}, {'selected': '', 'name': 'Reviewer'}, {'selected': '', 'name': 'SubscriptionViewer'}]</pre>
+</div>
+</div>
+<div class="section" id="bypassing-permission-checks">
+<h2><a class="toc-backref" href="#id6">Bypassing permission checks</a><a class="headerlink" href="#bypassing-permission-checks" title="Permalink to this headline">¶</a></h2>
+<p>The current user is defined by active security manager. In both restricted and unrestricted execution certain
+functions may do their own security checks (invokeFactory, workflow, search)
+to filter out results.</p>
+<p>If function does its own security check, there usually a code path to execute without security check.
+For example the methods below have security-aware and raw versions</p>
+<ul class="simple">
+<li>context.restrictedTraverse() vs. context.unrestrictedTraverse()</li>
+<li>portal_catalog.searchResults() vs. portal_catalog.unrestrictedSearchResults()</li>
+</ul>
+<p>However, in certain situations you have only security-aware code path
+which is blocked for the current user. You still want to execute
+this code path and you are sure that it does not violate your site
+security principles.</p>
+<p>Below is an example how you can call any Python function and
+work around the security checks by establishing a temporary
+<tt class="docutils literal"><span class="pre">AccessControl.SecurityManager</span></tt> under special role.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">AccessControl</span> <span class="kn">import</span> <span class="n">ClassSecurityInfo</span><span class="p">,</span> <span class="n">getSecurityManager</span>
+<span class="kn">from</span> <span class="nn">AccessControl.SecurityManagement</span> <span class="kn">import</span> <span class="n">newSecurityManager</span><span class="p">,</span> <span class="n">setSecurityManager</span>
+<span class="kn">from</span> <span class="nn">AccessControl.User</span> <span class="kn">import</span> <span class="n">nobody</span>
+<span class="kn">from</span> <span class="nn">AccessControl.User</span> <span class="kn">import</span> <span class="n">UnrestrictedUser</span> <span class="k">as</span> <span class="n">BaseUnrestrictedUser</span>
+
+<span class="k">class</span> <span class="nc">UnrestrictedUser</span><span class="p">(</span><span class="n">BaseUnrestrictedUser</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Unrestricted user that still has an id.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">getId</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the ID of the user.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">getUserName</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">execute_under_special_role</span><span class="p">(</span><span class="n">portal</span><span class="p">,</span> <span class="n">role</span><span class="p">,</span> <span class="n">function</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Execute code under special role priviledges.</span>
+
+<span class="sd">    Example how to call::</span>
+
+<span class="sd">        execute_under_special_role(portal, &quot;Manager&quot;,</span>
+<span class="sd">            doSomeNormallyNotAllowedStuff,</span>
+<span class="sd">            source_folder, target_folder)</span>
+
+
+<span class="sd">    @param portal: Reference to ISiteRoot object whose access controls we are using</span>
+
+<span class="sd">    @param function: Method to be called with special priviledges</span>
+
+<span class="sd">    @param role: User role we are using for the security context when calling the priviledged code. For example, use &quot;Manager&quot;.</span>
+
+<span class="sd">    @param args: Passed to the function</span>
+
+<span class="sd">    @param kwargs: Passed to the function</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">sm</span> <span class="o">=</span> <span class="n">getSecurityManager</span><span class="p">()</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+
+            <span class="c"># Clone the current access control user and assign a new role for him/her</span>
+            <span class="c"># Note that the username (getId()) is left in exception tracebacks in error_log</span>
+            <span class="c"># so it is important thing to store</span>
+            <span class="n">tmp_user</span> <span class="o">=</span> <span class="n">UnrestrictedUser</span><span class="p">(</span>
+              <span class="n">sm</span><span class="o">.</span><span class="n">getUser</span><span class="p">()</span><span class="o">.</span><span class="n">getId</span><span class="p">(),</span>
+               <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">role</span><span class="p">],</span>
+               <span class="s">&#39;&#39;</span>
+           <span class="p">)</span>
+
+            <span class="c"># Act as user of the portal</span>
+            <span class="n">tmp_user</span> <span class="o">=</span> <span class="n">tmp_user</span><span class="o">.</span><span class="n">__of__</span><span class="p">(</span><span class="n">portal</span><span class="o">.</span><span class="n">acl_users</span><span class="p">)</span>
+            <span class="n">newSecurityManager</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">tmp_user</span><span class="p">)</span>
+
+            <span class="c"># Call the function</span>
+            <span class="k">return</span> <span class="n">function</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">except</span><span class="p">:</span>
+            <span class="c"># If special exception handlers are needed, run them here</span>
+            <span class="k">raise</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="c"># Restore the old security manager</span>
+        <span class="n">setSecurityManager</span><span class="p">(</span><span class="n">sm</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For more information, see</p>
+<ul class="simple">
+<li><a class="reference external" href="http://github.com/ned14/Easyshop/blob/master/src/easyshop.order/easyshop/order/adapters/order_management.py">http://github.com/ned14/Easyshop/blob/master/src/easyshop.order/easyshop/order/adapters/order_management.py</a></li>
+</ul>
+</div>
+<div class="section" id="catching-unauthorized">
+<h2><a class="toc-backref" href="#id7">Catching Unauthorized</a><a class="headerlink" href="#catching-unauthorized" title="Permalink to this headline">¶</a></h2>
+<p>Gracefully failing when the user does not have a permission. Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">AccessControl</span> <span class="kn">import</span> <span class="n">Unauthorized</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">portal_state</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">restrictedTraverse</span><span class="p">(</span><span class="s">&quot;@@plone_portal_state&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">Unauthorized</span><span class="p">:</span>
+    <span class="c"># portal_state may be limited to admin users only</span>
+    <span class="n">portal_state</span> <span class="o">=</span> <span class="bp">None</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="creating-permissions">
+<h2><a class="toc-backref" href="#id8">Creating permissions</a><a class="headerlink" href="#creating-permissions" title="Permalink to this headline">¶</a></h2>
+<p>You don't create permissions, they &quot;spring into existence&quot;.
+Whatever that means.</p>
+<ul class="simple">
+<li><a class="reference external" href="http://pypi.python.org/pypi/collective.autopermission/1.0b1">http://pypi.python.org/pypi/collective.autopermission/1.0b1</a> (Plone 3 only)</li>
+<li><a class="reference external" href="http://n2.nabble.com/creating-and-using-your-own-permissions-in-Plone-3-tp339972p1498626.html">http://n2.nabble.com/creating-and-using-your-own-permissions-in-Plone-3-tp339972p1498626.html</a></li>
+<li><a class="reference external" href="http://blog.fourdigits.nl/adding-zope-2-permissions-using-just-zcml-and-a-generic-setup-profile">http://blog.fourdigits.nl/adding-zope-2-permissions-using-just-zcml-and-a-generic-setup-profile</a></li>
+</ul>
+</div>
+<div class="section" id="assigning-permissions-to-users-roles">
+<h2><a class="toc-backref" href="#id9">Assigning permissions to users (roles)</a><a class="headerlink" href="#assigning-permissions-to-users-roles" title="Permalink to this headline">¶</a></h2>
+<p>Permissions are usually assigned to roles, which are assigned to users through
+the web.</p>
+<p>To assign a permission to a role, use profiles/default/rolemap.xml:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot;?&gt;</span>
+ <span class="nt">&lt;rolemap&gt;</span>
+   <span class="nt">&lt;permissions&gt;</span>
+     <span class="nt">&lt;permission</span> <span class="na">name=</span><span class="s">&quot;MyProduct: MyPermission&quot;</span> <span class="na">acquire=</span><span class="s">&quot;False&quot;</span><span class="nt">&gt;</span>
+       <span class="nt">&lt;role</span> <span class="na">name=</span><span class="s">&quot;Member&quot;</span><span class="nt">/&gt;</span>
+     <span class="nt">&lt;/permission&gt;</span>
+   <span class="nt">&lt;/permissions&gt;</span>
+ <span class="nt">&lt;/rolemap&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="manually-fix-permission-problems">
+<h2><a class="toc-backref" href="#id10">Manually fix permission problems</a><a class="headerlink" href="#manually-fix-permission-problems" title="Permalink to this headline">¶</a></h2>
+<p>In the case you fiddle with permission and manage lock out even admin user for the content (both Plone
+page and raw Zope page) you can still fix the problem from <a class="reference internal" href="../misc/commandline.html"><em>debug prompt</em></a>.</p>
+<p>Example debug session how to set <tt class="docutils literal"><span class="pre">Access</span> <span class="pre">Contents</span> <span class="pre">Information</span></tt> back to all users:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">j</span><span class="o">=</span><span class="n">app</span><span class="o">.</span><span class="n">yoursiteid</span><span class="o">.</span><span class="n">yourfolderid</span><span class="o">.</span><span class="n">problematiccontent</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">AccessControl</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">Products.CMFCore.permissions</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sm</span><span class="o">=</span><span class="n">AccessControl</span><span class="o">.</span><span class="n">getSecurityManager</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">transaction</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">anon</span><span class="o">=</span><span class="n">sm</span><span class="o">.</span><span class="n">getUser</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">j</span><span class="o">.</span><span class="n">manage_permission</span><span class="p">(</span><span class="n">Products</span><span class="o">.</span><span class="n">CMFCore</span><span class="o">.</span><span class="n">permissions</span><span class="o">.</span><span class="n">AccessContentsInformation</span><span class="p">,</span><span class="n">roles</span><span class="o">=</span><span class="n">anon</span><span class="o">.</span><span class="n">getRoles</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transaction</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id1">
+<h2><a class="toc-backref" href="#id11">Creating permissions</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="define-both-zope-permissions-in-one-step-in-zcml">
+<h3><a class="toc-backref" href="#id12">Define both Zope permissions in one Step in ZCML</a><a class="headerlink" href="#define-both-zope-permissions-in-one-step-in-zcml" title="Permalink to this headline">¶</a></h3>
+<p>You can use <cite>collective.autopermission
+&lt;http://pypi.python.org/pypi/collective.autopermission/1.0b1&gt;</cite>
+(<cite>svn repository
+&lt;http://svn.plone.org/svn/collective/collective.autopermission&gt;</cite>)
+and define both the Zope 2 and Zope 3 permission at once with the
+&lt;permission&gt; zcml-directive. To do that install
+collective.autopermission. Either add &quot;collective.autopermission&quot; to
+&quot;install_requires&quot; in setup.py or to your buildout. Then include
+collective.autopermission's configure.zcml <em>before</em> you define the
+permissions <em>and</em> before you use them.  (collective.autopermission is
+not required in Zope 2.12/Plone 4 anymore!)</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;configure</span>
+  <span class="na">xmlns=</span><span class="s">&quot;http://namespaces.zope.org/zope&quot;</span>
+  <span class="na">xmlns:browser=</span><span class="s">&quot;http://namespaces.zope.org/browser&quot;</span><span class="nt">&gt;</span>
+
+  <span class="nt">&lt;include</span> <span class="na">package=</span><span class="s">&quot;collective.autopermission&quot;</span> <span class="nt">/&gt;</span>
+
+  <span class="nt">&lt;permission</span>
+    <span class="na">id=</span><span class="s">&quot;myproduct.mypermission&quot;</span>
+    <span class="na">title=</span><span class="s">&quot;MyProduct: MyPermission&quot;</span>
+    <span class="nt">/&gt;</span>
+
+  <span class="nt">&lt;browser:page</span>
+    <span class="na">for=</span><span class="s">&quot;*&quot;</span>
+    <span class="na">name=</span><span class="s">&quot;myexampleview&quot;</span>
+    <span class="na">class=</span><span class="s">&quot;browser.MyExampleView&quot;</span>
+    <span class="na">permission=</span><span class="s">&quot;myproduct.mypermission&quot;</span>
+    <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;/configure&gt;</span>
+</pre></div>
+</div>
+<p>Now you can use the permission both as a Zope 2 permission <em>('MyProduct:
+MyPermission')</em> or a Zope 3 permission <em>('myproduct.mypermission')</em>. The
+only disadvantage is that you can't import the permissionstring as a
+variable from permissions.py.</p>
+</div>
+<div class="section" id="define-zope-2-permissions-in-python-code-old-style">
+<h3><a class="toc-backref" href="#id13">Define Zope 2 permissions in Python code (old style)</a><a class="headerlink" href="#define-zope-2-permissions-in-python-code-old-style" title="Permalink to this headline">¶</a></h3>
+<p>If you want to protect certain actions in your product by a special permission,
+you most likely will want to assign this permission to a role when the product
+is installed.  You will want to use Generic Setup's rolemap.xml to assign these
+permissions.  A new permission will be added to the Zope instance by calling
+setDefaultRoles on it.</p>
+<p>However, at the time when Generic Setup is run, almost none of your code has
+actually been run, so the permission doesn't exist yet.  That's why we define
+the permissions in permissions.py, and call this from __init__.py:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># __init__.py:</span>
+
+<span class="kn">import</span> <span class="nn">permissions</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># permissions.py:</span>
+
+<span class="kn">from</span> <span class="nn">Products.CMFCore</span> <span class="kn">import</span> <span class="n">permissions</span> <span class="k">as</span> <span class="n">CMFCorePermissions</span>
+<span class="kn">from</span> <span class="nn">AccessControl.SecurityInfo</span> <span class="kn">import</span> <span class="n">ModuleSecurityInfo</span>
+<span class="kn">from</span> <span class="nn">Products.CMFCore.permissions</span> <span class="kn">import</span> <span class="n">setDefaultRoles</span>
+
+<span class="n">security</span> <span class="o">=</span> <span class="n">ModuleSecurityInfo</span><span class="p">(</span><span class="s">&#39;MyProduct&#39;</span><span class="p">)</span>
+<span class="n">security</span><span class="o">.</span><span class="n">declarePublic</span><span class="p">(</span><span class="s">&#39;MyPermission&#39;</span><span class="p">)</span>
+<span class="n">MyPermission</span> <span class="o">=</span> <span class="s">&#39;MyProduct: MyPermission&#39;</span>
+<span class="n">setDefaultRoles</span><span class="p">(</span><span class="n">MyPermission</span><span class="p">,</span> <span class="p">())</span>
+</pre></div>
+</div>
+<p>When working with permissions, always use the variable name instead of the
+string value.  This ensures that you can't make typos with the string value,
+which are hard to debug.  If you do make a typo in the variable name, you'll
+get an ImportError or NameError.</p>
+</div>
+<div class="section" id="making-permission-available-as-zope-3-permission">
+<h3><a class="toc-backref" href="#id14">Making permission available as Zope 3 permission</a><a class="headerlink" href="#making-permission-available-as-zope-3-permission" title="Permalink to this headline">¶</a></h3>
+<p>To use your permissions with Zope 3 technologies
+e.g. BrowserViews/formlib/z3c.form, you need
+to make them available available as Zope 3 permissions. This is done
+in ZCML using a the &lt;permission&gt; directive. Example configure.zcml:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;configure</span>
+  <span class="na">xmlns=</span><span class="s">&quot;http://namespaces.zope.org/zope&quot;</span><span class="nt">&gt;</span>
+
+  <span class="nt">&lt;permission</span>
+    <span class="na">id=</span><span class="s">&quot;myproduct.mypermission&quot;</span>
+    <span class="na">title=</span><span class="s">&quot;MyProduct: MyPermission&quot;</span>
+    <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;/configure&gt;</span>
+</pre></div>
+</div>
+<p>It's convention to prefix the permission id with the nmame of the
+package it's defined in and use lower case only. You have to take care
+that the title matches exactly the permission string you used in
+permissions.py. Otherwise a different, zope 3 only, permission is
+registered.</p>
+<p>You can use the permission to e.g. protect BrowserViews. Example
+configure.zcml:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;configure</span>
+  <span class="na">xmlns=</span><span class="s">&quot;http://namespaces.zope.org/zope&quot;</span>
+  <span class="na">xmlns:browser=</span><span class="s">&quot;http://namespaces.zope.org/browser&quot;</span><span class="nt">&gt;</span>
+
+  <span class="nt">&lt;permission</span>
+    <span class="na">id=</span><span class="s">&quot;myproduct.mypermission&quot;</span>
+    <span class="na">title=</span><span class="s">&quot;MyProduct: MyPermission&quot;</span> <span class="nt">/&gt;</span>
+
+  <span class="nt">&lt;browser:page</span>
+    <span class="na">for=</span><span class="s">&quot;*&quot;</span>
+    <span class="na">name=</span><span class="s">&quot;myexampleview&quot;</span>
+    <span class="na">class=</span><span class="s">&quot;browser.MyExampleView&quot;</span>
+    <span class="na">permission=</span><span class="s">&quot;myproduct.mypermission&quot;</span>
+    <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;/configure&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Permissions</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#checking-if-the-logged-in-user-has-a-permission">Checking if the logged in user has a permission</a></li>
+<li><a class="reference internal" href="#checking-if-a-specific-role-has-a-permission">Checking if a specific role has a permission</a></li>
+<li><a class="reference internal" href="#permission-access">Permission Access</a></li>
+<li><a class="reference internal" href="#bypassing-permission-checks">Bypassing permission checks</a></li>
+<li><a class="reference internal" href="#catching-unauthorized">Catching Unauthorized</a></li>
+<li><a class="reference internal" href="#creating-permissions">Creating permissions</a></li>
+<li><a class="reference internal" href="#assigning-permissions-to-users-roles">Assigning permissions to users (roles)</a></li>
+<li><a class="reference internal" href="#manually-fix-permission-problems">Manually fix permission problems</a></li>
+<li><a class="reference internal" href="#id1">Creating permissions</a><ul>
+<li><a class="reference internal" href="#define-both-zope-permissions-in-one-step-in-zcml">Define both Zope permissions in one Step in ZCML</a></li>
+<li><a class="reference internal" href="#define-zope-2-permissions-in-python-code-old-style">Define Zope 2 permissions in Python code (old style)</a></li>
+<li><a class="reference internal" href="#making-permission-available-as-zope-3-permission">Making permission available as Zope 3 permission</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Security</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="permission_lists.html"
+                        title="next chapter">Available permissions in Plone</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/security/permissions.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="permission_lists.html" title="Available permissions in Plone"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Security"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Security</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

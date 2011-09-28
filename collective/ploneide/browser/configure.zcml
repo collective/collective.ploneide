@@ -1,0 +1,100 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="collective.ploneide">
+
+  <browser:resourceDirectory
+      name="collective.ploneide.ace"
+      directory="ace"
+      />
+
+  <browser:resourceDirectory
+      name="collective.ploneide.resources"
+      directory="resources"
+      />
+
+  <browser:resourceDirectory
+      name="collective.ploneide.icons"
+      directory="icons"
+      />
+
+  <browser:resourceDirectory
+      name="collective.ploneide.developermanual"
+      directory="developermanual"
+      />
+      
+  <include file="debugger_boxes.zcml" />
+  
+  <browser:page
+      for="*"
+      name="ploneide"
+      class=".ploneide.PloneideView"
+      template="templates/ploneide.pt"
+      permission="zope.Public"
+      />
+
+  <!-- ide html -->      
+  <browser:page
+      for="*"
+      class=".ploneide.IdeBaseView"
+      name="idebase"
+      template="templates/idebase.pt"
+      permission="zope.Public"
+      />
+      
+  <browser:page
+      for="*"
+      name="list-directory"
+      class=".ploneide.ListDirectory"
+      template="templates/directory_contents.pt"
+      permission="zope.Public"
+      />
+
+  <browser:page
+      for="*"
+      name="directory-content-ajax"
+      attribute="directory_content_ajax"      
+      class=".ploneide.ListDirectoryTree"
+      permission="zope.Public"
+      />      
+      
+  <browser:page
+      for="*"
+      name="manage-sessions"
+      template="templates/manage_sessions.pt"
+      permission="zope.Public"
+      />
+
+  <browser:page
+     for="*"
+      name="save-as"
+      class=".ploneide.SaveAsView"
+      template="templates/save_as.pt"
+      permission="zope.Public"
+      />
+
+  <browser:page
+     for="*"
+      name="context-info"
+      class=".ploneide.ContextInfoView"
+      template="templates/context_info.pt"
+      permission="zope.Public"
+      />
+      
+  <browser:page
+      for="*"
+      name="test-dir"
+      class=".ploneide.TestDir"
+      permission="zope.Public"
+      />
+      
+  <browser:page
+      name="plone-reload"
+      for="*"
+      permission="zope.Public"
+      class=".ploneide.ReloadPlone"
+      template="templates/plone_reload.pt"
+      allowed_interface="plone.reload.interfaces.IReload"
+      />
+      
+</configure>

@@ -1,0 +1,598 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Functional testing &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Testing and debugging" href="index.html" />
+    <link rel="next" title="Doctests" href="doctests.html" />
+    <link rel="prev" title="Unit testing" href="unit_testing.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="doctests.html" title="Doctests"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="unit_testing.html" title="Unit testing"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Testing and debugging</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="functional-testing">
+<h1>Functional testing<a class="headerlink" href="#functional-testing" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">Functional testing tool allows you to use scripted
+browser to load pages from your site and fill in
+forms automatically.</p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
+<li><a class="reference internal" href="#test-browser" id="id2">Test browser</a></li>
+<li><a class="reference internal" href="#recording-tests" id="id3">Recording tests</a></li>
+<li><a class="reference internal" href="#functional-test-skeleton" id="id4">Functional test skeleton</a></li>
+<li><a class="reference internal" href="#preparing-error-logger" id="id5">Preparing error logger</a></li>
+<li><a class="reference internal" href="#opening-an-url" id="id6">Opening an URL</a></li>
+<li><a class="reference internal" href="#logging-in" id="id7">Logging in</a></li>
+<li><a class="reference internal" href="#logout" id="id8">Logout</a></li>
+<li><a class="reference internal" href="#showing-the-contents-from-the-last-request" id="id9">Showing the contents from the last request</a></li>
+<li><a class="reference internal" href="#getting-a-form-handler" id="id10">Getting a form handler</a></li>
+<li><a class="reference internal" href="#listing-available-form-controls" id="id11">Listing available form controls</a></li>
+<li><a class="reference internal" href="#filling-in-a-text-field-on-a-page" id="id12">Filling in a text field on  a page</a></li>
+<li><a class="reference internal" href="#selecting-a-checkbox" id="id13">Selecting a checkbox</a></li>
+<li><a class="reference internal" href="#clicking-a-button" id="id14">Clicking a button</a></li>
+<li><a class="reference internal" href="#checking-unauthorized-response" id="id15">Checking Unauthorized response</a></li>
+<li><a class="reference internal" href="#checking-a-http-response-header" id="id16">Checking a HTTP response header</a></li>
+<li><a class="reference internal" href="#checking-http-exception" id="id17">Checking HTTP exception</a></li>
+<li><a class="reference internal" href="#setting-test-browser-headers" id="id18">Setting test browser headers</a><ul>
+<li><a class="reference internal" href="#add-header-to-browser" id="id19">Add header to browser</a></li>
+<li><a class="reference internal" href="#setting-user-agent" id="id20">Setting user agent</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>PloneTestCase product provides <a class="reference external" href="https://svn.plone.org/svn/collective/Products.PloneTestCase/trunk/Products/PloneTestCase/PloneTestCase.py">FunctionalTestCase</a>
+base class for functional testing. Unlike unit tests, functional tests simulate real HTTP requests with transaction life cycle.</p>
+<ul class="simple">
+<li>Functional tests has different transaction for each browser.open() request</li>
+<li>Functional tests do traversing and can check e.g. for cookie based permissions</li>
+<li>Unit test method is executed in a single transaction and this might make impossible to
+test cache related behavior</li>
+</ul>
+</div>
+<div class="section" id="test-browser">
+<h2><a class="toc-backref" href="#id2">Test browser</a><a class="headerlink" href="#test-browser" title="Permalink to this headline">¶</a></h2>
+<p>Plone uses Products.Five.testbrowser as an browser emulator used in functional tests.
+It is based on zope.testbrowser package.
+You can find more information in the <a class="reference external" href="http://pypi.python.org/pypi/zope.testbrowser">zope.testbrowser docs home page</a>. The API is described in <a class="reference external" href="http://svn.zope.org/zope.testbrowser/tags/3.4.2/src/zope/testbrowser/interfaces.py?rev=81337&amp;view=markup">zope.testbrowser.interfaces (3.4 used by Plone 3)</a>.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">There also exists old <a class="reference external" href="http://pypi.python.org/pypi/zc.testbrowser">zc.testbrowser</a>,
+which is a different package with similar name.</p>
+</div>
+<p>All code assumes here is is executed in unit test context where self.portal is your unit test site instance.</p>
+</div>
+<div class="section" id="recording-tests">
+<h2><a class="toc-backref" href="#id3">Recording tests</a><a class="headerlink" href="#recording-tests" title="Permalink to this headline">¶</a></h2>
+<p>You can record functional tests through the browser. Think it as a Microsoft Word macro recoder kind of thing.</p>
+<ul class="simple">
+<li><a class="reference external" href="http://plone.org/documentation/kb/testing/zope-testrecorder">http://plone.org/documentation/kb/testing/zope-testrecorder</a></li>
+<li><a class="reference external" href="http://pyyou.wordpress.com/2008/04/11/how-to-install-zopetestrecorder-with-buildout/">http://pyyou.wordpress.com/2008/04/11/how-to-install-zopetestrecorder-with-buildout/</a></li>
+<li><a class="reference external" href="http://pypi.python.org/pypi/zope.testrecorder">http://pypi.python.org/pypi/zope.testrecorder</a></li>
+</ul>
+</div>
+<div class="section" id="functional-test-skeleton">
+<h2><a class="toc-backref" href="#id4">Functional test skeleton</a><a class="headerlink" href="#functional-test-skeleton" title="Permalink to this headline">¶</a></h2>
+<p>First see collective.testlayer package which does some of the things
+described below</p>
+<ul class="simple">
+<li><a class="reference external" href="http://pypi.python.org/pypi/collective.testcaselayer">http://pypi.python.org/pypi/collective.testcaselayer</a></li>
+</ul>
+<p>Example code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">Products.Five.testbrowser</span> <span class="kn">import</span> <span class="n">Browser</span>
+<span class="kn">from</span> <span class="nn">Products.PloneTestCase</span> <span class="kn">import</span> <span class="n">PloneTestCase</span> <span class="k">as</span> <span class="n">ptc</span>
+
+<span class="k">class</span> <span class="nc">BaseFunctionalTestCase</span><span class="p">(</span><span class="n">ptc</span><span class="o">.</span><span class="n">FunctionalTestCase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; This is a base class for functional test cases for your custom product.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">afterSetUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Show errors in console by monkey patching site error_log service</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">ptc</span><span class="o">.</span><span class="n">FunctionalTestCase</span><span class="o">.</span><span class="n">afterSetUp</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span> <span class="o">=</span> <span class="n">Browser</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">handleErrors</span> <span class="o">=</span> <span class="bp">False</span> <span class="c"># Don&#39;t get HTTP 500 pages</span>
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">portal</span><span class="o">.</span><span class="n">error_log</span><span class="o">.</span><span class="n">_ignored_exceptions</span> <span class="o">=</span> <span class="p">()</span>
+
+        <span class="k">def</span> <span class="nf">raising</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+            <span class="kn">import</span> <span class="nn">traceback</span>
+            <span class="n">traceback</span><span class="o">.</span><span class="n">print_tb</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+            <span class="k">print</span> <span class="n">info</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="kn">from</span> <span class="nn">Products.SiteErrorLog.SiteErrorLog</span> <span class="kn">import</span> <span class="n">SiteErrorLog</span>
+        <span class="n">SiteErrorLog</span><span class="o">.</span><span class="n">raising</span> <span class="o">=</span> <span class="n">raising</span>
+
+
+    <span class="k">def</span> <span class="nf">loginAsAdmin</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Perform through-the-web login.</span>
+
+<span class="sd">        Simulate going to the login form and logging in.</span>
+
+<span class="sd">        We use username and password provided by PloneTestCase.</span>
+
+<span class="sd">        This sets session cookie for testbrowser.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">Products.PloneTestCase.setup</span> <span class="kn">import</span> <span class="n">portal_owner</span><span class="p">,</span> <span class="n">default_password</span>
+
+        <span class="c"># Go admin</span>
+        <span class="n">browser</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span>
+        <span class="n">browser</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">portal</span><span class="o">.</span><span class="n">absolute_url</span><span class="p">()</span> <span class="o">+</span> <span class="s">&quot;/login_form&quot;</span><span class="p">)</span>
+        <span class="n">browser</span><span class="o">.</span><span class="n">getControl</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;__ac_name&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">portal_owner</span>
+        <span class="n">browser</span><span class="o">.</span><span class="n">getControl</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;__ac_password&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">default_password</span>
+        <span class="n">browser</span><span class="o">.</span><span class="n">getControl</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;submit&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="preparing-error-logger">
+<h2><a class="toc-backref" href="#id5">Preparing error logger</a><a class="headerlink" href="#preparing-error-logger" title="Permalink to this headline">¶</a></h2>
+<p>Since zope.testbrowser uses normal Plone paging mechanism, you won't get nice tracebacks to your console.</p>
+<p>The following snippet allows you to extract traceback data from site.error_log utility and print it to the console.
+Put it to your afterSetUp():</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">handleErrors</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">portal</span><span class="o">.</span><span class="n">error_log</span><span class="o">.</span><span class="n">_ignored_exceptions</span> <span class="o">=</span> <span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">raising</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+    <span class="kn">import</span> <span class="nn">traceback</span>
+    <span class="n">traceback</span><span class="o">.</span><span class="n">print_tb</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="k">print</span> <span class="n">info</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="kn">from</span> <span class="nn">Products.SiteErrorLog.SiteErrorLog</span> <span class="kn">import</span> <span class="n">SiteErrorLog</span>
+<span class="n">SiteErrorLog</span><span class="o">.</span><span class="n">raising</span> <span class="o">=</span> <span class="n">raising</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="opening-an-url">
+<h2><a class="toc-backref" href="#id6">Opening an URL</a><a class="headerlink" href="#opening-an-url" title="Permalink to this headline">¶</a></h2>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">Products.Five.testbrowser</span> <span class="kn">import</span> <span class="n">Browser</span>
+
+<span class="bp">self</span><span class="o">.</span><span class="n">browser</span> <span class="o">=</span> <span class="n">Browser</span><span class="p">()</span>
+
+<span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">portal</span><span class="o">.</span><span class="n">absolute_url</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="logging-in">
+<h2><a class="toc-backref" href="#id7">Logging in</a><a class="headerlink" href="#logging-in" title="Permalink to this headline">¶</a></h2>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">Products.PloneTestCase.setup</span> <span class="kn">import</span> <span class="n">portal_owner</span><span class="p">,</span> <span class="n">default_password</span>
+
+ <span class="c"># Go admin</span>
+<span class="n">browser</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">portal</span><span class="o">.</span><span class="n">absolute_url</span><span class="p">()</span> <span class="o">+</span> <span class="s">&quot;/login_form&quot;</span><span class="p">)</span>
+<span class="n">browser</span><span class="o">.</span><span class="n">getControl</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;__ac_name&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">portal_owner</span>
+<span class="n">browser</span><span class="o">.</span><span class="n">getControl</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;__ac_password&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">default_password</span>
+<span class="n">browser</span><span class="o">.</span><span class="n">getControl</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;submit&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="logout">
+<h2><a class="toc-backref" href="#id8">Logout</a><a class="headerlink" href="#logout" title="Permalink to this headline">¶</a></h2>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">browser</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s">&#39;http://nohost/plone/&#39;</span><span class="p">)</span>
+<span class="n">browser</span><span class="o">.</span><span class="n">getLink</span><span class="p">(</span><span class="s">&#39;Log out&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="showing-the-contents-from-the-last-request">
+<h2><a class="toc-backref" href="#id9">Showing the contents from the last request</a><a class="headerlink" href="#showing-the-contents-from-the-last-request" title="Permalink to this headline">¶</a></h2>
+<p>After test browser has opened an URL its
+content can be read from browser.contents variable.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">browser</span><span class="o">.</span><span class="n">contents</span> <span class="c"># browser is zope.testbrowser.Browser instance</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="getting-a-form-handler">
+<h2><a class="toc-backref" href="#id10">Getting a form handler</a><a class="headerlink" href="#getting-a-form-handler" title="Permalink to this headline">¶</a></h2>
+<p>You can use testbrowser <tt class="docutils literal"><span class="pre">getForm()</span></tt> to access different forms on a page.</p>
+<p>Form look-up is availabe by <tt class="docutils literal"><span class="pre">name</span></tt> or <tt class="docutils literal"><span class="pre">index</span></tt>.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">form</span> <span class="o">=</span> <span class="n">browser</span><span class="o">.</span><span class="n">getForm</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="c"># Skip login and search form on Plone 4</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="listing-available-form-controls">
+<h2><a class="toc-backref" href="#id11">Listing available form controls</a><a class="headerlink" href="#listing-available-form-controls" title="Permalink to this headline">¶</a></h2>
+<p>You can do the following to know what content your form has eaten</p>
+<ul>
+<li><p class="first">the mechanize browser instance that is used through
+zope.testbrowser. zope.testbrowser internally uses a testbrowser
+provided by the mechanize package. The mechanize objects are saved in
+browser.mech_browser and as attributes on different other instances
+returned by zope.testbrowser. mechanize has a different, less convenient
+api, but also provides more options. To see a list of all controls
+in a for you can do e.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># get the login form from the zope.testbrowser</span>
+<span class="n">login_form</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">getForm</span><span class="p">(</span><span class="s">&#39;login_form&#39;</span><span class="p">)</span>
+<span class="c"># get and print all controls</span>
+<span class="n">controls</span> <span class="o">=</span> <span class="n">login_form</span><span class="o">.</span><span class="n">mech_form</span><span class="o">.</span><span class="n">controls</span>
+<span class="k">for</span> <span class="n">control</span> <span class="ow">in</span> <span class="n">controls</span><span class="p">:</span>
+   <span class="k">print</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">control</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">],</span> <span class="n">control</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p>... or one-liner ...:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">form</span><span class="o">.</span><span class="n">mech_form</span><span class="o">.</span><span class="n">controls</span><span class="p">:</span> <span class="k">print</span> <span class="n">c</span>
+</pre></div>
+</div>
+<ul>
+<li><p class="first">the HTML page source code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">browser</span><span class="o">.</span><span class="n">contents</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+<div class="section" id="filling-in-a-text-field-on-a-page">
+<h2><a class="toc-backref" href="#id12">Filling in a text field on  a page</a><a class="headerlink" href="#filling-in-a-text-field-on-a-page" title="Permalink to this headline">¶</a></h2>
+<p>You can manipulate <tt class="docutils literal"><span class="pre">value</span></tt> of various form input controls.</p>
+<p>Example how to submit Plone search page:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">portal</span><span class="o">.</span><span class="n">absolute_url</span><span class="p">()</span> <span class="o">+</span> <span class="s">&quot;/search&quot;</span><span class="p">)</span>
+
+<span class="c"># Input some values to the search that we see we get</span>
+<span class="c"># zero hits and at least one hit</span>
+<span class="k">for</span> <span class="n">search_terms</span> <span class="ow">in</span> <span class="p">[</span><span class="s">u&quot;Plone&quot;</span><span class="p">,</span> <span class="s">u&quot;youcantfindthis&quot;</span><span class="p">]:</span>
+    <span class="n">form</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">getForm</span><span class="p">(</span><span class="s">&quot;searchform&quot;</span><span class="p">)</span>
+
+    <span class="c"># Fill in the search field</span>
+    <span class="nb">input</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">getControl</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;SearchableText&quot;</span><span class="p">)</span>
+    <span class="nb">input</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">search_terms</span>
+
+    <span class="c"># Submit the search form</span>
+    <span class="n">form</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="s">u&quot;Search&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="selecting-a-checkbox">
+<h2><a class="toc-backref" href="#id13">Selecting a checkbox</a><a class="headerlink" href="#selecting-a-checkbox" title="Permalink to this headline">¶</a></h2>
+<p>Checkboxes are usually presented as name:list style names:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">checkbox</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">getControl</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;myitem.select:list&quot;</span><span class="p">)</span>
+<span class="n">checkbox</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="p">[</span><span class="s">u&quot;selected&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="clicking-a-button">
+<h2><a class="toc-backref" href="#id14">Clicking a button</a><a class="headerlink" href="#clicking-a-button" title="Permalink to this headline">¶</a></h2>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">button</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">getControl</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;mybuttonname&quot;</span><span class="p">)</span>
+<span class="n">button</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>If you have a form instance, you can use the submit action. To click
+on the Button labled &quot;Log in&quot; in the login form, you do:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">login_form</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">getForm</span><span class="p">(</span><span class="s">&#39;login_form&#39;</span><span class="p">)</span>
+<span class="n">login_form</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="s">&#39;Log in&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="checking-unauthorized-response">
+<h2><a class="toc-backref" href="#id15">Checking Unauthorized response</a><a class="headerlink" href="#checking-unauthorized-response" title="Permalink to this headline">¶</a></h2>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">checkIsUnauthorized</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check whether URL gives Unauthorized response.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="kn">import</span> <span class="nn">urllib2</span>
+
+    <span class="c"># Disable redirect on security error</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">portal</span><span class="o">.</span><span class="n">acl_users</span><span class="o">.</span><span class="n">credentials_cookie_auth</span><span class="o">.</span><span class="n">login_path</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+
+    <span class="c"># Unfuse exception tracking for debugging</span>
+    <span class="c"># as set up in afterSetUp()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">handleErrors</span> <span class="o">=</span> <span class="bp">True</span>
+
+    <span class="k">def</span> <span class="nf">raising</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+        <span class="k">pass</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">portal</span><span class="o">.</span><span class="n">error_log</span><span class="o">.</span><span class="n">_ignored_exceptions</span> <span class="o">=</span> <span class="p">(</span><span class="s">&quot;Unauthorized&quot;</span><span class="p">)</span>
+    <span class="kn">from</span> <span class="nn">Products.SiteErrorLog.SiteErrorLog</span> <span class="kn">import</span> <span class="n">SiteErrorLog</span>
+    <span class="n">SiteErrorLog</span><span class="o">.</span><span class="n">raising</span> <span class="o">=</span> <span class="n">raising</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s">&quot;No Unauthorized risen:&quot;</span> <span class="o">+</span> <span class="n">url</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">,</span>  <span class="n">e</span><span class="p">:</span>
+        <span class="c"># Mechanize, the engine under testbrowser</span>
+        <span class="c"># uses urlllib2 and will raise this exception</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">code</span><span class="p">,</span> <span class="mi">401</span><span class="p">,</span> <span class="s">&quot;Got HTTP response code:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">code</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="checking-a-http-response-header">
+<h2><a class="toc-backref" href="#id16">Checking a HTTP response header</a><a class="headerlink" href="#checking-a-http-response-header" title="Permalink to this headline">¶</a></h2>
+<p>Exaple:</p>
+<blockquote>
+self.assertEqual(self.browser.headers[&quot;Content-type&quot;], 'application/octet-stream')</blockquote>
+</div>
+<div class="section" id="checking-http-exception">
+<h2><a class="toc-backref" href="#id17">Checking HTTP exception</a><a class="headerlink" href="#checking-http-exception" title="Permalink to this headline">¶</a></h2>
+<p>Example how to check for HTTP 500 Internal Server Error:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">test_no_language</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Check that language parameter is needed and nothing is executed unless it is given. &quot;&quot;&quot;</span>
+
+    <span class="kn">from</span> <span class="nn">urllib2</span> <span class="kn">import</span> <span class="n">HTTPError</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">handleErrors</span> <span class="o">=</span> <span class="bp">True</span> <span class="c"># Don&#39;t get HTTP 500 pages</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">portal</span><span class="o">.</span><span class="n">absolute_url</span><span class="p">()</span> <span class="o">+</span> <span class="s">&quot;/@@mobile_sitemap?mode=mobile&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="c"># should cause HTTPError: HTTP Error 500: Internal Server Error</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s">&quot;Should be never reached&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">HTTPError</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">pass</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="setting-test-browser-headers">
+<h2><a class="toc-backref" href="#id18">Setting test browser headers</a><a class="headerlink" href="#setting-test-browser-headers" title="Permalink to this headline">¶</a></h2>
+<p>Headers must be passed to underlying PublisherMechanizeBrowser instance
+and test browser must be constructed based on this instance.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">When passing parameters to PublisherMechanizeBrowser.addheaders HTTP prefix will be automatically added
+to header name.</p>
+</div>
+<div class="section" id="add-header-to-browser">
+<h3><a class="toc-backref" href="#id19">Add header to browser</a><a class="headerlink" href="#add-header-to-browser" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Products.Five.testbrowser</span> <span class="kn">import</span> <span class="n">Browser</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">browser</span> <span class="o">=</span> <span class="n">Browser</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">browser</span><span class="o">.</span><span class="n">addHeader</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="setting-user-agent">
+<h3><a class="toc-backref" href="#id20">Setting user agent</a><a class="headerlink" href="#setting-user-agent" title="Permalink to this headline">¶</a></h3>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">BaseFunctionalTestCase</span><span class="p">(</span><span class="n">ptc</span><span class="o">.</span><span class="n">FunctionalTestCase</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">setUA</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_agent</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create zope.testbrowser Browser with a specific user agent.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c"># Be sure to use Products.Five.testbrowser here</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span> <span class="o">=</span> <span class="n">UABrowser</span><span class="p">(</span><span class="n">user_agent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">handleErrors</span> <span class="o">=</span> <span class="bp">False</span> <span class="c"># Don&#39;t get HTTP 500 pages</span>
+
+<span class="kn">from</span> <span class="nn">zope.testbrowser</span> <span class="kn">import</span> <span class="n">browser</span>
+<span class="kn">from</span> <span class="nn">Products.Five.testbrowser</span> <span class="kn">import</span> <span class="n">PublisherHTTPHandler</span>
+<span class="kn">from</span> <span class="nn">Products.Five.testbrowser</span> <span class="kn">import</span> <span class="n">PublisherMechanizeBrowser</span>
+
+<span class="k">class</span> <span class="nc">UABrowser</span><span class="p">(</span><span class="n">browser</span><span class="o">.</span><span class="n">Browser</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A Zope ``testbrowser` Browser that uses the Zope Publisher.</span>
+
+<span class="sd">    The instance must set a custom user agent string.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_agent</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+
+        <span class="n">mech_browser</span> <span class="o">=</span> <span class="n">PublisherMechanizeBrowser</span><span class="p">()</span>
+        <span class="n">mech_browser</span><span class="o">.</span><span class="n">addheaders</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&quot;User-agent&quot;</span><span class="p">,</span> <span class="n">user_agent</span><span class="p">),]</span>
+
+        <span class="c"># override the http handler class</span>
+        <span class="n">mech_browser</span><span class="o">.</span><span class="n">handler_classes</span><span class="p">[</span><span class="s">&quot;http&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">PublisherHTTPHandler</span>
+        <span class="n">browser</span><span class="o">.</span><span class="n">Browser</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">mech_browser</span><span class="o">=</span><span class="n">mech_browser</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For more information, see</p>
+<ul class="simple">
+<li><a class="reference external" href="https://mail.zope.org/pipermail/zope3-users/2008-May/007871.html">https://mail.zope.org/pipermail/zope3-users/2008-May/007871.html</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Functional testing</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#test-browser">Test browser</a></li>
+<li><a class="reference internal" href="#recording-tests">Recording tests</a></li>
+<li><a class="reference internal" href="#functional-test-skeleton">Functional test skeleton</a></li>
+<li><a class="reference internal" href="#preparing-error-logger">Preparing error logger</a></li>
+<li><a class="reference internal" href="#opening-an-url">Opening an URL</a></li>
+<li><a class="reference internal" href="#logging-in">Logging in</a></li>
+<li><a class="reference internal" href="#logout">Logout</a></li>
+<li><a class="reference internal" href="#showing-the-contents-from-the-last-request">Showing the contents from the last request</a></li>
+<li><a class="reference internal" href="#getting-a-form-handler">Getting a form handler</a></li>
+<li><a class="reference internal" href="#listing-available-form-controls">Listing available form controls</a></li>
+<li><a class="reference internal" href="#filling-in-a-text-field-on-a-page">Filling in a text field on  a page</a></li>
+<li><a class="reference internal" href="#selecting-a-checkbox">Selecting a checkbox</a></li>
+<li><a class="reference internal" href="#clicking-a-button">Clicking a button</a></li>
+<li><a class="reference internal" href="#checking-unauthorized-response">Checking Unauthorized response</a></li>
+<li><a class="reference internal" href="#checking-a-http-response-header">Checking a HTTP response header</a></li>
+<li><a class="reference internal" href="#checking-http-exception">Checking HTTP exception</a></li>
+<li><a class="reference internal" href="#setting-test-browser-headers">Setting test browser headers</a><ul>
+<li><a class="reference internal" href="#add-header-to-browser">Add header to browser</a></li>
+<li><a class="reference internal" href="#setting-user-agent">Setting user agent</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="unit_testing.html"
+                        title="previous chapter">Unit testing</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="doctests.html"
+                        title="next chapter">Doctests</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/testing_and_debugging/functional_testing.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="doctests.html" title="Doctests"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="unit_testing.html" title="Unit testing"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Testing and debugging</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

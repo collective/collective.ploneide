@@ -1,0 +1,357 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Customizing the template and the widgets &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../../index.html" />
+    <link rel="up" title="Using zope.formlib" href="index.html" />
+    <link rel="next" title="Magical Zope form variables" href="../zope.html" />
+    <link rel="prev" title="Adding validation" href="validation.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../zope.html" title="Magical Zope form variables"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="validation.html" title="Adding validation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Forms, fields and widgets</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Using zope.formlib</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="customizing-the-template-and-the-widgets">
+<h1>Customizing the template and the widgets<a class="headerlink" href="#customizing-the-template-and-the-widgets" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">Hack into the appearance of your form.</p>
+</div>
+<div class="section" id="customizing-the-template">
+<h2>Customizing the template<a class="headerlink" href="#customizing-the-template" title="Permalink to this headline">¶</a></h2>
+<p><em>plone.app.form</em> provides a handy default template named
+<tt class="docutils literal"><span class="pre">pageform.pt</span></tt> which integrates well with the default Plone skin,
+but you might need to customize it or write your own one.</p>
+<p>To do that, override the <tt class="docutils literal"><span class="pre">template</span></tt> attribute of the form class
+definition:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">FeedbackForm</span><span class="p">(</span><span class="n">PageForm</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A typical feedback form</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="s">u&#39;Contact Us&#39;</span>
+    <span class="n">form_fields</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">Fields</span><span class="p">(</span><span class="n">IFeedbackForm</span><span class="p">)</span>
+    <span class="n">template</span> <span class="o">=</span> <span class="n">ViewPageTemplateFile</span><span class="p">(</span><span class="s">&#39;feedback_form.pt&#39;</span><span class="p">)</span>
+    <span class="n">result_template</span> <span class="o">=</span> <span class="n">ViewPageTemplateFile</span><span class="p">(</span><span class="s">&#39;feedback_result.pt&#39;</span><span class="p">)</span>
+
+    <span class="nd">@form.action</span><span class="p">(</span><span class="s">&quot;send&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">action_send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="n">mhost</span> <span class="o">=</span> <span class="n">MHost</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mFrom</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;customer&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mTo</span> <span class="o">=</span> <span class="s">&quot;feedback@mycompany.com&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mSubject</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;subject&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mBody</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;message&#39;</span><span class="p">]</span>
+        <span class="n">mhost</span><span class="o">.</span><span class="n">Send</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mFrom</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mTo</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mSubject</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mBody</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">result_template</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>As already stated, all the view attributes will be available inside
+the page template, including:</p>
+<ul class="simple">
+<li><strong>label -</strong> A label to display at the top of the form.</li>
+<li><strong>prefix -</strong> A string added to all widget and action names.</li>
+<li><strong>form_fields -</strong> The list of form's fields.</li>
+<li><strong>widgets -</strong> A list of views for the former fields. The widgets
+are looked up as multiadapters for each schema field and the
+request providing <tt class="docutils literal"><span class="pre">IDisplayWidget</span></tt> or <tt class="docutils literal"><span class="pre">IInputWidget</span></tt>.</li>
+<li><strong>errors -</strong> A list of errors encountered during validation.</li>
+<li><strong>error_views -</strong> A list of views for the former errors. These
+views are looked up as multiadapters for each error and the request
+providing
+<tt class="docutils literal"><span class="pre">zope.app.form.browser.interfaces.IWidgetInputErrorView</span></tt>.</li>
+<li><strong>status -</strong> An update status message, normally generated by
+success or failure handlers.</li>
+<li><strong>availableActions -</strong> The list of form's available actions.</li>
+<li><strong>template -</strong> The template used to display the form.</li>
+</ul>
+<p>It's reccommended to start with the default <tt class="docutils literal"><span class="pre">pageform.pt</span></tt> and
+customize it cutting, pasting, deleting and entering text and
+tags.</p>
+<p><strong>Using named templates</strong></p>
+<p>Another really zope3-ish method to choose the form template is
+using the <em>zope.formlib</em> named templates. Using named templates can
+be (and actually is) an overkill if you've designed your template
+to work with your form class as a single component. But if you
+write a form class and the template is just a visual customization
+of that form, you might want to be able to customize the template
+without having to reimplement the whole class, or let others do so.
+This is exactly how Plone overrides the default <em>zope.formlib</em>
+template with a more plone-ish one in the <em>plone.app.form</em>
+package.</p>
+<p>Please note that this approach was not taken in the example product
+<em>example.formlib</em>.</p>
+<p>Named templates are adapters for the form's view class to
+<tt class="docutils literal"><span class="pre">INamedTemplate</span></tt>, bound to the form class only by their names.
+This way, a third party product (e.g. a theme) can register a
+different template with the same name (usually in a different
+browser skin layer) to override the default one. Moreover, they're
+very easy to use. Modify and add the emphasized lines:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">zope.formlib.namedtemplate</span> <span class="kn">import</span> <span class="n">NamedTemplate</span>
+<span class="c"># Five&#39;s ViewPageTemplateFile doesn&#39;t work correctly with formlib&#39;s NamedTemplateImplementation,</span>
+<span class="c"># so we use here the Plone implementation</span>
+<span class="kn">from</span> <span class="nn">plone.app.form</span> <span class="kn">import</span> <span class="n">named_template_adapter</span>
+
+<span class="k">class</span> <span class="nc">FeedbackForm</span><span class="p">(</span><span class="n">PageForm</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A typical feedback form</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="s">u&#39;Contact Us&#39;</span>
+    <span class="n">form_fields</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">Fields</span><span class="p">(</span><span class="n">IFeedbackForm</span><span class="p">)</span>
+    <span class="n">template</span> <span class="o">=</span> <span class="n">NamedTemplate</span><span class="p">(</span><span class="s">&#39;feedback.form&#39;</span><span class="p">)</span>
+    <span class="n">result_template</span> <span class="o">=</span> <span class="n">ViewPageTemplateFile</span><span class="p">(</span><span class="s">&#39;feedback_result.pt&#39;</span><span class="p">)</span>
+    <span class="c"># rest of the form class implementation...</span>
+
+<span class="n">feedback_template</span> <span class="o">=</span> <span class="n">named_template_adapter</span><span class="p">(</span>
+    <span class="n">ViewPageTemplateFile</span><span class="p">(</span><span class="s">&#39;feedback_form.pt&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>In configure.zcml, add the following snippet to register the named
+template as an adapter for your form:</p>
+<div class="highlight-python"><pre>&lt;adapter
+        factory=".browser.feedback_template"
+        for=".browser.FeedbackForm"
+        name="feedback.form"
+        /&gt;</pre>
+</div>
+<p>Name your page template <tt class="docutils literal"><span class="pre">feedback_form.pt</span></tt> and you're done.</p>
+</div>
+<div class="section" id="customizing-the-widgets">
+<h2>Customizing the widgets<a class="headerlink" href="#customizing-the-widgets" title="Permalink to this headline">¶</a></h2>
+<p>As we've already stated earlier, form widgets are views for schema
+fields, i.e. multiadapters for each schema field and the request
+providing <em>IDisplayWidget</em> or <em>IInputWidget</em>, depending on if they
+display field data or offer editing funcionality to the user.</p>
+<p>To do so, override the <tt class="docutils literal"><span class="pre">custom_widget</span></tt> attribute of a field
+(which defaults to None). Remember how we set up the form's
+fields:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">FeedbackForm</span><span class="p">(</span><span class="n">PageForm</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A typical feedback form</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="s">u&#39;Contact Us&#39;</span>
+    <span class="n">form_fields</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">Fields</span><span class="p">(</span><span class="n">IFeedbackForm</span><span class="p">)</span>
+    <span class="c"># rest of the form class...</span>
+</pre></div>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">form_fields</span></tt> fields are accessible throught a dict-like
+interface, with the schema field names as keys, so we write:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">zope.app.form.browser</span> <span class="kn">import</span> <span class="n">RadioWidget</span> <span class="k">as</span> <span class="n">_RadioWidget</span>
+
+<span class="k">def</span> <span class="nf">RadioWidget</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+    <span class="n">vocabulary</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">vocabulary</span>
+    <span class="n">widget</span> <span class="o">=</span> <span class="n">_RadioWidget</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">vocabulary</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">widget</span>
+
+<span class="k">class</span> <span class="nc">FeedbackForm</span><span class="p">(</span><span class="n">PageForm</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A typical feedback form</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="s">u&#39;Contact Us&#39;</span>
+    <span class="n">form_fields</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">Fields</span><span class="p">(</span><span class="n">IFeedbackForm</span><span class="p">)</span>
+    <span class="n">form_fields</span><span class="p">[</span><span class="s">&#39;subject&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">custom_widget</span> <span class="o">=</span> <span class="n">RadioWidget</span>
+    <span class="c"># rest of the form class...</span>
+</pre></div>
+</div>
+<p>Here, we're specifying a custom widget for the subject field:
+<tt class="docutils literal"><span class="pre">RadioWidget</span></tt>, which displays a radio box for every item from the
+field's vocabulary. The <em>zope.app.form.browser</em> and
+plone.app.form.widgets packages provide a reasonable set of widgets
+to use and customize, including dropdowns and Kupu/WYSIWYG.
+Unfortunately, creating new widgets is out of the scope of this
+tutorial for now.</p>
+<p>The <tt class="docutils literal"><span class="pre">RadioWidget</span></tt> function deserves a little explanation. Believe
+it or not, <em>zope.formlib</em> doesn't handle custom widgets with
+vocabularies (called items widgets) properly, because it calls
+<tt class="docutils literal"><span class="pre">form_field.custom_widget(field,</span> <span class="pre">request)</span></tt> either the field has
+an associated vocabulary or not, and item widgets have to be
+initialized with a vocabulary argument too; so a wrapper function
+is needed to workaround this issue.</p>
+<p>Here's how the improved form looks like:</p>
+<img alt="../../_images/form_radiobuttons.png" src="../../_images/form_radiobuttons.png" />
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../../index.html"><img src="../../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Customizing the template and the widgets</a><ul>
+<li><a class="reference internal" href="#customizing-the-template">Customizing the template</a></li>
+<li><a class="reference internal" href="#customizing-the-widgets">Customizing the widgets</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="validation.html"
+                        title="previous chapter">Adding validation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../zope.html"
+                        title="next chapter">Magical Zope form variables</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/forms/formlib/customtemplate.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../zope.html" title="Magical Zope form variables"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="validation.html" title="Adding validation"
+             >previous</a> |</li>
+        <li><a href="../../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Forms, fields and widgets</a> &raquo;</li>
+          <li><a href="index.html" >Using zope.formlib</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

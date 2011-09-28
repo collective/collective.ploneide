@@ -1,0 +1,283 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Resource folders &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Templates, CSS and Javascript" href="index.html" />
+    <link rel="next" title="Skin layers" href="skin_layers.html" />
+    <link rel="prev" title="Javascripting" href="javascript.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="skin_layers.html" title="Skin layers"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="javascript.html" title="Javascripting"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Templates, CSS and Javascript</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="resource-folders">
+<h1>Resource folders<a class="headerlink" href="#resource-folders" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">How to use Zope 3 resource directories to expose static media files (css, js, other)
+in your Plone add-on product</p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
+<li><a class="reference internal" href="#zcml-resourcedirectory" id="id2">ZCML resourceDirectory</a></li>
+<li><a class="reference internal" href="#grok-static-media-folder" id="id3">Grok static media folder</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Resource folders are Zope 3 way to expose static media files to
+Plone URL mapping.</p>
+<p>Resource folders provide a mechanism which allows conflict free
+way to have static media files mapped to Plone URL space.
+Each URL is prefixed with <cite>++resource++your.package</cite>
+resource identified.</p>
+</div>
+<div class="section" id="zcml-resourcedirectory">
+<h2><a class="toc-backref" href="#id2">ZCML resourceDirectory</a><a class="headerlink" href="#zcml-resourcedirectory" title="Permalink to this headline">¶</a></h2>
+<p>If you want to customize media folder mapping point, you need to use
+Zope 3's resourceDirectory directive.</p>
+<p>Below is an example how to map <em>static</em> folder in your add-on
+root folder to be exposed via ++resource++your.product/ URI</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;configure</span>
+    <span class="na">xmlns=</span><span class="s">&quot;http://namespaces.zope.org/zope&quot;</span>
+    <span class="na">xmlns:five=</span><span class="s">&quot;http://namespaces.zope.org/five&quot;</span>
+    <span class="na">xmlns:genericsetup=</span><span class="s">&quot;http://namespaces.zope.org/genericsetup&quot;</span>
+    <span class="na">xmlns:i18n=</span><span class="s">&quot;http://namespaces.zope.org/i18n&quot;</span>
+    <span class="na">xmlns:browser=</span><span class="s">&quot;http://namespaces.zope.org/browser&quot;</span>
+    <span class="na">i18n_domain=</span><span class="s">&quot;your.product&quot;</span><span class="nt">&gt;</span>
+
+
+          <span class="c">&lt;!-- Register the installation GenericSetup extension profile</span>
+<span class="c">               (needed for portal_css and portal_javascripts XML import) --&gt;</span>
+          <span class="nt">&lt;genericsetup:registerProfile</span>
+              <span class="na">name=</span><span class="s">&quot;default&quot;</span>
+              <span class="na">title=</span><span class="s">&quot;Your add-on product name&quot;</span>
+              <span class="na">directory=</span><span class="s">&quot;profiles/default&quot;</span>
+              <span class="na">description=</span><span class="s">&quot;Your add-on product description&quot;</span>
+              <span class="na">provides=</span><span class="s">&quot;Products.GenericSetup.interfaces.EXTENSION&quot;</span>
+              <span class="nt">/&gt;</span>
+
+           <span class="c">&lt;!-- Resource directory for static media files --&gt;</span>
+         <span class="nt">&lt;browser:resourceDirectory</span>
+                <span class="na">name=</span><span class="s">&quot;your.product&quot;</span>
+                <span class="na">directory=</span><span class="s">&quot;static&quot;</span>
+                <span class="nt">/&gt;</span>
+
+          <span class="c">&lt;!-- -*- extra stuff goes here -*- --&gt;</span>
+
+<span class="nt">&lt;/configure&gt;</span>
+</pre></div>
+</div>
+<p>Furher reading</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.themeswiki.org/Creating_a_Custom_theme_for_Plone#Image_Resources">Example</a></li>
+</ul>
+</div>
+<div class="section" id="grok-static-media-folder">
+<h2><a class="toc-backref" href="#id3">Grok static media folder</a><a class="headerlink" href="#grok-static-media-folder" title="Permalink to this headline">¶</a></h2>
+<p>Learn more about <a class="reference internal" href="../components/grok.html"><em>Grok and Plone integration</em></a>.</p>
+<p>The easiest way to manage static resources is to make use of the static resource directory feature in five.grok.
+Simply add a directory called static in the package and make sure that the &lt;grok:grok package=&quot;.&quot; /&gt;
+line appears in configure.zcml.</p>
+<p>Example how to include yourproduct.app/static folder as ++resource++yourproduct.app
+URL.</p>
+<div class="highlight-xml"><pre>&lt;configure
+    ...
+    xmlns:grok="http://namespaces.zope.org/grok"&gt;
+
+  &lt;grok:grok package="." /&gt;
+
+&lt;/configure&gt;</pre>
+</div>
+<p>If a static resource directory in the example.conference package contains a file called conference.css,
+it will be accessible on a URL like <a class="reference external" href="http:/">http:/</a>/&lt;server&gt;/site/++resource++example.conference/conference.css.
+The resource name is the same as the package name wherein the static directory appears.</p>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Resource folders</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#zcml-resourcedirectory">ZCML resourceDirectory</a></li>
+<li><a class="reference internal" href="#grok-static-media-folder">Grok static media folder</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="javascript.html"
+                        title="previous chapter">Javascripting</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="skin_layers.html"
+                        title="next chapter">Skin layers</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/templates_css_and_javascripts/resourcefolders.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="skin_layers.html" title="Skin layers"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="javascript.html" title="Javascripting"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Templates, CSS and Javascript</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

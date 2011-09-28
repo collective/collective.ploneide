@@ -1,0 +1,255 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Setup of a Testcase Environment using UML and ArchGenXML &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../../../index.html" />
+    <link rel="up" title="Step by Step Instructions" href="index.html" />
+    <link rel="next" title="Recipes and Tips" href="../recipes-and-tips/index.html" />
+    <link rel="prev" title="Step by Step Instructions" href="index.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../recipes-and-tips/index.html" title="Recipes and Tips"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Step by Step Instructions"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Tutorials</a> &raquo;</li>
+          <li><a href="../index.html" >Using ArchGenXML</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Step by Step Instructions</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="setup-of-a-testcase-environment-using-uml-and-archgenxml">
+<h1>Setup of a Testcase Environment using UML and ArchGenXML<a class="headerlink" href="#setup-of-a-testcase-environment-using-uml-and-archgenxml" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#about-testing" id="id1">About Testing</a></li>
+<li><a class="reference internal" href="#testing-and-uml-archgenxml" id="id2">Testing and UML/ ArchGenXML</a></li>
+</ul>
+</div>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">Environment for test-driven and architecture centric development.</p>
+</div>
+<p><strong>TODO: Check if it works in 2.0. Add some information how to run the tests.</strong></p>
+<div class="section" id="about-testing">
+<h2><a class="toc-backref" href="#id1">About Testing</a><a class="headerlink" href="#about-testing" title="Permalink to this headline">¶</a></h2>
+<p>Since development is going on at many places in the Plone system,
+it is important to have a way ready to <em>test</em> if the software
+you wrote is affected by the changes. And, more important the other
+way around, if your work, in case it makes it way into the Plone
+core or other add-on products, affects the work of <em>others</em>.</p>
+<p>There are several documents available to read on why testing is
+important, so feel free to have a look:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://plone.org/documentation/tutorial/testing/introduction">Testing in Plone - Introduction</a></li>
+<li><a class="reference external" href="http://plone.org/documentation/tutorial/best-practices/unit-testing">Best Practices for Plone development - Unit Testing</a></li>
+<li><a class="reference external" href="http://plone.org/documentation/tutorial/richdocument/unit-testing">RichDocument Tutorial - Unit testing</a></li>
+</ul>
+<p>and there are many more: Try the <em>testing</em>. Some of these documents
+are describing in detail how to write the tests itself, which this
+manual page is not intended for.</p>
+</div>
+<div class="section" id="testing-and-uml-archgenxml">
+<h2><a class="toc-backref" href="#id2">Testing and UML/ ArchGenXML</a><a class="headerlink" href="#testing-and-uml-archgenxml" title="Permalink to this headline">¶</a></h2>
+<p>This document describes the few steps necessary to setup your testing
+environment when using an UML diagram and ArchGenXML. It generates
+your projects with the test infrastructure and you can focus on writing
+the test itself</p>
+<p>ArchGenXML provides a pre-configured testing environment - no more
+hand-work to create it !</p>
+<p>Steps:</p>
+<ol class="arabic simple">
+<li>Check if <a class="reference external" href="http://plone.org/products/plonetestcase/">PloneTestCase</a> product was shipped with your Plone. If not install it in the version for your Plone.</li>
+<li>Create a package in your model and name it 'tests' and give it the stereotype <tt class="docutils literal"><span class="pre">&lt;&lt;tests&gt;&gt;</span></tt></li>
+<li>Inside the new tests package create class 'MyFancyTestcase' (in the uml below named 'testPlone') and give it the stereotype <tt class="docutils literal"><span class="pre">&lt;&lt;plone_testcase&gt;&gt;</span></tt>. This is your main testcase class.</li>
+<li>Create an additional class inside the test package, call it 'testSetup', and give it the stereotype <tt class="docutils literal"><span class="pre">&lt;&lt;setup_testcase&gt;&gt;</span></tt>. Let it derive from the main testcase class using the generalization arrow.</li>
+<li>Testing methods/behaviour of archetypes classes: Create a class inside the test package. Give it the stereotype <tt class="docutils literal"><span class="pre">&lt;&lt;testcase&gt;&gt;</span></tt> or <tt class="docutils literal"><span class="pre">&lt;&lt;doc_testcase&gt;&gt;</span></tt>. Make them derive from main testcase class using the generalization arrow. On a testcase class you can add methods starting with 'test' such as 'testMyFancyFeature'. After code generation you just need to fill in your test code. A doc_testcase class creates an empty doctest text-file in the '/docs' directory of your product. There are some tagged value available to control the testcase in detail. Please look at the chapter <a class="reference internal" href="../reference/tagged-values.html#agx-tagged-values"><em>Tagged Values</em></a> for more information.</li>
+<li>To generate all imports and some startup code, you can use the dependency arrow from the testcase class to the archetypes class.</li>
+<li>You can repeat 5 and 6 for every class you want to include in yout test. You can organize your tests also different, like one integration test, as you like.</li>
+<li>Generate and run the tests. (TODO: steps needed to get the test fly, such as 'zopectl test' or setting SOFTWAREHOME and INSTANCEHOME environment.</li>
+</ol>
+<img alt="Sample UML" src="../../../_images/uml-testcase.png" />
+<p>These are the basic steps necessary to get it running.</p>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../../../index.html"><img src="../../../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Setup of a Testcase Environment using UML and ArchGenXML</a><ul>
+<li><a class="reference internal" href="#about-testing">About Testing</a></li>
+<li><a class="reference internal" href="#testing-and-uml-archgenxml">Testing and UML/ ArchGenXML</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Step by Step Instructions</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../recipes-and-tips/index.html"
+                        title="next chapter">Recipes and Tips</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../../_sources/tutorials/archgenxml/step-by-step-instructions/setup-of-a-testcase-environment-using-uml-and-archgenxml.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../recipes-and-tips/index.html" title="Recipes and Tips"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Step by Step Instructions"
+             >previous</a> |</li>
+        <li><a href="../../../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Tutorials</a> &raquo;</li>
+          <li><a href="../index.html" >Using ArchGenXML</a> &raquo;</li>
+          <li><a href="index.html" >Step by Step Instructions</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

@@ -1,0 +1,377 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Context helpers &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Miscellaneous information" href="index.html" />
+    <link rel="next" title="Zope DateTime" href="datetime.html" />
+    <link rel="prev" title="Miscellaneous information" href="index.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="datetime.html" title="Zope DateTime"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Miscellaneous information"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Miscellaneous information</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="context-helpers">
+<h1>Context helpers<a class="headerlink" href="#context-helpers" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
+<li><a class="reference internal" href="#iportalstate-and-icontextstate" id="id2">IPortalState and IContextState</a></li>
+<li><a class="reference internal" href="#using-in-templates-and-expressions" id="id3">Using in templates and expressions</a></li>
+<li><a class="reference internal" href="#tools" id="id4">Tools</a><ul>
+<li><a class="reference internal" href="#itools-interface" id="id5">ITools interface</a></li>
+<li><a class="reference internal" href="#gettoolbyname" id="id6">getToolByName</a></li>
+<li><a class="reference internal" href="#getsite" id="id7">getSite</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>This document tells how to access view and context utilities in Plone.</p>
+</div>
+<div class="section" id="iportalstate-and-icontextstate">
+<h2><a class="toc-backref" href="#id2">IPortalState and IContextState</a><a class="headerlink" href="#iportalstate-and-icontextstate" title="Permalink to this headline">¶</a></h2>
+<p>IPortalState define IContextState view-like interfaces
+to access miscencancellous information useful for the
+current page render. The views are cached properly,
+so they should access the information quite effective manner</p>
+<ul class="simple">
+<li>IPortalState is mapped as <em>&#64;&#64;plone_portal_state</em> view for traversing.</li>
+<li>IContextState is mapped as <em>&#64;&#64;plone_context_state</em> view for traversing.</li>
+</ul>
+<p>To see what's available through the interface,
+read documentation in
+<a class="reference external" href="http://svn.plone.org/svn/plone/plone.app.layout/trunk/plone/app/layout/globals/interfaces.py">plone.app.layout.globals.interfaces</a>
+module.</p>
+<p>Example how to get portal root URL:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">Acquisition</span> <span class="kn">import</span> <span class="n">aq_inner</span>
+<span class="kn">from</span> <span class="nn">zope.component</span> <span class="kn">import</span> <span class="n">getMultiAdapter</span>
+
+<span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">MyView</span><span class="p">(</span><span class="n">BrowserView</span><span class="p">):</span>
+
+    <span class="o">...</span>
+
+    <span class="k">def</span> <span class="nf">mymethod</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="n">aq_inner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
+        <span class="n">portal_state</span> <span class="o">=</span> <span class="n">getMultiAdapter</span><span class="p">((</span><span class="n">context</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s">u&#39;plone_portal_state&#39;</span><span class="p">)</span>
+
+        <span class="n">url</span> <span class="o">=</span> <span class="n">portal_state</span><span class="o">.</span><span class="n">portal_url</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Example how to get the current language:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">Acquisition</span> <span class="kn">import</span> <span class="n">aq_inner</span>
+<span class="kn">from</span> <span class="nn">zope.component</span> <span class="kn">import</span> <span class="n">getMultiAdapter</span>
+
+<span class="o">...</span>
+
+<span class="n">context</span> <span class="o">=</span> <span class="n">aq_inner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
+<span class="n">portal_state</span> <span class="o">=</span> <span class="n">getMultiAdapter</span><span class="p">((</span><span class="n">context</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s">u&#39;plone_portal_state&#39;</span><span class="p">)</span>
+
+<span class="n">current_language</span> <span class="o">=</span> <span class="n">portal_state</span><span class="o">.</span><span class="n">language</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Example how to expose portal_state to template:</p>
+<p>ZCML includes allowed_attributes:</p>
+<div class="highlight-python"><pre>&lt;browser:page
+    for="*"
+    name="test"
+    permission="zope2.Public"
+    class=".views.MyView"
+    allowed_attributes="portal_state"
+    /&gt;</pre>
+</div>
+<p>Python class exposes the variable:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">Acquisition</span> <span class="kn">import</span> <span class="n">aq_inner</span>
+<span class="kn">from</span> <span class="nn">zope.component</span> <span class="kn">import</span> <span class="n">getMultiAdapter</span>
+
+<span class="k">class</span> <span class="nc">MyView</span><span class="p">(</span><span class="n">BrowserView</span><span class="p">):</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">portal_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="n">aq_inner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
+        <span class="n">portal_state</span> <span class="o">=</span> <span class="n">getMultiAdapter</span><span class="p">((</span><span class="n">context</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s">u&#39;plone_portal_state&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">portal_state</span>
+</pre></div>
+</div>
+<p>Template can use it:</p>
+<div class="highlight-python"><pre>&lt;div&gt;
+    The language is &lt;span tal:content="view/portal_state/language" /&gt;
+&lt;/div&gt;</pre>
+</div>
+<p>You can directly look up portal_state in template using acquisition
+magic and view traversing, without need of ZCML code
+or Python view code changes. This is useful e.g. overridden
+viewlet templates:</p>
+<div class="highlight-python"><pre>&lt;!--
+
+    In traversing @@ marks that the traversing
+    machine should look up a view by that name.
+
+    First we look up the view and then use
+    it to access the variables defined in
+    IPortalState interface.
+
+--&gt;
+
+&lt;div tal:define="portal_state context/@@plone_portal_state" &gt;
+    The language is &lt;span tal:content="portal_state/language" /&gt;
+&lt;/div&gt;</pre>
+</div>
+</div>
+<div class="section" id="using-in-templates-and-expressions">
+<h2><a class="toc-backref" href="#id3">Using in templates and expressions</a><a class="headerlink" href="#using-in-templates-and-expressions" title="Permalink to this headline">¶</a></h2>
+<p>You can use IContextState and IPortalState in TALES expressions, like portal_actions too.</p>
+<p>Example portal_actions condition expression:</p>
+<div class="highlight-python"><pre>python:object.restrictedTraverse('@@plone_portal_state').language() == 'fi'</pre>
+</div>
+</div>
+<div class="section" id="tools">
+<h2><a class="toc-backref" href="#id4">Tools</a><a class="headerlink" href="#tools" title="Permalink to this headline">¶</a></h2>
+<p>Tools are persistent utility classes available in the site root.
+They are visible in ZMI. Tools include things like</p>
+<ul class="simple">
+<li>portal_catalog - Search and indexing facilities for content</li>
+<li>portal_workflow - Inquiry and do workflow related actions</li>
+<li>portal_membership - User registration information</li>
+</ul>
+<div class="section" id="itools-interface">
+<h3><a class="toc-backref" href="#id5">ITools interface</a><a class="headerlink" href="#itools-interface" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="https://svn.plone.org/svn/plone/plone.app.layout/trunk/plone/app/layout/globals/interfaces.py">plone.app.layout.globals.interfaces.ITools interface</a>
+and Tools BrowserView provide cached access for most often
+needed tools.</p>
+<p>ITools is mapped as <em>plone_tools</em> view for traversing.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">Acquisition</span> <span class="kn">import</span> <span class="n">aq_inner</span>
+<span class="kn">from</span> <span class="nn">zope.component</span> <span class="kn">import</span> <span class="n">getMultiAdapter</span>
+
+<span class="n">context</span> <span class="o">=</span> <span class="n">aq_inner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
+<span class="n">tools</span> <span class="o">=</span> <span class="n">getMultiAdapter</span><span class="p">((</span><span class="n">context</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s">u&#39;plone_tools&#39;</span><span class="p">)</span>
+
+<span class="n">portal_url</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">url</span><span class="p">()</span>
+
+<span class="c"># The root URL of the site is got by using portal_url.__call__()</span>
+<span class="c"># method</span>
+
+<span class="n">the_current_root_url_of_the_site</span> <span class="o">=</span> <span class="n">portal_url</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="gettoolbyname">
+<h3><a class="toc-backref" href="#id6">getToolByName</a><a class="headerlink" href="#gettoolbyname" title="Permalink to this headline">¶</a></h3>
+<p>getToolByName is old-fashioned way of getting tools the context
+object as a start point. It also works for tools
+which are not defined in ITools interface.</p>
+<p>getToolByName gets any Plone portal root item using acquisition.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">Products.CMFCore.WorkflowCore</span> <span class="kn">import</span> <span class="n">WorkflowException</span>
+
+<span class="c"># Do the workflow transition &quot;submit&quot; for the current context</span>
+<span class="n">workflowTool</span> <span class="o">=</span> <span class="n">getToolByName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="s">&quot;portal_workflow&quot;</span><span class="p">)</span>
+<span class="n">workflowTool</span><span class="o">.</span><span class="n">doActionFor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="s">&quot;submit&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="getsite">
+<h3><a class="toc-backref" href="#id7">getSite</a><a class="headerlink" href="#getsite" title="Permalink to this headline">¶</a></h3>
+<p>sometimes you don't have a context and/or you just need to get the portal object (site root):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">zope.app.component.hooks</span> <span class="kn">import</span> <span class="n">getSite</span>
+<span class="n">portal</span> <span class="o">=</span> <span class="n">getSite</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Context helpers</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#iportalstate-and-icontextstate">IPortalState and IContextState</a></li>
+<li><a class="reference internal" href="#using-in-templates-and-expressions">Using in templates and expressions</a></li>
+<li><a class="reference internal" href="#tools">Tools</a><ul>
+<li><a class="reference internal" href="#itools-interface">ITools interface</a></li>
+<li><a class="reference internal" href="#gettoolbyname">getToolByName</a></li>
+<li><a class="reference internal" href="#getsite">getSite</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Miscellaneous information</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="datetime.html"
+                        title="next chapter">Zope DateTime</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/misc/context.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="datetime.html" title="Zope DateTime"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Miscellaneous information"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Miscellaneous information</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

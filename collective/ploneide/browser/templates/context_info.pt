@@ -1,0 +1,159 @@
+<script type="text/javascript">
+    
+    function loadFileAndGotoLine(filename, lineno){
+        loadFileFromFullPath(filename);
+        env.editor.scrollToLine(lineno, true);
+    }
+    
+</script>
+
+<div class="context-info">
+    <h1>Context information:</h1>
+
+    <div class="contenttype-info"
+         tal:define="contenttype view/getContentType"
+         tal:condition="contenttype">
+        <h2>Content Type:</h2>
+        
+        <p class="meta-type">
+        <span>Meta type: </span>
+        <span tal:content="python:contenttype.get('meta_type', '')"/>
+        </p>
+        
+        <p class="portal-type">
+        <span>Portal type: </span>
+        <span tal:content="python:contenttype.get('portal_type', '')"/>
+        </p>
+        
+        <p class="python-file">
+        <a href="#" 
+           onclick="#"
+           tal:define = "py_file python:contenttype.get('py_file', None)"
+           tal:condition = "py_file"
+           tal:attributes = "onclick string:loadFileFromFullPath('${py_file}')">
+            <img class="filesystem-icon"
+                 src="++resource++collective.ploneide.icons/py.png" />
+        </a>
+        </p>
+ 
+        <h2>Schema:</h2>
+        <div class="contenttype-schema"
+             tal:define="schema view/getSchemaForContentType">
+             
+             <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Label</th>
+                    <th>Visibility</th>
+                    <th>Condition</th>
+                    <th>Field file</th>
+                    <th>Widget file</th>
+                </tr>
+                <tr tal:repeat="id schema">
+                    <td nowrap tal:content="id"/>
+                    <td nowrap tal:content="python:schema[id].get('label','')"/>
+                    <td nowrap tal:define="visibility python:schema[id].get('visibility','')">
+                        <p tal:define="view_v python:visibility.get('view', None)"
+                           tal:condition="view_v">View: <span tal:content="view_v"/>
+                        </p>
+                        <p tal:define="edit_v python:visibility.get('edit', None)"
+                           tal:condition="edit_v">Edit: <span tal:content="edit_v"/>
+                        </p>
+                    </td>
+                        
+                    <td nowrap tal:content="python:schema[id].get('condition','')"/>
+ 
+                    <td nowrap tal:define="py_file python:schema[id].get('field_py_file','');
+                                           py_lineno python:schema[id].get('field_py_lineno','')">
+                        
+                        <p tal:content="python:schema[id].get('field','')"/>
+                        
+                        <a href="#" 
+                           onclick="#"
+                           tal:condition = "py_file"
+                           tal:attributes = "onclick string:loadFileAndGotoLine('${py_file}', ${py_lineno})">
+                            <img class="filesystem-icon"
+                                 src="++resource++collective.ploneide.icons/py.png" />
+                        </a>            
+                    </td>
+                    
+                    <td nowrap tal:define="py_file python:schema[id].get('widget_py_file','');
+                                           py_lineno python:schema[id].get('widget_py_lineno','')">
+                        
+                        <p tal:content="python:schema[id].get('widget','')"/>
+                        
+                        <a href="#" 
+                           onclick="#"
+                           tal:condition = "py_file"
+                           tal:attributes = "onclick string:loadFileAndGotoLine('${py_file}', ${py_lineno})">
+                            <img class="filesystem-icon"
+                                 src="++resource++collective.ploneide.icons/py.png" />
+                        </a>            
+                    </td>
+                </tr>
+             </table>
+        
+        </div>
+ 
+    </div>
+
+    <div class="workflow-info"
+         tal:define="workflow view/getWorkflowPolicy"
+         tal:condition="workflow">
+        <h2>Workflow policy:</h2>
+        <p>
+            <span tal:content="workflow/title"/>
+            (<span tal:content="workflow/id"/>)
+            <a href="#" target="_blank"
+               tal:attributes="href string:${here/portal_url}/portal_workflow/${workflow/id}/manage_properties">
+                                               
+            <img src="zope_icon.png" alt="Configuration"/>
+            </a>
+        </p>
+    </div>
+    
+    <div class="provided-views" tal:define="views view/getAllowedViews">
+        <h2>Provided views:</h2>
+        <h3>(Default view is marked with *)</h3>
+        <p class="default-page"
+           tal:define="default_page view/getDefaultPage|nothing"
+           tal:condition="default_page">
+                There's a default page assigned here: 
+                <a href="#" tal:attributes="href string:${default_page/absolute_url}/@@ploneide"
+                            tal:content="default_page/title"/>
+                <span>*</span>
+        </p>
+        <p class="provided-view"             
+            tal:repeat="allowed_view python:views.keys()">
+            <span tal:condition="python:allowed_view == context.defaultView()">*</span>
+            <span tal:content="allowed_view" />
+            <a href="#" 
+               onclick="#"
+               tal:define = "pt_file python:views[allowed_view].get('pt', None)"
+               tal:condition = "pt_file"
+               tal:attributes = "onclick string:loadFileFromFullPath('${pt_file}')">
+                <img class="filesystem-icon"
+                     src="++resource++collective.ploneide.icons/html.png" />
+            </a>
+            <a href="#" 
+               onclick="#"
+               tal:define = "py_file python:views[allowed_view].get('py', None)"
+               tal:condition = "py_file"
+               tal:attributes = "onclick string:loadFileFromFullPath('${py_file}')">
+                <img class="filesystem-icon"
+                     src="++resource++collective.ploneide.icons/py.png" />
+            </a>
+ 
+            
+        </p>
+ 
+    </div>
+ 
+    <div class="provided-interfaces">
+        <h2>Provided interfaces:</h2>
+        <p class="provided-interface" 
+            tal:repeat="interface view/getProvidedInterfaces"
+            tal:content="interface"/>
+    </div>
+    
+</div>

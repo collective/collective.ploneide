@@ -1,0 +1,399 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Content types &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Content management" href="index.html" />
+    <link rel="next" title="Workflows" href="workflow.html" />
+    <link rel="prev" title="Renaming objects (changing object ids)" href="rename.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="workflow.html" title="Workflows"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="rename.html" title="Renaming objects (changing object ids)"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Content management</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="content-types">
+<h1>Content types<a class="headerlink" href="#content-types" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">Plone's content type subsystems and creating new content types programmatically.</p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
+<li><a class="reference internal" href="#type-information-registry" id="id2">Type information registry</a><ul>
+<li><a class="reference internal" href="#listing-available-content-types" id="id3">Listing available content types</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#creating-a-new-content-type" id="id4">Creating a new content type</a><ul>
+<li><a class="reference internal" href="#debugging-new-content-type-problems" id="id5">Debugging new content type problems</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#creating-new-content-types-through-the-web" id="id6">Creating new content types through-the-web</a></li>
+<li><a class="reference internal" href="#implictly-allowed" id="id7">Implictly allowed</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Plone has two kind of content types subsystems</p>
+<ul class="simple">
+<li><a class="reference internal" href="archetypes/index.html"><em>Archetypes</em></a> based</li>
+<li><a class="reference internal" href="dexterity.html"><em>Dexterity</em></a> based (new)</li>
+<li>See also Plomino (later in this document)</li>
+</ul>
+<p>Flexible architecture allows other kinds of content type subsystems as well.</p>
+</div>
+<div class="section" id="type-information-registry">
+<h2><a class="toc-backref" href="#id2">Type information registry</a><a class="headerlink" href="#type-information-registry" title="Permalink to this headline">¶</a></h2>
+<p>Plone maintains available content types in portal_types tool.</p>
+<p>portal_types is a folderish content where type information are child objects,
+keyed by portal_type metadata.</p>
+<p>portal_factory is a tool responsible for creating the persistent object representing the content.</p>
+<p><a class="reference external" href="http://svn.zope.org/Products.CMFCore/trunk/Products/CMFCore/TypesTool.py?rev=101748&amp;view=auto">TypesTool source code</a>.</p>
+<div class="section" id="listing-available-content-types">
+<h3><a class="toc-backref" href="#id3">Listing available content types</a><a class="headerlink" href="#listing-available-content-types" title="Permalink to this headline">¶</a></h3>
+<p>Below is an example Zope 3 vocabulary factory which will return
+all the available content types to be used with multi-selection field.</p>
+<p>Define vocabulary in ZCML:</p>
+<div class="highlight-python"><pre>&lt;utility
+    provides="zope.schema.interfaces.IVocabularyFactory"
+    component=".vocabularies.content_types_vocabulary"
+    name="mfabrik.like.content_types"
+    /&gt;</pre>
+</div>
+<p>Then have the factory code for it in vocabularies.py:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Zope 3 schema vocabulary factory for making multiple choices between installed content types of Plone site.</span>
+
+<span class="sd">    http://mfabrik.com</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">__license__</span> <span class="o">=</span> <span class="s">&quot;GPL 2&quot;</span>
+<span class="n">__copyright__</span> <span class="o">=</span> <span class="s">&quot;2010 mFabrik Research Oy&quot;</span>
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&quot;Mikko Ohtamaa &lt;mikko@mfabrik.com&gt;&quot;</span>
+<span class="n">__docformat__</span> <span class="o">=</span> <span class="s">&quot;epytext&quot;</span>
+
+<span class="kn">from</span> <span class="nn">Acquisition</span> <span class="kn">import</span> <span class="n">aq_inner</span>
+<span class="kn">from</span> <span class="nn">zope.app.component.hooks</span> <span class="kn">import</span> <span class="n">getSite</span>
+<span class="kn">from</span> <span class="nn">zope.schema.vocabulary</span> <span class="kn">import</span> <span class="n">SimpleVocabulary</span><span class="p">,</span> <span class="n">SimpleTerm</span>
+<span class="kn">from</span> <span class="nn">Products.CMFCore.utils</span> <span class="kn">import</span> <span class="n">getToolByName</span>
+
+<span class="k">def</span> <span class="nf">make_terms</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Create zope.schema terms for vocab from tuples,</span>
+
+<span class="sd">    @return: Generator of SimpleTerm objects</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">terms</span> <span class="o">=</span> <span class="p">[</span> <span class="n">SimpleTerm</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="n">pair</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">token</span><span class="o">=</span><span class="n">pair</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">title</span><span class="o">=</span><span class="n">pair</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">items</span> <span class="p">]</span>
+    <span class="k">return</span> <span class="n">terms</span>
+
+<span class="k">def</span> <span class="nf">friendly_types</span><span class="p">(</span><span class="n">site</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; List user selectable content types.</span>
+
+<span class="sd">    Note that there exist a method in IPortalState utility view for this, but we cannot</span>
+<span class="sd">    use it, because vocabulary factory must be available in contexts where there is</span>
+<span class="sd">    no HTTP request (e.g. installing add-on product).</span>
+
+<span class="sd">    This code is copy-pasted from https://svn.plone.org/svn/plone/plone.app.layout/trunk/plone/app/layout/globals/portal.py</span>
+
+<span class="sd">    @return: Generator for (id, type_info title) tuples</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="n">aq_inner</span><span class="p">(</span><span class="n">site</span><span class="p">)</span>
+    <span class="n">site_properties</span> <span class="o">=</span> <span class="n">getToolByName</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="s">&quot;portal_properties&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">site_properties</span>
+    <span class="n">not_searched</span> <span class="o">=</span> <span class="n">site_properties</span><span class="o">.</span><span class="n">getProperty</span><span class="p">(</span><span class="s">&#39;types_not_searched&#39;</span><span class="p">,</span> <span class="p">[])</span>
+
+    <span class="n">portal_types</span> <span class="o">=</span> <span class="n">getToolByName</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="s">&quot;portal_types&quot;</span><span class="p">)</span>
+    <span class="n">types</span> <span class="o">=</span> <span class="n">portal_types</span><span class="o">.</span><span class="n">listContentTypes</span><span class="p">()</span>
+
+    <span class="c"># Get list of content type ids which are not filtered out</span>
+    <span class="n">prepared_types</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">types</span> <span class="k">if</span> <span class="n">t</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">not_searched</span><span class="p">]</span>
+
+    <span class="c"># Return (id, title) pairs</span>
+    <span class="k">return</span> <span class="p">[</span> <span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">portal_types</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span><span class="o">.</span><span class="n">title</span><span class="p">)</span> <span class="k">for</span> <span class="nb">id</span> <span class="ow">in</span> <span class="n">prepared_types</span> <span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">content_types_vocabulary</span><span class="p">(</span><span class="n">context</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A vocabulary factory for making a choice of a portal type.</span>
+
+<span class="sd">    @param context: Assume Plone site.</span>
+
+<span class="sd">    @return: SimpleVocabulary containing (portal type id, portal type title) pairs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c"># This special case must be handled by plone.app.registry quick installing registry.xml</span>
+    <span class="c"># which refers to zope.schema refering to this vocabulary</span>
+    <span class="c"># site information is *not* available</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">plone.registry.record</span>
+        <span class="kn">import</span> <span class="nn">plone.registry.recordsproxy</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">plone</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">record</span><span class="o">.</span><span class="n">Record</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">plone</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">recordsproxy</span><span class="o">.</span><span class="n">RecordsProxy</span><span class="p">):</span>
+            <span class="n">context</span> <span class="o">=</span> <span class="n">getSite</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="n">items</span> <span class="o">=</span> <span class="n">friendly_types</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">SimpleVocabulary</span><span class="p">(</span><span class="n">make_terms</span><span class="p">(</span><span class="n">items</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="creating-a-new-content-type">
+<h2><a class="toc-backref" href="#id4">Creating a new content type</a><a class="headerlink" href="#creating-a-new-content-type" title="Permalink to this headline">¶</a></h2>
+<p>This instructions apply for <a class="reference internal" href="archetypes/index.html"><em>Archetypes subsystem based content types</em></a></p>
+<ul class="simple">
+<li>You need to have an add-on product code skeleton created using paster's <em>archetypes</em> template</li>
+<li>Use <em>paster addcontent content</em> command new types.</li>
+</ul>
+<p>Related how tos</p>
+<ul class="simple">
+<li><a class="reference external" href="http://lionfacelemonface.wordpress.com/tutorials/zopeskel-archetypes-howto/">http://lionfacelemonface.wordpress.com/tutorials/zopeskel-archetypes-howto/</a></li>
+<li><a class="reference external" href="http://docs.openia.com/howtos/development/plone/creating-a-site-archetypes-object-and-contenttypes-with-paster?set_language=fi&amp;cl=fi">http://docs.openia.com/howtos/development/plone/creating-a-site-archetypes-object-and-contenttypes-with-paster?set_language=fi&amp;cl=fi</a></li>
+<li><a class="reference external" href="http://www.unc.edu/~jj/plone/">http://www.unc.edu/~jj/plone/</a></li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Creating types by hand is not worth of the problems. Please use a
+code generator to create the skeleton for your new content type.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Content type name must not contain spaces. Content type name or description
+must not contain non-ASCII letters. If you need to change these please
+create a translation catalog which will translate the text to
+one with spaces or international letters.</p>
+</div>
+<div class="section" id="debugging-new-content-type-problems">
+<h3><a class="toc-backref" href="#id5">Debugging new content type problems</a><a class="headerlink" href="#debugging-new-content-type-problems" title="Permalink to this headline">¶</a></h3>
+<p>Creating types by hand is not worth of the problems.</p>
+<ul class="simple">
+<li><a class="reference external" href="http://plone.org/documentation/faq/why-doesnt-my-custom-content-type-show-up-in-add-menu/">Why doesn't my custom content type show up in add menu</a> checklist.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="creating-new-content-types-through-the-web">
+<h2><a class="toc-backref" href="#id6">Creating new content types through-the-web</a><a class="headerlink" href="#creating-new-content-types-through-the-web" title="Permalink to this headline">¶</a></h2>
+<p>There exist solutions for non-programmes and Plone novices to create their content types
+more easily.</p>
+<p>Dexterity</p>
+<ul class="simple">
+<li><a class="reference external" href="http://plone.org/products/dexterity">http://plone.org/products/dexterity</a></li>
+<li>Core feature</li>
+<li>Use Dexterity control panel in site setup</li>
+</ul>
+<p>Plomino (Archetypes-based add-on)</p>
+<ul class="simple">
+<li>With Plomino you can make an entire web application that can organize &amp;
+manipulate data with very limited programming experience.</li>
+<li><a class="reference external" href="http://www.plomino.net/">http://www.plomino.net/</a></li>
+<li><a class="reference external" href="http://www.youtube.com/view_play_list?p=469DE37C742F31D1">http://www.youtube.com/view_play_list?p=469DE37C742F31D1</a></li>
+</ul>
+</div>
+<div class="section" id="implictly-allowed">
+<h2><a class="toc-backref" href="#id7">Implictly allowed</a><a class="headerlink" href="#implictly-allowed" title="Permalink to this headline">¶</a></h2>
+<p>Implictly allowed is flag whether the content is globally addable or
+must be specifically enabled for certain folders.</p>
+<p>The following example allows creation of Large Plone Folder anywhere at the site
+(it is disabled by default). For available properties, see TypesTool._advanced_properties.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">portal_types</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">portal_types</span>
+<span class="n">lpf</span> <span class="o">=</span> <span class="n">portal_types</span><span class="p">[</span><span class="s">&quot;Large Plone Folder&quot;</span><span class="p">]</span>
+<span class="n">lpf</span><span class="o">.</span><span class="n">global_allow</span> <span class="o">=</span> <span class="bp">True</span> <span class="c"># This is &quot;Globally allowed&quot; property</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Content types</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#type-information-registry">Type information registry</a><ul>
+<li><a class="reference internal" href="#listing-available-content-types">Listing available content types</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#creating-a-new-content-type">Creating a new content type</a><ul>
+<li><a class="reference internal" href="#debugging-new-content-type-problems">Debugging new content type problems</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#creating-new-content-types-through-the-web">Creating new content types through-the-web</a></li>
+<li><a class="reference internal" href="#implictly-allowed">Implictly allowed</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="rename.html"
+                        title="previous chapter">Renaming objects (changing object ids)</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="workflow.html"
+                        title="next chapter">Workflows</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/content/types.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="workflow.html" title="Workflows"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="rename.html" title="Renaming objects (changing object ids)"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Content management</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

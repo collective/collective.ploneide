@@ -1,0 +1,312 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Sharing &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Users and members" href="index.html" />
+    <link rel="next" title="Security" href="../security/index.html" />
+    <link rel="prev" title="Members as content" href="membrane.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../security/index.html" title="Security"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="membrane.html" title="Members as content"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Users and members</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="sharing">
+<h1>Sharing<a class="headerlink" href="#sharing" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">Customizing the sharing feature of Plone</p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
+<li><a class="reference internal" href="#setting-sharing-rights-programmatically" id="id2">Setting sharing rights programmatically</a><ul>
+<li><a class="reference internal" href="#complex-example-create-one-folder-per-group-and-add-sharing-rights" id="id3">Complex example: Create one folder per group and add sharing rights</a></li>
+<li><a class="reference internal" href="#general-methods-to-manipulate-local-roles-sharing" id="id4">General methods to manipulate local roles (sharing)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#add-sharing-tab-to-a-custom-content-type" id="id5">Add sharing tab to a custom content type</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://pypi.python.org/pypi/collective.sharingroles">http://pypi.python.org/pypi/collective.sharingroles</a></li>
+<li><a class="reference external" href="http://encolpe.wordpress.com/2010/02/08/add-a-new-role-in-the-sharing-tab-for-plone-3/">http://encolpe.wordpress.com/2010/02/08/add-a-new-role-in-the-sharing-tab-for-plone-3/</a></li>
+<li><a class="reference external" href="http://svn.plone.org/svn/plone/plone.app.workflow/trunk/plone/app/workflow/browser/sharing.py">Sharing tab source code</a></li>
+<li><a class="reference external" href="http://svn.plone.org/svn/plone/plone.app.workflow/trunk/plone/app/workflow/configure.zcml">Default sharing tab role translations</a></li>
+</ul>
+</div>
+<div class="section" id="setting-sharing-rights-programmatically">
+<h2><a class="toc-backref" href="#id2">Setting sharing rights programmatically</a><a class="headerlink" href="#setting-sharing-rights-programmatically" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="complex-example-create-one-folder-per-group-and-add-sharing-rights">
+<h3><a class="toc-backref" href="#id3">Complex example: Create one folder per group and add sharing rights</a><a class="headerlink" href="#complex-example-create-one-folder-per-group-and-add-sharing-rights" title="Permalink to this headline">¶</a></h3>
+<p>The sample code</p>
+<ul class="simple">
+<li>Creates one folder per group, with some groups excluded. The folder is not created if it exists.</li>
+<li>Blocks role inheritance for the group</li>
+<li>Gives edit access to the group through sharing</li>
+<li>Gives view access to the logged in users through sharing</li>
+</ul>
+<p>Example is provided as Zope External Method. Create External Method
+in the target parent folder through ZMI. Then run &quot;Test&quot;
+for this external method in ZMI.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">from</span> <span class="nn">StringIO</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="kn">from</span> <span class="nn">zope.component</span> <span class="kn">import</span> <span class="n">getUtility</span>
+<span class="kn">from</span> <span class="nn">plone.i18n.normalizer.interfaces</span> <span class="kn">import</span> <span class="n">IURLNormalizer</span>
+
+
+<span class="n">block_groups</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;Administrators&quot;</span><span class="p">,</span><span class="s">&quot;opettajat&quot;</span><span class="p">,</span><span class="s">&quot;kouluttajat&quot;</span><span class="p">,</span><span class="s">&quot;yhteyshenkilot&quot;</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">set_sharing</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="nb">buffer</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">()</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="n">normalizer</span> <span class="o">=</span> <span class="n">getUtility</span><span class="p">(</span><span class="n">IURLNormalizer</span><span class="p">)</span>
+
+        <span class="n">site</span>  <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">portal_url</span><span class="o">.</span><span class="n">getPortalObject</span><span class="p">()</span>
+        <span class="n">acl</span> <span class="o">=</span> <span class="n">site</span><span class="o">.</span><span class="n">acl_users</span>
+        <span class="n">groups</span> <span class="o">=</span> <span class="n">acl</span><span class="o">.</span><span class="n">source_groups</span><span class="o">.</span><span class="n">getGroupIds</span><span class="p">()</span>
+
+        <span class="n">existing_folders</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">objectIds</span><span class="p">()</span>
+
+        <span class="c"># Create a folder per each group</span>
+        <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">block_groups</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="k">print</span> <span class="o">&gt;&gt;</span> <span class="nb">buffer</span><span class="p">,</span> <span class="s">&quot;Doing group:&quot;</span> <span class="o">+</span> <span class="n">g</span>
+
+            <span class="n">g</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&quot;utf-8&quot;</span><span class="p">)</span>
+
+            <span class="nb">id</span> <span class="o">=</span> <span class="n">normalizer</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">id</span> <span class="ow">in</span> <span class="n">existing_folders</span><span class="p">:</span>
+                <span class="n">context</span><span class="o">.</span><span class="n">invokeFactory</span><span class="p">(</span><span class="s">&quot;Folder&quot;</span><span class="p">,</span> <span class="nb">id</span><span class="p">)</span>
+
+            <span class="n">folder</span> <span class="o">=</span> <span class="n">context</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span>
+
+            <span class="c"># Set sharing rights</span>
+            <span class="c"># - No inheritance</span>
+            <span class="n">folder</span><span class="o">.</span><span class="n">__ac_local_roles_block__</span> <span class="o">=</span> <span class="bp">True</span>
+
+            <span class="c"># - Group has edit access</span>
+
+
+            <span class="c"># - Logged in users have view access</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">(</span><span class="nb">buffer</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="nb">buffer</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="general-methods-to-manipulate-local-roles-sharing">
+<h3><a class="toc-backref" href="#id4">General methods to manipulate local roles (sharing)</a><a class="headerlink" href="#general-methods-to-manipulate-local-roles-sharing" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">folder</span><span class="o">.</span><span class="n">manage_setLocalRoles</span><span class="p">(</span><span class="n">userid</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;Reader&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>would grant the role &quot;Reader&quot; (Can View on the Sharing Tab) to userid.</p>
+<p>Beware that this will set the local roles for the user to only ['Reader']. If the user already has other local roles, this will (untested) clear those.</p>
+<p>It will not affect inherited roles.</p>
+</div>
+</div>
+<div class="section" id="add-sharing-tab-to-a-custom-content-type">
+<h2><a class="toc-backref" href="#id5">Add sharing tab to a custom content type</a><a class="headerlink" href="#add-sharing-tab-to-a-custom-content-type" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://plone.org/documentation/kb/add-sharing-tab">http://plone.org/documentation/kb/add-sharing-tab</a></li>
+</ul>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Sharing</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#setting-sharing-rights-programmatically">Setting sharing rights programmatically</a><ul>
+<li><a class="reference internal" href="#complex-example-create-one-folder-per-group-and-add-sharing-rights">Complex example: Create one folder per group and add sharing rights</a></li>
+<li><a class="reference internal" href="#general-methods-to-manipulate-local-roles-sharing">General methods to manipulate local roles (sharing)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#add-sharing-tab-to-a-custom-content-type">Add sharing tab to a custom content type</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="membrane.html"
+                        title="previous chapter">Members as content</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../security/index.html"
+                        title="next chapter">Security</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/members/sharing_tab.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../security/index.html" title="Security"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="membrane.html" title="Members as content"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Users and members</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

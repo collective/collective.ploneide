@@ -1,0 +1,264 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Testing and debugging &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="next" title="Logging" href="logging.html" />
+    <link rel="prev" title="Upgrade tips" href="../misc/upgrade.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="logging.html" title="Logging"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../misc/upgrade.html" title="Upgrade tips"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="testing-and-debugging">
+<h1>Testing and debugging<a class="headerlink" href="#testing-and-debugging" title="Permalink to this headline">¶</a></h1>
+<p>This section contains tips how to test and debug your code.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="logging.html">Logging</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="logging.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html#logging-from-python-code">Logging from Python code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html#logging-from-page-templates-and-restrictedpython-scripts">Logging from page templates and RestrictedPython scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html#forcing-log-level-and-output">Forcing log level and output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html#temporarily-capturing-log-output">Temporarily capturing log output</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pdb.html">Python debugging</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pdb.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pdb.html#using-pdb">Using pdb</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pdb.html#pretty-printing-objects">Pretty printing objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pdb.html#useful-pdb-commands">Useful pdb commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pdb.html#useful-pdb-snippets">Useful pdb snippets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pdb.html#automatically-start-debugger-when-exceptions-in-raised-browser">Automatically start debugger when exceptions in raised (browser)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pdb.html#automatically-start-debugger-when-exception-is-raised-command-line">Automatically start debugger when exception is raised (command line)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="unit_testing.html">Unit testing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="unit_testing.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unit_testing.html#running-unit-tests">Running unit tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unit_testing.html#test-coverage">Test coverage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unit_testing.html#creating-unit-tests">Creating unit tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unit_testing.html#base-test-class-skeleton">Base test class skeleton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unit_testing.html#posing-as-different-users">Posing as different users</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unit_testing.html#unit-tests-and-themes">Unit tests and themes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unit_testing.html#running-add-on-installers-and-extensions-profiles-for-unit-tests">Running add-on installers and extensions profiles for unit tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unit_testing.html#load-zcml-for-testing">Load zcml for testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unit_testing.html#setting-log-level-in-unit-tests">Setting log level in unit tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unit_testing.html#http-request">HTTP request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unit_testing.html#grabbing-emails">Grabbing emails</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unit_testing.html#unit-testing-and-zope-component-architecture">Unit testing and Zope component architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unit_testing.html#zcml">ZCML</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="functional_testing.html">Functional testing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="functional_testing.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functional_testing.html#test-browser">Test browser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functional_testing.html#recording-tests">Recording tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functional_testing.html#functional-test-skeleton">Functional test skeleton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functional_testing.html#preparing-error-logger">Preparing error logger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functional_testing.html#opening-an-url">Opening an URL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functional_testing.html#logging-in">Logging in</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functional_testing.html#logout">Logout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functional_testing.html#showing-the-contents-from-the-last-request">Showing the contents from the last request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functional_testing.html#getting-a-form-handler">Getting a form handler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functional_testing.html#listing-available-form-controls">Listing available form controls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functional_testing.html#filling-in-a-text-field-on-a-page">Filling in a text field on  a page</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functional_testing.html#selecting-a-checkbox">Selecting a checkbox</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functional_testing.html#clicking-a-button">Clicking a button</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functional_testing.html#checking-unauthorized-response">Checking Unauthorized response</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functional_testing.html#checking-a-http-response-header">Checking a HTTP response header</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functional_testing.html#checking-http-exception">Checking HTTP exception</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functional_testing.html#setting-test-browser-headers">Setting test browser headers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="doctests.html">Doctests</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="doctests.html#doctests-and-pdb">Doctests and pdb</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="error_log.html">Site error log service</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="error_log.html#example-how-to-add-exceptions-to-error-log">Example how to add exceptions to error log</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="boilerplate_tests.html">Boilerplate tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clean_uninstall.html">Clean uninstall</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="clean_uninstall.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="clean_uninstall.html#clean-uninstall-test-procedure">Clean uninstall test procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="clean_uninstall.html#example-unit-test">Example unit test</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../misc/upgrade.html"
+                        title="previous chapter">Upgrade tips</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="logging.html"
+                        title="next chapter">Logging</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/testing_and_debugging/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="logging.html" title="Logging"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../misc/upgrade.html" title="Upgrade tips"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

@@ -1,0 +1,414 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>CSS &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Templates, CSS and Javascript" href="index.html" />
+    <link rel="next" title="Javascripting" href="javascript.html" />
+    <link rel="prev" title="Page templates" href="template_basics.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="javascript.html" title="Javascripting"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="template_basics.html" title="Page templates"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Templates, CSS and Javascript</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="css">
+<h1><a class="toc-backref" href="#id1">CSS</a><a class="headerlink" href="#css" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">Creating and registering CSS files for Plone and Plone add-on products.</p>
+</div>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#css" id="id1">CSS</a><ul>
+<li><a class="reference internal" href="#introduction" id="id2">Introduction</a></li>
+<li><a class="reference internal" href="#registering-a-new-css-file" id="id3">Registering a new CSS file</a><ul>
+<li><a class="reference internal" href="#expressions" id="id4">Expressions</a></li>
+<li><a class="reference internal" href="#inserting-css-as-last-into-anonomyous-bundles" id="id5">Inserting CSS as last into anonomyous bundles</a></li>
+<li><a class="reference internal" href="#css-files-for-logged-in-members-only" id="id6">CSS files for logged in members only</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#conditional-comments-ie" id="id7">Conditional comments (IE)</a></li>
+<li><a class="reference internal" href="#generating-css-classes-programmatically-in-templates" id="id8">Generating CSS classes programmatically in templates</a></li>
+<li><a class="reference internal" href="#per-folder-overrides" id="id9">Per folder overrides</a></li>
+<li><a class="reference internal" href="#striping-listing-colours" id="id10">Striping listing colours</a></li>
+<li><a class="reference internal" href="#css-reset" id="id11">CSS reset</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id2">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>This page has Plone specific CSS instructions.</p>
+<p>In Plone, most of CSS files are managed by portal_css tool in Zope Management Interface.
+Page templates can still import CSS files directly, but portal_css does CSS file compression
+and merging automatically if used.</p>
+</div>
+<div class="section" id="registering-a-new-css-file">
+<h2><a class="toc-backref" href="#id3">Registering a new CSS file</a><a class="headerlink" href="#registering-a-new-css-file" title="Permalink to this headline">¶</a></h2>
+<p>You can register stylesheets to be included in Plone's various CSS bundles using GenericSetup XML.</p>
+<p>Example <em>profiles/default/cssregistry.xml</em></p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot;?&gt;</span>
+<span class="c">&lt;!-- This file holds the setup configuration for the portal_css tool. --&gt;</span>
+
+<span class="nt">&lt;object</span> <span class="na">name=</span><span class="s">&quot;portal_css&quot;</span><span class="nt">&gt;</span>
+
+ <span class="c">&lt;!-- Stylesheets that will be registered with the portal_css tool are defined</span>
+<span class="c">      here. You can also specify values for existing resources if you need to</span>
+<span class="c">      modify some of their properties.</span>
+<span class="c">      Stylesheet elements accept these parameters:</span>
+<span class="c">      - &#39;id&#39; (required): it must respect the name of the css or DTML file</span>
+<span class="c">        (case sensitive). &#39;.dtml&#39; suffixes must be ignored.</span>
+<span class="c">      - &#39;expression&#39; (optional - default: &#39;&#39;): a tal condition.</span>
+<span class="c">      - &#39;media&#39; (optional - default: &#39;&#39;): possible values: &#39;screen&#39;, &#39;print&#39;,</span>
+<span class="c">        &#39;projection&#39;, &#39;handheld&#39;...</span>
+<span class="c">      - &#39;rel&#39; (optional - default: &#39;stylesheet&#39;)</span>
+<span class="c">      - &#39;rendering&#39; (optional - default: &#39;import&#39;): &#39;import&#39;, &#39;link&#39; or</span>
+<span class="c">        &#39;inline&#39;.</span>
+<span class="c">      - &#39;enabled&#39; (optional - default: True): boolean</span>
+<span class="c">      - &#39;cookable&#39; (optional - default: True): boolean (aka &#39;merging allowed&#39;)</span>
+
+<span class="c">      See registerStylesheet() arguments in</span>
+<span class="c">      ResourceRegistries/tools/CSSRegistry.py for the latest list of all</span>
+<span class="c">      available keys and default values.</span>
+<span class="c">      --&gt;</span>
+
+
+         <span class="nt">&lt;stylesheet</span>
+            <span class="na">id=</span><span class="s">&quot;++resource++yourproduct.something/yourstylesheet.css&quot;</span>
+            <span class="na">media=</span><span class="s">&quot;&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">rendering=</span><span class="s">&quot;import&quot;</span>
+            <span class="na">cacheable=</span><span class="s">&quot;True&quot;</span> <span class="na">compression=</span><span class="s">&quot;safe&quot;</span> <span class="na">cookable=</span><span class="s">&quot;True&quot;</span>
+            <span class="na">enabled=</span><span class="s">&quot;1&quot;</span> <span class="na">expression=</span><span class="s">&quot;&quot;</span> <span class="na">insert-after=</span><span class="s">&quot;ploneKss.css&quot;</span><span class="nt">/&gt;</span>
+
+<span class="nt">&lt;/object&gt;</span>
+</pre></div>
+</div>
+<div class="section" id="expressions">
+<h3><a class="toc-backref" href="#id4">Expressions</a><a class="headerlink" href="#expressions" title="Permalink to this headline">¶</a></h3>
+<p>Expression portal_css attribute defines when your CSS file is included on HTML page.
+For more information see <a class="reference internal" href="../functionality/expressions.html"><em>expressions documentation</em></a>.</p>
+</div>
+<div class="section" id="inserting-css-as-last-into-anonomyous-bundles">
+<h3><a class="toc-backref" href="#id5">Inserting CSS as last into anonomyous bundles</a><a class="headerlink" href="#inserting-css-as-last-into-anonomyous-bundles" title="Permalink to this headline">¶</a></h3>
+<p>Plone compresses and merges CSS files to bundles.</p>
+<p>For Plone 3.x optimal place to put CSS file available to all users
+is after <em>ploneKss.css</em> as in the example above.</p>
+</div>
+<div class="section" id="css-files-for-logged-in-members-only">
+<h3><a class="toc-backref" href="#id6">CSS files for logged in members only</a><a class="headerlink" href="#css-files-for-logged-in-members-only" title="Permalink to this headline">¶</a></h3>
+<p>Add the following expression to your CSS file:</p>
+<div class="highlight-python"><pre>not: portal/portal_membership/isAnonymousUser</pre>
+</div>
+<p>If you want to load the CSS in the bundle with Plone's default member.css,
+use insert-after=&quot;member.css&quot;. In this case, however, the file
+will be one of the first CSS files to be loaded and cannot override
+values from other files unless CSS directive !import is used.</p>
+</div>
+</div>
+<div class="section" id="conditional-comments-ie">
+<h2><a class="toc-backref" href="#id7">Conditional comments (IE)</a><a class="headerlink" href="#conditional-comments-ie" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://plone.org/products/plone/roadmap/232a">http://plone.org/products/plone/roadmap/232a</a></li>
+</ul>
+</div>
+<div class="section" id="generating-css-classes-programmatically-in-templates">
+<h2><a class="toc-backref" href="#id8">Generating CSS classes programmatically in templates</a><a class="headerlink" href="#generating-css-classes-programmatically-in-templates" title="Permalink to this headline">¶</a></h2>
+<p># Try to put string generation code your view/viewlet if you have one</p>
+<p># If you do not have view (main_template) you can create a view and call it as in the following example.</p>
+<p>View class generating CSS class spans:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">Products.Five.browser</span> <span class="kn">import</span> <span class="n">BrowserView</span>
+<span class="kn">from</span> <span class="nn">Products.CMFCore.utils</span>  <span class="kn">import</span> <span class="n">getToolByName</span>
+
+<span class="k">class</span> <span class="nc">CSSHelperView</span><span class="p">(</span><span class="n">BrowserView</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Used by main_template &lt;body&gt; to set CSS classes &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="n">context</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">requet</span> <span class="o">=</span> <span class="n">request</span>
+
+    <span class="k">def</span> <span class="nf">logged_in_class</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Get CSS class telling whether the user is logged in or not</span>
+
+<span class="sd">        This allows us to fine-tune layout when edit frame et. al.</span>
+<span class="sd">        are on the screen.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mt</span> <span class="o">=</span> <span class="n">getToolByName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="s">&#39;portal_membership&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">mt</span><span class="o">.</span><span class="n">isAnonymousUser</span><span class="p">():</span> <span class="c"># the user has not logged in</span>
+            <span class="k">return</span> <span class="s">&quot;member-anonymous&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s">&quot;member-logged-in&quot;</span>
+</pre></div>
+</div>
+<p>Registering the view in ZCML:</p>
+<div class="highlight-python"><pre>&lt;browser:view
+        for="*"
+        name="css_class_helper"
+        class=".views.CSSHelperView"
+        permission="zope.Public"
+        allowed_attributes="logged_in_class"
+        /&gt;</pre>
+</div>
+<p>Calling the view in main_template.pt:</p>
+<div class="highlight-python"><pre>&lt;body tal:define="css_class_helper nocall:here/@@css_class_helper" tal:attributes="class string:${here/getSectionFromURL} template-${template/id} ${css_class_helper/logged_in_class};
+                      dir python:test(isRTL, 'rtl', 'ltr')"&gt;</pre>
+</div>
+<p>Defining CSS styles reaction to the presence of the class:</p>
+<div class="highlight-python"><pre>#region-content { padding: 0 0 0 0px !important;}
+.member-logged-in #region-content { padding: 0 0 0 4px !important;}</pre>
+</div>
+</div>
+<div class="section" id="per-folder-overrides">
+<h2><a class="toc-backref" href="#id9">Per folder overrides</a><a class="headerlink" href="#per-folder-overrides" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://pypi.python.org/pypi/Products.CustomOverrides">http://pypi.python.org/pypi/Products.CustomOverrides</a></li>
+</ul>
+</div>
+<div class="section" id="striping-listing-colours">
+<h2><a class="toc-backref" href="#id10">Striping listing colours</a><a class="headerlink" href="#striping-listing-colours" title="Permalink to this headline">¶</a></h2>
+<p>In your template you can define classes for 1) the item itself 2) extra odd and even class</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">tal:attributes=</span><span class="s">&quot;class python:&#39;feed-folder-item feed-folder-item-&#39; + (repeat[&#39;child&#39;].even() and &#39;even&#39; or &#39;odd&#39;)&quot;</span><span class="nt">&gt;</span>
+</pre></div>
+</div>
+<p>And you can colorize this with CSS</p>
+<div class="highlight-css"><div class="highlight"><pre><span class="nc">.feed-folder-item</span> <span class="p">{</span>
+        <span class="k">padding</span><span class="o">:</span> <span class="m">0.5em</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c">/* Make sure that all items have same amount of padding at the bottom,</span>
+<span class="c">   whether they have last paragraph with margin or not */</span>
+<span class="nf">#content</span> <span class="nc">.feed-folder-item</span> <span class="nt">p</span><span class="nd">:last-child</span> <span class="p">{</span>
+    <span class="k">margin-bottom</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.feed-folder-item-odd</span> <span class="p">{</span>
+    <span class="k">background</span><span class="o">:</span> <span class="m">#ddd</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.feed-folder-item-even</span> <span class="p">{</span>
+    <span class="k">background</span><span class="o">:</span> <span class="nb">white</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="css-reset">
+<h2><a class="toc-backref" href="#id11">CSS reset</a><a class="headerlink" href="#css-reset" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+If you are building a custom theme and you want to do cross-browser CSS reset,
+the following snippet is recommended</blockquote>
+<div class="highlight-css"><div class="highlight"><pre> <span class="c">/* @group CSS Reset */</span>
+
+<span class="c">/* Remove implicit browser styles to have a neutral starting point:</span>
+<span class="c">   - No elements should have implicit margin/padding</span>
+<span class="c">   - No underline by default on links (we add it explicitly in the body text)</span>
+<span class="c">   - When we want markers on lists, we will be explicit about it, and they render inline by default</span>
+<span class="c">   - Browsers are inconsistent about hX/pre/code, reset</span>
+<span class="c">   - Linked images should not have borders</span>
+<span class="c">   */</span>
+
+<span class="o">*</span> <span class="p">{</span> <span class="k">margin</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span> <span class="k">padding</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span> <span class="p">}</span>
+<span class="o">*</span> <span class="nd">:link</span><span class="o">,</span><span class="nd">:visited</span> <span class="p">{</span> <span class="k">text-decoration</span><span class="o">:</span><span class="k">none</span> <span class="p">}</span>
+<span class="o">*</span> <span class="nt">ul</span><span class="o">,</span><span class="nt">ol</span> <span class="p">{</span> <span class="k">list-style</span><span class="o">:</span><span class="k">none</span><span class="p">;</span> <span class="p">}</span>
+<span class="o">*</span> <span class="nt">li</span> <span class="p">{</span> <span class="k">display</span><span class="o">:</span> <span class="k">inline</span><span class="p">;</span> <span class="p">}</span>
+<span class="o">*</span> <span class="nt">h1</span><span class="o">,</span><span class="nt">h2</span><span class="o">,</span><span class="nt">h3</span><span class="o">,</span><span class="nt">h4</span><span class="o">,</span><span class="nt">h5</span><span class="o">,</span><span class="nt">h6</span><span class="o">,</span><span class="nt">pre</span><span class="o">,</span><span class="nt">code</span> <span class="p">{</span> <span class="k">font-size</span><span class="o">:</span><span class="m">1em</span><span class="p">;</span> <span class="p">}</span>
+<span class="o">*</span> <span class="nt">a</span> <span class="nt">img</span><span class="o">,</span><span class="nd">:link</span> <span class="nt">img</span><span class="o">,</span><span class="nd">:visited</span> <span class="nt">img</span> <span class="p">{</span> <span class="k">border</span><span class="o">:</span><span class="k">none</span> <span class="p">}</span>
+<span class="nt">a</span> <span class="p">{</span> <span class="k">outline</span><span class="o">:</span> <span class="k">none</span><span class="p">;</span> <span class="p">}</span>
+<span class="nt">table</span> <span class="p">{</span> <span class="k">border-spacing</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span> <span class="p">}</span>
+<span class="nt">img</span> <span class="p">{</span> <span class="k">vertical-align</span><span class="o">:</span> <span class="k">middle</span><span class="p">;</span> <span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">CSS</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#registering-a-new-css-file">Registering a new CSS file</a><ul>
+<li><a class="reference internal" href="#expressions">Expressions</a></li>
+<li><a class="reference internal" href="#inserting-css-as-last-into-anonomyous-bundles">Inserting CSS as last into anonomyous bundles</a></li>
+<li><a class="reference internal" href="#css-files-for-logged-in-members-only">CSS files for logged in members only</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#conditional-comments-ie">Conditional comments (IE)</a></li>
+<li><a class="reference internal" href="#generating-css-classes-programmatically-in-templates">Generating CSS classes programmatically in templates</a></li>
+<li><a class="reference internal" href="#per-folder-overrides">Per folder overrides</a></li>
+<li><a class="reference internal" href="#striping-listing-colours">Striping listing colours</a></li>
+<li><a class="reference internal" href="#css-reset">CSS reset</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="template_basics.html"
+                        title="previous chapter">Page templates</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="javascript.html"
+                        title="next chapter">Javascripting</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/templates_css_and_javascripts/css.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="javascript.html" title="Javascripting"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="template_basics.html" title="Page templates"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Templates, CSS and Javascript</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

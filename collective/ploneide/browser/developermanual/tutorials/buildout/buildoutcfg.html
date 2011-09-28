@@ -1,0 +1,540 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Understanding buildout.cfg &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../../index.html" />
+    <link rel="up" title="Buildout" href="index.html" />
+    <link rel="next" title="Creating a buildout defaults file" href="defaults.html" />
+    <link rel="prev" title="Creating a buildout for your project" href="creating.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="defaults.html" title="Creating a buildout defaults file"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="creating.html" title="Creating a buildout for your project"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Tutorials</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Buildout</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="understanding-buildout-cfg">
+<h1>Understanding buildout.cfg<a class="headerlink" href="#understanding-buildout-cfg" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">How to manage the main buildout configuration file</p>
+</div>
+<p><strong>Important note:</strong> This document applies to Plone 3.2 onwards. In
+Plone versions prior to 3.2 the vanilla buildout.cfg file was
+significatively different because Plone wasn't fully eggified.</p>
+<p><em>buildout.cfg</em> is the most important file in your new buildout
+environment. Here is how it looks:</p>
+<div class="highlight-cfg"><pre>[buildout]
+parts =
+    zope2
+    productdistros
+    instance
+    zopepy
+
+# Change the number here, and in find-links below, to change the version of
+# Plone being used
+extends = http://dist.plone.org/release/3.3.5/versions.cfg
+versions = versions
+
+# Add additional egg download sources here. dist.plone.org contains archives
+# of Plone packages.
+find-links =
+    http://dist.plone.org/release/3.3.5
+    http://dist.plone.org/thirdparty
+
+# Add additional eggs here
+eggs =
+
+# Reference any eggs you are developing here, one per line
+# e.g.: develop = src/my.package
+develop =
+
+[zope2]
+recipe = plone.recipe.zope2install
+url = ${versions:zope2-url}
+
+# Use this section to download additional old-style products.
+# List any number of URLs for product tarballs under URLs (separate
+# with whitespace, or break over several lines, with subsequent lines
+# indented). If any archives contain several products inside a top-level
+# directory, list the archive file name (i.e. the last part of the URL,
+# normally with a .tar.gz suffix or similar) under 'nested-packages'.
+# If any archives extract to a product directory with a version suffix, list
+# the archive name under 'version-suffix-packages'.
+[productdistros]
+recipe = plone.recipe.distros
+urls =
+nested-packages =
+version-suffix-packages =
+
+[instance]
+recipe = plone.recipe.zope2instance
+zope2-location = ${zope2:location}
+user = admin:admin
+http-address = 8080
+# comment the following two options in production sites
+debug-mode = on
+verbose-security = on
+
+# If you want Zope to know about any additional eggs, list them here.
+# This should include any development eggs you listed in develop-eggs above,
+# e.g. eggs = Plone my.package
+eggs =
+    Plone
+    ${buildout:eggs}
+
+# If you want to register ZCML slugs for any packages, list them here.
+# e.g. zcml = my.package my.other.package
+zcml =
+
+products =
+    ${buildout:directory}/products
+    ${productdistros:location}
+
+[zopepy]
+recipe = zc.recipe.egg
+eggs = ${instance:eggs}
+interpreter = zopepy
+extra-paths = ${zope2:location}/lib/python
+scripts = zopepy</pre>
+</div>
+<p>Let us walk through this file step-by-step:</p>
+<div class="section" id="the-main-buildout-section">
+<h2>The main [buildout] section<a class="headerlink" href="#the-main-buildout-section" title="Permalink to this headline">¶</a></h2>
+<p>The <em>[buildout]</em> section is the starting point for the file. It
+lists a number of &quot;parts&quot;, which are configured in separate
+sections later in the file. Each <em>part</em> has an associated <em>recipe</em>,
+which is the name of an egg that knows how to perform a particular
+task, e.g. build Zope or create a Zope instance. A recipe typically
+takes a few configuration options.</p>
+<p>Our global settings are as follows:</p>
+<div class="highlight-cfg"><pre>[buildout]
+parts =
+    zope2
+    productdistros
+    instance
+    zopepy
+
+find-links =
+    http://dist.plone.org/release/3.3.5
+    http://dist.plone.org/thirdparty
+
+eggs =
+
+develop =</pre>
+</div>
+<p>This specifies that the parts <em>zope2</em>, <em>productdistros</em>,
+<em>instance</em> and <em>zopepy</em> will be run, in that order. Then, we tell
+buildout that it can search one of a number of URLs when it is
+looking for eggs to download. In addition, it will always search
+the Cheese Shop.</p>
+<p>Note that configuration entries are commonly split into multiple
+lines.&nbsp; For this to work, all lines after the first must begin with
+<strong>at least 4 spaces</strong>.</p>
+<p>Next, we can list any eggs that buildout should download and
+install for us. This may include version specifications. For
+example, if you want sqlalchemy 0.3,&nbsp; but not 0.4, you could list;</p>
+<div class="highlight-cfg"><div class="highlight"><pre><span class="na">eggs</span> <span class="o">=</span>
+    <span class="na">sqlalchemy&gt;</span><span class="o">=</span><span class="s">0.3,&lt;0.4dev</span>
+</pre></div>
+</div>
+<p>Please note that you will need the Python Imaging Library (PIL) for
+Plone to work. This example assumes that you have this library
+already installed and available from your Python interpreter, but
+otherwise you can install a slightly modified (to workaround some
+common problems) version from the &quot;thirdparty&quot; Plone repository in
+your buildout adding its name to the eggs list:</p>
+<div class="highlight-cfg"><div class="highlight"><pre><span class="na">eggs</span> <span class="o">=</span> <span class="s">PILwoTk</span>
+</pre></div>
+</div>
+<p>And the full path to the package in the find-links, e.g.:</p>
+<div class="highlight-cfg"><div class="highlight"><pre><span class="na">find-links</span> <span class="o">=</span> <span class="s">http://dist.plone.org/thirdparty/PILwoTk-1.1.6.4.tar.gz</span>
+</pre></div>
+</div>
+<p>Finally, we can list development eggs, by specifying a directory
+where the egg is extracted in source format. For example:</p>
+<div class="highlight-cfg"><pre>eggs =
+    my.package
+
+develop =
+    src/my.package</pre>
+</div>
+<p>This presumes that there is an egg called <em>my.package</em> in the
+<em>src/</em> directory. We will learn how to create such eggs a little
+later in this tutorial. Notice how we must also list my.package as
+an actual egg dependency: development eggs are not automatically
+added to the &quot;working set&quot; of eggs that are installed for Zope.</p>
+</div>
+<div class="section" id="the-extends-and-versions-lines">
+<h2>The <em>extends</em> and <em>versions</em> lines<a class="headerlink" href="#the-extends-and-versions-lines" title="Permalink to this headline">¶</a></h2>
+<p>This part was introduced with Plone 3.2. It references a remote
+file where the version of each needed package is specified. Check
+that remote file to see yourself how these dependencies are
+specified.</p>
+<div class="highlight-cfg"><div class="highlight"><pre><span class="c"># Change the number here, and in find-links below, to change the version of</span>
+<span class="c"># Plone being used</span>
+<span class="na">extends</span> <span class="o">=</span> <span class="s">http://dist.plone.org/release/3.3.5/versions.cfg</span>
+<span class="na">versions</span> <span class="o">=</span> <span class="s">versions</span>
+</pre></div>
+</div>
+<p>If you want to use a local file instead of a remote one to be able
+to work offline, download it to your buildout directory and
+reference it like this:</p>
+<div class="highlight-cfg"><div class="highlight"><pre><span class="na">extends</span> <span class="o">=</span> <span class="s">versions.cfg</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="the-zope2-section">
+<h2>The [zope2] section<a class="headerlink" href="#the-zope2-section" title="Permalink to this headline">¶</a></h2>
+<p>This part builds Zope 2, using
+<a class="reference external" href="http://cheeseshop.python.org/pypi/plone.recipe.zope2install">plone.recipe.zope2install</a>.
+If you specified an existing Zope installation, you will not have
+this part. Otherwise, it looks like this:</p>
+<div class="highlight-cfg"><div class="highlight"><pre><span class="k">[zope2]</span>
+<span class="na">recipe</span> <span class="o">=</span> <span class="s">plone.recipe.zope2install</span>
+<span class="na">url</span> <span class="o">=</span> <span class="s">${versions:zope2-url}</span>
+</pre></div>
+</div>
+<p>Here, we reference the download location for Zope as present in the
+versions file. This ensures that we always get the recommended
+version of Zope. You could specify a download URL manually instead,
+if you wanted to use a different version of Zope.</p>
+<p>When the recipe is run, Zope 2 is installed in <em>parts/zope2</em>. The
+Zope software home becomes <em>parts/zope2/lib/python</em>.</p>
+</div>
+<div class="section" id="the-productdistros-section">
+<h2>The [productdistros] section<a class="headerlink" href="#the-productdistros-section" title="Permalink to this headline">¶</a></h2>
+<p>This uses the
+<a class="reference external" href="http://cheeseshop.python.org/pypi/plone.recipe.distros">plone.recipe.distros</a> recipe,
+which is able to download distributions (archives) of Zope 2 style
+products and make them available to Zope. It is empty to begin
+with:</p>
+<div class="highlight-cfg"><div class="highlight"><pre><span class="k">[productdistros]</span>
+<span class="na">recipe</span> <span class="o">=</span> <span class="s">plone.recipe.distros</span>
+<span class="na">urls</span> <span class="o">=</span>
+<span class="na">nested-packages</span> <span class="o">=</span>
+<span class="na">version-suffix-packages</span> <span class="o">=</span>
+</pre></div>
+</div>
+<p>However, you can list any number of downloads. The recipe is also
+able to deal with archives that contain a single top-level
+directory that contains a bundle of actual product directories
+(<em>nested-packages</em>), or packages that have a version number in the
+directory name and thus need to be renamed to get the actual
+product directory (<em>version-suffix-packages</em>).</p>
+<p>Consider the following distributions:</p>
+<div class="highlight-python"><pre># A typical distribution
+ExampleProduct-1.0.tgz
+ |
+ |- ExampleProduct
+     |
+     |- __init__.py
+     |- (product code)
+
+# A version suffix distribution
+AnotherExampleProduct-2.0.tgz
+ |
+ |- AnotherExampleProduct-2.0
+     |
+     |- __init__.py
+     |- (product code)
+
+# A nested package distribution
+ExampleProductBundle-1.0.tgz
+ |
+ |- ExampleProductBundle
+     |
+     |- ProductOne
+     |   |- __init__.py
+     |   |- (product code)
+     |
+     |- ProductTwo
+         |- __init__.py
+         |- (product code)</pre>
+</div>
+<p>Here is what the part would look like if we try to install the
+three distributions above:</p>
+<div class="highlight-cfg"><pre>[productdistros]
+recipe = plone.recipe.distros
+urls =
+    http://example.com/dist/ExampleProduct-1.0.tgz
+    http://example.com/dist/AnotherExampleProduct-2.0.tgz
+    http://example.com/dist/ExampleProductBundle-1.0.tgz
+nested-packages = ExampleProductBundle-1.0.tgz
+version-suffix-packages = AnotherExampleProduct-2.0.tgz</pre>
+</div>
+<p>You can specify multiple downloads on separate lines. When the
+recipe is run, the product directories for downloaded products are
+found in <em>parts/productdistros</em>.</p>
+</div>
+<div class="section" id="the-instance-section">
+<h2>The [instance] section<a class="headerlink" href="#the-instance-section" title="Permalink to this headline">¶</a></h2>
+<p>The instance section pulls it all together: It configures a Zope
+instance using the
+<a class="reference external" href="http://cheeseshop.python.org/pypi/plone.recipe.zope2instance">plone.recipe.zope2instance</a> script.
+Here is how it looks:</p>
+<div class="highlight-cfg"><pre>[instance]
+recipe = plone.recipe.zope2instance
+zope2-location = ${zope2:location}
+user = admin:admin
+http-address = 8080
+# comment the following two options in production sites
+debug-mode = on
+verbose-security = on
+
+eggs =
+    Plone
+    ${buildout:eggs}
+
+zcml =
+
+products =
+    ${buildout:directory}/products
+    ${productdistros:location}</pre>
+</div>
+<p>Here, we reference the Zope 2 installation from the <em>[zope2]</em> part
+- if you specified a location yourself when creating the buildout,
+you would see that one here. Then, we specify the initial admin
+user and password used only when creating the initial database, and
+the port that Zope will be bound to. We also turn on debug mode and
+verbose security. They are useful for development, but remember to
+turn them off in production sites since they can compromise the
+security of your site. These options are used to generate an
+appropriate <em>zope.conf</em> file for this instance. See the
+<a class="reference external" href="http://cheeseshop.python.org/pypi/plone.recipe.zope2instance">recipe page in the Cheese Shop</a>
+for more details on the options available.</p>
+<p>Next, we specify which eggs that will be made available to Zope.
+This references the &quot;global&quot; eggs from the <em>[buildout]</em> section, as
+well as Plone itself. You could add additional eggs here, though it
+is generally easier to specify these at the top of the file, so
+that they get included in the <em>${buildout:eggs}</em> working set.</p>
+<p>Zope 3 <em>configure.zcml</em> files are not automatically loaded for eggs
+or packages that lack <em>z3c.autoinclude</em> support and are not in the
+<em>Products</em> namespace. To load ZCML files for a regular package, we
+can make buildout create a ZCML slug by listing the package under
+the <em>zcml</em> option:</p>
+<div class="highlight-cfg"><pre>zcml =
+    my.package
+    my.package-overrides</pre>
+</div>
+<p>This assumes that <em>my.package</em> was previously referenced in the
+buildout. This would load both the main <em>configure.zcml*and the
+*overrides.zcml</em> file from this package.&nbsp; Over time, the need for
+these entries should diminish, as <em>z3c.autoinclude</em> support becomes
+widespread.</p>
+<p>Finally, we list the various directories that contain Zope 2 style
+products - akin to the <em>Products/</em> directory in a traditional
+instance. Notice how the <em>products/</em> directory in the main buildout
+directory comes first, followed by the products downloaded with the
+<em>[productdistros]</em> part.</p>
+<p>When the recipe is run, the Zope instance home will be
+<em>parts/instance</em>, and a control script is created in
+<em>./bin/instance</em>.</p>
+</div>
+<div class="section" id="the-zopepy-section">
+<h2>The [zopepy] section<a class="headerlink" href="#the-zopepy-section" title="Permalink to this headline">¶</a></h2>
+<p>This final section creates a Python interpreter that has all the
+eggs and packages (but not Zope 2 style products) that Zope would
+have during startup. This can be useful for testing purposes.</p>
+<div class="highlight-cfg"><div class="highlight"><pre><span class="k">[zopepy]</span>
+<span class="na">recipe</span> <span class="o">=</span> <span class="s">zc.recipe.egg</span>
+<span class="na">eggs</span> <span class="o">=</span> <span class="s">${instance:eggs}</span>
+<span class="na">interpreter</span> <span class="o">=</span> <span class="s">zopepy</span>
+<span class="na">extra-paths</span> <span class="o">=</span> <span class="s">${zope2:location}/lib/python</span>
+<span class="na">scripts</span> <span class="o">=</span> <span class="s">zopepy</span>
+</pre></div>
+</div>
+<p>Here, we copy the eggs from the <em>[instance]</em> section, and include
+in the pythonpath the Zope instance home.</p>
+<p>When the recipe is run, the script will be created in
+<em>./bin/zopepy</em>.</p>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../../index.html"><img src="../../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Understanding buildout.cfg</a><ul>
+<li><a class="reference internal" href="#the-main-buildout-section">The main [buildout] section</a></li>
+<li><a class="reference internal" href="#the-extends-and-versions-lines">The <em>extends</em> and <em>versions</em> lines</a></li>
+<li><a class="reference internal" href="#the-zope2-section">The [zope2] section</a></li>
+<li><a class="reference internal" href="#the-productdistros-section">The [productdistros] section</a></li>
+<li><a class="reference internal" href="#the-instance-section">The [instance] section</a></li>
+<li><a class="reference internal" href="#the-zopepy-section">The [zopepy] section</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="creating.html"
+                        title="previous chapter">Creating a buildout for your project</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="defaults.html"
+                        title="next chapter">Creating a buildout defaults file</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/tutorials/buildout/buildoutcfg.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="defaults.html" title="Creating a buildout defaults file"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="creating.html" title="Creating a buildout for your project"
+             >previous</a> |</li>
+        <li><a href="../../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Tutorials</a> &raquo;</li>
+          <li><a href="index.html" >Buildout</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

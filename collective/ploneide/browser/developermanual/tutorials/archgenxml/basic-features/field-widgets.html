@@ -1,0 +1,232 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Widgets &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../../../index.html" />
+    <link rel="up" title="Basic Features" href="index.html" />
+    <link rel="next" title="Methods and Actions" href="methods-and-actions.html" />
+    <link rel="prev" title="Attributes / Fields / Indexing" href="attributes-fields-indexing.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="methods-and-actions.html" title="Methods and Actions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="attributes-fields-indexing.html" title="Attributes / Fields / Indexing"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Tutorials</a> &raquo;</li>
+          <li><a href="../index.html" >Using ArchGenXML</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Basic Features</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="widgets">
+<h1>Widgets<a class="headerlink" href="#widgets" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#changing-the-default-widgets" id="id1">Changing the default widgets</a></li>
+<li><a class="reference internal" href="#creating-new-widgets" id="id2">Creating new widgets</a></li>
+</ul>
+</div>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">Setting up the Widgets for each field.</p>
+</div>
+<p>ArchGenXML will pick a default widget for your fields and fill in default labels and descriptions. For example, a <tt class="docutils literal"><span class="pre">string</span></tt> field gets a <tt class="docutils literal"><span class="pre">StringWidget</span></tt> by default, but a <tt class="docutils literal"><span class="pre">selection</span></tt> field type gets <tt class="docutils literal"><span class="pre">SelectionWidget</span></tt> on a StringField! You can override this in two ways. So ArchGenXML mixes up fields and widgets slightly for convinience reasons. Anyway, you can override all predefined definitions using widget options.</p>
+<p>Widget options are specified with the prefix <tt class="docutils literal"><span class="pre">widget:</span></tt>. As with normal field tagged values, unrecognised options will be passed straight through to the widget definition.</p>
+<p>The most common widget options are:</p>
+<p>widget:type -- sets the widget type used. Its the name of the widget class. You can use all widgets shipped within the Archetypes-Framework by just providing this tagged value. To use 3rd-Party widgets you additionally need to import the class using the <em>imports</em> tagged value on class level.</p>
+<p><tt class="docutils literal"><span class="pre">widget:label</span></tt> -- sets the widget's label</p>
+<p><tt class="docutils literal"><span class="pre">widget:description</span></tt> -- sets the widget's description</p>
+<p><tt class="docutils literal"><span class="pre">widget:label_msgid</span></tt> -- overrides the default label message id (i18n)</p>
+<p><tt class="docutils literal"><span class="pre">widget:description_msgid</span></tt> -- overrides the default description message id (i18n)</p>
+<p><tt class="docutils literal"><span class="pre">widget:i18n_domain</span></tt> -- sets the i18n domain (defaults to the product name)</p>
+<p>You may also use widget-specific options, such as <tt class="docutils literal"><span class="pre">widget:size</span></tt> where they apply. Look up possible widget-specific options at the documentation of the widget you want to use.</p>
+<div class="section" id="changing-the-default-widgets">
+<h2><a class="toc-backref" href="#id1">Changing the default widgets</a><a class="headerlink" href="#changing-the-default-widgets" title="Permalink to this headline">¶</a></h2>
+<p>To change the widget used for one field-type for a whole model, a product, a package or just for all fields in one class you can set on the product, package or class level the tagged value <tt class="docutils literal"><span class="pre">default:widget:FIELDNAMEABBREVIATION</span></tt> to <tt class="docutils literal"><span class="pre">WIDGETNAME</span></tt>. For example use the tagged value <tt class="docutils literal"><span class="pre">default:widget:Reference</span></tt> set it to <tt class="docutils literal"><span class="pre">ReferenceBrowserWidget</span></tt> to use the ReferenceBrowserWidget instead of the ReferenceWidget. You might also want to also use the <tt class="docutils literal"><span class="pre">imports</span></tt> tagged value and set it to <tt class="docutils literal"><span class="pre">from</span> <span class="pre">ATReferenceBrowserWidget.ATReferenceBrowserWidget</span> <span class="pre">import</span> <span class="pre">ReferenceBrowserWidget</span></tt> on your class to ensure that you get the widget definition imported into your class.</p>
+</div>
+<div class="section" id="creating-new-widgets">
+<h2><a class="toc-backref" href="#id2">Creating new widgets</a><a class="headerlink" href="#creating-new-widgets" title="Permalink to this headline">¶</a></h2>
+<p>To define a new widget add a class to your model with the <tt class="docutils literal"><span class="pre">&lt;&lt;widget&gt;&gt;</span></tt> stereotype.</p>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../../../index.html"><img src="../../../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Widgets</a><ul>
+<li><a class="reference internal" href="#changing-the-default-widgets">Changing the default widgets</a></li>
+<li><a class="reference internal" href="#creating-new-widgets">Creating new widgets</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="attributes-fields-indexing.html"
+                        title="previous chapter">Attributes / Fields / Indexing</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="methods-and-actions.html"
+                        title="next chapter">Methods and Actions</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../../_sources/tutorials/archgenxml/basic-features/field-widgets.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="methods-and-actions.html" title="Methods and Actions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="attributes-fields-indexing.html" title="Attributes / Fields / Indexing"
+             >previous</a> |</li>
+        <li><a href="../../../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Tutorials</a> &raquo;</li>
+          <li><a href="../index.html" >Using ArchGenXML</a> &raquo;</li>
+          <li><a href="index.html" >Basic Features</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

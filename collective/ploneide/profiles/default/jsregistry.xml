@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<object name="portal_javascripts" meta_type="JavaScripts Registry">
+
+<!--<javascript cacheable="True" compression="none" cookable="False"
+            enabled="True" expression=""
+            id="++resource++collective.ploneide.ace/ace.js" inline="False"/>
+
+<javascript cacheable="True" compression="none" cookable="False"
+            enabled="True" expression=""
+            id="++resource++collective.ploneide.ace/cockpit.js" inline="False"/>
+
+<javascript cacheable="True" compression="none" cookable="False"
+            enabled="True" expression=""
+            id="++resource++collective.ploneide.ace/mode-css.js" inline="False"/>
+
+<javascript cacheable="True" compression="none" cookable="False"
+            enabled="True" expression=""
+            id="++resource++collective.ploneide.ace/mode-html.js" inline="False"/>
+
+<javascript cacheable="True" compression="none" cookable="False"
+            enabled="True" expression=""
+            id="++resource++collective.ploneide.ace/mode-javascript.js" inline="False"/>
+
+<javascript cacheable="True" compression="none" cookable="False"
+            enabled="True" expression=""
+            id="++resource++collective.ploneide.ace/mode-python.js" inline="False"/>
+
+<javascript cacheable="True" compression="none" cookable="False"
+            enabled="True" expression=""
+            id="++resource++collective.ploneide.ace/mode-xml.js" inline="False"/>
+
+<javascript cacheable="True" compression="none" cookable="False"
+            enabled="True" expression=""
+            id="++resource++collective.ploneide.ace/theme-clouds.js" inline="False"/>
+
+<javascript cacheable="True" compression="none" cookable="False"
+            enabled="True" expression=""
+            id="++resource++collective.ploneide.ace/theme-clouds_midnight.js" inline="False"/>
+
+<javascript cacheable="True" compression="none" cookable="False"
+            enabled="True" expression=""
+            id="++resource++collective.ploneide.ace/theme-cobalt.js" inline="False"/>
+
+<javascript cacheable="True" compression="none" cookable="False"
+            enabled="True" expression=""
+            id="++resource++collective.ploneide.ace/theme-dawn.js" inline="False"/>
+
+<javascript cacheable="True" compression="none" cookable="False"
+            enabled="True" expression=""
+            id="++resource++collective.ploneide.ace/theme-eclipse.js" inline="False"/>
+
+<javascript cacheable="True" compression="none" cookable="False"
+            enabled="True" expression=""
+            id="++resource++collective.ploneide.ace/theme-idle_fingers.js" inline="False"/>
+
+<javascript cacheable="True" compression="none" cookable="False"
+            enabled="True" expression=""
+            id="++resource++collective.ploneide.ace/theme-kr_theme.js" inline="False"/>
+
+<javascript cacheable="True" compression="none" cookable="False"
+            enabled="True" expression=""
+            id="++resource++collective.ploneide.ace/theme-merbivore.js" inline="False"/>
+
+<javascript cacheable="True" compression="none" cookable="False"
+            enabled="True" expression=""
+            id="++resource++collective.ploneide.ace/theme-merbivore_soft.js" inline="False"/>
+
+<javascript cacheable="True" compression="none" cookable="False"
+            enabled="True" expression=""
+            id="++resource++collective.ploneide.ace/theme-mono_industrial.js" inline="False"/>
+
+<javascript cacheable="True" compression="none" cookable="False"
+            enabled="True" expression=""
+            id="++resource++collective.ploneide.ace/theme-monokai.js" inline="False"/>
+
+<javascript cacheable="True" compression="none" cookable="False"
+            enabled="True" expression=""
+            id="++resource++collective.ploneide.ace/theme-pastel_on_dark.js" inline="False"/>
+
+<javascript cacheable="True" compression="none" cookable="False"
+            enabled="True" expression=""
+            id="++resource++collective.ploneide.ace/theme-twilight.js" inline="False"/>
+
+<javascript cacheable="True" compression="none" cookable="False"
+            enabled="True" expression=""
+            id="++resource++collective.ploneide.ace/theme-vibrant_ink.js" inline="False"/>
+
+<javascript cacheable="True" compression="none" cookable="False"
+            enabled="True" expression=""
+            id="++resource++collective.ploneide.ace/worker-coffee.js" inline="False"/>
+
+<javascript cacheable="True" compression="none" cookable="False"
+            enabled="True" expression=""
+            id="++resource++collective.ploneide.ace/worker-javascript.js" inline="False"/>-->
+
+
+</object>

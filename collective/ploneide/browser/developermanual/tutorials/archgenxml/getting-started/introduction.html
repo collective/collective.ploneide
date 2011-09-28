@@ -1,0 +1,300 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Introduction &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../../../index.html" />
+    <link rel="up" title="Getting Started" href="index.html" />
+    <link rel="next" title="Installation" href="installation.html" />
+    <link rel="prev" title="Getting Started" href="index.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="Installation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Getting Started"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Tutorials</a> &raquo;</li>
+          <li><a href="../index.html" >Using ArchGenXML</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Getting Started</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#what-is-archgenxml" id="id1">What is ArchGenXML</a></li>
+<li><a class="reference internal" href="#why-should-i-use-archgenxml" id="id2">Why should I use ArchGenXML?</a></li>
+<li><a class="reference internal" href="#contributors" id="id3">Contributors</a><ul>
+<li><a class="reference internal" href="#authors" id="id4">Authors</a></li>
+<li><a class="reference internal" href="#sponsors" id="id5">Sponsors</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">An introduction to ArchGenXML — what it is, reasons to use it, who made it.</p>
+</div>
+<div class="section" id="what-is-archgenxml">
+<h2><a class="toc-backref" href="#id1">What is ArchGenXML</a><a class="headerlink" href="#what-is-archgenxml" title="Permalink to this headline">¶</a></h2>
+<p>With ArchGenXML, you can create working Python code without writing one single
+line of Python. It is a command-line utility that generates fully functional
+Zope Products, based on the Archetypes framework, from UML models using XMI
+(<tt class="docutils literal"><span class="pre">.xmi</span></tt>, <tt class="docutils literal"><span class="pre">.zargo</span></tt>, <tt class="docutils literal"><span class="pre">.zuml</span></tt>) files. The most common use-case is to
+generate a set of custom content types and folders, possibly with a few tools,
+a member type and some workflows thrown in.</p>
+<p>In practice, you draw your UML diagrams in a tool which has the ability to
+generate XMI files, like ArgoUML or Poseidon. Once you are ready to test your
+product, you run ArchGenXML on the XMI file, which will generate the product
+directory. After generation, you will be able to install your product in Plone
+and have your new content types, tools and workflows available.</p>
+<p>At present, round-trip support is not implemented: custom code can't be
+converted back into XMI (and thus diagrams). However, you can re-generate your
+product over existing code; method bodies and certain &quot;protected&quot; code sections
+will be preserved. This means that you can evolve your product's public
+interfaces, its methods and its attributes in the UML model, without fear of
+losing your hand-written code.</p>
+<p>ArchGenXML is hosted at <a class="reference external" href="http://svn.plone.org/svn/archetypes/ArchGenXML/">svn.plone.org</a>
+as a subproject of the Archetypes project. It is released under GNU General
+Public Licence 2 or later.</p>
+<img alt="Eyecatcher: UML Model, small image as an example from a real life project of BlueDynamics" src="../../../_images/uml-model-small.png" style="width: 400px;" />
+</div>
+<div class="section" id="why-should-i-use-archgenxml">
+<h2><a class="toc-backref" href="#id2">Why should I use ArchGenXML?</a><a class="headerlink" href="#why-should-i-use-archgenxml" title="Permalink to this headline">¶</a></h2>
+<p>Major reasons:</p>
+<ul class="simple">
+<li>You want to save time</li>
+<li>You are a lazy programmer</li>
+<li>You don't like to reinvent the wheel</li>
+<li>You don't like copying and pasting code (and bugs)</li>
+<li>You make heavy use of references and interfaces</li>
+<li>You have big projects with many different custom types</li>
+<li>You want or need a well-documented interface to your product</li>
+<li>You like structured model- and pattern-driven software development</li>
+<li>You want to maintain your project in future without getting a headache</li>
+</ul>
+<p>and many other good and odd reasons.</p>
+</div>
+<div class="section" id="contributors">
+<h2><a class="toc-backref" href="#id3">Contributors</a><a class="headerlink" href="#contributors" title="Permalink to this headline">¶</a></h2>
+<p>The project was initially started by Phil Auersperg. Thanks to his laziness :-)</p>
+<div class="section" id="authors">
+<h3><a class="toc-backref" href="#id4">Authors</a><a class="headerlink" href="#authors" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt><strong>Phil Auersperg (Project Leader)</strong></dt>
+<dd>BlueDynamics Alliance, Auersperg-Castell KEG, <a class="reference external" href="mailto:phil&#37;&#52;&#48;bluedynamics&#46;com">phil<span>&#64;</span>bluedynamics<span>&#46;</span>com</a>,</dd>
+<dt><strong>Jens Klein (Release Manager, Developer and Doc-Writer)</strong></dt>
+<dd>BlueDynamics Alliance, Klein &amp; Partner KEG, <a class="reference external" href="mailto:jens&#37;&#52;&#48;bluedynamics&#46;com">jens<span>&#64;</span>bluedynamics<span>&#46;</span>com</a>,</dd>
+<dt><strong>Reinout van Rees (Co-Release Manager, Developer and Doc-Writer)</strong></dt>
+<dd>ZestSoftware</dd>
+<dt><strong>Fabiano Weimar dos Santos (Ideas, Testing, Bugfixing, Workflow)</strong></dt>
+<dd>Weimar Desenvolvimento e Consultoria em Informatica Ltda., <a class="reference external" href="mailto:xiru&#37;&#52;&#48;xiru&#46;org">xiru<span>&#64;</span>xiru<span>&#46;</span>org</a>,</dd>
+<dt><strong>Martin Aspeli (Improvements, bug fixes and documentation)</strong></dt>
+<dd>Martin Aspeli</dd>
+<dt><strong>Robert Niederreiter (Lots of base work on AGX 2.0)</strong></dt>
+<dd>Robert Niederreiter</dd>
+<dt><strong>and others</strong></dt>
+<dd>thanks to everybody who contributed with testing, doc-writing or code-pieces!</dd>
+</dl>
+</div>
+<div class="section" id="sponsors">
+<h3><a class="toc-backref" href="#id5">Sponsors</a><a class="headerlink" href="#sponsors" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Xiru.org, Brazil (Fabiano Weimar dos Santos) sponsors a valuable amount of
+money into workflow support (State diagrams -&gt; DCWorkflow, will go into release
+1.2),</li>
+<li>PilotSystems, Paris, France (David Sapiro),</li>
+<li>OpenSource.ag, Innsbruck, Austria (Georg Pleger).</li>
+</ul>
+<p>If you want to contribute ArchGenXML by improving the code, helping with
+documentation or sponsoring it to make us improve it, please contact one of
+us.</p>
+</div>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../../../index.html"><img src="../../../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Introduction</a><ul>
+<li><a class="reference internal" href="#what-is-archgenxml">What is ArchGenXML</a></li>
+<li><a class="reference internal" href="#why-should-i-use-archgenxml">Why should I use ArchGenXML?</a></li>
+<li><a class="reference internal" href="#contributors">Contributors</a><ul>
+<li><a class="reference internal" href="#authors">Authors</a></li>
+<li><a class="reference internal" href="#sponsors">Sponsors</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Getting Started</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="installation.html"
+                        title="next chapter">Installation</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../../_sources/tutorials/archgenxml/getting-started/introduction.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="Installation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Getting Started"
+             >previous</a> |</li>
+        <li><a href="../../../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Tutorials</a> &raquo;</li>
+          <li><a href="../index.html" >Using ArchGenXML</a> &raquo;</li>
+          <li><a href="index.html" >Getting Started</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

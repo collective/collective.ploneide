@@ -1,0 +1,42 @@
+<!--<script type="text/javascript">
+
+
+window.onload = function() {
+    $('#reload-form').ajaxForm({
+            target: '#output'
+    });
+
+}
+
+</script>
+-->
+
+<h1>plone.reload</h1>
+<tal:block tal:condition="view/status">
+
+    <h2>Status</h2>
+
+    <pre tal:content="view/status"
+         style="background-color:#ddd; padding:0.5em;
+                border: 1px black dashed; line-height:1.2em;">
+        Status
+    </pre>
+    
+</tal:block>
+<br/>
+<br/>
+<form action="#"
+      method="post"
+      id="reload-form"
+      name="reload-form"
+      tal:attributes="action request/getURL">
+      
+    <input type="hidden" name="action" value="zcml"/>
+      
+    <input name="plone.reload" type="submit" value="Reload Code and ZCML" />
+    <br/>
+    <br/>
+    <input tal:condition="view/isRestartable"
+           name="plone.restart" type="submit" value="Restart Plone" />
+
+</form>

@@ -1,0 +1,372 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Unicode encoding and decoding &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Troubleshooting" href="index.html" />
+    <link rel="next" title="Exceptions" href="exceptions.html" />
+    <link rel="prev" title="Basic troubleshooting" href="basic.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="exceptions.html" title="Exceptions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="basic.html" title="Basic troubleshooting"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Troubleshooting</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="unicode-encoding-and-decoding">
+<h1>Unicode encoding and decoding<a class="headerlink" href="#unicode-encoding-and-decoding" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction-why-unicode-is-difficult" id="id1">Introduction: Why unicode is difficult?</a></li>
+<li><a class="reference internal" href="#sys-setdefaultencoding" id="id2">sys.setdefaultencoding()</a></li>
+<li><a class="reference internal" href="#unicodeencodeerror" id="id3">UnicodeEncodeError</a></li>
+<li><a class="reference internal" href="#unicodedecodeerror" id="id4">UnicodeDecodeError</a><ul>
+<li><a class="reference internal" href="#safe-way-to-decode-strings" id="id5">Safe way to <tt class="docutils literal"><span class="pre">decode()</span></tt> strings</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#infamous-non-breaking-unicode-space-xa0" id="id6">Infamous non-breaking Unicode space \xa0</a><ul>
+<li><a class="reference internal" href="#how-to-fix" id="id7">How to fix</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="introduction-why-unicode-is-difficult">
+<h2><a class="toc-backref" href="#id1">Introduction: Why unicode is difficult?</a><a class="headerlink" href="#introduction-why-unicode-is-difficult" title="Permalink to this headline">¶</a></h2>
+<p>Python 2.x does not make clear distinction between:</p>
+<ul class="simple">
+<li>8-bit strings (byte data)</li>
+<li>16-bit unicode strings (character data)</li>
+</ul>
+<p>Developers use these two formats interchangeably, because it is so easy and
+Python does not warn you about this.</p>
+<p>However, it will only work as long as the input does not encounter any
+international, non-ASCII, characters.  When 8-bit encoded string data and
+16-bit raw Unicode string data gets mixed up, by being run through encoding
+first, really nasty things start to happen.</p>
+<p>Read more:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.amk.ca/python/howto/unicode">http://www.amk.ca/python/howto/unicode</a></li>
+<li><a class="reference external" href="http://evanjones.ca/python-utf8.html">http://evanjones.ca/python-utf8.html</a></li>
+</ul>
+</div>
+<div class="section" id="sys-setdefaultencoding">
+<h2><a class="toc-backref" href="#id2">sys.setdefaultencoding()</a><a class="headerlink" href="#sys-setdefaultencoding" title="Permalink to this headline">¶</a></h2>
+<p>Python has a <strong>system-wide</strong> setting to enforce encoding of all unicode
+input automatically to utf-8 when used as 8-bit string.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This is a wrong way to fix things and it will break other things.
+You have been warned.</p>
+</div>
+<ul class="simple">
+<li><a class="reference external" href="http://tarekziade.wordpress.com/2008/01/08/syssetdefaultencoding-is-evil/">http://tarekziade.wordpress.com/2008/01/08/syssetdefaultencoding-is-evil/</a></li>
+</ul>
+</div>
+<div class="section" id="unicodeencodeerror">
+<h2><a class="toc-backref" href="#id3">UnicodeEncodeError</a><a class="headerlink" href="#unicodeencodeerror" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">UnicodeEncodeError</span></tt>: 'ascii' codec can't encode character u'xe4' in position 4: ordinal not in range(128)</p>
+<p>This is usually because you are trying to output/store unicode data using
+outdated methods, e.g.</p>
+<ul class="simple">
+<li>printing,</li>
+<li>logging,</li>
+<li>using 7-bit ids ...</li>
+</ul>
+<p>Instead of:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">foo</span>
+</pre></div>
+</div>
+<p>do:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">foo</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&quot;utf-8&quot;</span><span class="p">)</span> <span class="c"># You are sure this is a unicode string</span>
+</pre></div>
+</div>
+<p>Filtering example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">safe_print</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Do not die on bad input when doing debug prints &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">print</span> <span class="n">x</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span> <span class="n">x</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&quot;utf-8&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="unicodedecodeerror">
+<h2><a class="toc-backref" href="#id4">UnicodeDecodeError</a><a class="headerlink" href="#unicodedecodeerror" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://wiki.python.org/moin/UnicodeDecodeError">http://wiki.python.org/moin/UnicodeDecodeError</a></li>
+</ul>
+<div class="section" id="safe-way-to-decode-strings">
+<h3><a class="toc-backref" href="#id5">Safe way to <tt class="docutils literal"><span class="pre">decode()</span></tt> strings</a><a class="headerlink" href="#safe-way-to-decode-strings" title="Permalink to this headline">¶</a></h3>
+<p>This example will accept all string input and convert it to proper
+unicode strings.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="c"># Ignore errors even if the string is not proper UTF-8 or has</span>
+    <span class="c"># broken marker bytes.</span>
+    <span class="c"># Python built-in function unicode() can do this.</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s">&quot;utf-8&quot;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s">&quot;ignore&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="c"># Assume the value object has proper __unicode__() method</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><a class="reference external" href="http://pyref.infogami.com/__unicode__">http://pyref.infogami.com/__unicode__</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="infamous-non-breaking-unicode-space-xa0">
+<h2><a class="toc-backref" href="#id6">Infamous non-breaking Unicode space \xa0</a><a class="headerlink" href="#infamous-non-breaking-unicode-space-xa0" title="Permalink to this headline">¶</a></h2>
+<p>Press CTRL+space / AltGr space on Linux to accidentally create it.</p>
+<p><strong>You can't see it.</strong> But it breaks everything.</p>
+<div class="section" id="how-to-fix">
+<h3><a class="toc-backref" href="#id7">How to fix</a><a class="headerlink" href="#how-to-fix" title="Permalink to this headline">¶</a></h3>
+<p>Example to how to fix non-breaking space characters which have ended up
+in reStructuredText <tt class="docutils literal"><span class="pre">.txt</span></tt> files.  This is Unicode character code A0.</p>
+<p>Example fix_wtf_space.py:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot; Fix non-breaking space characters which have ended up to reST</span>
+<span class="sd">    .txt files.  This is Unicode character code A0.</span>
+
+<span class="sd">    Press CTRL+space / AltGr space on Linux to accidentally create it.</span>
+
+<span class="sd">    E.g. as a sympton the following exception is raised if you try</span>
+<span class="sd">    to upload Python egg::</span>
+
+<span class="sd">      File &quot;/Library/Python/2.6/site-packages/docutils-0.6-py2.6.egg/docutils/parsers/rst/states.py&quot;, line 2621, in blank</span>
+<span class="sd">        self.parent += self.literal_block()</span>
+<span class="sd">      File &quot;/Library/Python/2.6/site-packages/docutils-0.6-py2.6.egg/docutils/parsers/rst/states.py&quot;, line 2712, in literal_block</span>
+<span class="sd">        literal_block = nodes.literal_block(data, data)</span>
+<span class="sd">      File &quot;/Library/Python/2.6/site-packages/docutils-0.6-py2.6.egg/docutils/nodes.py&quot;, line 810, in __init__</span>
+<span class="sd">        TextElement.__init__(self, rawsource, text, *children, **attributes)</span>
+<span class="sd">      File &quot;/Library/Python/2.6/site-packages/docutils-0.6-py2.6.egg/docutils/nodes.py&quot;, line 798, in __init__</span>
+<span class="sd">        textnode = Text(text)</span>
+<span class="sd">      File &quot;/Library/Python/2.6/site-packages/docutils-0.6-py2.6.egg/docutils/nodes.py&quot;, line 331, in __new__</span>
+<span class="sd">        return reprunicode.__new__(cls, data)</span>
+<span class="sd">    UnicodeDecodeError: &#39;ascii&#39; codec can&#39;t decode byte 0xc2 in position 715: ordinal not in range(128)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="k">def</span> <span class="nf">fix</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Fix a single .txt file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">input</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s">&quot;rt&quot;</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="nb">input</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&quot;utf-8&quot;</span><span class="p">)</span>
+
+    <span class="c"># Show if we get bad hits</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="s">u&quot;</span><span class="se">\xa0</span><span class="s">&quot;</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Ufff&quot;</span>
+
+    <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">u&quot;</span><span class="se">\xa0</span><span class="s">&quot;</span><span class="p">,</span> <span class="s">u&quot; &quot;</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&quot;utf-8&quot;</span><span class="p">)</span>
+
+    <span class="n">output</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s">&quot;wt&quot;</span><span class="p">)</span>
+    <span class="n">output</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="n">output</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+
+<span class="c"># Process all .txt files in the</span>
+<span class="c"># current folder</span>
+<span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()):</span>
+    <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&quot;.txt&quot;</span><span class="p">):</span>
+        <span class="n">fix</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Unicode encoding and decoding</a><ul>
+<li><a class="reference internal" href="#introduction-why-unicode-is-difficult">Introduction: Why unicode is difficult?</a></li>
+<li><a class="reference internal" href="#sys-setdefaultencoding">sys.setdefaultencoding()</a></li>
+<li><a class="reference internal" href="#unicodeencodeerror">UnicodeEncodeError</a></li>
+<li><a class="reference internal" href="#unicodedecodeerror">UnicodeDecodeError</a><ul>
+<li><a class="reference internal" href="#safe-way-to-decode-strings">Safe way to <tt class="docutils literal"><span class="pre">decode()</span></tt> strings</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#infamous-non-breaking-unicode-space-xa0">Infamous non-breaking Unicode space \xa0</a><ul>
+<li><a class="reference internal" href="#how-to-fix">How to fix</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="basic.html"
+                        title="previous chapter">Basic troubleshooting</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="exceptions.html"
+                        title="next chapter">Exceptions</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/troubleshooting/unicode.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="exceptions.html" title="Exceptions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="basic.html" title="Basic troubleshooting"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Troubleshooting</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

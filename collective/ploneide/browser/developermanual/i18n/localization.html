@@ -1,0 +1,721 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Translating text strings &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Internationalization (i18n)" href="index.html" />
+    <link rel="next" title="Language functions" href="language.html" />
+    <link rel="prev" title="Internationalization (i18n)" href="index.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="language.html" title="Language functions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Internationalization (i18n)"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Internationalization (i18n)</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="translating-text-strings">
+<h1>Translating text strings<a class="headerlink" href="#translating-text-strings" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">Translating Python and TAL template source code text strings using gettext
+framework and other Plone/Zope i18n facilities.</p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
+<li><a class="reference internal" href="#zope-i18n" id="id2">zope.i18n</a><ul>
+<li><a class="reference internal" href="#generating-a-pot-template-file-for-your-package-s" id="id3">Generating a .pot template file for your package(s)</a></li>
+<li><a class="reference internal" href="#marking-translatable-strings" id="id4">Marking translatable strings</a></li>
+<li><a class="reference internal" href="#automatically-translated-message-ids" id="id5">Automatically translated message ids</a></li>
+<li><a class="reference internal" href="#manually-translated-message-ids" id="id6">Manually translated message ids</a></li>
+<li><a class="reference internal" href="#non-python-message-ids" id="id7">Non-python message ids</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#testing-translations" id="id8">Testing translations</a><ul>
+<li><a class="reference internal" href="#plone-4" id="id9">Plone 4</a></li>
+<li><a class="reference internal" href="#plone-3" id="id10">Plone 3</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#translation-string-substitution" id="id11">Translation string substitution</a></li>
+<li><a class="reference internal" href="#placesstranslationservice" id="id12">PlacessTranslationService</a></li>
+<li><a class="reference internal" href="#i18ndude" id="id13">i18ndude</a><ul>
+<li><a class="reference internal" href="#installing-i18ndude" id="id14">Installing i18ndude</a></li>
+<li><a class="reference internal" href="#setting-up-folder-structure-for-finnish-and-english" id="id15">Setting up folder structure for Finnish and English</a></li>
+<li><a class="reference internal" href="#creating-pot-base-file" id="id16">Creating .pot base file</a></li>
+<li><a class="reference internal" href="#manual-po-entries" id="id17">Manual po entries</a></li>
+<li><a class="reference internal" href="#managing-po-files" id="id18">Managing .po files</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dynamic-content" id="id19">Dynamic content</a></li>
+<li><a class="reference internal" href="#other" id="id20">Other</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Internationalization is a process to make your code locale and language aware.
+Usually this means supplying translation files for text strings
+used in the code.</p>
+<p>Plone internally uses UNIX standard <a class="reference external" href="http://www.gnu.org/software/gettext/">gettext</a>
+tool to perform i18n.</p>
+<p>There are two separate gettext systems. Both use <cite>.po &lt;http://www.gnu.org/software/hello/manual/gettext/PO-Files.html&gt;</cite>
+file format to describe translations.</p>
+<p>Note that this chapter concerns only code-level translations. Content translations are
+managed by Products.LinguaPlone add-on product.</p>
+</div>
+<div class="section" id="zope-i18n">
+<h2><a class="toc-backref" href="#id2">zope.i18n</a><a class="headerlink" href="#zope-i18n" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Follows gettext best practices</li>
+<li>Translations are stored in <em>locales</em> folder of your application. Example: <em>locales/fi/LC_MESSAGES/your.app.po</em></li>
+<li>Has zope.i18nmessageid package which is string-like class allowing storing translation domain
+with translatable text strings easily</li>
+<li><cite>.po</cite> files must be manually converted to <cite>.mo</cite> binary files every time the translations are updated.
+See i18ndude.</li>
+</ul>
+<p>Plone (at least 3.3) uses only file path and name to search the translation files.
+Information in the .po file headers is ignored.</p>
+<div class="section" id="generating-a-pot-template-file-for-your-package-s">
+<h3><a class="toc-backref" href="#id3">Generating a .pot template file for your package(s)</a><a class="headerlink" href="#generating-a-pot-template-file-for-your-package-s" title="Permalink to this headline">¶</a></h3>
+<p>infrae.i18nextract can be used in your buildout, to create a script which searches particular packages for translation strings. This can be particularly useful for creating a single translations package which contains the translations for the set of packages which make up your application.</p>
+<p>Add the following to your buildout.cfg:</p>
+<div class="highlight-python"><pre>[translation]
+recipe = infrae.i18nextract
+packages =
+   myapplication.policy
+   myapplication .theme
+output = ${buildout:directory}/src/myapplication.translation/myapplication/translation/locales
+output-package = myapplication.translations
+domain = mypackage</pre>
+</div>
+<p>Running the ./bin/translation-extract script will produce a .pot file in the specified output directory which can then be used to create the .po files for each translation:</p>
+<div class="highlight-sh"><div class="highlight"><pre>msginit --locale<span class="o">=</span>fr --input<span class="o">=</span>locales/mypackage.pot --output<span class="o">=</span>locales/fr/LC_MESSAGES/mypackage.po
+</pre></div>
+</div>
+<p>The locales directory should contain a directory for each language, and a directory called LC_MESSAGES within each of these, followed by the corresponding .po files containing the translation strings:</p>
+<div class="highlight-sh"><div class="highlight"><pre>./locales/en/LC_MESSAGES/mypackage.po
+./locales/fi/LC_MESSAGES/mypackage.po
+./locales/ga/LC_MESSAGES/mypackage.po
+</pre></div>
+</div>
+</div>
+<div class="section" id="marking-translatable-strings">
+<h3><a class="toc-backref" href="#id4">Marking translatable strings</a><a class="headerlink" href="#marking-translatable-strings" title="Permalink to this headline">¶</a></h3>
+<p>Each module declares its own MessageFactory which is a callable and marks strings with translation domain.
+MessageFactory is declared at main __init__.py file of your package.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">zope.i18nmessageid</span> <span class="kn">import</span> <span class="n">MessageFactory</span>
+
+<span class="c"># your.app.package must match domain declaration in .po files</span>
+<span class="n">MessageFactory</span> <span class="o">=</span> <span class="n">MessageFactory</span><span class="p">(</span><span class="s">&#39;youpackage.name&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You also need to have the following ZCML entry:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;configure</span>
+    <span class="na">xmlns:i18n=</span><span class="s">&quot;http://namespaces.zope.org/i18n&quot;</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;i18n:registerTranslations</span> <span class="na">directory=</span><span class="s">&quot;locales&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;/configure&gt;</span>
+</pre></div>
+</div>
+<p>After the set-up above you can use message factory to mark strings with translation domains.
+i18ndude translation utilities use underscore _ to mark translatable strings (gettext message ids).
+Message ids must be unicode strings.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">your.app.package</span> <span class="kn">import</span> <span class="n">yourAppMessageFactory</span> <span class="k">as</span> <span class="n">_</span>
+
+<span class="n">my_translatable_text</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s">u&quot;My text&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The object will still look like a string:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_translatable_text</span>
+<span class="go">u&#39;My text&#39;</span>
+</pre></div>
+</div>
+<p>But in reality it is zope.i18nmessageid.message.Message object.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_translatable_text</span><span class="o">.</span><span class="n">__class__</span>
+<span class="go">&lt;type &#39;zope.i18nmessageid.message.Message&#39;&gt;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_translatable_text</span><span class="o">.</span><span class="n">domain</span>
+<span class="go">&#39;your.app.package&#39;</span>
+</pre></div>
+</div>
+<p>To see the translation:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">zope.i18n</span> <span class="kn">import</span> <span class="n">translate</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">translate</span><span class="p">(</span><span class="n">my_translatable_text</span><span class="p">)</span>
+<span class="go">u&quot;The text of the translation.&quot; # This is the corresponding msgstr from the .po file</span>
+</pre></div>
+</div>
+<p>For more information see</p>
+<ul class="simple">
+<li><a class="reference external" href="http://grok.zope.org/documentation/how-to/how-to-internationalize-your-application">http://grok.zope.org/documentation/how-to/how-to-internationalize-your-application</a></li>
+</ul>
+</div>
+<div class="section" id="automatically-translated-message-ids">
+<h3><a class="toc-backref" href="#id5">Automatically translated message ids</a><a class="headerlink" href="#automatically-translated-message-ids" title="Permalink to this headline">¶</a></h3>
+<p>Plone will automatically perform translation for message ids which are outputted in page templates.</p>
+<p>The following code would translate my_translateable_text to the native language
+activated for the current page.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;span</span> <span class="na">tal:content=</span><span class="s">&quot;view/my_translateable_text&quot;</span><span class="nt">&gt;</span>
+</pre></div>
+</div>
+<p>Note that since my_translateable_text is zope.i18nmessageid.message.Message containing
+its own gettext domain information, the i18n:domain attribute in page templates does not
+affect message ids declared through message factories.</p>
+</div>
+<div class="section" id="manually-translated-message-ids">
+<h3><a class="toc-backref" href="#id6">Manually translated message ids</a><a class="headerlink" href="#manually-translated-message-ids" title="Permalink to this headline">¶</a></h3>
+<p>If you need to manipulate translated text outside page templates, you need
+to perform the final translation manually.</p>
+<p>Translation always needs context (i.e. under which site the translation happens),
+as the active language and other preferences are read from the HTTP request object
+and site object settings.</p>
+<p>Translation can be performed using context.translate() method:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Translate some text</span>
+<span class="n">msgid</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s">u&quot;My text&quot;</span><span class="p">)</span> <span class="c"># my_text is zope.</span>
+
+<span class="c"># Use inherited translate() function to get the final text string</span>
+<span class="n">translated</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">msgid</span><span class="p">)</span>
+
+<span class="c"># translated is now u&quot;Käännetty teksti&quot; (in Finnish)</span>
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">context.translate()</span></tt> uses translate.py Python script from
+LanguageTool.</p>
+<p>It has the signature:</p>
+<div class="highlight-python"><pre>def translate(self, domain, msgid, mapping=None, context=None,
+      target_language=None, default=None):</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Translation needs HTTP request object and thus may not work correctly
+from command-line scripts.</p>
+</div>
+</div>
+<div class="section" id="non-python-message-ids">
+<h3><a class="toc-backref" href="#id7">Non-python message ids</a><a class="headerlink" href="#non-python-message-ids" title="Permalink to this headline">¶</a></h3>
+<p>There are also other message id markers in code outside Python domain</p>
+<ul class="simple">
+<li>ZCML entries have their own mechanism</li>
+<li>GenericSetup XML have their own mechanism</li>
+<li>TAL page templates have their own mechanism</li>
+</ul>
+</div>
+</div>
+<div class="section" id="testing-translations">
+<h2><a class="toc-backref" href="#id8">Testing translations</a><a class="headerlink" href="#testing-translations" title="Permalink to this headline">¶</a></h2>
+<p>Here is a simple way to check if your gettext domains are correctly loaded.</p>
+<div class="section" id="plone-4">
+<h3><a class="toc-backref" href="#id9">Plone 4</a><a class="headerlink" href="#plone-4" title="Permalink to this headline">¶</a></h3>
+<p>You can start Plone debug shell and manually check if translations can be performed.</p>
+<p>First start Plone in debug shell:</p>
+<div class="highlight-python"><pre>bin/instance debug</pre>
+</div>
+</div>
+<div class="section" id="plone-3">
+<h3><a class="toc-backref" href="#id10">Plone 3</a><a class="headerlink" href="#plone-3" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>You can find PlacelessTranslationService in Zope Management Interface root/control panel (not site root)</li>
+</ul>
+</div>
+</div>
+<div class="section" id="translation-string-substitution">
+<h2><a class="toc-backref" href="#id11">Translation string substitution</a><a class="headerlink" href="#translation-string-substitution" title="Permalink to this headline">¶</a></h2>
+<p>Translation string substitutions must be used when the final translated
+message contains variable strings in it.</p>
+<p>Plone content classes inherit translate() function which can be
+used to get the final translated string.
+It will use the currently activate language.
+Translation domain will be taken from the msgid object
+itself, which is string-like zope.i18nmessageid instance.</p>
+<p>Message ids are immutable (read-only)
+objects so you need to always create a new message id
+if you use different variable substituion mappings.</p>
+<p>Python code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">saariselka.app</span> <span class="kn">import</span> <span class="n">appMessageFactory</span> <span class="k">as</span> <span class="n">_</span>
+
+<span class="k">class</span> <span class="nc">SomeView</span><span class="p">(</span><span class="n">BrowserView</span><span class="p">):</span>
+
+
+    <span class="k">def</span> <span class="nf">do_stuff</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">msgid</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s">u&quot;search_results_found_msg&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">u&quot;Found ${results} results&quot;</span><span class="p">,</span> <span class="n">mapping</span><span class="o">=</span><span class="p">{</span> <span class="s">u&quot;results&quot;</span> <span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">contents</span><span class="p">)})</span>
+
+        <span class="c"># Use inherited translate() function to get the final text string</span>
+        <span class="n">translated</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">msgid</span><span class="p">)</span>
+
+        <span class="c"># Show the final result count to the user as a portal status message</span>
+        <span class="n">messages</span> <span class="o">=</span> <span class="n">IStatusMessage</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">)</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">addStatusMessage</span><span class="p">(</span><span class="n">translated</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s">&quot;info&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Corresponding .po file entry:</p>
+<div class="highlight-python"><pre>#. Default: "Found ${results} results"
+#: ./browser/accommondationsummaryview.py:429
+msgid "search_results_found_msg"
+msgstr "Löytyi ${results} majoituskohdetta"</pre>
+</div>
+<p>For more information, see</p>
+<ul class="simple">
+<li><a class="reference external" href="http://wiki.zope.org/zope3/TurningMessageIDsIntoRocks">http://wiki.zope.org/zope3/TurningMessageIDsIntoRocks</a></li>
+</ul>
+</div>
+<div class="section" id="placesstranslationservice">
+<h2><a class="toc-backref" href="#id12">PlacessTranslationService</a><a class="headerlink" href="#placesstranslationservice" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Historic, being phased out</li>
+<li>Stores .po files in <em>i18n</em> folder of your add-on product</li>
+<li>Used for main &quot;plone&quot; translation catalog (until Plone 3.3.x)</li>
+<li>Translation files are processed when Plone is restarted. Example: <em>i18n/yourapp-fi.po</em>.</li>
+</ul>
+</div>
+<div class="section" id="i18ndude">
+<h2><a class="toc-backref" href="#id13">i18ndude</a><a class="headerlink" href="#i18ndude" title="Permalink to this headline">¶</a></h2>
+<p>i18ndude is developer command-line utility to manage .po and .mo files.</p>
+<p>Usually you build our own shell script wrapper around i18ndude to automatize
+generation of .mo files of your product .po files.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Plone 3.3 and onwards do not need manual .po -&gt; .mo compilation,
+but it will happen on start up. Plone 4 has a special switch for
+this: in your buildout.cfg in the part using
+plone.recipe.zope2instance you can set an environment variable
+for this:</p>
+<div class="highlight-python"><pre>environment-vars =
+    zope_i18n_compile_mo_files true</pre>
+</div>
+<p class="last">Note that the value does not matter: the code in <tt class="docutils literal"><span class="pre">zope.i18n</span></tt>
+simply looks for the existence of the variable and does not
+care what its value is.</p>
+</div>
+<p>See</p>
+<ul class="simple">
+<li><a class="reference external" href="http://vincentfretin.ecreall.com/articles/my-translation-doesnt-show-up-in-plone-4">http://vincentfretin.ecreall.com/articles/my-translation-doesnt-show-up-in-plone-4</a></li>
+</ul>
+<p>Examples</p>
+<ul class="simple">
+<li><a class="reference external" href="http://pypi.python.org/pypi/i18ndude">i18ndude Python package</a></li>
+<li><a class="reference external" href="http://maurits.vanrees.org/weblog/archive/2007/09/i18n-locales-and-plone-3.0">i18ndude example for Plone 3.0 and later</a></li>
+<li><a class="reference external" href="http://blogs.ingeniweb.com/blogs/user/7/tag/i18ndude/">i18ndude example for Plone 2.5</a></li>
+</ul>
+<div class="section" id="installing-i18ndude">
+<h3><a class="toc-backref" href="#id14">Installing i18ndude</a><a class="headerlink" href="#installing-i18ndude" title="Permalink to this headline">¶</a></h3>
+<p>The recommended method is to have i18ndude installed via your <a class="reference internal" href="../tutorials/buildout/index.html"><em>buildout</em></a>.</p>
+<p>Add the following to your buildout.cfg:</p>
+<div class="highlight-python"><pre>parts =
+        ...
+        i18ndude
+
+[i18ndude]
+unzip = true
+recipe = zc.recipe.egg
+eggs = i18ndude</pre>
+</div>
+<p>After this <tt class="docutils literal"><span class="pre">i18ndude</span></tt> is available in your <em>buildout/bin</em> folder</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">bin/i18ndude -h</span>
+<span class="go">Usage: i18ndude command [options] [path | file1 file2 ...]]</span>
+</pre></div>
+</div>
+<p>You can also call it relative to your current package source folder</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">huiske-imac:twinapex moo$</span>  <span class="nb">cd </span>src/mfabrik.plonezohointegration/
+<span class="gp">huiske-imac:mfabrik.plonezohointegration moo$</span> ../../bin/i18ndude
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Do not easy_install i18ndude. i18ndude depends on various Zope packages and
+pulling them to your system-wide Python configuration could be dangerous,
+due to potential conflicts with corresponding, but different versions,
+of the same packages used with Plone.</p>
+</div>
+<p>More information</p>
+<ul class="simple">
+<li><a class="reference external" href="http://markmail.org/message/gru5oaxdl452ekh6#query:+page:1+mid:m22a2ap4xwtwogs5+state:results">http://markmail.org/message/gru5oaxdl452ekh6#query:+page:1+mid:m22a2ap4xwtwogs5+state:results</a></li>
+</ul>
+</div>
+<div class="section" id="setting-up-folder-structure-for-finnish-and-english">
+<h3><a class="toc-backref" href="#id15">Setting up folder structure for Finnish and English</a><a class="headerlink" href="#setting-up-folder-structure-for-finnish-and-english" title="Permalink to this headline">¶</a></h3>
+<p>Example:</p>
+<div class="highlight-python"><pre>mkdir locales
+mkdir locales/fi
+mkdir locales/en
+mkdir locales/fi/LC_MESSAGES
+mkdir locales/en/LC_MESSAGES</pre>
+</div>
+</div>
+<div class="section" id="creating-pot-base-file">
+<h3><a class="toc-backref" href="#id16">Creating .pot base file</a><a class="headerlink" href="#creating-pot-base-file" title="Permalink to this headline">¶</a></h3>
+<p>Example:</p>
+<div class="highlight-python"><pre>i18ndude rebuild-pot --pot locales/mydomain.pot --create your.app.package .</pre>
+</div>
+</div>
+<div class="section" id="manual-po-entries">
+<h3><a class="toc-backref" href="#id17">Manual po entries</a><a class="headerlink" href="#manual-po-entries" title="Permalink to this headline">¶</a></h3>
+<p>i18ndude scans source .py and .pt files for translatable text strings.
+On some occassions this is not enough - for example if you dynamically generate
+message ids in your code. Entries which cannot be detected by automatic
+code scan are called <em>manual po entries</em>. They are
+managed in <tt class="docutils literal"><span class="pre">locales/manual.pot</span></tt> which is merged to generated
+<tt class="docutils literal"><span class="pre">locales/yournamespace.app.pot</span></tt> file.</p>
+<p>Here is a sample manual.pot file:</p>
+<div class="highlight-python"><pre>msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: mfabrik.app\n"
+
+# This entry is used in gomobiletheme.mfabrik  templates for the campaign page header
+# It is not automatically picked, since it is referred from external package
+#. Default: "Watch video"
+msgid "watch_video"
+msgstr ""</pre>
+</div>
+</div>
+<div class="section" id="managing-po-files">
+<h3><a class="toc-backref" href="#id18">Managing .po files</a><a class="headerlink" href="#managing-po-files" title="Permalink to this headline">¶</a></h3>
+<p>Example shell script to manage i18n files. Change CATALOGNAME to reflect the
+actual package of your product:</p>
+<p>The script will</p>
+<ul class="simple">
+<li>Pick up all changes to i18n strings in code and reflect them back to the translation catalog of each language</li>
+<li>Pick up changes in manual.pot file and reflect them back to the translation catalog of each language</li>
+</ul>
+<div class="highlight-sh"><div class="highlight"><pre><span class="c">#!/bin/sh</span>
+<span class="c">#</span>
+<span class="c"># Shell script to manage .po files.</span>
+<span class="c">#</span>
+<span class="c"># Run this file in the folder main __init__.py of product</span>
+<span class="c">#</span>
+<span class="c"># E.g. if your product is yourproduct.name</span>
+<span class="c"># you run this file in yourproduct.name/yourproduct/name</span>
+<span class="c">#</span>
+<span class="c">#</span>
+<span class="c"># Copyright 2010 mFabrik http://mfabrik.com</span>
+<span class="c">#</span>
+<span class="c"># http://plone.org/documentation/manual/plone-community-developer-documentation/i18n/localization</span>
+<span class="c">#</span>
+
+<span class="c"># Assume the product name is the current folder name</span>
+<span class="nv">CURRENT_PATH</span><span class="o">=</span><span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>
+<span class="nv">CATALOGNAME</span><span class="o">=</span><span class="s2">&quot;yourproduct.app&quot;</span>
+
+<span class="c"># List of languages</span>
+<span class="nv">LANGUAGES</span><span class="o">=</span><span class="s2">&quot;en fi de&quot;</span>
+
+<span class="c"># Create locales folder structure for languages</span>
+install -d locales
+<span class="k">for </span>lang in <span class="nv">$LANGUAGES</span>; <span class="k">do</span>
+<span class="k">    </span>install -d locales/<span class="nv">$lang</span>/LC_MESSAGES
+<span class="k">done</span>
+
+<span class="c"># Assume i18ndude is installed with buildout</span>
+<span class="c"># and this script is run under src/ folder with two nested namespaces in the package name (like mfabrik.plonezohointegration)</span>
+<span class="nv">I18NDUDE</span><span class="o">=</span>../../../../bin/i18ndude
+
+<span class="k">if </span><span class="nb">test</span> ! -e <span class="nv">$I18NDUDE</span>; <span class="k">then</span>
+<span class="k">        </span><span class="nb">echo</span> <span class="s2">&quot;You must install i18ndude with buildout&quot;</span>
+        <span class="nb">echo</span> <span class="s2">&quot;See http://svn.plone.org/svn/collective/collective.developermanual/trunk/source/i18n/localization.txt&quot;</span>
+        <span class="nb">exit</span>
+<span class="k">fi</span>
+
+<span class="c">#</span>
+<span class="c"># Do we need to merge manual PO entries from a file called manual.pot.</span>
+<span class="c"># this option is later passed to i18ndude</span>
+<span class="c">#</span>
+<span class="k">if </span><span class="nb">test</span> -e locales/manual.pot; <span class="k">then</span>
+<span class="k">        </span><span class="nb">echo</span> <span class="s2">&quot;Manual PO entries detected&quot;</span>
+        <span class="nv">MERGE</span><span class="o">=</span><span class="s2">&quot;--merge locales/manual.pot&quot;</span>
+<span class="k">else</span>
+<span class="k">        </span><span class="nb">echo</span> <span class="s2">&quot;No manual PO entries detected&quot;</span>
+        <span class="nv">MERGE</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+<span class="k">fi</span>
+
+<span class="c"># Rebuild .pot</span>
+<span class="nv">$I18NDUDE</span> rebuild-pot --pot locales/<span class="nv">$CATALOGNAME</span>.pot <span class="nv">$MERGE</span> --create <span class="nv">$CATALOGNAME</span> .
+
+
+<span class="c"># Compile po files</span>
+<span class="k">for </span>lang in <span class="k">$(</span>find locales -mindepth 1 -maxdepth 1 -type d<span class="k">)</span>; <span class="k">do</span>
+
+<span class="k">    if </span><span class="nb">test</span> -d <span class="nv">$lang</span>/LC_MESSAGES; <span class="k">then</span>
+
+<span class="k">        </span><span class="nv">PO</span><span class="o">=</span><span class="nv">$lang</span>/LC_MESSAGES/<span class="k">${</span><span class="nv">CATALOGNAME</span><span class="k">}</span>.po
+
+        <span class="c"># Create po file if not exists</span>
+        touch <span class="nv">$PO</span>
+
+        <span class="c"># Sync po file</span>
+        <span class="nb">echo</span> <span class="s2">&quot;Syncing $PO&quot;</span>
+        <span class="nv">$I18NDUDE</span> sync --pot locales/<span class="nv">$CATALOGNAME</span>.pot <span class="nv">$PO</span>
+
+
+        <span class="c"># Plone 3.3 and onwards do not need manual .po -&gt; .mo compilation,</span>
+        <span class="c"># but it will happen on start up if you have</span>
+        <span class="c"># registered the locales directory in ZCML</span>
+        <span class="c"># For more info see http://vincentfretin.ecreall.com/articles/my-translation-doesnt-show-up-in-plone-4</span>
+
+        <span class="c"># Compile .po to .mo</span>
+        <span class="c"># MO=$lang/LC_MESSAGES/${CATALOGNAME}.mo</span>
+        <span class="c"># echo &quot;Compiling $MO&quot;</span>
+        <span class="c"># msgfmt -o $MO $lang/LC_MESSAGES/${CATALOGNAME}.po</span>
+    <span class="k">fi</span>
+<span class="k">done</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Remember to register locales directory in configure.zcml
+for automatic .mo compilation as instructed above.</p>
+</div>
+<p>More information</p>
+<ul class="simple">
+<li><a class="reference external" href="http://plataforma.cenditel.gob.ve/browser/proyectosInstitucionales/eGov/ppm/trunk/rebuild_i18n">http://plataforma.cenditel.gob.ve/browser/proyectosInstitucionales/eGov/ppm/trunk/rebuild_i18n</a></li>
+<li><a class="reference external" href="http://encolpe.wordpress.com/2008/04/28/manage-your-internationalization-with-i18ndude/">http://encolpe.wordpress.com/2008/04/28/manage-your-internationalization-with-i18ndude/</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="dynamic-content">
+<h2><a class="toc-backref" href="#id19">Dynamic content</a><a class="headerlink" href="#dynamic-content" title="Permalink to this headline">¶</a></h2>
+<p>If your HTML template contains dynamic content like</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;h1</span> <span class="na">i18n:translate=</span><span class="s">&quot;search_form_heading&quot;</span><span class="nt">&gt;</span>Search from <span class="nt">&lt;span</span> <span class="na">tal:content=</span><span class="s">&quot;context/@@plone_portal_state/portal_title&quot;</span> <span class="nt">/&gt;&lt;/h1&gt;</span>
+</pre></div>
+</div>
+<p>It will produce .po entry:</p>
+<div class="highlight-python"><pre>msgstr "Hae sivustolta &lt;span&gt;${DYNAMIC_CONTENT}&lt;/span&gt;"</pre>
+</div>
+<p>You need to give the name to the dynamic part</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;h1</span> <span class="na">i18n:translate=</span><span class="s">&quot;search_form_heading&quot;</span><span class="nt">&gt;</span>Search from <span class="nt">&lt;span</span> <span class="na">i18n:name=</span><span class="s">&quot;site_title&quot;</span> <span class="na">tal:content=</span><span class="s">&quot;context/@@plone_portal_state/portal_title&quot;</span> <span class="nt">/&gt;&lt;/h1&gt;</span>
+</pre></div>
+</div>
+<p>... and then you can refer the dynamic part by a name:</p>
+<div class="highlight-python"><pre>#. Default: "Search from &lt;span&gt;${DYNAMIC_CONTENT}&lt;/span&gt;"
+#: ./skins/gomobiletheme_basic/search.pt:46
+#: ./skins/gomobiletheme_plone3/search.pt:46
+msgid "search_form_heading"
+msgstr "Hae sivustolta ${site_title}</pre>
+</div>
+<p>More info</p>
+<ul class="simple">
+<li><a class="reference external" href="http://dev.plone.org/plone/changeset/35219">http://dev.plone.org/plone/changeset/35219</a></li>
+<li><a class="reference external" href="http://permalink.gmane.org/gmane.comp.web.zope.plone.collective.cvs/111531">http://permalink.gmane.org/gmane.comp.web.zope.plone.collective.cvs/111531</a></li>
+</ul>
+</div>
+<div class="section" id="other">
+<h2><a class="toc-backref" href="#id20">Other</a><a class="headerlink" href="#other" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://grok.zope.org/documentation/how-to/how-to-internationalize-your-application">http://grok.zope.org/documentation/how-to/how-to-internationalize-your-application</a></li>
+<li><a class="reference external" href="http://reinout.vanrees.org/weblog/2007/12/14/translating-schemata-names.html">http://reinout.vanrees.org/weblog/2007/12/14/translating-schemata-names.html</a></li>
+<li><a class="reference external" href="http://plone.org/products/archgenxml/documentation/how-to/handling-i18n-translation-files-with-archgenxml-and-i18ndude/view?searchterm=">http://plone.org/products/archgenxml/documentation/how-to/handling-i18n-translation-files-with-archgenxml-and-i18ndude/view?searchterm=</a></li>
+<li><a class="reference external" href="http://vincentfretin.ecreall.com/articles/my-translation-doesnt-show-up-in-plone-4">http://vincentfretin.ecreall.com/articles/my-translation-doesnt-show-up-in-plone-4</a></li>
+<li><a class="reference external" href="http://dev.plone.org/plone/ticket/9089">http://dev.plone.org/plone/ticket/9089</a></li>
+</ul>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Translating text strings</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#zope-i18n">zope.i18n</a><ul>
+<li><a class="reference internal" href="#generating-a-pot-template-file-for-your-package-s">Generating a .pot template file for your package(s)</a></li>
+<li><a class="reference internal" href="#marking-translatable-strings">Marking translatable strings</a></li>
+<li><a class="reference internal" href="#automatically-translated-message-ids">Automatically translated message ids</a></li>
+<li><a class="reference internal" href="#manually-translated-message-ids">Manually translated message ids</a></li>
+<li><a class="reference internal" href="#non-python-message-ids">Non-python message ids</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#testing-translations">Testing translations</a><ul>
+<li><a class="reference internal" href="#plone-4">Plone 4</a></li>
+<li><a class="reference internal" href="#plone-3">Plone 3</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#translation-string-substitution">Translation string substitution</a></li>
+<li><a class="reference internal" href="#placesstranslationservice">PlacessTranslationService</a></li>
+<li><a class="reference internal" href="#i18ndude">i18ndude</a><ul>
+<li><a class="reference internal" href="#installing-i18ndude">Installing i18ndude</a></li>
+<li><a class="reference internal" href="#setting-up-folder-structure-for-finnish-and-english">Setting up folder structure for Finnish and English</a></li>
+<li><a class="reference internal" href="#creating-pot-base-file">Creating .pot base file</a></li>
+<li><a class="reference internal" href="#manual-po-entries">Manual po entries</a></li>
+<li><a class="reference internal" href="#managing-po-files">Managing .po files</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dynamic-content">Dynamic content</a></li>
+<li><a class="reference internal" href="#other">Other</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Internationalization (i18n)</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="language.html"
+                        title="next chapter">Language functions</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/i18n/localization.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="language.html" title="Language functions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Internationalization (i18n)"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Internationalization (i18n)</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

@@ -1,0 +1,440 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Persistent objects &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Persistency and transactions" href="index.html" />
+    <link rel="next" title="Transactions" href="transactions.html" />
+    <link rel="prev" title="Persistency and transactions" href="index.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="transactions.html" title="Transactions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Persistency and transactions"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Persistency and transactions</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="persistent-objects">
+<h1>Persistent objects<a class="headerlink" href="#persistent-objects" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">This document tells how to save objects to Plone/Zope database.
+Persistent objects are automatically read and written from ZODB database in Plone
+and they appear as normal Python objects in your code. This document clarifies
+some of special properties, like with containers, when you deal with persistent
+objects programmatically.</p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
+<li><a class="reference internal" href="#lists-and-dictionaries" id="id2">Lists and dictionaries</a></li>
+<li><a class="reference internal" href="#persistentlist-vs-normal-python-list" id="id3">PersistentList vs. normal Python list</a></li>
+<li><a class="reference internal" href="#persistent-modifications-setattr-and-transactions" id="id4">Persistent, modifications, __setattr__ and transactions</a></li>
+<li><a class="reference internal" href="#up-to-date-reads" id="id5">Up-to-date reads</a></li>
+<li><a class="reference internal" href="#accessing-broken-objects" id="id6">Accessing broken objects</a></li>
+<li><a class="reference internal" href="#fixing-damaged-objects" id="id7">Fixing damaged objects</a></li>
+<li><a class="reference internal" href="#volatile-references" id="id8">Volatile references</a><ul>
+<li><a class="reference internal" href="#correct-use-of-volatile-variables-in-fuctions" id="id9">Correct use of volatile variables in fuctions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#measuring-persistent-object-sizes" id="id10">Measuring persistent object sizes</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p><strong>Q: How do I save() object in Plone</strong></p>
+<p><strong>A: You don't</strong></p>
+<p>Plone does this automatically for you. You just assign the file data
+as an attribute of some persistent object. When the HTTP request
+completes, Zope transaction manager will automatically update all
+changed persistent objects to the database. There is no &quot;save&quot; as such in Zope world -
+it all is transparent to the developer. If the
+transaction fails in any point, no data is being written and you do
+not need to worry about the partial data being written to the
+database.</p>
+<ul class="simple">
+<li>Changed objects will be automatically saved (if they are attached to the
+traversing graph)</li>
+<li>Save will not occur if an exception is raised</li>
+</ul>
+<p>If your data class inherits from higher level Plone base classes
+(all go up to persistent.Persitent class). persistency is handled transparently for you.
+Plone also handles
+transaction automatically for each HTTP request. Unless you wish
+to do manual transactions there is no need to call transaction.commit().</p>
+<p>If you want to do your own persistent classes please read the following</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.zodb.org/documentation/guide/prog-zodb.html#writing-a-persistent-class">Writing a persistent class</a></li>
+<li><a class="reference external" href="http://www.zope.org/Documentation/Books/ZDG/current/Persistence.stx">About persistent objects</a></li>
+<li><a class="reference external" href="http://apidoc.zope.org/++apidoc++/Interface/persistent.interfaces.IPersistent/index.html">Persistent interface description</a>.</li>
+<li><a class="reference external" href="http://plone.org/events/regional/nola05/collateral/Chris%20McDonough-ZODB%20Tips%20and%20Tricks.pdf">ZODB tips and tricks</a></li>
+</ul>
+</div>
+<div class="section" id="lists-and-dictionaries">
+<h2><a class="toc-backref" href="#id2">Lists and dictionaries</a><a class="headerlink" href="#lists-and-dictionaries" title="Permalink to this headline">¶</a></h2>
+<p>If you modify objects inside persistent lists and dictionaries, the change is not automatically
+reflected to the parent container.</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.zodb.org/documentation/guide/prog-zodb.html#writing-a-persistent-class">Modifying mutable objects</a></li>
+</ul>
+</div>
+<div class="section" id="persistentlist-vs-normal-python-list">
+<h2><a class="toc-backref" href="#id3">PersistentList vs. normal Python list</a><a class="headerlink" href="#persistentlist-vs-normal-python-list" title="Permalink to this headline">¶</a></h2>
+<p>All items in normal Python list are stored as one write and loaded on one write.
+PersistentList is slower, but allows individual objects picked from the list without loading the whole list.</p>
+<p>For more information, see</p>
+<ul class="simple">
+<li><a class="reference external" href="https://mail.zope.org/pipermail/zodb-dev/2009-December/013011.html">https://mail.zope.org/pipermail/zodb-dev/2009-December/013011.html</a></li>
+</ul>
+</div>
+<div class="section" id="persistent-modifications-setattr-and-transactions">
+<h2><a class="toc-backref" href="#id4">Persistent, modifications, __setattr__ and transactions</a><a class="headerlink" href="#persistent-modifications-setattr-and-transactions" title="Permalink to this headline">¶</a></h2>
+<p>When Persitent object is modified, via attribute set or __setattr__() call,
+the current transaction is converted to a write transaction.
+Write transactions are usually undoable (visible on Zope's Undo tab).</p>
+<p>If you are using Python property mutator and even if it does not write to the object it
+still will trigger the object rewrite.</p>
+<p>More info</p>
+<ul class="simple">
+<li><a class="reference external" href="https://mail.zope.org/pipermail/zodb-dev/2009-December/013047.html">https://mail.zope.org/pipermail/zodb-dev/2009-December/013047.html</a></li>
+</ul>
+</div>
+<div class="section" id="up-to-date-reads">
+<h2><a class="toc-backref" href="#id5">Up-to-date reads</a><a class="headerlink" href="#up-to-date-reads" title="Permalink to this headline">¶</a></h2>
+<p>Normally, ZODB only assures that objects read are consistent, but not necessarily up to date.
+Checking whether an object is up to date is important when information read from one object
+is used to update another.</p>
+<p>The following will force the object to use the most up-to-date version in the transaction:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="bp">self</span><span class="o">.</span><span class="n">_p_jar</span><span class="o">.</span><span class="n">readCurrent</span><span class="p">(</span><span class="n">ob</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>A conflict error will be raised if the version of ob read by the transaction isn't
+current when the transaction is committed.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">ZODB versions older than 3.10.0b5 do not support this feature.</p>
+</div>
+<p>More information</p>
+<ul class="simple">
+<li><a class="reference external" href="http://pypi.python.org/pypi/ZODB3/3.10.0b5#b5-2010-09-02">http://pypi.python.org/pypi/ZODB3/3.10.0b5#b5-2010-09-02</a></li>
+</ul>
+</div>
+<div class="section" id="accessing-broken-objects">
+<h2><a class="toc-backref" href="#id6">Accessing broken objects</a><a class="headerlink" href="#accessing-broken-objects" title="Permalink to this headline">¶</a></h2>
+<p>ZODB is object database.
+By default, it cannot load object from the database if the code (Python class)
+is not present.</p>
+<p>You can still access data in the objects by creating Python code &quot;stubs&quot; which
+fake the non-existing classes in the run-time environment.</p>
+<p>More info</p>
+<ul class="simple">
+<li><a class="reference external" href="http://mockit.blogspot.com/2010/11/getting-broken-objects-out-of-zodb.html">http://mockit.blogspot.com/2010/11/getting-broken-objects-out-of-zodb.html</a></li>
+</ul>
+</div>
+<div class="section" id="fixing-damaged-objects">
+<h2><a class="toc-backref" href="#id7">Fixing damaged objects</a><a class="headerlink" href="#fixing-damaged-objects" title="Permalink to this headline">¶</a></h2>
+<p>If your BTrees have been damanged, you can use <tt class="docutils literal"><span class="pre">dm.historical</span></tt> tool
+to inspect the object history and rewind it to a working state.</p>
+<ul class="simple">
+<li><a class="reference external" href="http://plone.293351.n2.nabble.com/Cleaning-up-damaged-BTree-can-t-delete-folder-tp5761780p5773269.html">http://plone.293351.n2.nabble.com/Cleaning-up-damaged-BTree-can-t-delete-folder-tp5761780p5773269.html</a></li>
+<li><a class="reference external" href="http://pypi.python.org/pypi/dm.historical/">http://pypi.python.org/pypi/dm.historical/</a></li>
+</ul>
+<p>See also</p>
+<ul class="simple">
+<li><a class="reference internal" href="../content/deleting.html"><em>Deleting broken objects</em></a></li>
+</ul>
+</div>
+<div class="section" id="volatile-references">
+<h2><a class="toc-backref" href="#id8">Volatile references</a><a class="headerlink" href="#volatile-references" title="Permalink to this headline">¶</a></h2>
+<p>Volatile attributes are attributes on persistent objects which never get stored.
+ZODB assumes variable is volatile if it has _v_ prefix.</p>
+<p>Volatiles are useful when framework expects the object to conform certain interface,
+like form frameworks. However, your persistent object edited by form cannot
+have persitent attributes for all variables the form expects to see.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">persistent</span> <span class="kn">import</span> <span class="n">Persistent</span>
+<span class="kn">from</span> <span class="nn">zope.annotation</span> <span class="kn">import</span> <span class="n">IAnnotations</span>
+
+<span class="k">class</span> <span class="nc">VolatileContext</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Mix-in class to provide context variable to persistent classes which is not persitent.</span>
+
+<span class="sd">    Some subsystems (e.g. forms) expect objects to have a reference to parent/site/whatever.</span>
+<span class="sd">    However, it might not be a wise idea to have circular persistent references.</span>
+
+<span class="sd">    This helper class creates a context property which is volatile (never persistent),</span>
+<span class="sd">    but can be still set on the object after creation or after database load.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_set_context</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_v_context</span> <span class="o">=</span> <span class="n">context</span>
+
+    <span class="k">def</span> <span class="nf">_get_context</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_v_context</span>
+
+<span class="k">class</span> <span class="nc">MobileBehaviorStorage</span><span class="p">(</span><span class="n">VolatileContext</span><span class="p">,</span> <span class="n">Persistent</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Set moible specific field properties on the context object and return the context object itself.#</span>
+
+<span class="sd">    This allows to use attribute storage with schema input validation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">mobileFolderListing</span> <span class="o">=</span> <span class="n">FieldPropertyDelegate</span><span class="p">(</span><span class="n">IMobileBehavior</span><span class="p">[</span><span class="s">&quot;mobileFolderListing&quot;</span><span class="p">])</span>
+
+
+<span class="n">KEY</span> <span class="o">=</span> <span class="s">&quot;mobile&quot;</span>
+
+<span class="k">def</span> <span class="nf">manufacture_mobile_behavior</span><span class="p">(</span><span class="n">context</span><span class="p">):</span>
+
+    <span class="n">annotations</span> <span class="o">=</span> <span class="n">IAnnotations</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">KEY</span> <span class="ow">in</span> <span class="n">annotations</span><span class="p">:</span>
+        <span class="n">annotations</span><span class="p">[</span><span class="n">KEY</span><span class="p">]</span> <span class="o">=</span> <span class="n">MobileBehaviorStorage</span><span class="p">()</span>
+
+    <span class="nb">object</span> <span class="o">=</span> <span class="n">annotations</span><span class="p">[</span><span class="n">KEY</span><span class="p">]</span>
+
+    <span class="c"># Set volatile context</span>
+    <span class="nb">object</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="n">context</span>
+
+    <span class="k">return</span> <span class="nb">object</span>
+</pre></div>
+</div>
+<div class="section" id="correct-use-of-volatile-variables-in-fuctions">
+<h3><a class="toc-backref" href="#id9">Correct use of volatile variables in fuctions</a><a class="headerlink" href="#correct-use-of-volatile-variables-in-fuctions" title="Permalink to this headline">¶</a></h3>
+<p><strong>WRONG</strong>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;_v_image&#39;</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_v_image</span>
+</pre></div>
+</div>
+<p><strong>RIGHT</strong>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">marker</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&quot;_v_image&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">marker</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">value</span>
+</pre></div>
+</div>
+<p><strong>RIGHT</strong>:</p>
+<div class="highlight-python"><pre>try:
+    return self._v_image
+except AttributeError:</pre>
+</div>
+<p><strong>WRONG</strong>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="bp">self</span><span class="o">.</span><span class="n">_v_image</span><span class="o">=</span><span class="n">expensive_calculation</span><span class="p">()</span>
+<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_v_image</span>
+</pre></div>
+</div>
+<p><strong>RIGHT</strong>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">image</span><span class="o">=</span><span class="n">expensive_calculation</span><span class="p">()</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">_v_image</span><span class="o">=</span><span class="n">image</span>
+<span class="k">return</span> <span class="n">image</span>
+</pre></div>
+</div>
+<p>For more information, see</p>
+<ul class="simple">
+<li><a class="reference external" href="https://mail.zope.org/pipermail/zodb-dev/2010-May/013437.html">https://mail.zope.org/pipermail/zodb-dev/2010-May/013437.html</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="measuring-persistent-object-sizes">
+<h2><a class="toc-backref" href="#id10">Measuring persistent object sizes</a><a class="headerlink" href="#measuring-persistent-object-sizes" title="Permalink to this headline">¶</a></h2>
+<p>Get the size of the pickled object in the database.</p>
+<p>Something like:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">pickle</span><span class="p">,</span> <span class="n">serial</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">_p_jar</span><span class="o">.</span><span class="n">_storage</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">_p_oid</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">_p_jar</span><span class="o">.</span><span class="n">_version</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>See also</p>
+<ul class="simple">
+<li><a class="reference external" href="http://blog.hannosch.eu/2009/05/visualizing-persistent-structure-of.html">http://blog.hannosch.eu/2009/05/visualizing-persistent-structure-of.html</a></li>
+<li><a class="reference external" href="http://plone.org/documentation/kb/debug-zodb-bloat">http://plone.org/documentation/kb/debug-zodb-bloat</a></li>
+<li>treeanalyze.py will give you the total size of a traverse graph <a class="reference external" href="http://svn.erp5.org/erp5/trunk/utils/treenalyser.py?view=markup&amp;pathrev=24405">http://svn.erp5.org/erp5/trunk/utils/treenalyser.py?view=markup&amp;pathrev=24405</a></li>
+</ul>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Persistent objects</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#lists-and-dictionaries">Lists and dictionaries</a></li>
+<li><a class="reference internal" href="#persistentlist-vs-normal-python-list">PersistentList vs. normal Python list</a></li>
+<li><a class="reference internal" href="#persistent-modifications-setattr-and-transactions">Persistent, modifications, __setattr__ and transactions</a></li>
+<li><a class="reference internal" href="#up-to-date-reads">Up-to-date reads</a></li>
+<li><a class="reference internal" href="#accessing-broken-objects">Accessing broken objects</a></li>
+<li><a class="reference internal" href="#fixing-damaged-objects">Fixing damaged objects</a></li>
+<li><a class="reference internal" href="#volatile-references">Volatile references</a><ul>
+<li><a class="reference internal" href="#correct-use-of-volatile-variables-in-fuctions">Correct use of volatile variables in fuctions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#measuring-persistent-object-sizes">Measuring persistent object sizes</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Persistency and transactions</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="transactions.html"
+                        title="next chapter">Transactions</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/persistency/persistent.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="transactions.html" title="Transactions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Persistency and transactions"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Persistency and transactions</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

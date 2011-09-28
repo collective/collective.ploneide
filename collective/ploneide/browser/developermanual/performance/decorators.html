@@ -1,0 +1,324 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Cache decorators &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Performance and tuning" href="index.html" />
+    <link rel="next" title="RAM cache" href="ramcache.html" />
+    <link rel="prev" title="Performance and tuning" href="index.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="ramcache.html" title="RAM cache"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Performance and tuning"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Performance and tuning</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="cache-decorators">
+<h1>Cache decorators<a class="headerlink" href="#cache-decorators" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
+<li><a class="reference internal" href="#cache-result-for-process-lifecycle" id="id2">Cache result for process lifecycle</a></li>
+<li><a class="reference internal" href="#timeout-caches" id="id3">Timeout caches</a></li>
+<li><a class="reference internal" href="#caching-per-request" id="id4">Caching per request</a><ul>
+<li><a class="reference internal" href="#caching-on-browserviews" id="id5">Caching on BrowserViews</a></li>
+<li><a class="reference internal" href="#caching-on-archetypes-accessors" id="id6">Caching on Archetypes accessors</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#other-resources" id="id7">Other resources</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Cache decorators are convenient methods caching of function return values.</p>
+<p>They work like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@cache_this_function</span>
+<span class="k">def</span> <span class="nf">my_slow_function</span><span class="p">():</span>
+     <span class="c"># This is run only once and all subsequent calls get value from the cache</span>
+     <span class="k">return</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Cache decorators do not work with methods or functions using generators (yield).
+The cache stores empty value.</p>
+</div>
+<p><a class="reference external" href="http://pypi.python.org/pypi/plone.memoize">plone.memoize</a> package offers helpful function decorators to cache the resulting values.</p>
+<p>See also <a class="reference internal" href="ramcache.html"><em>using memcached backend for memoizers</em></a>.</p>
+</div>
+<div class="section" id="cache-result-for-process-lifecycle">
+<h2><a class="toc-backref" href="#id2">Cache result for process lifecycle</a><a class="headerlink" href="#cache-result-for-process-lifecycle" title="Permalink to this headline">¶</a></h2>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">plone.memoize</span> <span class="kn">import</span> <span class="n">forever</span>
+
+<span class="nd">@forever.memoize</span>
+<span class="k">def</span> <span class="nf">getFields</span><span class="p">(</span><span class="n">area</span><span class="p">,</span> <span class="n">subject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Get all fields inside area / subject.</span>
+
+<span class="sd">    Results is cached for process lifetime.</span>
+
+<span class="sd">    @return: List of internal fields</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">schema</span> <span class="o">=</span> <span class="n">getSchema</span><span class="p">(</span><span class="n">area</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span> <span class="n">field</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">schema</span> <span class="k">if</span> <span class="n">field</span><span class="p">[</span><span class="s">&quot;subject&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">subject</span> <span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="timeout-caches">
+<h2><a class="toc-backref" href="#id3">Timeout caches</a><a class="headerlink" href="#timeout-caches" title="Permalink to this headline">¶</a></h2>
+<p>Please read <a class="reference external" href="http://danielnouri.org/blog/devel/plone-memoize-timeout.html?showcomments=yes">Timed caching decorator with plone.memoize</a>.</p>
+<ul class="simple">
+<li><a class="reference external" href="https://svn.plone.org/svn/collective/collective.externalcontent/trunk/collective/externalcontent/tests/test_vocabulary.py">Another example</a>.</li>
+</ul>
+</div>
+<div class="section" id="caching-per-request">
+<h2><a class="toc-backref" href="#id4">Caching per request</a><a class="headerlink" href="#caching-per-request" title="Permalink to this headline">¶</a></h2>
+<p>This pattern shows how to avoid recalculate the same value
+during the life cycle of a HTTP request object.</p>
+<div class="section" id="caching-on-browserviews">
+<h3><a class="toc-backref" href="#id5">Caching on BrowserViews</a><a class="headerlink" href="#caching-on-browserviews" title="Permalink to this headline">¶</a></h3>
+<p>This is useful if the same view/utility is going to be called many time from different sources for the same HTTP request.</p>
+<p><a class="reference external" href="https://svn.plone.org/svn/plone/plone.memoize/trunk/plone/memoize/view.txt">plone.memoize.view</a>
+package provides necessary decorators for BrowserView based classes.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">plone.memoize.view</span> <span class="kn">import</span> <span class="n">memoize</span><span class="p">,</span> <span class="n">memoize_contextless</span>
+
+<span class="k">class</span> <span class="nc">MyView</span><span class="p">(</span><span class="n">BrowserView</span><span class="p">):</span>
+
+
+    <span class="nd">@memoize</span>
+    <span class="k">def</span> <span class="nf">getValue</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot; This value is recalculated for every new BrowserView context per request &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s">&quot;something&quot;</span>
+
+    <span class="nd">@memoize_contextless</span>
+    <span class="k">def</span> <span class="nf">getValueNoContext</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot; This value is recalculated for all context objects once per request &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s">&quot;something&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="caching-on-archetypes-accessors">
+<h3><a class="toc-backref" href="#id6">Caching on Archetypes accessors</a><a class="headerlink" href="#caching-on-archetypes-accessors" title="Permalink to this headline">¶</a></h3>
+<p>If you have a custom <a class="reference internal" href="../content/archetypes/fields.html"><em>Archetypes accessor method</em></a>
+you can avoid recalculating it during the request processing.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">getParsedORADataCached</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Same as above, but does not run through JSON reader every time.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c"># Manually store the result on HTTP request</span>
+    <span class="c"># object annotations</span>
+
+
+    <span class="c"># Use function name + Archetypes unique identified as the key</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="s">&quot;parsed-ora-data-&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">UID</span><span class="p">()</span>
+
+    <span class="n">cache</span> <span class="o">=</span> <span class="n">IAnnotations</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">REQUEST</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getParsedORAData</span><span class="p">()</span>
+        <span class="n">cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
+
+    <span class="k">return</span> <span class="n">data</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="other-resources">
+<h2><a class="toc-backref" href="#id7">Other resources</a><a class="headerlink" href="#other-resources" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="https://svn.plone.org/svn/plone/plone.memoize/trunk/plone/memoize/">plone.memoize source code</a>.</li>
+<li><a class="reference external" href="http://svn.zope.org/zope.app.cache/trunk/src/zope/app/cache/">zope.app.cache source code</a></li>
+</ul>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Cache decorators</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#cache-result-for-process-lifecycle">Cache result for process lifecycle</a></li>
+<li><a class="reference internal" href="#timeout-caches">Timeout caches</a></li>
+<li><a class="reference internal" href="#caching-per-request">Caching per request</a><ul>
+<li><a class="reference internal" href="#caching-on-browserviews">Caching on BrowserViews</a></li>
+<li><a class="reference internal" href="#caching-on-archetypes-accessors">Caching on Archetypes accessors</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#other-resources">Other resources</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Performance and tuning</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ramcache.html"
+                        title="next chapter">RAM cache</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/performance/decorators.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="ramcache.html" title="RAM cache"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Performance and tuning"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Performance and tuning</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

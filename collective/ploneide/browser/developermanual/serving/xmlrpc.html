@@ -1,0 +1,313 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>XML-RPC &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Serving HTTP and other protocols" href="index.html" />
+    <link rel="next" title="WebDAV" href="webdav.html" />
+    <link rel="prev" title="Publishing" href="publishing.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="webdav.html" title="WebDAV"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="publishing.html" title="Publishing"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Serving HTTP and other protocols</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="xml-rpc">
+<h1>XML-RPC<a class="headerlink" href="#xml-rpc" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
+<li><a class="reference internal" href="#authentication" id="id2">Authentication</a></li>
+<li><a class="reference internal" href="#zpublisher-client" id="id3">ZPublisher client</a></li>
+<li><a class="reference internal" href="#web-services-api-for-plone-wsapi4plone" id="id4">Web Services API for Plone (wsapi4plone)</a><ul>
+<li><a class="reference internal" href="#importing-an-image-using-wsapi" id="id5">Importing an Image Using WSAPI</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#more-information" id="id6">More information</a></li>
+</ul>
+</div>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">Using XML-RPC remote call protocol to manipulate Plone site.</p>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Zope provides transparent XML-RPC support for any traversable object.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># URL to the object</span>
+<span class="n">target</span> <span class="o">=</span> <span class="s">&#39;http://localhost:8080/plone&#39;</span>
+
+<span class="c"># Call remote method</span>
+<span class="n">path</span> <span class="o">=</span> <span class="n">xmlrpclib</span><span class="o">.</span><span class="n">ServerProxy</span><span class="p">(</span><span class="n">target</span><span class="p">)</span><span class="o">.</span><span class="n">getPhysicalPath</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Zope object handles are not transferable across function call boundaries.
+Thus, you can only call functions with primitive arguments. If you
+need to call function with object arguments you need to create
+server side helper code first.</p>
+</div>
+<p>For more information see</p>
+<ul class="simple">
+<li>transmogrifier.ploneremote</li>
+</ul>
+</div>
+<div class="section" id="authentication">
+<h2><a class="toc-backref" href="#id2">Authentication</a><a class="headerlink" href="#authentication" title="Permalink to this headline">¶</a></h2>
+<p>The simplest way to authenticate the user for XML-RPC calls
+is to embed HTTP Basic Auth data to URL:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># URL to the object</span>
+<span class="n">target</span> <span class="o">=</span> <span class="s">&#39;http://admin:admin@localhost:8080/plone&#39;</span>
+
+<span class="c"># Call remote method</span>
+<span class="n">path</span> <span class="o">=</span> <span class="n">xmlrpclib</span><span class="o">.</span><span class="n">ServerProxy</span><span class="p">(</span><span class="n">target</span><span class="p">)</span><span class="o">.</span><span class="n">getPhysicalPath</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="zpublisher-client">
+<h2><a class="toc-backref" href="#id3">ZPublisher client</a><a class="headerlink" href="#zpublisher-client" title="Permalink to this headline">¶</a></h2>
+<p>XML-RPC does not marshal objects reliable between remote calls.
+Getting the real remote object can be done with ZPublisher.Client.Object.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This approach works only for Python clients and
+needs Zope libraries available at the client side.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Zope object handles are not transferable across function call boundaries.
+Thus, you can only call functions with primitive arguments. If you
+need to call function with object arguments you need to create
+server side helper code first.</p>
+</div>
+<ul class="simple">
+<li><a class="reference external" href="http://svn.zope.org/Zope/tags/ajung-final-zpt-integration-before-merge-savepoint/utilities/load_site.py?rev=67269&amp;view=auto">http://svn.zope.org/Zope/tags/ajung-final-zpt-integration-before-merge-savepoint/utilities/load_site.py?rev=67269&amp;view=auto</a></li>
+<li><a class="reference external" href="http://maurits.vanrees.org/weblog/archive/2009/10/lighting-talks-friday#id2">http://maurits.vanrees.org/weblog/archive/2009/10/lighting-talks-friday#id2</a></li>
+</ul>
+</div>
+<div class="section" id="web-services-api-for-plone-wsapi4plone">
+<h2><a class="toc-backref" href="#id4">Web Services API for Plone (wsapi4plone)</a><a class="headerlink" href="#web-services-api-for-plone-wsapi4plone" title="Permalink to this headline">¶</a></h2>
+<p>This is an add-on product exposes more methods available through Zope's
+XML-RPC api.</p>
+<ul class="simple">
+<li><a class="reference external" href="http://plone.org/products/wsapi4plone.core">http://plone.org/products/wsapi4plone.core</a></li>
+</ul>
+<div class="section" id="importing-an-image-using-wsapi">
+<h3><a class="toc-backref" href="#id5">Importing an Image Using WSAPI</a><a class="headerlink" href="#importing-an-image-using-wsapi" title="Permalink to this headline">¶</a></h3>
+<p>In the following example we retreive, from the 'Pictures' folder, an image called 'red-wine-glass.jpg',
+post it to a folder called 'ministries' and give it the name 'theimage'.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">xmlrpclib</span> <span class="kn">import</span> <span class="n">ServerProxy</span>
+<span class="kn">from</span> <span class="nn">xmlrpclib</span> <span class="kn">import</span> <span class="n">Binary</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">ServerProxy</span><span class="p">(</span><span class="s">&quot;http://username:password@localhost:8080/path/to/plone&quot;</span><span class="p">)</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;Pictures&#39;</span><span class="p">,</span> <span class="s">&#39;red-wine-glass.jpg&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+<span class="n">myimage</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;ministries/theimage&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s">&#39;title&#39;</span><span class="p">:</span> <span class="s">&#39;a beautiful wine glass&#39;</span><span class="p">,</span> <span class="s">&#39;image&#39;</span><span class="p">:</span><span class="n">Binary</span><span class="p">(</span><span class="n">data</span><span class="p">)},</span><span class="s">&#39;Image&#39;</span><span class="p">]}</span>
+
+
+<span class="n">output</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_object</span><span class="p">(</span><span class="n">client</span><span class="o">.</span><span class="n">post_object</span><span class="p">(</span><span class="n">myimage</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>For more information see <a class="reference external" href="http://plone.org/products/wsapi4plone.core/">wsapi4plone.core</a> add-on product adds XML-RPC operations
+support for Plone.</p>
+</div>
+</div>
+<div class="section" id="more-information">
+<h2><a class="toc-backref" href="#id6">More information</a><a class="headerlink" href="#more-information" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://www.zope.org/Members/Amos/XML-RPC">http://www.zope.org/Members/Amos/XML-RPC</a></li>
+</ul>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">XML-RPC</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#authentication">Authentication</a></li>
+<li><a class="reference internal" href="#zpublisher-client">ZPublisher client</a></li>
+<li><a class="reference internal" href="#web-services-api-for-plone-wsapi4plone">Web Services API for Plone (wsapi4plone)</a><ul>
+<li><a class="reference internal" href="#importing-an-image-using-wsapi">Importing an Image Using WSAPI</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#more-information">More information</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="publishing.html"
+                        title="previous chapter">Publishing</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="webdav.html"
+                        title="next chapter">WebDAV</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/serving/xmlrpc.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="webdav.html" title="WebDAV"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="publishing.html" title="Publishing"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Serving HTTP and other protocols</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

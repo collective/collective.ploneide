@@ -1,0 +1,47 @@
+<script type="text/javascript">
+
+    updateSessionGroupsList();
+    
+    function renameFromSessionManager(){
+        var new_name = document.getElementById("new-session-name").value;
+        renameCurrentSessionsGroup(new_name);
+    }
+    
+    function loadFromSessionManager(){
+        var name = document.getElementById("sessions-group-list").value;
+        loadSessionsGroup(name);
+    }
+    
+    function removeCurrentSessionsGroup(){
+        var storage = getSessionsDefaultStorage();
+
+        var name = getCurrentSessionsGroupName();
+        removeSessionsGroup(name);
+            
+        if (storage == "localStorage"){
+            var to_load = localStorageGetLastSessionGroupName();
+            loadSessionsGroup(to_load);
+        }
+        updateSessionGroupsList();
+    }
+    
+</script>
+
+<h2>Sessions:</h2>
+<select id="sessions-group-list" name="sessions-group-list" onchange="loadFromSessionManager()">
+</select>
+<br/>
+<br/>
+
+<h2>Rename current session:</h2>
+<input type="text" id="new-session-name" name="new-session-name"/>
+<input type="button" value="Rename" onclick="renameFromSessionManager()">
+<br/>
+<br/>
+
+<input type="button" value="New empty session" onclick="createNewEmptySessionsGroup()">
+
+<br/>
+<br/>
+<input type="button" value="Delete current session" onclick="removeCurrentSessionsGroup()">
+

@@ -1,0 +1,276 @@
+/*
+ * Start main fixes
+ */
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+/*LOGO MENU*/ 
+.logo {
+    background:url('++resource++collective.ploneide.resources/ploneide-logo.png') no-repeat scroll 0 0 transparent;
+    float:left;
+    width:40px;
+    height:40px;
+    margin-right:5px;
+    margin-left:5px;
+    position:relative;
+    top:-30px;
+}
+ 
+#editor-main {
+    background:none repeat scroll 0 0 #333;
+    padding:10px 0 0;
+}
+#editor-main .top-bar{
+    background-color:#444;
+    background: url('++resource++collective.ploneide.resources/shadow-bar.png') repeat-x scroll 0 0 #222222;
+    display: block;
+    margin:0px 0px 10px 0px;    
+    padding: 5px 20px 6px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    height:2em;
+    line-height: 1.8em;
+    -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
+    border-bottom: 1px solid rgba(0,0,0,0.25);
+    position: relative;
+    cursor: pointer;    
+}
+#editor-main .editor-wrapper {
+    padding:0;
+}
+#editor {
+    position: relative;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    border:medium none;
+}
+#editor-files-tabs {
+    padding-left:49px;
+}
+#editor-files-tabs .tab {
+    position:relative;
+    display: inline-block;
+    vertical-align: baseline;
+    margin: 0 2px;
+    outline: none;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    font: 14px/100% Arial, Helvetica, sans-serif;
+    padding: .5em 2em .55em;
+    text-shadow: 0 1px 1px rgba(0,0,0,.3);
+    -webkit-border-radius: 0.5em 0.5em 0 0;
+    -moz-border-radius: 0.5em 0.5em 0 0;
+    border-radius: 0.5em 0.5em 0 0;
+    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+    -moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+    box-shadow: 0 1px 2px rgba(0,0,0,.2);  
+    color: #e9e9e9;
+    border-top: solid 1px #555;
+    background: #555;
+    background: -webkit-gradient(linear, left top, left bottom, from(#444), to(#333));
+    background: -moz-linear-gradient(top, #444, #333);      
+}
+#editor-files-tabs .selected {
+    cursor:pointer;
+    background-color:#555;
+    background: #616161;
+    background: -webkit-gradient(linear, left top, left bottom, from(#666), to(#555));
+    background: -moz-linear-gradient(top, #666, #555);    
+}
+
+#editor-files-tabs span.tab:hover {
+    background: #555;
+    background: -webkit-gradient(linear, left top, left bottom, from(#444), to(#555));
+    background: -moz-linear-gradient(top, #444, #555);   
+}
+#editor-files-tabs .close {
+    color:#999;
+    font-size:12px;
+    right:10px;
+    position:absolute;
+}
+#editor-files-tabs span.close:hover {
+    color:red;
+}
+
+#edit-files-tabs {
+    display: block;
+    height: 2em;
+}
+
+/* PANEL TABS */
+.panel-tabs {
+    border-bottom:1px solid #000;
+	background: -o-linear-gradient(top,#323232,#303030) repeat scroll 0 0 #303030;
+	background: -moz-linear-gradient(top,#323232,#303030) repeat scroll 0 0 #303030;
+	background: -webkit-gradient(linear,left top,left bottom,from(#323232),to(#303030)) repeat scroll 0 0 #303030;    
+	float:left;
+	width:100%;
+	clear:both;
+}
+.panel-tabs .tab{
+    float:left;
+    height:49px;
+}
+.panel-tabs .tab a{
+    float:left;
+    color:#fff;
+    height:50px;
+    width:53px;
+}
+.panel-tabs .tab a span {
+    display:none;
+}
+
+.panel-tabs .tab .item-tree{
+    background:url('++resource++collective.ploneide.icons/project-tree-icon-large.png') scroll no-repeat center center transparent;
+}
+.panel-tabs .tab .item-tree:hover, .panel-tabs .tab .item-tree.current{
+    background:url('++resource++collective.ploneide.icons/project-tree-icon-large-hover.png') scroll no-repeat center center transparent;
+}
+
+.panel-tabs .tab .item-debug{
+    background:url('++resource++collective.ploneide.icons/project-debug-icon-large.png') scroll no-repeat center center transparent;
+}
+.panel-tabs .tab .item-debug:hover, .panel-tabs .tab .item-debug.current{
+    background:url('++resource++collective.ploneide.icons/project-debug-icon-large-hover.png') scroll no-repeat center center transparent;
+}
+
+.panels {
+    clear:both;
+    top:5px;
+    position:relative;
+}
+.panel-box {
+    padding:10px;
+    margin:0px 5px 5px 5px;
+    background-color:#FFF;
+    overflow: auto;
+}
+
+.panel-box#global-scope-placeholder{
+    max-height: 400px;
+}
+
+/* TREE */
+#tree {
+}
+#project-tree {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+#tree-placeholder {
+    
+}
+
+
+/*TOOLBAR */
+#editor-toolbar img {
+    margin: 4px 4px 0px;
+    height: 24px;
+}
+
+#editor-toolbar {
+    background-color: #555;
+    margin-top: 0px;
+    position:relative;
+}
+
+/*LINEBAR*/
+.ace_gutter-cell.ace_breakpoint {
+    background-image: url("data:image/gif;base64,R0lGODlhEAAQAKECAKEAAKIAAP///////yH5BAEKAAIALAIAAgAMAAwAAAIilAUJdwEB3zIR1pmsfUh7+XhaJkakyDkodqrBIZkvI7hMAQA7");
+    background-repeat: no-repeat;
+    background-position: 0px center;
+}
+
+.ace_gutter-cell.ace_current-line {
+    background-image: url("data:image/gif;base64,R0lGODlhEAAQAIABAAAAAP///yH+EUNyZWF0ZWQgd2l0aCBHSU1QACH5BAEKAAEALAAAAAAQABAAAAIejI+poG0AXYJUPsrsrRZnjWlBKHkg2ZhdJHKgCAcFADs=");
+    background-repeat: no-repeat;
+    background-position: 6px center;
+}
+
+/* DEBUGGER STYLES */
+
+#debugger-console {
+    display: none;
+    overflow: auto;
+    height: 30%;
+}
+
+.debugger-controls {
+    display: none;
+}
+
+.debugger-controls img{
+    height: 32px;
+}
+
+.debugger_current_line {
+    background-color: #F2C545;
+    position: absolute;
+    z-index: 2;
+}
+
+/*DEBUGGER SCOPE VIEW*/
+.debugger-scope-box table{
+    background-color: #2C2828;
+    color: #9A9A9A;
+    padding: 5px;
+}
+
+.debugger-scope-box table td {
+    border-width: 1px;
+    border-style: solid;
+}
+
+.value_changed {
+    background-color: #F2C545;
+    color: black;
+}
+
+/* CONSOLE-BOX */
+.debugger-console-box input{
+    width: 100%;
+}
+
+.debugger-console-box table{
+    width: 100%;
+    padding: 5px;
+}
+
+.debugger-console-box table tr {
+    border-width: 1px;
+    border-style: solid;
+}
+
+.debugger-console-box .command-issued {
+    background-color: #E8E8E8;
+    color: #333;
+}
+
+.debugger-console-box .returned-value {
+    background-color: #2C2828;
+    color: #9A9A9A;
+}
+
+/* CONTEXT VIEW*/
+
+img.filesystem-icon {
+    width: 20px;
+}
+
+.contenttype-schema td, tr {
+    border-width: 1px;
+    border-style: solid;
+    padding: 5px;
+}

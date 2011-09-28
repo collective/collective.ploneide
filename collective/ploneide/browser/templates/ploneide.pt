@@ -1,0 +1,64 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      lang="en"
+      i18n:domain="collective.ploneide">
+<head>
+    <link rel="stylesheet" type="text/css" media="screen" href="public.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="columns.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="++resource++collective.ploneide.resources/fixes.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="++resource++collective.ploneide.resources/tree/style/simplejqtree.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="++resource++collective.ploneide.resources/layout/layout.css" />
+    
+    <tal:script replace="structure view/getAuxiliarServer" />
+    <tal:script replace="structure view/getDebuggerServer" />
+    
+    <script type="text/javascript" src="jquery.js"></script>   
+    <script type="text/javascript" src="++resource++plone.app.jquerytools.js"></script>
+    <script type="text/javascript" src="++resource++plone.app.jquerytools.overlayhelpers.js"></script>
+    <script type="text/javascript" src="++resource++plone.app.jquerytools.form.js"></script>
+    <script type="text/javascript" src="++resource++collective.ploneide.ace/ace.js"></script>
+    <script type="text/javascript" src="++resource++collective.ploneide.ace/cockpit.js"></script>
+    <script type="text/javascript" src="++resource++collective.ploneide.ace/split.js"></script>
+    <script type="text/javascript" src="++resource++collective.ploneide.ace/mode-css.js"></script>
+    <script type="text/javascript" src="++resource++collective.ploneide.ace/mode-html.js"></script>
+    <script type="text/javascript" src="++resource++collective.ploneide.ace/mode-javascript.js"></script>
+    <script type="text/javascript" src="++resource++collective.ploneide.ace/mode-python.js"></script>
+    <script type="text/javascript" src="++resource++collective.ploneide.ace/mode-xml.js"></script>
+    <script type="text/javascript" src="++resource++collective.ploneide.ace/theme-clouds.js"></script>
+    <script type="text/javascript" src="++resource++collective.ploneide.ace/theme-clouds_midnight.js"></script>
+    <script type="text/javascript" src="++resource++collective.ploneide.ace/theme-cobalt.js"></script>
+    <script type="text/javascript" src="++resource++collective.ploneide.ace/theme-dawn.js"></script>
+    <script type="text/javascript" src="++resource++collective.ploneide.ace/theme-eclipse.js"></script>
+    <script type="text/javascript" src="++resource++collective.ploneide.ace/theme-idle_fingers.js"></script>
+    <script type="text/javascript" src="++resource++collective.ploneide.ace/theme-kr_theme.js"></script>
+    <script type="text/javascript" src="++resource++collective.ploneide.ace/theme-merbivore.js"></script>
+    <script type="text/javascript" src="++resource++collective.ploneide.ace/theme-merbivore_soft.js"></script>
+    <script type="text/javascript" src="++resource++collective.ploneide.ace/theme-mono_industrial.js"></script>
+    <script type="text/javascript" src="++resource++collective.ploneide.ace/theme-monokai.js"></script>
+    <script type="text/javascript" src="++resource++collective.ploneide.ace/theme-pastel_on_dark.js"></script>
+    <script type="text/javascript" src="++resource++collective.ploneide.ace/theme-twilight.js"></script>
+    <script type="text/javascript" src="++resource++collective.ploneide.ace/theme-vibrant_ink.js"></script>
+
+
+    <!-- tree -->
+    <script type="text/javascript" src="++resource++collective.ploneide.resources/tree/jquery.simplejqtree.js"></script>
+
+    <script type="text/javascript" src="++resource++collective.ploneide.resources/local_storage.js"></script>
+    <script type="text/javascript" src="++resource++collective.ploneide.resources/sessions.js"></script>
+    <script type="text/javascript" src="++resource++collective.ploneide.resources/files.js"></script>
+    <script type="text/javascript" src="++resource++collective.ploneide.resources/ploneide.js"></script>
+    <script type="text/javascript" src="++resource++collective.ploneide.resources/debugger_boxes.js"></script>
+    <script type="text/javascript" src="++resource++collective.ploneide.resources/debugging.js"></script>
+    <script type="text/javascript" src="++resource++collective.ploneide.resources/aux.js"></script>
+    <script type="text/javascript" src="++resource++collective.ploneide.resources/boot.js"></script>
+
+    <!-- layout -->
+    <script type="text/javascript" src="++resource++collective.ploneide.resources/jquery-ui-1.8.16.custom.min.js"></script>    
+    <script type="text/javascript" src="++resource++collective.ploneide.resources/layout/jquery.layout.js"></script>
+      
+</head>
+<body>
+    <iframe class="ui-layout-south" src="" width="100%" height="100%" tal:attributes="src context/absolute_url">
+      <p>Your browser does not support iframes.</p>
+    </iframe> 
+</body>
+</html>

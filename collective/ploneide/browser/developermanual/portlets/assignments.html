@@ -1,0 +1,291 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>How and where are Portlet Assignments stored? &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Portlets" href="index.html" />
+    <link rel="next" title="How are portlets rendered?" href="rendered.html" />
+    <link rel="prev" title="Testing the portlet" href="testing.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="rendered.html" title="How are portlets rendered?"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="testing.html" title="Testing the portlet"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Portlets</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="how-and-where-are-portlet-assignments-stored">
+<h1>How and where are Portlet Assignments stored?<a class="headerlink" href="#how-and-where-are-portlet-assignments-stored" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">When you choose a portlet to be displayed somewhere,
+for example, using the interface that appears when
+you hit the Manage Portlets button, what you're doing
+is storing a persistent instance of the Portlet Assignment
+class into your site, together with all its associated
+configuration data.</p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#site-wide" id="id1">Site-wide</a></li>
+<li><a class="reference internal" href="#contextual" id="id2">Contextual</a></li>
+</ul>
+</div>
+<p>Portlet Assignments are stored in what's called an Assignment
+Mapping. This is an ordered container with a dict-like interface.
+The keys are unique string names, and the values are instances of
+the assignment class.</p>
+<p>Assignment mappings can be stored in two different kinds of
+locations depending on their type: site-wide or contextual.</p>
+<div class="section" id="site-wide">
+<h2><a class="toc-backref" href="#id1">Site-wide</a><a class="headerlink" href="#site-wide" title="Permalink to this headline">¶</a></h2>
+<p>Site-wide assigned portlets are shown in the whole site, unless
+blocked. They're stored in Portlet Managers. Portlet Managers
+define a column or other area that can be filled with portlets, and
+are analogous to the viewlet manager for viewlets. They are named
+persistent local utilites providing the <tt class="docutils literal"><span class="pre">IPortletManager</span></tt>
+interface.</p>
+<p>You can look up a portlet manager like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">manager</span> <span class="o">=</span> <span class="n">getUtility</span><span class="p">(</span><span class="n">IPortletManager</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">u&quot;plone.leftcolumn&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>By default, there are two standard portlet managers,
+<tt class="docutils literal"><span class="pre">plone.leftcolumn</span></tt> and <tt class="docutils literal"><span class="pre">plone.rightcolumn</span></tt>, as well as four
+portlet managers for the four columns on the dashboard, from
+<tt class="docutils literal"><span class="pre">plone.dashboard1</span></tt> to <tt class="docutils literal"><span class="pre">plone.dashboard4</span></tt>. You can create your
+own in <tt class="docutils literal"><span class="pre">portlets.xml</span></tt> like this:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;portletmanager</span>
+  <span class="na">name=</span><span class="s">&quot;my.package.myportletmanager&quot;</span>
+  <span class="na">type=</span><span class="s">&quot;my.package.interfaces.IMyPortletManagerType&quot;</span>
+  <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<p>The &quot;type&quot; is a marker interface that can be used to install
+particular portlets only for particular types of portlet managers,
+as explained above. Example:
+<tt class="docutils literal"><span class="pre">plone.app.portlets.interfaces.IDashboard</span></tt>.</p>
+<p>Portlets in global categories (site-wide) are stored directly
+inside the <tt class="docutils literal"><span class="pre">IPortletManager</span></tt> utility, under a particular category
+- e.g. &quot;group&quot; - a category-specific key - e.g. the group id - and
+finally a unique portlet id. Putting this together, we could access
+a particular portlet assignment like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">plone.portlet.constants</span> <span class="kn">import</span> <span class="n">GROUP_CATEGORY</span>
+<span class="n">manager</span> <span class="o">=</span> <span class="n">getUtility</span><span class="p">(</span><span class="n">IPortletManager</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">u&quot;plone.leftcolumn&quot;</span><span class="p">)</span>
+<span class="n">recent_assignment</span> <span class="o">=</span> <span class="n">manager</span><span class="p">[</span><span class="n">GROUP_CATEGORY</span><span class="p">][</span><span class="s">u&quot;Administrators&quot;</span><span class="p">][</span><span class="s">u&quot;recent&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Here we look up the left column portlet manager and get the portlet
+assignment named <em>recent</em> assigned to the <em>Administrators</em> group.</p>
+<p>Each of the lookups here has a dict interface, so you can iterate,
+call <tt class="docutils literal"><span class="pre">keys()</span></tt> and so on. You can store assignments under any
+string as category, but the default portlet retriever is only aware
+of the three site-wide assignment categories defined as constants
+in <em>plone.portlet.constants</em>, <tt class="docutils literal"><span class="pre">USER_CATEGORY</span></tt>, <tt class="docutils literal"><span class="pre">GROUP_CATEGORY</span></tt>
+and <tt class="docutils literal"><span class="pre">CONTENT_TYPE_CATEGORY</span></tt>, which should be enough for most
+use-cases. More on portlet retrievers later.</p>
+</div>
+<div class="section" id="contextual">
+<h2><a class="toc-backref" href="#id2">Contextual</a><a class="headerlink" href="#contextual" title="Permalink to this headline">¶</a></h2>
+<p>Location-specific portlet assignments are stored on annotations on
+objects providing the <tt class="docutils literal"><span class="pre">ILocalPortletAssignable</span></tt> marker
+interface.</p>
+<p>To get hold of the assignment in this case, we multi-adapt the
+content object and the manager instance to the
+<tt class="docutils literal"><span class="pre">IPortletAssignment</span></tt> interface, like so:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">manager</span> <span class="o">=</span> <span class="n">getUtility</span><span class="p">(</span><span class="n">IPortletManager</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">u&quot;plone.leftcolumn&quot;</span><span class="p">)</span>
+<span class="n">assignment_mapping</span> <span class="o">=</span> <span class="n">getMultiAdapter</span><span class="p">((</span><span class="n">context</span><span class="p">,</span> <span class="n">manager</span><span class="p">),</span> <span class="n">IPortletAssignmentMapping</span><span class="p">)</span>
+<span class="n">news_portlet</span> <span class="o">=</span> <span class="n">assignment_mapping</span><span class="p">[</span><span class="s">u&quot;news&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>There are two functions in plone.app.portlets.utils to make it
+easier to find the appropriate mapping for a portlet, or to get a
+portlet assignment directly: <tt class="docutils literal"><span class="pre">assignment_mapping_from_key()</span></tt> and
+<tt class="docutils literal"><span class="pre">assignment_from_key()</span></tt>.</p>
+<p>We can use GenericSetup to assign portlets to particular portlet
+managers upon the installation of a product. Read the
+<a class="reference external" href="../theme-reference/elements/portlet/move/">Theme Reference Manual</a> for info about how to do that. Read the
+<a class="reference external" href="../../../tutorial/genericsetup">Generic Setup tutorial</a> for further info about what's
+GenericSetup and how it works.</p>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">How and where are Portlet Assignments stored?</a><ul>
+<li><a class="reference internal" href="#site-wide">Site-wide</a></li>
+<li><a class="reference internal" href="#contextual">Contextual</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="testing.html"
+                        title="previous chapter">Testing the portlet</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="rendered.html"
+                        title="next chapter">How are portlets rendered?</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/portlets/assignments.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="rendered.html" title="How are portlets rendered?"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="testing.html" title="Testing the portlet"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Portlets</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

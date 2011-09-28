@@ -1,0 +1,801 @@
+===============
+ Views
+===============
+
+.. admonition:: Description
+
+        Rendering HTML pages in Plone using Zope 3 view pattern.
+
+.. contents:: :local:
+
+Introduction
+-------------
+
+Plone/Zope uses a view pattern to output dynamically generated HTML pages.
+
+Views are the basic elements of modern Python web frameworks. A view runs code 
+to set-up  Python variables for a template rendering. Output may not limited
+to HTML pages and snippets, but may contain JSON, file download payloads and other.
+
+Views are usually combination of 
+
+* Python class which performs the user interface logic settup  
+
+* Corresponding page template (in TAL language) or direct Python string output 
+
+By keeping as much of the logic code
+in a separate Python class and making page template as dumb as possible
+better component readability and reuse is achieved. You can override
+either Python logic or the template file separately.
+
+When you are working with Plone, the most usual view type is *BrowserView* from 
+Products.Five package, but there are others. 
+
+Each BrowserView class is a Python callable. BrowserView.__call__()
+method acts as an entry point of executing the view code. From Zope point of view,
+even a function would be enough as it is callable.
+
+Plain Zope 3 vs. Grok
+=====================
+
+Views were introduced in Zope 3 and made available in Plone by Products.Five package
+(which provides some Plone/Zope 2 specific adaption hooks). 
+However, Zope 3's way of XML based configuration languae ZCML and separating things to three different files 
+(Python module, ZCML configuration, TAL template) was later seen as cumbersome to maintain.
+
+Later a project called `Grok <http://grok.zope.org/>`_ was started to introduce easy API to Zope,
+including how to set up and maintain views. For more information how to use Grok (five.grok package)
+with Plone, please read `Plone and Grok tutorial <http://plone.org/products/dexterity/documentation/manual/five.grok>`_. 
+
+.. note::
+	
+	 When writing this (Q1/2010), all project templates in Paster still use old-style Zope views.
+	 
+More information
+================
+
+* `Zope view tutorial <http://plone.org/documentation/tutorial/borg/zope-3-views>`_.
+
+* `Grok view tutorial <http://plone.org/products/dexterity/documentation/manual/five.grok/browser-components/views>`_.
+
+View components
+===============
+
+Views are Zope component architecture multi-adapter registrations.
+If you are doing manual view look-ups then this information concerns you.
+
+Views are looked up by name. Zope publisher does forced
+view look-up, instead of traversing, if the traversing name is prefixed with @@.
+
+Views are resolved against different interfaces
+
+* context: Any class/interface. If not given zope.interface.Interface is used (corresponds for="*")
+
+* request: Always HTTP request. Interface zope.publisher.interfaces.browser.IBrowserRequest is used.
+
+* layer: Theme layer interface. If not given zope.publisher.interfaces.browser.IDefaultBrowserLayer is used.
+
+See also `related source code <http://svn.zope.org/zope.browserpage/trunk/src/zope/browserpage/metaconfigure.py?rev=103273&view=auto>`_.
+
+Finding a view to override
+--------------------------
+
+Here is short introduction how to find how existing views are defined.
+First, you go to portal_types to look what views have been registered to a particular content.
+
+For example, if you want to override *Folder's* Tabular view, you find out that
+it is registered as ``/folder_tabular_view`` handler.
+
+You look for *folder_tabular_view* old style page
+template or ``@@folder_tabular_view`` BrowserView ZCML registration in Plone source tree - 
+it can be either. 
+
+Example how to search for this using UNIX tools
+
+.. code-block:: console
+
+    find . | grep -i folder_tabular_view # find old style .pt files
+    
+.. code-block:: console
+
+    grep -Ri --include="*.zcml" folder_tabular_view * # find new style view registrations in ZCML files
+    
+``folder_tabular_view`` is found on :doc:`skin layer </templates_css_and_javascripts/skin_layers>`
+called ``plone_content`` in CMFPlone product.
+
+More info
+
+* :doc:`How to override old style page templates </templates_css_and_javascripts/skin_layers>`
+
+Creating and registering a view
+-------------------------------
+
+This shows how to create and register view in Zope 3 manner.
+
+Creating a view using Grok
+==============================
+
+This is the simplest method and recommended for Plone 4.1+ onwards. 
+
+First create your add-on product using :doc:`Dexterity project template </tutorials/paste>`.
+
+Add file *yourcompany.app/yourcompany/app/browser/views.py*::
+
+        """
+            
+            Viewlets related to application logic.
+        
+        """
+        
+        # Zope imports
+        from zope.interface import Interface
+        from five import grok
+                
+           
+        # Use templates directory to search for templates.
+        grok.templatedir('templates')
+        
+        class MyView(grok.View):
+            """ Render the title and description of item only (example)
+            """
+            
+            # The view is available on every content item type
+            grok.context(Interface)
+    
+
+The view in the question is not registered against any :doc:`layer </views/layers>`,
+so it is available always. The view becomes available on Zope start-up and is
+available even if you don't run a add-on installer. This is the suggested
+approach for logic views which are not theme related.
+
+The ``grok.context(Interface)`` statement means that view is available for every content item:
+you can use it in URL like *http://yoursite/news/newsitem/@@yourviewname* or
+*http://yoursite/news/@@yourviewname* - just incoming self.context parameter changes.
+Alternatively, you could use here some :doc:`content interface </content/types>`
+to make view available for certain content types only.   
+
+Then create *yourcompany.app/yourcompany/app/browser/templates* and add the related template::
+
+        <html xmlns="http://www.w3.org/1999/xhtml"
+              xmlns:metal="http://xml.zope.org/namespaces/metal"
+              xmlns:tal="http://xml.zope.org/namespaces/tal"
+              xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+              i18n:domain="example.dexterityforms"
+              metal:use-macro="context/main_template/macros/master">
+              
+            <metal:block fill-slot="main">
+                
+                <h1 class="documentFirstHeading" tal:content="context/Title | string:'No title'" />
+                
+                <p>This is an example view.</p>
+                
+                <div id="content-core">
+                    XXX - render content using content widgets
+                </div>
+                
+            </metal:block>
+            
+        </html>
+
+Another example (empty.pt) which renders only title and description Plone 3 way::
+
+        <html xmlns="http://www.w3.org/1999/xhtml"
+              xmlns:metal="http://xml.zope.org/namespaces/metal"
+              xmlns:tal="http://xml.zope.org/namespaces/tal"
+              xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+              i18n:domain="example.dexterityforms"
+              metal:use-macro="context/main_template/macros/master">
+              
+            <metal:block fill-slot="main">
+                
+                <h1 class="documentFirstHeading" tal:content="context/pretty_title_or_id" />
+               
+                <p class="documentDescription" tal:content="context/Description|nothing" />
+                        
+            </metal:block>
+            
+        </html>
+                     
+        
+Possible :doc:`slot </templates_css_and_javascripts/template_basics>` options you can fill in
+
+* ``main`` - render edit border yourself
+
+* ``content`` - render title your self 
+
+* ``content-core`` - title prerendered, Plone version > 4.x
+         
+Now you can access your view with a news folder::
+
+        http://localhost:8080/Plone/news/myview
+        
+... or a site root::
+
+        http://localhost:8080/Plone/myview
+        
+... or any content item.
+
+You can also use @@ notation at the front of the view name to make sure a view is looked up. This
+is used to separate view names from content item names, if these two conflict::
+
+        http://localhost:8080/Plone/news/@@myview        
+
+More info
+
+* http://plone.org/products/dexterity/documentation/manual/five.grok/browser-components/views
+
+* http://plone.org/documentation/kb/how-to-write-templates-for-plone-4
+
+Creating a view using ZCML
+==============================
+
+Example::
+
+    # We must use BrowserView from view, not from zope.browser
+    # Zope version does not
+    from Products.Five.browser import BrowserView
+
+    class MyView(BrowserView):
+
+        def __init__(self, context, request):
+            """
+            This will initialize context and request object as they are given as view multiadaption parameters.
+            
+            Note that BrowserView constructor does this for you and this step here is just to show
+            how view receives its context and request parameter. You do not need to write 
+            __init__() for your views. 
+            """
+            self.context = context
+            self.request = request
+
+        # by default call will call self.index() method which is mapped
+        # to ViewPageTemplateFile specified in ZCML
+        #def __call__():
+        #
+
+.. warning::
+
+        Do not attempt to run any code in __init__() method of a view.
+        If this code fails and exception is caused, zope.component machinery
+        remaps this as "View not found" exception or traversing error.
+        Instead, use a pattern where you have setup() or similar
+        method which __call__() or view users explicitly call.
+        
+Registering a view
++++++++++++++++++++++
+
+Zope 3 views are registered in ZCML, XML-based configuration language.
+Usually the configuration file, where the registration done is 
+*yourapp.package/yourapp/package/browser/configure.zcml*.
+
+The following example registers a new view
+
+* *for* tells which content receive this view.
+  for="*" means that this view can be used for any content. This equals for registering views
+  to zope.interface.Interface base class.
+
+* *name* is view's name which exposes it to traversing and getMultiAdapter() 
+  look-ups. If your view's name is "test" then you can render it in browser
+  by calling http://yourhost/site/page/@@test
+
+* *permission* is permission needed to access the view. 
+  When HTTP request comes in, the currently logged in user's access rights
+  in the current context are checked against this permission.
+  See :doc:<Security chapter /security/permission_lists.txt>
+  for available Plone out-of-the-box permissions. Usually 
+  you want have *zope2.View*, *cmf.ModifyPortalContent*, *cmf.ManagePortal* or *zope2.Public* here.
+
+* *class* is Python dotted name for BrowserView based class which is
+  responsible for managing the view. Class __call__() method
+  is the entry point for view processing and rendering.
+ 
+ 
+* Note that you need to declare *browser* namespace in your configure.zcml
+  to use *browser* configuration directives 
+
+.. code-block:: xml
+
+  <configure
+        xmlns="http://namespaces.zope.org/zope"
+        xmlns:browser="http://namespaces.zope.org/browser"
+        >          
+        
+          <browser:page
+                for="*"
+                name="test"
+                permission="zope2.Public"
+                class=".views.MyView"
+                />
+                
+  </configure>
+
+Relationship between views and templates
+++++++++++++++++++++++++++++++++++++++++++
+
+ZCML <browser:view template=""> will set *index* class attribute.
+
+The default view __call__() method will return the value
+returned by self.index() call.
+
+Example::
+
+    <browser:page
+        for="*"
+        name="test"
+        permission="zope2.Public"
+        class=".views.MyView"
+        />
+
+    from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+
+    class MyView(BrowserView):
+
+        index = ViewPageTemplateFile("my-template.pt")
+
+
+is equal to::
+
+    <browser:page
+        for="*"
+        name="test"
+        permission="zope2.Public"
+        class=".views.MyView"
+        template="my-template.pt"
+        />
+
+    class MyView(BrowserView):
+        pass
+
+Rendering of the view is done by following::
+
+    from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+
+    class MyView(BrowserView):
+
+        # This may be overridden in ZCML
+        index = ViewPageTemplateFile("my-template.pt")
+
+        def render(self):
+            return self.index()
+
+        def __call__(self):
+            return self.render()
+
+Overriding a view template in run-time
+++++++++++++++++++++++++++++++++++++++++
+
+Below is an sample code snipped which allows override of already
+constructed ``ViewPageTemplateFile`` with a chosen file in run-time::
+
+        import plone.z3cform
+        from zope.app.pagetemplate import ViewPageTemplateFile as Zope3PageTemplateFile
+        from zope.app.pagetemplate.viewpagetemplatefile import BoundPageTemplate
+        # Construct template from a file which lies in a certain package
+        template = Zope3PageTemplateFile('subform.pt', os.path.join(os.path.dirname(plone.z3cform.__file__), "templates"))        
+        # Bind template to context
+        # This will make template callable with template() syntax and context
+        form_instance.template = BoundPageTemplate(template, form_instance)
+ 
+            
+Layers
+------
+
+Views can be registered against a specific layer interface. This means that
+views are only looked up if the specific layer is effective.
+Since one Zope application server can contain multiple Plone sites, layers
+are used to determine which Python code is effective for which Plone site.
+
+Layer can be be effective when
+
+* certain theme is active
+
+* if a specific add-on product is installed
+
+You should generally always register your views against a certain layer in your own code.
+
+For more information, see 
+
+* :doc:`browser layers </views/layers>`
+            
+Content type, mimetype and Template start tag
+---------------------------------------------
+
+If you need to produce other output than (X)HTML here are some resources
+
+* http://n2.nabble.com/Setting-a-mime-type-on-a-Zope-3-browser-view-tp4442770p4442770.html           
+
+Zope ViewPageTemplateFile vs. Five ViewPageTemplateFile
+-------------------------------------------------------
+
+.. *warning*: There are two ViewPageTemplateFile classes with the same name.
+
+* Zope  `BrowserView source code <http://svn.zope.org/zope.publisher/trunk/src/zope/publisher/browser.py?rev=101538&view=auto>`_.
+
+* `Five version  <http://svn.zope.org/Zope/trunk/src/Products/Five/browser/__init__.py?rev=96262&view=markup>`_. Products.Five is a way
+  to stick some of Zope 3 technologies to Zope 2 codebase used by Plone.
+
+Difference in code::
+
+    from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+
+    vs.
+
+    from zope.app.pagetemplate import ViewPageTemplateFile
+
+
+Difference is that Five version supports
+
+* Acquisition
+
+* provider: TAL expression
+
+* Other Plone specific TAL expression functions like test()
+
+* Usually Plone code needs Five version of ViewPageTemplateFile
+
+* Some subsystems, notably z3c.form package, expect Zope 3 version of ViewPageTemplateFile instances
+
+
+Overriding a view class in a product
+------------------------------------
+
+Most of the code in this section is copied from a `tutorial by Martin Aspeli 
+(on slideshare.net)
+<http://www.slideshare.net/wooda/martin-aspeli-extending-and-customising-plone-3>`_.
+The main change is that, at least for Plone 4, the interface should subclass 
+plone.theme.interfaces.IDefaultPloneLayer instead of zope.interface.Interface.
+
+In this example we override the "@@register" form from the 
+plone.app.users package, creating a custom form which subclasses the original.
+
+* Create an interface in interfaces.py:
+
+.. code-block:: python
+
+    from plone.theme.interfaces import IDefaultPloneLayer
+
+    class IExamplePolicy(IDefaultPloneLayer):
+        """ A marker interface for the theme layer 
+        """
+
+* Then create profiles/default/browserlayer.xml:
+
+.. code-block:: xml
+
+    <layers>
+      <layer 
+        name="example.policy.layer"
+        interface="example.policy.interfaces.IExamplePolicy" 
+      />
+    </layers>
+
+* Create browser/configure.zcml:
+
+.. code-block:: xml
+
+    <configure
+        xmlns="http://namespaces.zope.org/zope"
+        xmlns:browser="http://namespaces.zope.org/browser"
+        i18n_domain="example.policy">
+      <browser:page
+          name="register"
+          class=".customregistration.CustomRegistrationForm"
+          permission="zope2.View"
+          layer="..interfaces.IExamplePolicy"
+          />
+    </configure>
+
+* Create browser/customregistration.py:
+
+.. code-block:: python
+
+    from plone.app.users.browser.register import RegistrationForm
+
+    class CustomRegistrationForm(RegistrationForm):
+        """ Subclass the standard registration form
+        """        
+        
+Helper views
+------------
+
+Not all views need to return HTML output, or output at all. Views can be used as a helpers
+around in the code to provide APIs to objects. Since views can be overridden using layers,
+view is a natural plug-in point which an add-on product can customize or override
+in a conflict-free manner.
+
+View methods are exposed to page templates and such, so you can also call 
+view methods directly from a page template, besides Python code.
+
+More information
+================
+
+* :doc:`Context helpers </misc/context>`
+
+* :doc:`Expressions </functionality/expressions>`
+
+Historical perspective
+=======================
+
+Often the point of using helper views is that you can have reusable functionality which can be plugged-in as one-line code around the system. Helper views also get around the following limitations:
+
+* TAL security
+
+* Limiting Python expression to one line
+
+* Not being able to import Python modules
+
+.. note ::
+
+        Using RestrictedPython scripts (creating Python through
+        Zope Management Interface) and Zope 2 Extension modules is discouraged.
+        The same functionality can be achieved with helper views, with 
+        less potential pitfalls.        
+
+Reusing view template snippets or embedding another view
+-------------------------------------------------------------
+
+To use the same template code several times you can either
+
+* Create a own BrowserView for it call this view (see *Getting a view* below)
+
+* Share a ViewPageTemplate instance between views and using it several times 
+
+.. note::
+
+        Plone 2.x way, TAL template language macros, are discouraged to provide reusable
+        functionality in your add-on product. This is because macros are hardwired
+        to TAL template language and referring them outside templates is difficult.
+        Also, if you ever need to mix or change the template language, you can
+        do it easily when templates are a feature of a pure Python based view and not vice versa.
+
+Here is an example how to have a view snippet which can be used subclasses of a base view class.
+Subclasses can refer to this template in any point of the view rendering, making it possible
+for subclasses to have fine tuned control over how the template snippet is represented.
+
+Related Python code::
+        
+        from Products.Five import BrowserView
+        from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+
+        class ProductCardView(BrowserView):
+            """
+            End user visible product card presentation.
+            """
+            implements(IProductCardView)
+        
+            # Nested template which renders address box + buy button
+            summary_template = ViewPageTemplateFile("summarybox.pt")
+
+
+            def renderSummary(self):
+                """ Render summary box 
+                
+                @return: Resulting HTML code as Python string
+                """
+                return self.summary_template()
+                
+Then you can render summary template in the main template associated with ProductCardView,
+by calling ``renderSummary()`` method and TAL non-escaping HTML embedding.
+
+.. code-block:: html
+
+            <h1 tal:content="context/Title" />
+
+            <div tal:replace="structure view/renderSummary" />
+
+            <div class="description">
+                <div tal:condition="python:context.Description().decode('utf-8') != u'None'" tal:replace="structure context/Description" />
+            </div>
+
+And the summarybox.pt itself is just HTML code without Plone decoration frame (main_template/master etc. macros).
+Make sure that you declare i18n:domain again or the strings in this template are not translated.
+
+.. code-block:: html
+
+        <div class="summary-box" i18n:domain="your.package">
+                ...
+        </div>                                
+
+Accessing a view instance in code
+-----------------------------------
+
+You need to get access to view in your code if you are 
+
+* Calling a view from inside another view
+
+* Calling a view from unit test code
+
+Below are two different approach.
+
+By using getMultiAdapter()
+==========================
+
+This is the most efficient way in Python.
+
+Example
+
+.. code-block:: python
+
+    from Acquisition import aq_inner
+    from zope.component import getMultiAdapter
+
+    def getView(context, request, name):
+        # Remove acquisition wrapper which may cause false context assumptions
+        context = aq_inner(context)
+        # Will raise ComponentLookUpError
+        view = getMultiAdapter((context, request), name=name)
+        # Put view to acquisition chain
+        view = view.__of__(context)
+        return view
+
+
+By using traversing
+===================
+
+Traversing is slower than direct getMultiAdapter() call.
+However, traversing is available in templates and RestrictedPython modules easily.
+
+Example
+
+.. code-block:: python
+
+    def getView(context, name):
+        """ Return a view which is associated with context object and current HTTP request.
+
+        @param context: Any Plone content object
+        @param name: Attribute name holding the view name
+        """
+
+
+        try:
+            view = context.unrestrictedTraverse("@@" + name)
+        except AttributeError:
+            raise RuntimeError("Instance %s did not have view %s" % (str(context), name))
+
+        view = view.__of__(context)
+
+        return view
+
+You can also do direct view looks up and method calls in template by using @@ notation in traversing.
+
+.. code-block:: html
+
+    <div tal:attributes="lang context/@@plone_portal_state/current_language">
+        We look up lang attribute by using BrowserView which name is "plone_portal_state"
+    </div>
+
+
+Use a skin based template in a Five view
+========================================
+
+Use aq_acquire(object, template_name)
+
+Example: Get an object by its path and render it using its default template in the current context.
+
+.. code-block:: python
+
+    from Acquisition import aq_base, aq_acquire
+    from Products.Five.browser import BrowserView
+
+    class TelescopeView(BrowserView):
+        """
+        Renders an object in a different location of the site when passed the
+        path to it in the querystring.
+        """
+        def __call__(self):
+            path = self.request["path"]
+            target_obj = self.context.restrictedTraverse(path)
+            # Strip the target_obj of context with aq_base.
+            # Put the target in the context of self.context.
+            # getDefaultLayout returns the name of the default
+            # view method from the factory type information
+            return aq_acquire(aq_base(target_obj).__of__(self.context),
+                              target_obj.getDefaultLayout())()
+
+Listing available views
+------------------------
+
+This is useful for debugging purposes::
+
+        from plone.app.customerize import registration
+        from zope.publisher.interfaces.browser import IBrowserRequest
+        
+        # views is generator of zope.component.registry.AdapterRegistration objects
+        views = registration.getViews(IBrowserRequest)
+        
+Listing all views of certain type
+=================================
+
+How to filter out views which provide certain interface.
+
+        from plone.app.customerize import registration
+        from zope.publisher.interfaces.browser import IBrowserRequest
+        
+        # views is generator of zope.component.registry.AdapterRegistration objects
+        views = registration.getViews(IBrowserRequest)
+        
+        # Filter out all classes which do not filter a certain interface
+        views = [ view.factory for view in views if IBlocksView.implementedBy(view.factory) ] 
+
+Default view of a content item
+-------------------------------
+
+Objects has views for "default", view, edit, and so on.
+
+The distinction between *default* and *view* views are that for files,
+the default can be download.
+
+The default view...
+
+* This view is configured in :doc:`portal_types </content/types>`.
+
+* This view is rendered when content item is called - even though 
+  they are objects, they have ``__call__()`` Python method defined.
+
+
+If you explicitly need to get content item view for page rendering, 
+you can do it::
+
+    def viewURLFor(item):
+        cdtate = getMultiAdapter((item, item.REQUEST), name='plone_context_state)
+        return cstate.view_url() 
+  
+More info
+
+* :doc:`Context helpers and utilities </misc/context>`
+
+* http://plone.293351.n2.nabble.com/URL-to-content-view-tp6028204p6028204.html  
+       
+Views and magical acquisition
+----------------------------------
+
+.. warning ::
+
+        This is really nasty stuff. If this were not be a public document I'd 
+        use more harsh words here.
+
+In Plone 3, the following will lead the very hard to debug errors.
+
+Views will automatically assign themselves as a parent for all member variables.
+
+E.g. you have Basket content item with absolute_url() of ::
+
+        http://localhost:9666/isleofback/sisalto/matkasuunnitelmat/d59ca034c50995d6a77cacbe03e718de
+     
+Then if you use this object in view code member variable assignment...
+
+::
+
+        self.basket = my_basket
+        
+... this will mess up Basket content item acquisition chain::
+
+        <Basket at /isleofback/sisalto/yritykset/katajamaan_taksi/d59ca034c50995d6a77cacbe03e718de>
+
+One workaround to avoid this mess it to put a member variable inside a Python array
+and create an accessor method to read it when needed::
+
+
+    def initSomeVariables():
+
+        basket = collector.get_collector(basket_folder, self.request, create)
+            
+        if basket is not None:
+            # Work around acquisition wrapping thing 
+            # which forces the parent
+            
+            # Assign a variable inside an array which prevents automatic
+            # acquisition wrapping for doing its broken magic or something
+            # along the lines
+            self.basket_holder = [ basket ]
+        else:
+            self.basket_holder = [ None ]
+        
+    
+    def getCollector(self):
+        """
+        @return: User's collector object where pages are stored
+        """
+        return self.basket_holder[0]
+
+                 

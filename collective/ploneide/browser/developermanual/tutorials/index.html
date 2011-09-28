@@ -1,0 +1,252 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Tutorials &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="next" title="Python, Plone and Zope" href="python.html" />
+    <link rel="prev" title="How to upload Plone community developer documentation to Plone CMS" href="../introduction/developermanual.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="python.html" title="Python, Plone and Zope"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../introduction/developermanual.html" title="How to upload Plone community developer documentation to Plone CMS"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="tutorials">
+<h1>Tutorials<a class="headerlink" href="#tutorials" title="Permalink to this headline">¶</a></h1>
+<p>Hand-holding information on how to get started with Plone.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="python.html">Python, Plone and Zope</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="python.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python.html#tutorial-and-language-learning">Tutorial and language learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python.html#plone-and-zope-resources">Plone and Zope resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python.html#installing-python">Installing Python</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="buildout/index.html">Buildout</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="buildout/introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout/packages.html">Packages, products and eggs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout/prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout/creating.html">Creating a buildout for your project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout/buildoutcfg.html">Understanding buildout.cfg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout/defaults.html">Creating a buildout defaults file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout/thirdparty.html">Installing a third party product</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout/creatingpackage.html">Creating a new package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout/deployment.html">A deployment configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout/recipes.html">Useful buildout recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout/subversion.html">Installing products from Subversion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout/additional.html">Additional information</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="paste.html">Zopeskel templates</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="paste.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="paste.html#zopeskel-and-buildout">Zopeskel and buildout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="paste.html#creating-an-add-on-product-skeleton">Creating an add-on product skeleton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="paste.html#local-commands">Local commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="paste.html#dexterity-templates">Dexterity templates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="paste.html#in-depth-background-information">In-depth background information</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="archgenxml/index.html">Using ArchGenXML</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="archgenxml/getting-started/index.html">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="archgenxml/basic-features/index.html">Basic Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="archgenxml/third-party-product-integration/index.html">Third Party Product Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="archgenxml/reference/index.html">Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="archgenxml/step-by-step-instructions/index.html">Step by Step Instructions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="archgenxml/recipes-and-tips/index.html">Recipes and Tips</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="old-style-vs-new-style/index.html">Old style vs. new style technologies</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="old-style-vs-new-style/packaging.html">Packaging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="old-style-vs-new-style/theming.html">Theming</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="addon.html">Introduction to extending Plone</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="addon.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="addon.html#how-to-add-code-to-plone">How to add code to Plone</a></li>
+<li class="toctree-l2"><a class="reference internal" href="addon.html#laying-your-first-egg">Laying your first egg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="addon.html#manifest-problem">MANIFEST problem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="addon.html#paste-and-buildout">Paste and buildout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="addon.html#zopeskel-templates">ZopeSkel templates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="addon.html#add-on-installer">Add-on installer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="addon.html#traversing">Traversing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="addon.html#browserview">BrowserView</a></li>
+<li class="toctree-l2"><a class="reference internal" href="addon.html#forms-z3c-forms">Forms (z3c.forms)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="addon.html#transactions">Transactions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../introduction/developermanual.html"
+                        title="previous chapter">How to upload Plone community developer documentation to Plone CMS</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="python.html"
+                        title="next chapter">Python, Plone and Zope</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/tutorials/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="python.html" title="Python, Plone and Zope"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../introduction/developermanual.html" title="How to upload Plone community developer documentation to Plone CMS"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

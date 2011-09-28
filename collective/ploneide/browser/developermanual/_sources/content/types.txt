@@ -1,0 +1,199 @@
+=================
+Content types
+=================
+
+.. admonition:: Description
+
+	Plone's content type subsystems and creating new content types programmatically.
+
+.. contents :: :local:
+
+Introduction
+-------------
+
+Plone has two kind of content types subsystems
+
+* :doc:`Archetypes </content/archetypes/index>` based
+
+* :doc:`Dexterity </content/dexterity>` based (new)
+
+* See also Plomino (later in this document)
+
+Flexible architecture allows other kinds of content type subsystems as well.
+
+Type information registry
+-------------------------
+
+Plone maintains available content types in portal_types tool.
+
+portal_types is a folderish content where type information are child objects,
+keyed by portal_type metadata.
+
+portal_factory is a tool responsible for creating the persistent object representing the content.
+
+`TypesTool source code <http://svn.zope.org/Products.CMFCore/trunk/Products/CMFCore/TypesTool.py?rev=101748&view=auto>`_.
+
+Listing available content types
+================================
+
+Below is an example Zope 3 vocabulary factory which will return 
+all the available content types to be used with multi-selection field.
+
+Define vocabulary in ZCML::
+
+  <utility
+      provides="zope.schema.interfaces.IVocabularyFactory"
+      component=".vocabularies.content_types_vocabulary"
+      name="mfabrik.like.content_types"
+      />
+      
+Then have the factory code for it in vocabularies.py::
+
+        """
+        
+            Zope 3 schema vocabulary factory for making multiple choices between installed content types of Plone site.
+        
+            http://mfabrik.com
+        
+        """
+        
+        __license__ = "GPL 2"
+        __copyright__ = "2010 mFabrik Research Oy"
+        __author__ = "Mikko Ohtamaa <mikko@mfabrik.com>"
+        __docformat__ = "epytext"
+        
+        from Acquisition import aq_inner
+        from zope.app.component.hooks import getSite
+        from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
+        from Products.CMFCore.utils import getToolByName
+        
+        def make_terms(items):
+            """ Create zope.schema terms for vocab from tuples,
+            
+            @return: Generator of SimpleTerm objects
+            """
+            terms = [ SimpleTerm(value=pair[0], token=pair[0], title=pair[1]) for pair in items ]
+            return terms
+        
+        def friendly_types(site):
+            """ List user selectable content types.
+            
+            Note that there exist a method in IPortalState utility view for this, but we cannot
+            use it, because vocabulary factory must be available in contexts where there is
+            no HTTP request (e.g. installing add-on product).
+             
+            This code is copy-pasted from https://svn.plone.org/svn/plone/plone.app.layout/trunk/plone/app/layout/globals/portal.py
+            
+            @return: Generator for (id, type_info title) tuples
+            """
+            context = aq_inner(site)
+            site_properties = getToolByName(context, "portal_properties").site_properties
+            not_searched = site_properties.getProperty('types_not_searched', [])
+        
+            portal_types = getToolByName(context, "portal_types")
+            types = portal_types.listContentTypes()
+            
+            # Get list of content type ids which are not filtered out
+            prepared_types = [t for t in types if t not in not_searched]
+            
+            # Return (id, title) pairs
+            return [ (id, portal_types[id].title) for id in prepared_types ]
+        
+        def content_types_vocabulary(context):
+            """
+            A vocabulary factory for making a choice of a portal type.
+        
+            @param context: Assume Plone site.
+        
+            @return: SimpleVocabulary containing (portal type id, portal type title) pairs.
+            """
+            
+            # This special case must be handled by plone.app.registry quick installing registry.xml
+            # which refers to zope.schema refering to this vocabulary
+            # site information is *not* available
+                
+            try:
+                import plone.registry.record
+                import plone.registry.recordsproxy
+                if isinstance(context, plone.registry.record.Record) or isinstance(context, plone.registry.recordsproxy.RecordsProxy):
+                    context = getSite()
+            except ImportError:
+                pass
+            
+            items = friendly_types(context)
+            
+            return SimpleVocabulary(make_terms(items))
+
+Creating a new content type
+----------------------------
+
+This instructions apply for :doc:`Archetypes subsystem based content types </content/archetypes/index>`
+
+* You need to have an add-on product code skeleton created using paster's *archetypes* template
+
+* Use *paster addcontent content* command new types. 
+
+Related how tos
+
+* http://lionfacelemonface.wordpress.com/tutorials/zopeskel-archetypes-howto/
+
+* http://docs.openia.com/howtos/development/plone/creating-a-site-archetypes-object-and-contenttypes-with-paster?set_language=fi&cl=fi
+
+* http://www.unc.edu/~jj/plone/
+
+.. note ::
+
+        Creating types by hand is not worth of the problems. Please use a 
+        code generator to create the skeleton for your new content type.
+
+.. warning::
+
+        Content type name must not contain spaces. Content type name or description
+        must not contain non-ASCII letters. If you need to change these please
+        create a translation catalog which will translate the text to 
+        one with spaces or international letters.  
+
+Debugging new content type problems
+===================================
+
+Creating types by hand is not worth of the problems.
+
+* `Why doesn't my custom content type show up in add menu <http://plone.org/documentation/faq/why-doesnt-my-custom-content-type-show-up-in-add-menu/>`_ checklist.
+
+Creating new content types through-the-web
+---------------------------------------------
+
+There exist solutions for non-programmes and Plone novices to create their content types
+more easily.
+
+Dexterity 
+
+* http://plone.org/products/dexterity
+
+* Core feature
+
+* Use Dexterity control panel in site setup
+
+Plomino (Archetypes-based add-on)
+
+* With Plomino you can make an entire web application that can organize &
+  manipulate data with very limited programming experience.
+
+* http://www.plomino.net/
+
+* http://www.youtube.com/view_play_list?p=469DE37C742F31D1
+
+Implictly allowed
+------------------
+
+Implictly allowed is flag whether the content is globally addable or
+must be specifically enabled for certain folders.
+
+The following example allows creation of Large Plone Folder anywhere at the site
+(it is disabled by default). For available properties, see TypesTool._advanced_properties.
+
+Example::
+
+    portal_types = self.context.portal_types
+    lpf = portal_types["Large Plone Folder"]
+    lpf.global_allow = True # This is "Globally allowed" property

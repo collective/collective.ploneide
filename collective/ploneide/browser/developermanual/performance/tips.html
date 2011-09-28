@@ -1,0 +1,342 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Performance and caching tips &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Performance and tuning" href="index.html" />
+    <link rel="next" title="Troubleshooting" href="../troubleshooting/index.html" />
+    <link rel="prev" title="RAM cache" href="ramcache.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../troubleshooting/index.html" title="Troubleshooting"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ramcache.html" title="RAM cache"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Performance and tuning</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="performance-and-caching-tips">
+<h1>Performance and caching tips<a class="headerlink" href="#performance-and-caching-tips" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#caching" id="id1">Caching</a></li>
+<li><a class="reference internal" href="#optimizing-zeo-and-threads" id="id2">Optimizing ZEO and threads</a></li>
+<li><a class="reference internal" href="#debugging-slow-threads-in-production" id="id3">Debugging slow threads in production</a></li>
+<li><a class="reference internal" href="#memcached-as-session-storage" id="id4">Memcached as session storage</a></li>
+<li><a class="reference internal" href="#input-output-performance-of-the-server" id="id5">Input/output performance of the server</a></li>
+<li><a class="reference internal" href="#tuning-complex-configurations" id="id6">Tuning complex configurations</a></li>
+<li><a class="reference internal" href="#reducing-memory-usage" id="id7">Reducing memory usage</a><ul>
+<li><a class="reference internal" href="#disable-extra-languages" id="id8">Disable extra languages</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#large-files" id="id9">Large files</a></li>
+<li><a class="reference internal" href="#linguaplone-and-multi-lingual-sites" id="id10">LinguaPlone and multi-lingual sites</a></li>
+<li><a class="reference internal" href="#sessions-and-performance" id="id11">Sessions and performance</a></li>
+<li><a class="reference internal" href="#zserver-thread-count" id="id12">ZServer thread count</a></li>
+<li><a class="reference internal" href="#xsendfile" id="id13">XSendFile</a></li>
+</ul>
+</div>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">Tips for Plone performance tuning and making your add-on product and customizations faster.</p>
+</div>
+<div class="section" id="caching">
+<h2><a class="toc-backref" href="#id1">Caching</a><a class="headerlink" href="#caching" title="Permalink to this headline">¶</a></h2>
+<p>For Plone 4 and onwards, see <a class="reference external" href="http://pypi.python.org/pypi/plone.app.caching">plone.app.caching</a>.</p>
+</div>
+<div class="section" id="optimizing-zeo-and-threads">
+<h2><a class="toc-backref" href="#id2">Optimizing ZEO and threads</a><a class="headerlink" href="#optimizing-zeo-and-threads" title="Permalink to this headline">¶</a></h2>
+<p>For multicore systems, which basically all production systems nowadays are, you might want
+to optimize Python threading vs. processes. You may also tune how many
+Python interpreter instructions are run before doing green thread switches in the interpreter.</p>
+<ul class="simple">
+<li><a class="reference external" href="https://mail.zope.org/pipermail/zodb-dev/2010-December/013897.html">https://mail.zope.org/pipermail/zodb-dev/2010-December/013897.html</a></li>
+</ul>
+</div>
+<div class="section" id="debugging-slow-threads-in-production">
+<h2><a class="toc-backref" href="#id3">Debugging slow threads in production</a><a class="headerlink" href="#debugging-slow-threads-in-production" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://pypi.python.org/pypi/Products.LongRequestLogger">http://pypi.python.org/pypi/Products.LongRequestLogger</a></li>
+</ul>
+</div>
+<div class="section" id="memcached-as-session-storage">
+<h2><a class="toc-backref" href="#id4">Memcached as session storage</a><a class="headerlink" href="#memcached-as-session-storage" title="Permalink to this headline">¶</a></h2>
+<p>Storing sessions in ZEO/ZODB is not scaling up since they are
+very prone to raise ConflictErrors if there is considerable load
+on the system.</p>
+<p>Memcached provides more scalable session backend.</p>
+<p>For more information, see <a class="reference external" href="http://pypi.python.org/pypi/lovely.session/0.2.2">lovely.session add-on product</a>.</p>
+</div>
+<div class="section" id="input-output-performance-of-the-server">
+<h2><a class="toc-backref" href="#id5">Input/output performance of the server</a><a class="headerlink" href="#input-output-performance-of-the-server" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="http://plope.com/Members/chrism/iostat_debugging">http://plope.com/Members/chrism/iostat_debugging</a></p>
+<p>Clarification:</p>
+<div class="highlight-python"><pre>&lt;mcdonc&gt; well, the example has await at about 40X svctime.. that's pretty shitty
+&lt;mcdonc&gt; i mean that box was useless</pre>
+</div>
+</div>
+<div class="section" id="tuning-complex-configurations">
+<h2><a class="toc-backref" href="#id6">Tuning complex configurations</a><a class="headerlink" href="#tuning-complex-configurations" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="http://www.lovelysystems.com/the-decathlon-of-computer-science/">http://www.lovelysystems.com/the-decathlon-of-computer-science/</a></p>
+</div>
+<div class="section" id="reducing-memory-usage">
+<h2><a class="toc-backref" href="#id7">Reducing memory usage</a><a class="headerlink" href="#reducing-memory-usage" title="Permalink to this headline">¶</a></h2>
+<p>This tips are especially critical when running Plone on low-memory virtual private server (VPS).</p>
+<div class="section" id="disable-extra-languages">
+<h3><a class="toc-backref" href="#id8">Disable extra languages</a><a class="headerlink" href="#disable-extra-languages" title="Permalink to this headline">¶</a></h3>
+<p>Add PTS_LANGUAGES to buildout.cfg:</p>
+<div class="highlight-python"><pre>[instance]
+...
+environment=
+    PTS_LANGUAGES=en fi</pre>
+</div>
+</div>
+</div>
+<div class="section" id="large-files">
+<h2><a class="toc-backref" href="#id9">Large files</a><a class="headerlink" href="#large-files" title="Permalink to this headline">¶</a></h2>
+<p>How to offload blob processing away from Zope</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.slideshare.net/Jazkarta/large-files-without-the-trials">http://www.slideshare.net/Jazkarta/large-files-without-the-trials</a></li>
+</ul>
+</div>
+<div class="section" id="linguaplone-and-multi-lingual-sites">
+<h2><a class="toc-backref" href="#id10">LinguaPlone and multi-lingual sites</a><a class="headerlink" href="#linguaplone-and-multi-lingual-sites" title="Permalink to this headline">¶</a></h2>
+<p>Do not use <tt class="docutils literal"><span class="pre">LanguageIndex</span></tt> and update your LinguaPlone to version 3.1.</p>
+<ul class="simple">
+<li><a class="reference external" href="http://plone.293351.n2.nabble.com/Products-LinguaPlone-LanguageIndex-vs-FieldIndex-tp5554729p5554729.html">http://plone.293351.n2.nabble.com/Products-LinguaPlone-LanguageIndex-vs-FieldIndex-tp5554729p5554729.html</a></li>
+<li><a class="reference external" href="http://plone-regional-forums.221720.n2.nabble.com/New-LinguaPlone-releases-with-large-performance-improvements-td5578581.html">http://plone-regional-forums.221720.n2.nabble.com/New-LinguaPlone-releases-with-large-performance-improvements-td5578581.html</a></li>
+</ul>
+</div>
+<div class="section" id="sessions-and-performance">
+<h2><a class="toc-backref" href="#id11">Sessions and performance</a><a class="headerlink" href="#sessions-and-performance" title="Permalink to this headline">¶</a></h2>
+<p>Write transactions are great deal worse performance wise than read transactions.</p>
+<p>By default, every login is a write transaction. Also, Plone needs to update
+logged user in session timestamp once in a while to keep the session active.</p>
+<p>With high amount of users you may run to many ConflictErrors (read conflicts)
+with ZODB.</p>
+<p>There are some tricks you can do here</p>
+<ul class="simple">
+<li><a class="reference external" href="http://plone.293351.n2.nabble.com/the-mysterious-case-of-the-zope-sessions-that-shouldn-t-tp5731395p5731395.html">http://plone.293351.n2.nabble.com/the-mysterious-case-of-the-zope-sessions-that-shouldn-t-tp5731395p5731395.html</a></li>
+<li><a class="reference external" href="http://pypi.python.org/pypi/collective.beaker/">http://pypi.python.org/pypi/collective.beaker/</a></li>
+</ul>
+</div>
+<div class="section" id="zserver-thread-count">
+<h2><a class="toc-backref" href="#id12">ZServer thread count</a><a class="headerlink" href="#zserver-thread-count" title="Permalink to this headline">¶</a></h2>
+<p>How many requests one ZEO front end client (ZServer can handle).</p>
+<p>Buildout default is 2.</p>
+<p>Adjust it:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="n">client1</span><span class="p">]</span>
+<span class="n">recipe</span> <span class="o">=</span> <span class="n">plone</span><span class="o">.</span><span class="n">recipe</span><span class="o">.</span><span class="n">zope2instance</span>
+<span class="o">....</span>
+<span class="n">zserver</span><span class="o">-</span><span class="n">threads</span> <span class="o">=</span> <span class="mi">5</span>
+</pre></div>
+</div>
+<p>Find good value by doing performance testing for your site.</p>
+<p>More info</p>
+<ul class="simple">
+<li><a class="reference external" href="http://pypi.python.org/pypi/plone.recipe.zope2instance">http://pypi.python.org/pypi/plone.recipe.zope2instance</a></li>
+</ul>
+</div>
+<div class="section" id="xsendfile">
+<h2><a class="toc-backref" href="#id13">XSendFile</a><a class="headerlink" href="#xsendfile" title="Permalink to this headline">¶</a></h2>
+<p>XSendFile is an enhancement over HTTP front end proxy protocol
+which allows offloading of file uploads and downloads to the front end web server</p>
+<p>More info for Plone support</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/collective/collective.xsendfile">https://github.com/collective/collective.xsendfile</a></li>
+</ul>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Performance and caching tips</a><ul>
+<li><a class="reference internal" href="#caching">Caching</a></li>
+<li><a class="reference internal" href="#optimizing-zeo-and-threads">Optimizing ZEO and threads</a></li>
+<li><a class="reference internal" href="#debugging-slow-threads-in-production">Debugging slow threads in production</a></li>
+<li><a class="reference internal" href="#memcached-as-session-storage">Memcached as session storage</a></li>
+<li><a class="reference internal" href="#input-output-performance-of-the-server">Input/output performance of the server</a></li>
+<li><a class="reference internal" href="#tuning-complex-configurations">Tuning complex configurations</a></li>
+<li><a class="reference internal" href="#reducing-memory-usage">Reducing memory usage</a><ul>
+<li><a class="reference internal" href="#disable-extra-languages">Disable extra languages</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#large-files">Large files</a></li>
+<li><a class="reference internal" href="#linguaplone-and-multi-lingual-sites">LinguaPlone and multi-lingual sites</a></li>
+<li><a class="reference internal" href="#sessions-and-performance">Sessions and performance</a></li>
+<li><a class="reference internal" href="#zserver-thread-count">ZServer thread count</a></li>
+<li><a class="reference internal" href="#xsendfile">XSendFile</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ramcache.html"
+                        title="previous chapter">RAM cache</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../troubleshooting/index.html"
+                        title="next chapter">Troubleshooting</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/performance/tips.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../troubleshooting/index.html" title="Troubleshooting"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ramcache.html" title="RAM cache"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Performance and tuning</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

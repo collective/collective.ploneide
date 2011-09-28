@@ -1,0 +1,457 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Varnish &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Hosting" href="index.html" />
+    <link rel="next" title="Nginx" href="nginx.html" />
+    <link rel="prev" title="WSGI" href="wsgi.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="nginx.html" title="Nginx"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="wsgi.html" title="WSGI"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Hosting</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="varnish">
+<h1>Varnish<a class="headerlink" href="#varnish" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">Varnish is a caching front-end server. This document has notes how to use Varnish
+with Plone.</p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
+<li><a class="reference internal" href="#management-console" id="id2">Management console</a><ul>
+<li><a class="reference internal" href="#telnet-console" id="id3">Telnet console</a></li>
+<li><a class="reference internal" href="#varnishadm-system-wide-installation" id="id4">varnishadm (system-wide installation)</a></li>
+<li><a class="reference internal" href="#quit-console" id="id5">Quit console</a></li>
+<li><a class="reference internal" href="#purging-the-cache" id="id6">Purging the cache</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#loading-new-vcl-to-live-varnish-daemon" id="id7">Loading new VCL to live varnish daemon</a></li>
+<li><a class="reference internal" href="#logs" id="id8">Logs</a></li>
+<li><a class="reference internal" href="#stats" id="id9">Stats</a></li>
+<li><a class="reference internal" href="#varnish-buildout-restart-snippet" id="id10">Varnish buildout restart snippet</a></li>
+<li><a class="reference internal" href="#virtual-hosting" id="id11">Virtual hosting</a></li>
+<li><a class="reference internal" href="#varnish-and-i18n" id="id12">Varnish and I18N</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>This page contains info for using Varnish caching proxy with Plone.</p>
+<p>Please read first</p>
+<ul class="simple">
+<li><a class="reference external" href="http://pypi.python.org/pypi/plone.recipe.varnish">http://pypi.python.org/pypi/plone.recipe.varnish</a></li>
+<li><a class="reference external" href="http://varnish-cache.org/">http://varnish-cache.org/</a></li>
+</ul>
+</div>
+<div class="section" id="management-console">
+<h2><a class="toc-backref" href="#id2">Management console</a><a class="headerlink" href="#management-console" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="telnet-console">
+<h3><a class="toc-backref" href="#id3">Telnet console</a><a class="headerlink" href="#telnet-console" title="Permalink to this headline">¶</a></h3>
+<p>Management console must be enabled in Varnish buildout settings.</p>
+<p>Example:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">ssh yourhost</span>
+<span class="go">telnet localhost 8088</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Port number depends on your Varnish settings.</p>
+</div>
+</div>
+<div class="section" id="varnishadm-system-wide-installation">
+<h3><a class="toc-backref" href="#id4">varnishadm (system-wide installation)</a><a class="headerlink" href="#varnishadm-system-wide-installation" title="Permalink to this headline">¶</a></h3>
+<p>Ubuntu/Debian supports accessing Varnish admin through:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">varnishadm -T localhost:6082 -S /etc/varnish/secret</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="quit-console">
+<h3><a class="toc-backref" href="#id5">Quit console</a><a class="headerlink" href="#quit-console" title="Permalink to this headline">¶</a></h3>
+<p>Quit command:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">quit</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="purging-the-cache">
+<h3><a class="toc-backref" href="#id6">Purging the cache</a><a class="headerlink" href="#purging-the-cache" title="Permalink to this headline">¶</a></h3>
+<p>This will remove all entries from Varnish cache:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">url.purge .*</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="loading-new-vcl-to-live-varnish-daemon">
+<h2><a class="toc-backref" href="#id7">Loading new VCL to live varnish daemon</a><a class="headerlink" href="#loading-new-vcl-to-live-varnish-daemon" title="Permalink to this headline">¶</a></h2>
+<p>More often than not it is beneficial to load new configuration without bringing the cache down for maintenance.
+Using this method also checks the new VCL for syntax errors before activating it.
+Logging in to Varnish CLI requires varnishadm tool, address of management interface and authentication secret file.
+See varnishadm man-page for details.</p>
+<p>Opening new CLI connection to Varnish console, buildout based Varnish installation:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">parts/varnish-build/bin/varnishadm -T localhost:8088</span>
+</pre></div>
+</div>
+<p>Port 8088 is defined in <tt class="docutils literal"><span class="pre">buildout.cfg</span></tt>:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">[varnish-instance]</span>
+<span class="go">telnet = localhost:8088</span>
+</pre></div>
+</div>
+<p>Opening new CLI connection to Varnish console, system-wide Varnish installation on Ubuntu/Debian:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">varnishadm -T localhost:6082 -S /etc/varnish/secret</span>
+</pre></div>
+</div>
+<p>You can dynamically load and parse new VCL config file to memory:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">vcl.load &lt;name&gt; &lt;file&gt;</span>
+</pre></div>
+</div>
+<p>For example:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">vcl.load newconf_1 /etc/varnish/newconf.vcl</span>
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">vcl.load</span></tt> will load and compile the new configuration. Compilation will fail and report on syntax errors.
+Now that the new configuration has been loaded it can be activated with:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">vcl.use newconf_1</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Varnish does not reuse &lt;name&gt; in vcl.load, so every time you need to reload
+your config you need to invent a new name for it.</p>
+</div>
+</div>
+<div class="section" id="logs">
+<h2><a class="toc-backref" href="#id8">Logs</a><a class="headerlink" href="#logs" title="Permalink to this headline">¶</a></h2>
+<p>To see real-time log dump (system-wide Varnish configuration):</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">varnishlog</span>
+</pre></div>
+</div>
+<p>By default, Varnish does not log to any file and keeps log only in memory.
+If you want to extract Apache like log from varnish you need to use <tt class="docutils literal"><span class="pre">varnishncsa</span></tt>
+utility.</p>
+</div>
+<div class="section" id="stats">
+<h2><a class="toc-backref" href="#id9">Stats</a><a class="headerlink" href="#stats" title="Permalink to this headline">¶</a></h2>
+<p>Check live &quot;top like&quot; Varnish monitor:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">parts/varnish-build/bin/varnishstat</span>
+</pre></div>
+</div>
+<p>Use admin console to print stats for you:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">stats</span>
+<span class="go">200 2114</span>
+
+<span class="go">       95717  Client connections accepted</span>
+<span class="go">      132889  Client requests received</span>
+<span class="go">       38638  Cache hits</span>
+<span class="go">       21261  Cache hits for pass</span>
+<span class="go">       59565  Cache misses</span>
+<span class="go">       23395  Backend conn. success</span>
+<span class="go">          87  Backend conn. failures</span>
+<span class="go">       62062  Backend conn. reuses</span>
+<span class="go">       17259  Backend conn. was closed</span>
+<span class="go">       79331  Backend conn. recycles</span>
+<span class="go">          10  Fetch head</span>
+<span class="go">       65423  Fetch with Length</span>
+<span class="go">       15694  Fetch chunked</span>
+<span class="go">        3753  Fetch EOF</span>
+<span class="go">         302  Fetch wanted close</span>
+<span class="go">         355  Fetch failed</span>
+<span class="go">         180  N struct sess_mem</span>
+<span class="go">         227  N struct object</span>
+<span class="go">         234  N struct objectcore</span>
+<span class="go">         259  N struct objecthead</span>
+<span class="go">         501  N struct smf</span>
+<span class="go">          35  N small free smf</span>
+<span class="go">          16  N large free smf</span>
+<span class="go">          10  N struct vbe_conn</span>
+<span class="go">          10  N worker threads</span>
+<span class="go">         478  N worker threads created</span>
+<span class="go">        2929  N worker threads limited</span>
+<span class="go">        3995  N overflowed work requests</span>
+<span class="go">           4  N backends</span>
+<span class="go">       59052  N expired objects</span>
+<span class="go">       36943  N LRU moved objects</span>
+<span class="go">      105838  Objects sent with write</span>
+<span class="go">       95717  Total Sessions</span>
+<span class="go">      132889  Total Requests</span>
+<span class="go">          21  Total pipe</span>
+<span class="go">       25917  Total pass</span>
+<span class="go">       84827  Total fetch</span>
+<span class="go">    56847844  Total header bytes</span>
+<span class="go">  3212053619  Total body bytes</span>
+<span class="go">       54026  Session Closed</span>
+<span class="go">         112  Session Pipeline</span>
+<span class="go">          39  Session Read Ahead</span>
+<span class="go">       84400  Session Linger</span>
+<span class="go">       75169  Session herd</span>
+<span class="go">     8395856  SHM records</span>
+<span class="go">      953122  SHM writes</span>
+<span class="go">           1  SHM flushes due to overflow</span>
+<span class="go">         913  SHM MTX contention</span>
+<span class="go">           4  SHM cycles through buffer</span>
+<span class="go">      137327  allocator requests</span>
+<span class="go">         450  outstanding allocations</span>
+<span class="go">    10911744  bytes allocated</span>
+<span class="go">   257523712  bytes free</span>
+<span class="go">         675  SMS allocator requests</span>
+<span class="go">      282210  SMS bytes allocated</span>
+<span class="go">      282210  SMS bytes freed</span>
+<span class="go">       85435  Backend requests made</span>
+<span class="go">           2  N vcl total</span>
+<span class="go">           2  N vcl available</span>
+<span class="go">           1  N total active purges</span>
+<span class="go">           1  N new purges added</span>
+<span class="go">      119461  HCB Lookups without lock</span>
+<span class="go">       38489  HCB Lookups with lock</span>
+<span class="go">       38489  HCB Inserts</span>
+<span class="go">      353868  Client uptime</span>
+<span class="go">          41  Backend conn. retry</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="varnish-buildout-restart-snippet">
+<h2><a class="toc-backref" href="#id10">Varnish buildout restart snippet</a><a class="headerlink" href="#varnish-buildout-restart-snippet" title="Permalink to this headline">¶</a></h2>
+<p>The following snippet will restart a varnishd instance which has
+been started from <em>plone.recipe.varnish</em> buildout directly
+invoking <tt class="docutils literal"><span class="pre">bin/varnish-instance</span></tt> command.</p>
+<p>It will also create Apache compatible log file which you
+can examinen using text editing tools by running
+<tt class="docutils literal"><span class="pre">varnishncsa</span></tt> command which will read log data
+from Varnish memory mapped file and write it to
+a text file in Apache format.</p>
+<p>Example:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">#</span>!/bin/sh
+<span class="gp">#</span> Varnish restart script
+<span class="go">sudo killall varnishd</span>
+<span class="go">sudo bin/varnish-instance</span>
+<span class="gp">#</span> Create Apache compatible log file
+<span class="go">sudo kill `cat var/varnishncsa.pid`</span>
+<span class="go">sudo parts/varnish-build/bin/varnishncsa -D -d -a -w var/log/varnish.log -P var/varnishncsa.pid</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="virtual-hosting">
+<h2><a class="toc-backref" href="#id11">Virtual hosting</a><a class="headerlink" href="#virtual-hosting" title="Permalink to this headline">¶</a></h2>
+<p>If you want to map Varnish backend directly to Plone-as-a-virtualhost (Zope VirtualHostMonster
+is used to map site name to Plone site instance id) use req.url mutating.</p>
+<p>The following maps Plone site id <em>plonecommunity</em> to <em>plonecommunity.mobi</em> domain.
+Plone is a single Zope instance, running in port 9999.</p>
+<p>Example:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">backend plonecommunity {</span>
+<span class="go">        .host = &quot;127.0.0.1&quot;;</span>
+<span class="go">        .port = &quot;9999&quot;;</span>
+<span class="go">}</span>
+
+<span class="go">sub vcl_recv {</span>
+<span class="go">        if (req.http.host ~ &quot;^(www.)?plonecommunity.mobi(:[0-9]+)?$&quot;</span>
+<span class="go">            || req.http.host ~ &quot;^plonecommunity.mfabrik.com(:[0-9]+)?$&quot;) {</span>
+
+<span class="go">                set req.backend = plonecommunity</span>
+<span class="go">                set req.url = &quot;/VirtualHostBase/http/plonecommunity.mobi:80/plonecommunity/VirtualHostRoot&quot; req.url;</span>
+<span class="go">                set req.backend = plonecommunity;</span>
+<span class="go">        }</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="varnish-and-i18n">
+<h2><a class="toc-backref" href="#id12">Varnish and I18N</a><a class="headerlink" href="#varnish-and-i18n" title="Permalink to this headline">¶</a></h2>
+<p>Please see <a class="reference internal" href="../i18n/cache.html"><em>cache issues related to LinguaPlone</em></a>.</p>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Varnish</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#management-console">Management console</a><ul>
+<li><a class="reference internal" href="#telnet-console">Telnet console</a></li>
+<li><a class="reference internal" href="#varnishadm-system-wide-installation">varnishadm (system-wide installation)</a></li>
+<li><a class="reference internal" href="#quit-console">Quit console</a></li>
+<li><a class="reference internal" href="#purging-the-cache">Purging the cache</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#loading-new-vcl-to-live-varnish-daemon">Loading new VCL to live varnish daemon</a></li>
+<li><a class="reference internal" href="#logs">Logs</a></li>
+<li><a class="reference internal" href="#stats">Stats</a></li>
+<li><a class="reference internal" href="#varnish-buildout-restart-snippet">Varnish buildout restart snippet</a></li>
+<li><a class="reference internal" href="#virtual-hosting">Virtual hosting</a></li>
+<li><a class="reference internal" href="#varnish-and-i18n">Varnish and I18N</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="wsgi.html"
+                        title="previous chapter">WSGI</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="nginx.html"
+                        title="next chapter">Nginx</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/hosting/varnish.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="nginx.html" title="Nginx"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="wsgi.html" title="WSGI"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Hosting</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

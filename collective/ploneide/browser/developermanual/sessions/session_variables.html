@@ -1,0 +1,334 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Sessions &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Sessions and cookies" href="index.html" />
+    <link rel="next" title="Cookies" href="cookies.html" />
+    <link rel="prev" title="Sessions and cookies" href="index.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="cookies.html" title="Cookies"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Sessions and cookies"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Sessions and cookies</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="sessions">
+<h1>Sessions<a class="headerlink" href="#sessions" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">How Plone handles anonymous and logged in user sessions.
+How to store and retrieve session data variables programmatically.</p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
+<li><a class="reference internal" href="#setting-a-session-parameter" id="id2">Setting a session parameter</a></li>
+<li><a class="reference internal" href="#getting-a-session" id="id3">Getting a session</a></li>
+<li><a class="reference internal" href="#getting-session-id" id="id4">Getting session id</a></li>
+<li><a class="reference internal" href="#initial-construction-of-session-data" id="id5">Initial construction of session data</a></li>
+<li><a class="reference internal" href="#deleting-session-data" id="id6">Deleting session data</a></li>
+<li><a class="reference internal" href="#session-data-and-unit-testing" id="id7">Session data and unit testing</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Sessions are visitor sessions at the site.</p>
+<p>Sessions have features like</p>
+<ul class="simple">
+<li>Login and logout, but also identified by a cookie</li>
+<li>Timeout</li>
+<li>Hold arbitary per-user data on server side</li>
+<li>Identified by cookies</li>
+</ul>
+<p>In Plone, sessions are managed by Zope's session_data_manager tool.
+The source code is in <a class="reference external" href="http://svn.zope.org/Zope/trunk/src/Products/Sessions/">Products.Sessions</a>.</p>
+</div>
+<div class="section" id="setting-a-session-parameter">
+<h2><a class="toc-backref" href="#id2">Setting a session parameter</a><a class="headerlink" href="#setting-a-session-parameter" title="Permalink to this headline">¶</a></h2>
+<p>Plone has a tool called session_data_manager.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">sdm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">session_data_manager</span>
+<span class="n">session</span> <span class="o">=</span> <span class="n">sdm</span><span class="o">.</span><span class="n">getSessionData</span><span class="p">(</span><span class="n">create</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">session</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;my_option&quot;</span><span class="p">,</span> <span class="n">any_python_object_supporting_pickling</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="getting-a-session">
+<h2><a class="toc-backref" href="#id3">Getting a session</a><a class="headerlink" href="#getting-a-session" title="Permalink to this headline">¶</a></h2>
+<p>Plone has a convenience method to get the session of the current user:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">session</span> <span class="o">=</span> <span class="n">sdm</span><span class="o">.</span><span class="n">getSessionData</span><span class="p">(</span><span class="n">create</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="getting-session-id">
+<h2><a class="toc-backref" href="#id4">Getting session id</a><a class="headerlink" href="#getting-session-id" title="Permalink to this headline">¶</a></h2>
+<p>Each session has unique id associated with it, this concerns
+both anonymous and logged-in users.</p>
+<p>Session is based on browser cookies, so it is browser specific.
+If the same user has multiple browsers open on your site,
+all browsers have their own session.</p>
+<p>If you need to refer to the session id, you can query for it:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">sdm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">session_data_manager</span>
+<span class="n">session_id</span> <span class="o">=</span> <span class="n">sdm</span><span class="o">.</span><span class="n">getBrowserIdManager</span><span class="p">()</span><span class="o">.</span><span class="n">getBrowserId</span><span class="p">(</span><span class="n">create</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="c"># Session id will be None if the session has not been created yet</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="initial-construction-of-session-data">
+<h2><a class="toc-backref" href="#id5">Initial construction of session data</a><a class="headerlink" href="#initial-construction-of-session-data" title="Permalink to this headline">¶</a></h2>
+<p>The example below creates a session data variable when it is accessed
+for the first time. For the subsequent instances,
+the same object is returned. The object changes are automatically
+persistent if it inherits peristent.Persistent object.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Session data stored this way does not survive Plone restart.</p>
+</div>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">getOrCreateCheckoutSession</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">create</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">browser_id</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Get the named session object for storing session data.</span>
+
+<span class="sd">    Each add-on product can have their own session data slot(s)</span>
+<span class="sd">    identified by a string name.</span>
+
+<span class="sd">    @param context: Any Plone content item with acquisition support</span>
+
+<span class="sd">    @param create: Force new data creation, otherwise return None if not exist</span>
+
+<span class="sd">    @param browser_id: Cookie id in the user browsers. We can set this</span>
+<span class="sd">        explicitly if we want to</span>
+
+<span class="sd">    @return: ICheckoutData instance</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">session_manager</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">session_data_manager</span>
+    <span class="k">if</span> <span class="n">browser_id</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">session_manager</span><span class="o">.</span><span class="n">hasSessionData</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">create</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="n">session_manager</span><span class="o">.</span><span class="n">getSessionData</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="n">session_manager</span><span class="o">.</span><span class="n">getSessionDataByKey</span><span class="p">(</span><span class="n">browser_id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">session</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">session</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="n">CHECKOUT_DATA_SESSION_KEY</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">create</span><span class="p">:</span>
+            <span class="n">session</span><span class="p">[</span><span class="n">CHECKOUT_DATA_SESSION_KEY</span><span class="p">]</span> <span class="o">=</span> <span class="n">CheckoutData</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="deleting-session-data">
+<h2><a class="toc-backref" href="#id6">Deleting session data</a><a class="headerlink" href="#deleting-session-data" title="Permalink to this headline">¶</a></h2>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">_destroyCartForSession</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">browser_id</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="n">session_manager</span> <span class="o">=</span> <span class="n">getToolByName</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="s">&#39;session_data_manager&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">browser_id</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">session_manager</span><span class="o">.</span><span class="n">hasSessionData</span><span class="p">():</span> <span class="c">#nothing to destroy</span>
+            <span class="k">return</span> <span class="bp">None</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="n">session_manager</span><span class="o">.</span><span class="n">getSessionData</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="n">session_manager</span><span class="o">.</span><span class="n">getSessionDataByKey</span><span class="p">(</span><span class="n">browser_id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">session</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">session</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s">&#39;getpaid.cart&#39;</span><span class="p">):</span>
+        <span class="k">return</span>
+    <span class="k">del</span> <span class="n">session</span><span class="p">[</span><span class="s">&#39;getpaid.cart&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="session-data-and-unit-testing">
+<h2><a class="toc-backref" href="#id7">Session data and unit testing</a><a class="headerlink" href="#session-data-and-unit-testing" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Please see <a class="reference external" href="http://article.gmane.org/gmane.comp.web.zope.plone.user/104243">http://article.gmane.org/gmane.comp.web.zope.plone.user/104243</a></li>
+</ul>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Sessions</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#setting-a-session-parameter">Setting a session parameter</a></li>
+<li><a class="reference internal" href="#getting-a-session">Getting a session</a></li>
+<li><a class="reference internal" href="#getting-session-id">Getting session id</a></li>
+<li><a class="reference internal" href="#initial-construction-of-session-data">Initial construction of session data</a></li>
+<li><a class="reference internal" href="#deleting-session-data">Deleting session data</a></li>
+<li><a class="reference internal" href="#session-data-and-unit-testing">Session data and unit testing</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Sessions and cookies</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="cookies.html"
+                        title="next chapter">Cookies</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/sessions/session_variables.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="cookies.html" title="Cookies"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Sessions and cookies"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Sessions and cookies</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

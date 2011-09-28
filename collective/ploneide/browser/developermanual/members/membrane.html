@@ -1,0 +1,579 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Members as content &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Users and members" href="index.html" />
+    <link rel="next" title="Sharing" href="sharing_tab.html" />
+    <link rel="prev" title="Repositories" href="pluggable_authentication_service/repositories.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="sharing_tab.html" title="Sharing"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pluggable_authentication_service/repositories.html" title="Repositories"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Users and members</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="members-as-content">
+<h1>Members as content<a class="headerlink" href="#members-as-content" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">Products.membrane and Products.remember add-ons provide &quot;member management as Plone content items&quot;.
+Member-as-content paradigm will make member management radically flexible: members can be
+in different folders, have different workflows and states and different profile fields.</p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
+<li><a class="reference internal" href="#basics" id="id2">Basics</a></li>
+<li><a class="reference internal" href="#getting-member-by-username" id="id3">Getting member by username</a></li>
+<li><a class="reference internal" href="#getting-member-from-membraneuser-or-owner-record" id="id4">Getting member from MembraneUser or owner record</a></li>
+<li><a class="reference internal" href="#creating-a-member" id="id5">Creating a member</a></li>
+<li><a class="reference internal" href="#populating-member-fields-automatically" id="id6">Populating member fields automatically</a></li>
+<li><a class="reference internal" href="#checking-member-validy" id="id7">Checking member validy</a></li>
+<li><a class="reference internal" href="#setting-user-password" id="id8">Setting user password</a><ul>
+<li><a class="reference internal" href="#accessing-hashed-password" id="id9">Accessing hashed password</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#moving-members" id="id10">Moving members</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>remember (small r) and membrane are framework add-on products for Plone which allows you to manipulate site members
+as they were normal content objects. The product also allows distributed user management and
+different user classes.</p>
+<ul class="simple">
+<li>Products.membrane provides framework of integrating acl_users access right to content-like members
+and perform tasks like login</li>
+<li>Products.remember is a basic implementation of this with two different user workflows and a normal user schema</li>
+</ul>
+</div>
+<div class="section" id="basics">
+<h2><a class="toc-backref" href="#id2">Basics</a><a class="headerlink" href="#basics" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Read the <a class="reference external" href="http://plone.org/documentation/tutorial/borg/membrane">membrane tutorial</a>.</li>
+<li>See the example code Products.membrane.example.</li>
+<li>Read the documents at Products.remember/docs/tutorial.</li>
+<li>See <a class="reference external" href="https://weblion.psu.edu/trac/weblion/wiki/FacultyStaffDirectory">Weblion FacultyStaffDirectory product</a>.</li>
+<li>It is recommended to enabled debug level logging output for membrane related unit tests,
+as PlonePAS code swallows several exceptions and does not output them unless debug level is activated</li>
+</ul>
+</div>
+<div class="section" id="getting-member-by-username">
+<h2><a class="toc-backref" href="#id3">Getting member by username</a><a class="headerlink" href="#getting-member-by-username" title="Permalink to this headline">¶</a></h2>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">Products.CMFCore.utils</span>  <span class="kn">import</span> <span class="n">getToolByName</span>
+
+<span class="n">membrane</span> <span class="o">=</span> <span class="n">getToolByName</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="s">&quot;membrane_tool&quot;</span><span class="p">)</span>
+
+<span class="c"># getUserAuthProvider returns None if there is no membrane based user match for username</span>
+<span class="c"># e.g. this will return None for Zope admin user</span>
+<span class="n">sits_user</span> <span class="o">=</span> <span class="n">membrane</span><span class="o">.</span><span class="n">getUserAuthProvider</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+<span class="k">return</span> <span class="n">sits_user</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="getting-member-from-membraneuser-or-owner-record">
+<h2><a class="toc-backref" href="#id4">Getting member from MembraneUser or owner record</a><a class="headerlink" href="#getting-member-from-membraneuser-or-owner-record" title="Permalink to this headline">¶</a></h2>
+<p>Below is an example how to resolve member content object from MembraneUser record &quot;owner&quot; who is user &quot;local_user&quot;:</p>
+<div class="highlight-python"><pre>(Pdb) mbtool = self.portal.membrane_tool
+(Pdb) owner
+&lt;MembraneUser 'local_user'&gt;
+(Pdb) mbtool.getUserAuthProvider(owner.getId())
+&lt;SitsLocalUser at /plone/country/hospital/local_users/local_user</pre>
+</div>
+</div>
+<div class="section" id="creating-a-member">
+<h2><a class="toc-backref" href="#id5">Creating a member</a><a class="headerlink" href="#creating-a-member" title="Permalink to this headline">¶</a></h2>
+<p>The following snippet works in unit tests:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">mem_password</span> <span class="o">=</span> <span class="s">&#39;secret&#39;</span>
+
+<span class="n">def_mem_data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&#39;email&#39;</span><span class="p">:</span> <span class="s">&#39;noreply@xxxxxxxxyyyyyy.com&#39;</span><span class="p">,</span>
+    <span class="s">&#39;password&#39;</span><span class="p">:</span> <span class="n">mem_password</span><span class="p">,</span>
+    <span class="s">&#39;confirm_password&#39;</span><span class="p">:</span> <span class="n">mem_password</span><span class="p">,</span>
+     <span class="p">}</span>
+
+<span class="n">mem_data</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&#39;portal_member&#39;</span><span class="p">:</span>
+        <span class="p">{</span>
+          <span class="s">&#39;fullname&#39;</span><span class="p">:</span> <span class="s">&#39;Portal Member&#39;</span><span class="p">,</span>
+          <span class="s">&#39;mail_me&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s">&#39;admin_member&#39;</span><span class="p">:</span>
+        <span class="p">{</span>
+          <span class="s">&#39;roles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;Manager&#39;</span><span class="p">,</span> <span class="s">&#39;Member&#39;</span><span class="p">]</span>
+        <span class="p">},</span>
+        <span class="s">&#39;blank_member&#39;</span><span class="p">:</span>
+        <span class="p">{},</span>
+    <span class="p">}</span>
+
+<span class="n">mdata</span> <span class="o">=</span> <span class="n">getToolByName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">portal</span><span class="p">,</span> <span class="s">&#39;portal_memberdata&#39;</span><span class="p">)</span>
+
+<span class="n">mdata</span><span class="o">.</span><span class="n">invokeFactory</span><span class="p">(</span><span class="s">&quot;MyUserPortalType&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+<span class="n">member</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">mdata</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="c">#</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="populating-member-fields-automatically">
+<h2><a class="toc-backref" href="#id6">Populating member fields automatically</a><a class="headerlink" href="#populating-member-fields-automatically" title="Permalink to this headline">¶</a></h2>
+<p>Use the following unit test snippet:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">populateUser</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">member</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Auto-ppulate member object required fields based on Archetypes schema.</span>
+
+<span class="sd">    @param member: Memberane member content object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="kn">from</span> <span class="nn">Products.SitsHospital.content.SitsUser</span> <span class="kn">import</span> <span class="n">SitsUser</span>
+
+    <span class="n">schema</span> <span class="o">=</span> <span class="n">SitsUser</span><span class="o">.</span><span class="n">schema</span>
+
+    <span class="n">data</span><span class="o">=</span><span class="p">{}</span>
+
+    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">schema</span><span class="o">.</span><span class="n">_fields</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">f</span><span class="o">.</span><span class="n">required</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">__name__</span> <span class="ow">in</span> <span class="p">[</span> <span class="s">&quot;password&quot;</span><span class="p">,</span> <span class="s">&quot;id&quot;</span> <span class="p">]:</span>
+            <span class="c"># Do not set password or member id</span>
+            <span class="k">continue</span>
+
+        <span class="c"># Autofill member field values</span>
+        <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">vocabulary</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">vocabulary</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">f</span><span class="o">.</span><span class="n">__name__</span> <span class="ow">in</span> <span class="p">[</span> <span class="s">&quot;email&quot;</span> <span class="p">]:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="s">&quot;test@xyz.com&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="s">&quot;foo&quot;</span>
+
+        <span class="c"># print &quot;filling in field:&quot; + str(f)</span>
+
+        <span class="n">data</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">__name__</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="n">member</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="checking-member-validy">
+<h2><a class="toc-backref" href="#id7">Checking member validy</a><a class="headerlink" href="#checking-member-validy" title="Permalink to this headline">¶</a></h2>
+<p>The following snippet is useful for unit testing:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">assertValidMember</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">member</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Emulate Products.remember.content.member validation behavior with verbose output.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">errors</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="c"># make sure object has required data and metadata</span>
+    <span class="n">member</span><span class="o">.</span><span class="n">Schema</span><span class="p">()</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">member</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="n">errors</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">errors</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s">&quot;Member contained errors:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">errors</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="setting-user-password">
+<h2><a class="toc-backref" href="#id8">Setting user password</a><a class="headerlink" href="#setting-user-password" title="Permalink to this headline">¶</a></h2>
+<p>Passwords are stored hashed and can be set using BaseMember._setPassword() method.</p>
+<p>_setPassword() takes password as plain-text argument and hashes it before storing:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">user_object</span><span class="o">.</span><span class="n">_setPassword</span><span class="p">(</span><span class="s">&quot;secret&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="accessing-hashed-password">
+<h3><a class="toc-backref" href="#id9">Accessing hashed password</a><a class="headerlink" href="#accessing-hashed-password" title="Permalink to this headline">¶</a></h3>
+<p>Use password attribute directly.</p>
+<blockquote>
+hashed = user_object.password</blockquote>
+<p>Password hash should be unicode string.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">By default, Products.remember uses HMACHash hasher. As a salt,
+str(context) string is used. This means that it is not possible to move hashed
+password from one context item to another. For more information see
+Products.remember.content.password_hashers module.</p>
+</div>
+</div>
+</div>
+<div class="section" id="moving-members">
+<h2><a class="toc-backref" href="#id10">Moving members</a><a class="headerlink" href="#moving-members" title="Permalink to this headline">¶</a></h2>
+<p>Moving members is not straightforward as by default member password is hashed with the member location
+- members need to reregister their password after being moved from a folder to another.</p>
+<p>Here is a complex function to perform moving by recreating the user and deleting the old object:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">Products.CMFCore.utils</span>  <span class="kn">import</span> <span class="n">getToolByName</span>
+<span class="kn">from</span> <span class="nn">Products.Archetypes</span> <span class="kn">import</span> <span class="n">public</span> <span class="k">as</span> <span class="n">atapi</span>
+
+<span class="kn">from</span> <span class="nn">Products.SitsHospital.interfaces</span> <span class="kn">import</span> <span class="n">ISitsUser</span><span class="p">,</span> <span class="n">ISitsLocalUser</span><span class="p">,</span> <span class="n">ISitsLocalCoordinatorUser</span>
+
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s">&quot;RememberUserCopy&quot;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">createUser</span><span class="p">(</span><span class="n">sourceUser</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">targetFolder</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Default example user createor &quot;&quot;&quot;</span>
+    <span class="n">targetFolder</span><span class="o">.</span><span class="n">invokeFactory</span><span class="p">(</span><span class="s">&quot;Member&quot;</span><span class="p">,</span> <span class="n">username</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">targetFolder</span><span class="p">[</span><span class="n">username</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">postProcess</span><span class="p">(</span><span class="n">sourceUser</span><span class="p">,</span> <span class="n">targetUser</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Hook to set-up additional fields which do not have 1:1 mapping in the new and old user objects &quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+
+
+<span class="k">def</span> <span class="nf">copyRememberUser</span><span class="p">(</span><span class="n">sourceUser</span><span class="p">,</span> <span class="n">targetFolder</span><span class="p">,</span> <span class="n">user_constructor</span><span class="o">=</span><span class="n">createUser</span><span class="p">,</span> <span class="n">post_process</span><span class="o">=</span><span class="n">postProcess</span><span class="p">,</span> <span class="n">expected_creation_state</span><span class="o">=</span><span class="s">&quot;new_private&quot;</span><span class="p">,</span> <span class="n">expected_initialization_state</span><span class="o">=</span><span class="s">&quot;private&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Copies Product.remember based user from one location to another.</span>
+
+<span class="sd">    This is useful if you have locally stored members on your site (for example one folder per country)</span>
+<span class="sd">    and you need to move the person from one country to another.</span>
+
+<span class="sd">    Member password is hashed against the member object location. Thus, password will be invalid</span>
+<span class="sd">    if the physical path of member object changes. All moved members are asked to re-enter their</span>
+<span class="sd">    passwords.</span>
+
+<span class="sd">    If betahaus.emaillogin is installed we also updat its catalog so that</span>
+<span class="sd">    the email login works after the member has been moved.</span>
+
+<span class="sd">    When all the fields in the user schema validate succesfully,</span>
+<span class="sd">    the re-registration email for the new user is automatically send</span>
+<span class="sd">    (TODO: Not sure whether this is general condition for Products.Remember)</span>
+
+<span class="sd">    @param sourceUser: from Products.remember.content.member.Member instance</span>
+
+<span class="sd">    @param targetFolder: Any folderish object which can contain Member instances</span>
+
+<span class="sd">    @param user_constructor: function(sourceUser, targetFolder) if special user creation is needed</span>
+
+<span class="sd">    @param post_process: function(sourceUser, targetUser) for setting up custom fields if there is no 1:1 mapping between fields of the new and old user object. Also you can do workflow mangling here.</span>
+
+<span class="sd">    @param expected_creation_state: The workflow state where the new member should be after it has been correctly initialized. In this point update() is not yet called, so Remember automatic registration mechanism should have not been triggered.</span>
+
+<span class="sd">    @param expected_initialization_state: The workflow state where the new member should be after it has been correctly initialized. In this point update() is not yet called, so Remember automatic registration mechanism should have not been triggered.</span>
+
+<span class="sd">    @return: The newly created national coordinator object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c"># shortcut to the source user</span>
+    <span class="n">lc</span> <span class="o">=</span> <span class="n">sourceUser</span>
+
+    <span class="c"># Validate LC user</span>
+    <span class="n">errors</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">lc</span><span class="o">.</span><span class="n">Schema</span><span class="p">()</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">lc</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="n">errors</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">errors</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="ow">not</span> <span class="n">errors</span><span class="p">,</span> <span class="s">&quot;The source user must be valid before moving. Errors:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span>
+
+    <span class="n">username</span> <span class="o">=</span> <span class="n">lc</span><span class="o">.</span><span class="n">getUserName</span><span class="p">()</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Copying user:&quot;</span> <span class="o">+</span> <span class="n">username</span><span class="p">)</span>
+
+    <span class="c"># Make sure that LC username is free</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">lc</span><span class="o">.</span><span class="n">getId</span><span class="p">()</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">lc</span><span class="o">.</span><span class="n">aq_parent</span>
+
+    <span class="k">assert</span> <span class="n">lc</span><span class="o">.</span><span class="n">cb_userHasCopyOrMovePermission</span><span class="p">(),</span> <span class="s">&quot;No permission&quot;</span>
+    <span class="k">assert</span> <span class="n">lc</span><span class="o">.</span><span class="n">cb_isMoveable</span><span class="p">(),</span> <span class="s">&quot;Object problem&quot;</span>
+
+    <span class="c"># We temporarily rename the old object for the duration</span>
+    <span class="c"># of the moving so that the id of the member</span>
+    <span class="c"># object won&#39;t conflict with the newly created target user</span>
+    <span class="n">new_id</span> <span class="o">=</span> <span class="nb">id</span> <span class="o">+</span> <span class="s">&quot;-old&quot;</span>
+    <span class="k">assert</span> <span class="nb">type</span><span class="p">(</span><span class="n">new_id</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">unicode</span>
+
+    <span class="n">parent</span><span class="o">.</span><span class="n">manage_renameObject</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">new_id</span><span class="p">)</span>
+
+    <span class="c"># We need to re-fetch the object handle as it has changed in rename</span>
+    <span class="n">lc</span> <span class="o">=</span> <span class="n">parent</span><span class="p">[</span><span class="n">new_id</span><span class="p">]</span>
+
+
+    <span class="c"># nc = newly crated user</span>
+    <span class="n">nc</span> <span class="o">=</span> <span class="n">user_constructor</span><span class="p">(</span><span class="n">sourceUser</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">targetFolder</span><span class="p">)</span>
+
+    <span class="c"># List of field names which we cannot copy</span>
+    <span class="n">do_not_copy</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;id&quot;</span><span class="p">]</span>
+
+    <span class="c"># Duplicate field data from old user object to new one by inspecting the user object schema</span>
+    <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">lc</span><span class="o">.</span><span class="n">Schema</span><span class="p">()</span><span class="o">.</span><span class="n">fields</span><span class="p">():</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">getName</span><span class="p">()</span>
+
+        <span class="c"># ComputedFields are handled specially,</span>
+        <span class="c"># and UID also</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">atapi</span><span class="o">.</span><span class="n">ComputedField</span><span class="p">)</span> <span class="ow">and</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">do_not_copy</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">field</span><span class="o">.</span><span class="n">writeable</span><span class="p">(</span><span class="n">nc</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&quot;No permission to copy field value:&quot;</span> <span class="o">+</span> <span class="n">name</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s">&quot;password&quot;</span><span class="p">:</span>
+                <span class="c"># Note: moving password from one user to another</span>
+                <span class="c"># is not possible because password is hashed with</span>
+                <span class="c"># the user location in Products.remember.content.password_hashers</span>
+                <span class="c"># Insert dummy password which must be reseted</span>
+                <span class="n">nc</span><span class="o">.</span><span class="n">password</span> <span class="o">=</span> <span class="s">&quot;dummy&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">getRaw</span><span class="p">(</span><span class="n">lc</span><span class="p">)</span>
+
+                <span class="c"># The schema of new object</span>
+                <span class="n">schema</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">Schema</span><span class="p">()</span>
+
+                <span class="c"># Check that the old field exists in the new schema</span>
+                <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">schema</span><span class="p">:</span>
+                    <span class="n">newfield</span> <span class="o">=</span> <span class="n">schema</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Copying field &quot;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+                    <span class="n">newfield</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">nc</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c"># The old field does not exist on the new object</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&quot;Target does not have field &quot;</span> <span class="o">+</span> <span class="n">name</span><span class="p">)</span>
+
+    <span class="c">#  Do custom setup for newly created user</span>
+    <span class="n">post_process</span><span class="p">(</span><span class="n">lc</span><span class="p">,</span> <span class="n">nc</span><span class="p">)</span>
+
+    <span class="c"># Validate NC user</span>
+    <span class="n">errors</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">nc</span><span class="o">.</span><span class="n">Schema</span><span class="p">()</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">nc</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="n">errors</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">errors</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="ow">not</span> <span class="n">errors</span><span class="p">,</span> <span class="s">&quot;Newly created user did not validate:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span>
+
+    <span class="c"># Assert that the user is not yet log in-able</span>
+    <span class="n">workflow</span> <span class="o">=</span> <span class="n">getToolByName</span><span class="p">(</span><span class="n">lc</span><span class="p">,</span> <span class="s">&quot;portal_workflow&quot;</span><span class="p">)</span>
+    <span class="n">review_state</span> <span class="o">=</span> <span class="n">workflow</span><span class="o">.</span><span class="n">getInfoFor</span><span class="p">(</span><span class="n">nc</span><span class="p">,</span> <span class="s">&#39;review_state&#39;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">review_state</span> <span class="o">==</span> <span class="n">expected_creation_state</span><span class="p">,</span> <span class="s">&quot;Got review state:&quot;</span> <span class="o">+</span> <span class="n">review_state</span>
+
+    <span class="c"># Remove the old user object</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">lc</span><span class="o">.</span><span class="n">aq_parent</span>
+
+    <span class="c">##fore email-catalog removal and without the -old added</span>
+    <span class="n">lc_path</span><span class="o">=</span><span class="s">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lc</span><span class="o">.</span><span class="n">getPhysicalPath</span><span class="p">())</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;-old&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">parent</span><span class="o">.</span><span class="n">manage_delObjects</span><span class="p">([</span><span class="n">lc</span><span class="o">.</span><span class="n">getId</span><span class="p">()])</span>
+
+    <span class="c"># Trigger workflow state transition to register</span>
+    <span class="c"># Mark creation flag to be set</span>
+
+    <span class="n">nc</span><span class="o">.</span><span class="n">markCreationFlag</span><span class="p">()</span>
+
+    <span class="k">assert</span> <span class="n">nc</span><span class="o">.</span><span class="n">isValid</span><span class="p">(),</span> <span class="s">&quot;The new NC was not valid after the creation flag was set&quot;</span>
+
+    <span class="c"># This will trigger automatic workflow transition</span>
+    <span class="c"># to the registered state</span>
+    <span class="n">nc</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="c"># Validate NC user once again, just in case markCreationFlag and update did something bad</span>
+    <span class="n">errors</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">nc</span><span class="o">.</span><span class="n">Schema</span><span class="p">()</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">nc</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="n">errors</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">errors</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="ow">not</span> <span class="n">errors</span><span class="p">,</span> <span class="s">&quot;Got errors:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span>
+    <span class="n">nc</span><span class="o">.</span><span class="n">reindexObject</span><span class="p">()</span>
+
+
+    <span class="c"># Check if we have betahaus.emailcatalog extension installed for Plone 3.x</span>
+    <span class="n">email_catalog</span> <span class="o">=</span> <span class="n">getToolByName</span><span class="p">(</span><span class="n">nc</span><span class="p">,</span> <span class="s">&quot;email_catalog&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">email_catalog</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="c"># This ensures the member log-in will work in the future</span>
+        <span class="c"># as email_catalog does not automatically reflect member changes</span>
+        <span class="n">email_catalog</span><span class="o">.</span><span class="n">uncatalog_object</span><span class="p">(</span><span class="n">lc_path</span><span class="p">)</span>
+        <span class="n">email_catalog</span><span class="o">.</span><span class="n">reindexObject</span><span class="p">(</span><span class="n">nc</span><span class="p">)</span>
+
+
+    <span class="c"># Not needed - this email is automatically triggered by</span>
+    <span class="c"># workflow state change when the all user fields are</span>
+    <span class="c"># validated succesfully in Schema()</span>
+    <span class="c">#nc.resetPassword()</span>
+
+    <span class="c"># Check that we are in active user state - the registeration email should have been send</span>
+    <span class="n">review_state</span> <span class="o">=</span> <span class="n">workflow</span><span class="o">.</span><span class="n">getInfoFor</span><span class="p">(</span><span class="n">nc</span><span class="p">,</span> <span class="s">&#39;review_state&#39;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">review_state</span> <span class="o">==</span> <span class="n">expected_initialization_state</span><span class="p">,</span> <span class="s">&quot;Newly created user was not auto-activated for some reason, state:&quot;</span> <span class="o">+</span> <span class="n">review_state</span>
+
+    <span class="k">return</span> <span class="n">nc</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Members as content</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#basics">Basics</a></li>
+<li><a class="reference internal" href="#getting-member-by-username">Getting member by username</a></li>
+<li><a class="reference internal" href="#getting-member-from-membraneuser-or-owner-record">Getting member from MembraneUser or owner record</a></li>
+<li><a class="reference internal" href="#creating-a-member">Creating a member</a></li>
+<li><a class="reference internal" href="#populating-member-fields-automatically">Populating member fields automatically</a></li>
+<li><a class="reference internal" href="#checking-member-validy">Checking member validy</a></li>
+<li><a class="reference internal" href="#setting-user-password">Setting user password</a><ul>
+<li><a class="reference internal" href="#accessing-hashed-password">Accessing hashed password</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#moving-members">Moving members</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pluggable_authentication_service/repositories.html"
+                        title="previous chapter">Repositories</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="sharing_tab.html"
+                        title="next chapter">Sharing</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/members/membrane.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="sharing_tab.html" title="Sharing"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pluggable_authentication_service/repositories.html" title="Repositories"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Users and members</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

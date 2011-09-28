@@ -1,0 +1,615 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Eventish content types &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Content management" href="index.html" />
+    <link rel="next" title="Archetypes" href="archetypes/index.html" />
+    <link rel="prev" title="Import and export" href="importexport.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="archetypes/index.html" title="Archetypes"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="importexport.html" title="Import and export"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Content management</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="eventish-content-types">
+<h1>Eventish content types<a class="headerlink" href="#eventish-content-types" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">Creating and programming event and eventhish content types in Plone</p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id2">Introduction</a><ul>
+<li><a class="reference internal" href="#further-reading" id="id3">Further reading</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#portal-calendar" id="id4">portal_calendar</a><ul>
+<li><a class="reference internal" href="#adding-a-new-event-type-in-the-calendar" id="id5">Adding a new event type in the calendar</a></li>
+<li><a class="reference internal" href="#getting-eventish-content-types" id="id6">Getting eventish content types</a></li>
+<li><a class="reference internal" href="#getting-calendar-publishing-states" id="id7">Getting calendar publishing states</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#recurrence-calendar-support-in-plone-3" id="id8">Recurrence calendar support in Plone 3</a><ul>
+<li><a class="reference internal" href="#making-recurrent-event-appear-in-the-calendar-portlet" id="id9">Making recurrent event appear in the calendar portlet</a></li>
+<li><a class="reference internal" href="#beta-code-notice" id="id10">Beta code notice</a></li>
+<li><a class="reference internal" href="#id1" id="id11">Further reading</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id2">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Plone supports events as the content. Events have start time, end time
+and etc. fields. Events can be exported in standard vCal (Outlook)
+and iCal (OSX) formats. A default calendar shows published events
+in a calendar view.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Recurring events (events repeating with an interval)
+are not supported out-of-the-box on Plone 4.0 or older.</p>
+</div>
+<div class="section" id="further-reading">
+<h3><a class="toc-backref" href="#id3">Further reading</a><a class="headerlink" href="#further-reading" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference external" href="http://plone.org/products/vs.event">vs.event</a> - recurring events for Plone 3 and 4.0</li>
+<li><a class="reference external" href="http://www.zopyx.com/blog/plone.app.event">plone.app.event</a> - recurring events for Plone 4.1+</li>
+<li><a class="reference external" href="http://plone.org/products/dateable">Dateable</a> - bunch of Plone code to bring all the different calendar extensions together</li>
+<li><a class="reference external" href="http://www.inigo-tech.com/blog/customizing-p4a.calendar-and-the-power-of-collections-and-views">http://www.inigo-tech.com/blog/customizing-p4a.calendar-and-the-power-of-collections-and-views</a></li>
+<li><a class="reference external" href="http://regebro.wordpress.com/2009/01/28/ui-help-needed-recurring-events-form-usability/">http://regebro.wordpress.com/2009/01/28/ui-help-needed-recurring-events-form-usability/</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="portal-calendar">
+<h2><a class="toc-backref" href="#id4">portal_calendar</a><a class="headerlink" href="#portal-calendar" title="Permalink to this headline">¶</a></h2>
+<p>portal_calendar service is provided by Products.CMFCalendar.</p>
+<p>portal_calendar</p>
+<ul class="simple">
+<li>Provides facilities to query event calendar in easy way</li>
+</ul>
+<p>The most useful portal_calendar call is <tt class="docutils literal"><span class="pre">portal_calendar.getEventsForCalendar(month,</span> <span class="pre">year,</span> <span class="pre">path=navigation_root_path)</span></tt>
+to get event listing of a certain month.</p>
+<div class="section" id="adding-a-new-event-type-in-the-calendar">
+<h3><a class="toc-backref" href="#id5">Adding a new event type in the calendar</a><a class="headerlink" href="#adding-a-new-event-type-in-the-calendar" title="Permalink to this headline">¶</a></h3>
+<p>Use-case: you've created a content-type and want it to be shown in
+the calendar portlet.</p>
+<p>First add a custom import step.</p>
+<p><tt class="docutils literal"><span class="pre">profiles/default/import_steps.xml</span></tt></p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot;?&gt;</span>
+<span class="nt">&lt;import-steps&gt;</span>
+    <span class="nt">&lt;import-step</span> <span class="na">id=</span><span class="s">&quot;compass-types-various&quot;</span> <span class="na">version=</span><span class="s">&quot;20090725-02&quot;</span>
+        <span class="na">handler=</span><span class="s">&quot;compass.types.setuphandlers.importVarious&quot;</span>
+        <span class="na">title=</span><span class="s">&quot;Additional Compass Types Setup&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;/import-step&gt;</span>
+<span class="nt">&lt;/import-steps&gt;</span>
+</pre></div>
+</div>
+<p>Then in this custom step call portal_calendar service.
+Note that you might want to preserve the existing event types.
+Plone's default event type is called <tt class="docutils literal"><span class="pre">Event</span></tt>.</p>
+<p>setuphandlers.py:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">Products.CMFCore.utils</span> <span class="kn">import</span> <span class="n">getToolByName</span>
+
+<span class="k">def</span> <span class="nf">addCalendarTypes</span><span class="p">(</span><span class="n">portal</span><span class="p">):</span>
+    <span class="n">portal_calendar</span> <span class="o">=</span> <span class="n">getToolByName</span><span class="p">(</span><span class="n">portal</span><span class="p">,</span> <span class="s">&#39;portal_calendar&#39;</span><span class="p">)</span>
+    <span class="c"># &#39;Event&#39; was already here, we&#39;re just adding the</span>
+    <span class="c"># &#39;DD Training Class&#39; content-type.</span>
+    <span class="n">portal_calendar</span><span class="o">.</span><span class="n">calendar_types</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;Event&#39;</span><span class="p">,</span> <span class="s">&#39;DD Training Class&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">importVarious</span><span class="p">(</span><span class="n">context</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Miscellanous steps import handle</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">context</span><span class="o">.</span><span class="n">readDataFile</span><span class="p">(</span><span class="s">&#39;compass.types_various.txt&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="n">portal</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">getSite</span><span class="p">()</span>
+
+    <span class="n">addCalendarTypes</span><span class="p">(</span><span class="n">portal</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Credits: ecarloshanson, optilude.</p>
+</div>
+<div class="section" id="getting-eventish-content-types">
+<h3><a class="toc-backref" href="#id6">Getting eventish content types</a><a class="headerlink" href="#getting-eventish-content-types" title="Permalink to this headline">¶</a></h3>
+<p>portal_calendar maintains the list of eventish content types
+appearing in Plone calendar services.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Get tuple of portal_typ names for eventish content types</span>
+<span class="n">supported_event_types</span> <span class="o">=</span> <span class="n">portal_calendar</span><span class="o">.</span><span class="n">getCalendarTypes</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="getting-calendar-publishing-states">
+<h3><a class="toc-backref" href="#id7">Getting calendar publishing states</a><a class="headerlink" href="#getting-calendar-publishing-states" title="Permalink to this headline">¶</a></h3>
+<p>Workflow states in which events appear in the calendar:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">portal_calendar</span><span class="o">.</span><span class="n">getCalendarStates</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="recurrence-calendar-support-in-plone-3">
+<h2><a class="toc-backref" href="#id8">Recurrence calendar support in Plone 3</a><a class="headerlink" href="#recurrence-calendar-support-in-plone-3" title="Permalink to this headline">¶</a></h2>
+<p>vs.event has an index <tt class="docutils literal"><span class="pre">recurrence_days</span></tt>
+which stores the dates when the recurrent event
+appears five years ahead of the time when the event is saved.</p>
+<p>Below is the glue code which is needed to support
+the recurrent eveng in Plone 3 calendar portlet.
+It combines vs.event, plone.app.portlets and Products.CMFCalendar
+bits to pull the necessary stuff together (a task which was not
+trivial).</p>
+<div class="section" id="making-recurrent-event-appear-in-the-calendar-portlet">
+<h3><a class="toc-backref" href="#id9">Making recurrent event appear in the calendar portlet</a><a class="headerlink" href="#making-recurrent-event-appear-in-the-calendar-portlet" title="Permalink to this headline">¶</a></h3>
+<p>Below is a calendar portlet <tt class="docutils literal"><span class="pre">Renderer</span></tt> code
+which can be used to make recurrent events appear in the
+standard Plone calendar portlet:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Override default Plone 3 calendar portlet to support rendering</span>
+<span class="sd">    of recurring events.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">datetime</span>
+
+<span class="kn">from</span> <span class="nn">Acquisition</span> <span class="kn">import</span> <span class="n">aq_inner</span>
+<span class="kn">from</span> <span class="nn">DateTime</span> <span class="kn">import</span> <span class="n">DateTime</span>
+
+<span class="kn">from</span> <span class="nn">zope.i18nmessageid</span> <span class="kn">import</span> <span class="n">MessageFactory</span>
+<span class="kn">from</span> <span class="nn">zope.interface</span> <span class="kn">import</span> <span class="n">implements</span>
+<span class="kn">from</span> <span class="nn">zope.component</span> <span class="kn">import</span> <span class="n">getMultiAdapter</span>
+
+<span class="kn">from</span> <span class="nn">plone.app.portlets.portlets</span> <span class="kn">import</span> <span class="n">calendar</span> <span class="k">as</span> <span class="n">base</span>
+
+<span class="c"># Package with various calendar support code</span>
+<span class="c"># - not very wlel documented</span>
+<span class="kn">import</span> <span class="nn">dateable.kalends</span>
+
+<span class="k">def</span> <span class="nf">convert_to_indexed_format</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">daynumber</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Convert datetime to vs.event recurrence_days index format.</span>
+
+<span class="sd">    recurrence_days holds the date as compressed int format</span>
+<span class="sd">    for efficiency reasons.</span>
+
+<span class="sd">    See vs.event.context.recurrence for more information.</span>
+
+
+<span class="sd">    @return: Indexed recurrenct_day format of given date or None if not supported</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c"># This is an empty cell in the calendar and does not represent any meaningful day</span>
+    <span class="k">if</span> <span class="n">daynumber</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="n">cur_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">daynumber</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">cur_date</span><span class="o">.</span><span class="n">toordinal</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">create_event_structure</span><span class="p">(</span><span class="n">portal_calendar</span><span class="p">,</span> <span class="n">results</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Create calendar dict/list struct for event presentation.</span>
+
+<span class="sd">    This code is mostly ripped from Products.CMFCalendar.calendar.CalendarTool catalog_getevents()</span>
+
+<span class="sd">    @param results: Iterable of eventish brain objects</span>
+
+<span class="sd">    @return: Dict day number -&gt; event data</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">last_day</span> <span class="o">=</span> <span class="n">portal_calendar</span><span class="o">.</span><span class="n">_getCalendar</span><span class="p">()</span><span class="o">.</span><span class="n">monthrange</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">first_date</span> <span class="o">=</span> <span class="n">portal_calendar</span><span class="o">.</span><span class="n">getBeginAndEndTimes</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">year</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">last_date</span> <span class="o">=</span> <span class="n">portal_calendar</span><span class="o">.</span><span class="n">getBeginAndEndTimes</span><span class="p">(</span><span class="n">last_day</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">year</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c"># compile a list of the days that have events</span>
+    <span class="n">eventDays</span><span class="o">=</span><span class="p">{}</span>
+    <span class="k">for</span> <span class="n">daynumber</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">32</span><span class="p">):</span> <span class="c"># 1 to 31</span>
+        <span class="n">eventDays</span><span class="p">[</span><span class="n">daynumber</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;eventslist&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                                <span class="s">&#39;event&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                                <span class="s">&#39;day&#39;</span><span class="p">:</span> <span class="n">daynumber</span><span class="p">}</span>
+    <span class="n">includedevents</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">getRID</span><span class="p">()</span> <span class="ow">in</span> <span class="n">includedevents</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">includedevents</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">getRID</span><span class="p">())</span>
+        <span class="n">event</span><span class="o">=</span><span class="p">{}</span>
+        <span class="c"># we need to deal with events that end next month</span>
+        <span class="k">if</span>  <span class="n">result</span><span class="o">.</span><span class="n">end</span><span class="o">.</span><span class="n">month</span><span class="p">()</span> <span class="o">!=</span> <span class="n">month</span><span class="p">:</span>
+            <span class="c"># doesn&#39;t work for events that last ~12 months</span>
+            <span class="c"># fix it if it&#39;s a problem, otherwise ignore</span>
+            <span class="n">eventEndDay</span> <span class="o">=</span> <span class="n">last_day</span>
+            <span class="n">event</span><span class="p">[</span><span class="s">&#39;end&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">eventEndDay</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">end</span><span class="o">.</span><span class="n">day</span><span class="p">()</span>
+            <span class="n">event</span><span class="p">[</span><span class="s">&#39;end&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">end</span><span class="o">.</span><span class="n">Time</span><span class="p">()</span>
+        <span class="c"># and events that started last month</span>
+        <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">start</span><span class="o">.</span><span class="n">month</span><span class="p">()</span> <span class="o">!=</span> <span class="n">month</span><span class="p">:</span>  <span class="c"># same as above (12 month thing)</span>
+            <span class="n">eventStartDay</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">event</span><span class="p">[</span><span class="s">&#39;start&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">eventStartDay</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">start</span><span class="o">.</span><span class="n">day</span><span class="p">()</span>
+            <span class="n">event</span><span class="p">[</span><span class="s">&#39;start&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">start</span><span class="o">.</span><span class="n">Time</span><span class="p">()</span>
+
+        <span class="n">event</span><span class="p">[</span><span class="s">&#39;title&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">Title</span> <span class="ow">or</span> <span class="n">result</span><span class="o">.</span><span class="n">getId</span>
+
+        <span class="k">if</span> <span class="n">eventStartDay</span> <span class="o">!=</span> <span class="n">eventEndDay</span><span class="p">:</span>
+            <span class="n">allEventDays</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">eventStartDay</span><span class="p">,</span> <span class="n">eventEndDay</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">eventDays</span><span class="p">[</span><span class="n">eventStartDay</span><span class="p">][</span><span class="s">&#39;eventslist&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="p">{</span><span class="s">&#39;end&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                     <span class="s">&#39;start&#39;</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">start</span><span class="o">.</span><span class="n">Time</span><span class="p">(),</span>
+                     <span class="s">&#39;title&#39;</span><span class="p">:</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;title&#39;</span><span class="p">]}</span> <span class="p">)</span>
+            <span class="n">eventDays</span><span class="p">[</span><span class="n">eventStartDay</span><span class="p">][</span><span class="s">&#39;event&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+            <span class="k">for</span> <span class="n">eventday</span> <span class="ow">in</span> <span class="n">allEventDays</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">eventDays</span><span class="p">[</span><span class="n">eventday</span><span class="p">][</span><span class="s">&#39;eventslist&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="p">{</span><span class="s">&#39;end&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                     <span class="s">&#39;start&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                     <span class="s">&#39;title&#39;</span><span class="p">:</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;title&#39;</span><span class="p">]}</span> <span class="p">)</span>
+                <span class="n">eventDays</span><span class="p">[</span><span class="n">eventday</span><span class="p">][</span><span class="s">&#39;event&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+            <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">end</span> <span class="o">==</span> <span class="n">result</span><span class="o">.</span><span class="n">end</span><span class="o">.</span><span class="n">earliestTime</span><span class="p">():</span>
+                <span class="n">last_day_data</span> <span class="o">=</span> <span class="n">eventDays</span><span class="p">[</span><span class="n">allEventDays</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]]</span>
+                <span class="n">last_days_event</span> <span class="o">=</span> <span class="n">last_day_data</span><span class="p">[</span><span class="s">&#39;eventslist&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">last_days_event</span><span class="p">[</span><span class="s">&#39;end&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">end</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">latestTime</span><span class="p">()</span><span class="o">.</span><span class="n">Time</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">eventDays</span><span class="p">[</span><span class="n">eventEndDay</span><span class="p">][</span><span class="s">&#39;eventslist&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="p">{</span> <span class="s">&#39;end&#39;</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">end</span><span class="o">.</span><span class="n">Time</span><span class="p">()</span>
+                    <span class="p">,</span> <span class="s">&#39;start&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&#39;title&#39;</span><span class="p">:</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;title&#39;</span><span class="p">]}</span> <span class="p">)</span>
+                <span class="n">eventDays</span><span class="p">[</span><span class="n">eventEndDay</span><span class="p">][</span><span class="s">&#39;event&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">eventDays</span><span class="p">[</span><span class="n">eventStartDay</span><span class="p">][</span><span class="s">&#39;eventslist&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+            <span class="n">eventDays</span><span class="p">[</span><span class="n">eventStartDay</span><span class="p">][</span><span class="s">&#39;event&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="c"># This list is not uniqued and isn&#39;t sorted</span>
+        <span class="c"># uniquing and sorting only wastes time</span>
+        <span class="c"># and in this example we don&#39;t need to because</span>
+        <span class="c"># later we are going to do an &#39;if 2 in eventDays&#39;</span>
+        <span class="c"># so the order is not important.</span>
+        <span class="c"># example:  [23, 28, 29, 30, 31, 23]</span>
+    <span class="k">return</span> <span class="n">eventDays</span>
+
+
+<span class="k">class</span> <span class="nc">RecurrentEventCalendarPortletRenderer</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">Renderer</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Support recurring events &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">retroFitRecurrentEvents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">weeks</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        List recurrencing events in the calendar</span>
+
+<span class="sd">        1. Get a list of supported event types</span>
+
+<span class="sd">        2. Build a list of queried recurrence_days</span>
+
+<span class="sd">        3. Query all recurrent events occuring in the given month</span>
+
+<span class="sd">        4. Retrofit calendar data with these recurrent events.</span>
+
+<span class="sd">        @param weeks: Array of displayable calendar weeks.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">context</span> <span class="o">=</span> <span class="n">aq_inner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
+        <span class="n">request</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span>
+
+        <span class="n">portal_calendar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">portal_calendar</span>
+
+        <span class="c"># Get tuple of portal_type names for eventish content types</span>
+        <span class="n">supported_event_types</span> <span class="o">=</span> <span class="n">portal_calendar</span><span class="o">.</span><span class="n">getCalendarTypes</span><span class="p">()</span>
+
+        <span class="c"># Build a list of queried dates in recurrence_days format</span>
+        <span class="n">recurrence_days_in_this_month</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">week</span> <span class="ow">in</span> <span class="n">weeks</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">day</span> <span class="ow">in</span> <span class="n">week</span><span class="p">:</span>
+
+                <span class="c"># This is an empty cell in the calendar</span>
+                <span class="c"># and does not present a meaningful date</span>
+                <span class="n">daynumber</span> <span class="o">=</span> <span class="n">day</span><span class="p">[</span><span class="s">&#39;day&#39;</span><span class="p">]</span>
+                <span class="n">date</span> <span class="o">=</span> <span class="n">convert_to_indexed_format</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">daynumber</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">date</span><span class="p">:</span>
+                    <span class="n">recurrence_days_in_this_month</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">date</span><span class="p">)</span>
+
+        <span class="c"># print &quot;recurrence_days:&quot; + str(recurrence_days_in_this_month)</span>
+
+        <span class="c"># Query all events on the site</span>
+        <span class="c"># Note that there is no separate list for recurrent events</span>
+        <span class="c"># so if you want to speed up you can hardcode</span>
+        <span class="c"># recurrent event type list here.</span>
+        <span class="n">matched_recurrence_events</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">portal_catalog</span><span class="p">(</span>
+                        <span class="n">portal_type</span><span class="o">=</span><span class="n">supported_event_types</span><span class="p">,</span>
+                        <span class="n">recurrence_days</span><span class="o">=</span><span class="p">{</span>
+                            <span class="s">&quot;query&quot;</span><span class="p">:</span><span class="n">recurrence_days_in_this_month</span><span class="p">,</span>
+                            <span class="s">&quot;operator&quot;</span> <span class="p">:</span> <span class="s">&quot;or&quot;</span>
+                        <span class="p">})</span>
+
+        <span class="c"># print &quot;Matched events:&quot; + str(len(list(matched_recurrence_events)))</span>
+
+        <span class="n">portal_catalog</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">portal_catalog</span>
+
+        <span class="k">for</span> <span class="n">week</span> <span class="ow">in</span> <span class="n">weeks</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">day</span> <span class="ow">in</span> <span class="n">week</span><span class="p">:</span>
+                <span class="n">daynumber</span> <span class="o">=</span> <span class="n">day</span><span class="p">[</span><span class="s">&#39;day&#39;</span><span class="p">]</span>
+
+                <span class="c"># This day is a filler slot and not a real date in a calendar</span>
+                <span class="k">if</span> <span class="n">daynumber</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="n">cur_date</span> <span class="o">=</span> <span class="n">convert_to_indexed_format</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">daynumber</span><span class="p">)</span>
+
+                <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">matched_recurrence_events</span><span class="p">:</span>
+                    <span class="c"># The event hit this date</span>
+                    <span class="c"># Get event brain result id</span>
+                    <span class="n">rid</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">getRID</span><span class="p">()</span>
+                    <span class="c"># Get list of recurrence_days indexed value.</span>
+                    <span class="c"># ZCatalog holds internal Catalog object which we can directly poke in evil way</span>
+                    <span class="c"># This call goes to Products.PluginIndexes.UnIndex.Unindex class and we</span>
+                    <span class="c"># read the persistent value from there what it has stored in our index</span>
+                    <span class="c"># recurrence_days</span>
+                    <span class="n">indexed_days</span> <span class="o">=</span> <span class="n">portal_catalog</span><span class="o">.</span><span class="n">_catalog</span><span class="o">.</span><span class="n">getIndex</span><span class="p">(</span><span class="s">&quot;recurrence_days&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">getEntryForObject</span><span class="p">(</span><span class="n">rid</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">[])</span>
+
+                    <span class="k">if</span> <span class="n">cur_date</span> <span class="ow">in</span> <span class="n">indexed_days</span><span class="p">:</span>
+                        <span class="c"># Construct event info</span>
+                        <span class="c"># See CalendarTool.catalog_getevents()</span>
+
+                        <span class="n">day</span><span class="p">[</span><span class="s">&quot;event&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span> <span class="c"># This day has events</span>
+
+                        <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+                        <span class="c"># Shortcut the event to be one day event (though this might not be a case)</span>
+                        <span class="n">data</span><span class="p">[</span><span class="s">&quot;start&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+                        <span class="n">data</span><span class="p">[</span><span class="s">&quot;end&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+                        <span class="n">data</span><span class="p">[</span><span class="s">&quot;title&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&quot;Title&quot;</span><span class="p">]</span>
+
+                        <span class="n">day</span><span class="p">[</span><span class="s">&quot;eventslist&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">getEventsForCalendar</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This has been overridden to call recurrent event fetcher.</span>
+
+<span class="sd">        The code is basically copy-paste from the base class.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="n">aq_inner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
+        <span class="n">year</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">year</span>
+        <span class="n">month</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">month</span>
+        <span class="n">portal_state</span> <span class="o">=</span> <span class="n">getMultiAdapter</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s">u&#39;plone_portal_state&#39;</span><span class="p">)</span>
+        <span class="n">navigation_root_path</span> <span class="o">=</span> <span class="n">portal_state</span><span class="o">.</span><span class="n">navigation_root_path</span><span class="p">()</span>
+        <span class="n">weeks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calendar</span><span class="o">.</span><span class="n">getEventsForCalendar</span><span class="p">(</span><span class="n">month</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">navigation_root_path</span><span class="p">)</span>
+
+        <span class="c"># Patched recurrent events go in here</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">retroFitRecurrentEvents</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">weeks</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">week</span> <span class="ow">in</span> <span class="n">weeks</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">day</span> <span class="ow">in</span> <span class="n">week</span><span class="p">:</span>
+                <span class="n">daynumber</span> <span class="o">=</span> <span class="n">day</span><span class="p">[</span><span class="s">&#39;day&#39;</span><span class="p">]</span>
+
+                <span class="k">if</span> <span class="n">daynumber</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="n">day</span><span class="p">[</span><span class="s">&#39;is_today&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">isToday</span><span class="p">(</span><span class="n">daynumber</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">day</span><span class="p">[</span><span class="s">&#39;event&#39;</span><span class="p">]:</span>
+                    <span class="n">cur_date</span> <span class="o">=</span> <span class="n">DateTime</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">daynumber</span><span class="p">)</span>
+                    <span class="n">localized_date</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_ts</span><span class="o">.</span><span class="n">ulocalized_time</span><span class="p">(</span><span class="n">cur_date</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span> <span class="n">request</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">)]</span>
+                    <span class="n">day</span><span class="p">[</span><span class="s">&#39;eventstring&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">localized_date</span><span class="o">+</span><span class="p">[</span><span class="s">&#39; </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">getEventString</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">day</span><span class="p">[</span><span class="s">&#39;eventslist&#39;</span><span class="p">]])</span>
+                    <span class="n">day</span><span class="p">[</span><span class="s">&#39;date_string&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">-</span><span class="si">%s</span><span class="s">-</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">daynumber</span><span class="p">)</span>
+
+
+        <span class="k">return</span> <span class="n">weeks</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="beta-code-notice">
+<h3><a class="toc-backref" href="#id10">Beta code notice</a><a class="headerlink" href="#beta-code-notice" title="Permalink to this headline">¶</a></h3>
+<p>Make sure that vs.event recurrence_days index is working -
+if it's not check <a class="reference internal" href="../searching_and_indexing/indexing.html"><em>Custom indexing example</em></a> how to create your own
+recurrency indexer. After you save vs.event content item
+you should see data in <tt class="docutils literal"><span class="pre">recurrence_days</span></tt> index through portal_catalog
+browsing interface.</p>
+</div>
+<div class="section" id="id1">
+<h3><a class="toc-backref" href="#id11">Further reading</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference external" href="http://plone.293351.n2.nabble.com/what-s-dateable-chronos-how-to-render-recurrence-events-in-a-calendar-portlet-tp5282788p5287261.html">http://plone.293351.n2.nabble.com/what-s-dateable-chronos-how-to-render-recurrence-events-in-a-calendar-portlet-tp5282788p5287261.html</a></li>
+<li>vs.event has KeywordIndex recurrence_days which contains a value
+created by <tt class="docutils literal"><span class="pre">vs.event.content.recurrence.VSRecurrenceSupport.getOccurrenceDays()</span></tt>.
+This value is a list of dates 5 years ahead when the event occurs.</li>
+<li>Plone 3 provides a view called &quot;calendar_view&quot; (Products.CMFPlone/deprecated.zcml)
+but this view is not used - do not it let to fool you</li>
+</ul>
+<p>Needed ZCML for the indexing:</p>
+<div class="highlight-python"><pre>&lt;adapter factory=".indexing.recurrence_days"/&gt;</pre>
+</div>
+</div>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Eventish content types</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a><ul>
+<li><a class="reference internal" href="#further-reading">Further reading</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#portal-calendar">portal_calendar</a><ul>
+<li><a class="reference internal" href="#adding-a-new-event-type-in-the-calendar">Adding a new event type in the calendar</a></li>
+<li><a class="reference internal" href="#getting-eventish-content-types">Getting eventish content types</a></li>
+<li><a class="reference internal" href="#getting-calendar-publishing-states">Getting calendar publishing states</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#recurrence-calendar-support-in-plone-3">Recurrence calendar support in Plone 3</a><ul>
+<li><a class="reference internal" href="#making-recurrent-event-appear-in-the-calendar-portlet">Making recurrent event appear in the calendar portlet</a></li>
+<li><a class="reference internal" href="#beta-code-notice">Beta code notice</a></li>
+<li><a class="reference internal" href="#id1">Further reading</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="importexport.html"
+                        title="previous chapter">Import and export</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="archetypes/index.html"
+                        title="next chapter">Archetypes</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/content/events.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="archetypes/index.html" title="Archetypes"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="importexport.html" title="Import and export"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Content management</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Serving HTTP and other protocols &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="next" title="HTTP request and response" href="http_request_and_response.html" />
+    <link rel="prev" title="Introduction to extending Plone" href="../tutorials/addon.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="http_request_and_response.html" title="HTTP request and response"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../tutorials/addon.html" title="Introduction to extending Plone"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="serving-http-and-other-protocols">
+<h1>Serving HTTP and other protocols<a class="headerlink" href="#serving-http-and-other-protocols" title="Permalink to this headline">¶</a></h1>
+<p>Serving content from your site to your users is effectively a mechanism to translate
+HTTP requests to HTTP responses.</p>
+<p>In Plone, answering to HTTP requests can be divided to three subproblems:</p>
+<ul class="simple">
+<li>Managing the lifecycle of the HTTP request and response pair;</li>
+<li>publishing, by traversing the request to the target object by its URI;</li>
+<li>choosing different parts of the code depending on active layers.</li>
+</ul>
+<p>Plone (actually the underlying ZServer) also supports FTP and WebDAV protocols.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="http_request_and_response.html">HTTP request and response</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="http_request_and_response.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="http_request_and_response.html#lifecycle">Lifecycle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="http_request_and_response.html#webservers">Webservers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="http_request_and_response.html#http-request">HTTP Request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="http_request_and_response.html#accessing-http-request-outside-context">Accessing HTTP request outside context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="http_request_and_response.html#http-response">HTTP response</a></li>
+<li class="toctree-l2"><a class="reference internal" href="http_request_and_response.html#middleware-like-hooks">Middleware-like hooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="http_request_and_response.html#post-publication-hook">Post-publication hook</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="traversing.html">Traversing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="traversing.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traversing.html#object-ids">Object ids</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traversing.html#path">Path</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traversing.html#exploring-zope-application-server">Exploring Zope application server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traversing.html#attribute-traversing">Attribute traversing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traversing.html#container-traversing">Container traversing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traversing.html#traversing-by-full-path">Traversing by full path</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traversing.html#getting-object-path">Getting object path</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traversing.html#getting-object-url">Getting object URL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traversing.html#getting-the-parent">Getting the parent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traversing.html#getting-the-site-root">Getting the site root</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traversing.html#getting-zope-application-server-handle">Getting Zope application server handle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traversing.html#acquisition-effect">Acquisition effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traversing.html#defaut-content-item">Defaut content item</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traversing.html#custom-traversing">Custom traversing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traversing.html#advanced-traversing-with-search-conditions">Advanced traversing with search conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traversing.html#other-resources">Other resources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="publishing.html">Publishing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="publishing.html#example-publishers">Example publishers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="xmlrpc.html">XML-RPC</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="xmlrpc.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xmlrpc.html#authentication">Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xmlrpc.html#zpublisher-client">ZPublisher client</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xmlrpc.html#web-services-api-for-plone-wsapi4plone">Web Services API for Plone (wsapi4plone)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xmlrpc.html#more-information">More information</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="webdav.html">WebDAV</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="webdav.html#supporting-webdav-in-your-custom-content">Supporting WebDAV in your custom content</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ftp.html">FTP</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ftp.html#enabling-ftp">Enabling FTP</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../tutorials/addon.html"
+                        title="previous chapter">Introduction to extending Plone</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="http_request_and_response.html"
+                        title="next chapter">HTTP request and response</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/serving/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="http_request_and_response.html" title="HTTP request and response"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../tutorials/addon.html" title="Introduction to extending Plone"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

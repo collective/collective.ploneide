@@ -1,0 +1,317 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>How to make portlets availability configurable via adapters &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../../index.html" />
+    <link rel="up" title="Appendix: Practicals" href="index.html" />
+    <link rel="next" title="Sessions and cookies" href="../../sessions/index.html" />
+    <link rel="prev" title="How to update schemas for already registered portlets" href="schema_update.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../sessions/index.html" title="Sessions and cookies"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="schema_update.html" title="How to update schemas for already registered portlets"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Portlets</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Appendix: Practicals</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="how-to-make-portlets-availability-configurable-via-adapters">
+<h1>How to make portlets availability configurable via adapters<a class="headerlink" href="#how-to-make-portlets-availability-configurable-via-adapters" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">Sometimes you may want to make specific portlets available only on
+some pages, like the portal root. This describes, how to implement
+such a functionality for custom portlets.</p>
+</div>
+<p>The interface IPortletRenderer in plone.portlets.interfaces specifies an
+available property, which is used to decide if an portlet should be shown or
+not. The Renderer class in plone.app.portlets.base, from which most Renderer
+classes derive, implements the available property which always returns True.
+You can override this property in you own Renderer class. And if you use the
+adapter pattern to calculate the available property, it gets configurable also
+outside the package, your portlet is defined in.</p>
+<ol class="arabic simple">
+<li>Define a default adapter including the adapter interface</li>
+</ol>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">zope.interface</span> <span class="kn">import</span> <span class="n">implementer</span>
+<span class="kn">from</span> <span class="nn">zope.interface</span> <span class="kn">import</span> <span class="n">Interface</span><span class="p">,</span> <span class="n">Attribute</span>
+
+<span class="k">class</span> <span class="nc">IPortletAvailable</span><span class="p">(</span><span class="n">Interface</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Interface for Adapters, implementing logic to determine, if the</span>
+<span class="sd">        Portlet should be shown or not.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">portlet</span> <span class="o">=</span> <span class="n">Attribute</span><span class="p">(</span><span class="s">u&quot;&quot;&quot;The portlet assignment&quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">manager</span> <span class="o">=</span> <span class="n">Attribute</span><span class="p">(</span><span class="s">u&quot;&quot;&quot;The portlet manager&quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="n">Attribute</span><span class="p">(</span><span class="s">u&quot;&quot;&quot;The context, this portlet is shown&quot;&quot;&quot;</span><span class="p">)</span>
+
+<span class="nd">@implementer</span><span class="p">(</span><span class="n">IPortletAvailable</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">portlet_default_available</span><span class="p">(</span><span class="n">portlet</span><span class="p">,</span> <span class="n">manager</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">True</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li>Register the adapter with zcml. The default adapter is registered as
+multiadapter to a portlet assignment, a portlet manager and a generic
+context. The portlet assignment specifies for which portlet type the adapter
+is registered (in this case IMyPortlet). The portlet manager adapted in this
+example is IPortletManager - the most generic one which includes IDashBoard,
+ILeftColumn and IRightColumn. The context in this example is also very
+generic - any content which can display portlets.</li>
+</ol>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;adapter</span>
+    <span class="na">factory=</span><span class="s">&quot;.portlet.portlet_default_available&quot;</span>
+    <span class="na">for=</span><span class="s">&quot;MY.PACKAGE.portlet.IMyPortlet</span>
+<span class="s">         plone.portlets.interfaces.IPortletManager</span>
+<span class="s">         plone.portlets.interfaces.ILocalPortletAssignable&quot;</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li>Use the adapter in your custom portlet:</li>
+</ol>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">Acquisition</span> <span class="kn">import</span> <span class="n">aq_inner</span><span class="p">,</span> <span class="n">aq_base</span>
+<span class="kn">from</span> <span class="nn">zope.component</span> <span class="kn">import</span> <span class="n">getMultiAdapter</span><span class="p">,</span> <span class="n">queryMultiAdapter</span>
+
+<span class="k">class</span> <span class="nc">PortletRenderer</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">Renderer</span><span class="p">):</span>
+    <span class="o">...</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">available</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="n">aq_inner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
+        <span class="n">assignment</span> <span class="o">=</span> <span class="n">aq_base</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="c"># first try to get a named multi adapter, then an unnamed</span>
+        <span class="n">available</span> <span class="o">=</span> <span class="n">queryMultiAdapter</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">assignment</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="p">,</span> <span class="n">context</span><span class="p">),</span>
+            <span class="n">IPortletAvailable</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">assignment</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="n">default</span><span class="o">=</span><span class="n">getMultiAdapter</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">assignment</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="p">,</span> <span class="n">context</span><span class="p">),</span>
+                <span class="n">IPortletAvailable</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">available</span>
+</pre></div>
+</div>
+<p>The first adapter lookup is a named one. So it's possible to register an
+adapter for one specific portlet only, whereas the second adapter lookup
+can apply to more than one portlet.</p>
+<p>The default adapter registered above always returns True. But we can override
+this behavior in another package, e.g. an Pone integration package (call it
+&quot;policy product&quot;).</p>
+<ol class="arabic simple" start="4">
+<li>Define custom adapters:</li>
+</ol>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">MY.PACKAGE.portlet</span> <span class="kn">import</span> <span class="n">IPortletAvailable</span>
+<span class="kn">from</span> <span class="nn">zope.interface</span> <span class="kn">import</span> <span class="n">implementer</span>
+
+<span class="nd">@implementer</span><span class="p">(</span><span class="n">IPortletAvailable</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">portlet_disabled</span><span class="p">(</span><span class="n">portlet</span><span class="p">,</span> <span class="n">manager</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+    <span class="c"># also some fancy logic can be implemented here</span>
+    <span class="k">return</span> <span class="bp">False</span>
+
+<span class="nd">@implementer</span><span class="p">(</span><span class="n">IPortletAvailable</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">portlet_enabled</span><span class="p">(</span><span class="n">portlet</span><span class="p">,</span> <span class="n">manager</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">True</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="5">
+<li>Register the adapters:</li>
+</ol>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;adapter</span>
+    <span class="na">factory=</span><span class="s">&quot;.portlet_adapters.portlet_enabled&quot;</span>
+    <span class="na">for=</span><span class="s">&quot;MY.PACKAGE.portlet.IMyPortlet</span>
+<span class="s">         plone.app.portlets.interfaces.ILeftColumn</span>
+<span class="s">         Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;adapter</span>
+    <span class="na">factory=</span><span class="s">&quot;.portlet_adapters.portlet_disabled&quot;</span>
+    <span class="na">for=</span><span class="s">&quot;MY.PACKAGE.portlet.IMyPortlet</span>
+<span class="s">         plone.app.portlets.interfaces.ILeftColumn</span>
+<span class="s">         plone.portlets.interfaces.ILocalPortletAssignable&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;adapter</span>
+    <span class="na">factory=</span><span class="s">&quot;.portlet_adapters.main_teaser_available&quot;</span>
+    <span class="na">for=</span><span class="s">&quot;MY.PACKAGE.portlet.IMyPortlet</span>
+<span class="s">         plone.app.portlets.interfaces.IRightColumn</span>
+<span class="s">         plone.portlets.interfaces.ILocalPortletAssignable&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;adapter</span>
+    <span class="na">factory=</span><span class="s">&quot;.portlet_adapters.portlet_disabled&quot;</span>
+    <span class="na">for=</span><span class="s">&quot;MY.PACKAGE.portlet.IMyPortlet</span>
+<span class="s">         plone.app.portlets.interfaces.IRightColumn</span>
+<span class="s">         Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot&quot;</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<p>Here, if the portlet is registered on ILeftColumn and IRightColumn, it is only
+shown on ILeftColumn, if the context is the portal root. Otherwise, it's shown
+on IRightColumn.</p>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../../index.html"><img src="../../_static/plone-icon-64.png" />
+</a></p>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="schema_update.html"
+                        title="previous chapter">How to update schemas for already registered portlets</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../../sessions/index.html"
+                        title="next chapter">Sessions and cookies</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/portlets/appendix/available_adapter.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../sessions/index.html" title="Sessions and cookies"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="schema_update.html" title="How to update schemas for already registered portlets"
+             >previous</a> |</li>
+        <li><a href="../../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Portlets</a> &raquo;</li>
+          <li><a href="index.html" >Appendix: Practicals</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

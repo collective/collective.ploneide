@@ -1,0 +1,385 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Member profiles &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Users and members" href="index.html" />
+    <link rel="next" title="Pluggable Authentication Service" href="pluggable_authentication_service/index.html" />
+    <link rel="prev" title="Reading member records" href="member_basics.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pluggable_authentication_service/index.html" title="Pluggable Authentication Service"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="member_basics.html" title="Reading member records"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Users and members</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="member-profiles">
+<h1>Member profiles<a class="headerlink" href="#member-profiles" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
+<li><a class="reference internal" href="#getting-member-profile-properties" id="id2">Getting member profile properties</a><ul>
+<li><a class="reference internal" href="#accessing-member-data" id="id3">Accessing member data</a></li>
+<li><a class="reference internal" href="#furher-reading" id="id4">Furher reading</a></li>
+<li><a class="reference internal" href="#getting-member-fullname" id="id5">Getting member fullname</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#setting-member-profile-properties" id="id6">Setting member profile properties</a><ul>
+<li><a class="reference internal" href="#setting-password" id="id7">Setting password</a></li>
+<li><a class="reference internal" href="#setting-visual-editor" id="id8">Setting visual editor</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">How to manage Plone member propeties programmatically</p>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Member profile fields are the fields which the logged in member
+can edit oneself on his user account page.</p>
+<p>For more info, see</p>
+<ul class="simple">
+<li>MemberDataTool: <a class="reference external" href="http://svn.zope.org/Products.CMFCore/trunk/Products/CMFCore/MemberDataTool.py?rev=110418&amp;view=auto">http://svn.zope.org/Products.CMFCore/trunk/Products/CMFCore/MemberDataTool.py?rev=110418&amp;view=auto</a></li>
+<li>MemberData class: <a class="reference external" href="http://svn.zope.org/Products.CMFCore/trunk/Products/CMFCore/MemberDataTool.py?rev=110418&amp;view=auto">http://svn.zope.org/Products.CMFCore/trunk/Products/CMFCore/MemberDataTool.py?rev=110418&amp;view=auto</a></li>
+</ul>
+<p>PlonePAS subclasses and extends MemberData and MemberDataTool</p>
+<ul class="simple">
+<li><a class="reference external" href="http://dev.plone.org/collective/browser/Products.PlonePAS/trunk/Products/PlonePAS/tools/memberdata.py?rev=122125#L27">See PlonePAS MemberDataTool</a>.</li>
+<li><a class="reference external" href="http://dev.plone.org/collective/browser/Products.PlonePAS/trunk/Products/PlonePAS/tools/memberdata.py?rev=122125#L220">See PlonePAS MemberData class</a>.</li>
+</ul>
+</div>
+<div class="section" id="getting-member-profile-properties">
+<h2><a class="toc-backref" href="#id2">Getting member profile properties</a><a class="headerlink" href="#getting-member-profile-properties" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Following concerns vanilla Plone only. If you have customized membership behavior
+it doesn't necessarily work.</p>
+</div>
+<p>Member profile properties (title, address, biography, etc.) are stored in portal_membership tool.</p>
+<p>Available fields can be found in ZMI -&gt; portal_membership -&gt; Properties     .</p>
+<p>The script below is a simple example of how to list all member email addresses:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">Products.CMFCore.utils</span> <span class="kn">import</span> <span class="n">getToolByName</span>
+<span class="n">memberinfo</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">membership</span> <span class="o">=</span> <span class="n">getToolByName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="s">&#39;portal_membership&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">member</span> <span class="ow">in</span> <span class="n">membership</span><span class="o">.</span><span class="n">listMembers</span><span class="p">():</span>
+    <span class="n">memberinfo</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">member</span><span class="o">.</span><span class="n">getProperty</span><span class="p">(</span><span class="s">&#39;email&#39;</span><span class="p">))</span>
+<span class="k">return</span> <span class="n">memberinfo</span>
+</pre></div>
+</div>
+<div class="section" id="accessing-member-data">
+<h3><a class="toc-backref" href="#id3">Accessing member data</a><a class="headerlink" href="#accessing-member-data" title="Permalink to this headline">¶</a></h3>
+<p>Get member data by username:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="furher-reading">
+<h3><a class="toc-backref" href="#id4">Furher reading</a><a class="headerlink" href="#furher-reading" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><dl class="first docutils">
+<dt><a class="reference external" href="http://svn.plone.org/svn/plone/plone.app.layout/trunk/plone/app/layout/viewlets/common.py">ToolbarViewlet has some sample code</a></dt>
+<dd><p class="first last">how to retrieve these properties.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="getting-member-fullname">
+<h3><a class="toc-backref" href="#id5">Getting member fullname</a><a class="headerlink" href="#getting-member-fullname" title="Permalink to this headline">¶</a></h3>
+<p>In Python code you can ask info from MemberData object:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">fullname</span> <span class="o">=</span> <span class="n">member_data</span><span class="o">.</span><span class="n">getProperty</span><span class="p">(</span><span class="s">&quot;fullname&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In template you can do something along the lines:</p>
+<div class="highlight-python"><pre>&lt;tal:with-fullname define="membership context/portal_membership;info python:membership.getMemberInfo(user.getId()); fullname info/fullname"&gt;
+    You are are &lt;span class="name" tal:content="fullname" /&gt;
+&lt;/tal:with-fullname&gt;</pre>
+</div>
+<p>Note that this code won't work for anonymous users.</p>
+</div>
+</div>
+<div class="section" id="setting-member-profile-properties">
+<h2><a class="toc-backref" href="#id6">Setting member profile properties</a><a class="headerlink" href="#setting-member-profile-properties" title="Permalink to this headline">¶</a></h2>
+<p>Use <em>setMemberProperties(mapping={})</em> to batch update properties.
+Old properties are not removed.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">member</span> <span class="o">=</span> <span class="n">portal_membership</span><span class="o">.</span><span class="n">getMemberById</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+<span class="n">member</span><span class="o">.</span><span class="n">setMemberProperties</span><span class="p">(</span><span class="n">mapping</span><span class="o">=</span><span class="p">{</span><span class="s">&quot;email&quot;</span><span class="p">:</span><span class="s">&quot;aaa@aaa.com&quot;</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>New properties must be explicitly declared in portal_memberdata,
+before creation of the member,
+or setMemberProperties() will silently fail.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">TODO: How to retrofit existing members with new properties?</p>
+</div>
+<p>Example:</p>
+<div class="highlight-python"><pre>def prepareMemberProperties(site):
+    """ Adjust site for custom member properties """
+
+    # Need to use ancient Z2 property sheet API here...
+    portal_memberdata = getToolByName(site, "portal_memberdata")
+
+    # When new member is created, it's MemberData
+    # is populated with the values from portal_memberdata property sheet,
+    # so value="" will be the default value for users' home_folder_uid
+    # member property
+    if not portal_memberdata.hasProperty("home_folder_uid"):
+        portal_memberdata.manage_addProperty(id="home_folder_uid", value="", type="string")
+
+ ....
+
+def createMatchingHomeFolder(member):
+    """ """
+
+    email = member.getProperty("email")
+    home_folder.setEmail(email)
+
+    # Store UID of the created folder in memberdata so we can
+    # look it up later to e.g. generate the link to the member folder
+    member.setMemberProperties(mapping={"home_folder_uid": home_folder.UID()})
+
+
+    return home_folder</pre>
+</div>
+<div class="section" id="setting-password">
+<h3><a class="toc-backref" href="#id7">Setting password</a><a class="headerlink" href="#setting-password" title="Permalink to this headline">¶</a></h3>
+<p>Password is a special case.</p>
+<p>Example how to set the user password:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Password is set in a special way</span>
+<span class="c"># passwd is password as plain text</span>
+<span class="n">member</span><span class="o">.</span><span class="n">setSecurityProfile</span><span class="p">(</span><span class="n">password</span><span class="o">=</span><span class="n">passwd</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="setting-visual-editor">
+<h3><a class="toc-backref" href="#id8">Setting visual editor</a><a class="headerlink" href="#setting-visual-editor" title="Permalink to this headline">¶</a></h3>
+<p>If you want to certain member to use TinyMCE instead of Kupu.
+Plone provides no means to do change other member properties through-the-web,
+but you can do it using the command-line scripting snippet below:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Traverse to your Plone site from Zope application root</span>
+<span class="n">context</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">mfabrik</span> <span class="c"># site id is mfabrik</span>
+
+<span class="n">users</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">acl_users</span><span class="o">.</span><span class="n">getUserNames</span><span class="p">()</span>
+
+<span class="n">portal_membership</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">portal_membership</span>
+
+<span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">users</span><span class="p">:</span>
+   <span class="n">member</span> <span class="o">=</span> <span class="n">portal_membership</span><span class="o">.</span><span class="n">getMemberById</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+   <span class="n">value</span> <span class="o">=</span> <span class="n">member</span><span class="o">.</span><span class="n">wysiwyg_editor</span>
+
+   <span class="c"># Show the existing editor choice before upgrading</span>
+   <span class="k">print</span> <span class="nb">str</span><span class="p">(</span><span class="n">user</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+
+   <span class="c"># Set WYSIWYG editor to all</span>
+
+   <span class="n">member</span><span class="o">.</span><span class="n">wysiwyg_editor</span> <span class="o">=</span> <span class="s">&quot;TinyMCE&quot;</span>
+
+   <span class="c"># The following does not work from command-line (assumes HTTP request?)</span>
+   <span class="c">#member.setMemberProperties({&#39;wysiwyg_editor&#39;: &#39;TinyMCE&#39;})</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The script does not work through ZMI as member properties
+do not have proper security declarations to set them as admin.</p>
+</div>
+</div>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Member profiles</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#getting-member-profile-properties">Getting member profile properties</a><ul>
+<li><a class="reference internal" href="#accessing-member-data">Accessing member data</a></li>
+<li><a class="reference internal" href="#furher-reading">Furher reading</a></li>
+<li><a class="reference internal" href="#getting-member-fullname">Getting member fullname</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#setting-member-profile-properties">Setting member profile properties</a><ul>
+<li><a class="reference internal" href="#setting-password">Setting password</a></li>
+<li><a class="reference internal" href="#setting-visual-editor">Setting visual editor</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="member_basics.html"
+                        title="previous chapter">Reading member records</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pluggable_authentication_service/index.html"
+                        title="next chapter">Pluggable Authentication Service</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/members/member_profile.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pluggable_authentication_service/index.html" title="Pluggable Authentication Service"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="member_basics.html" title="Reading member records"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Users and members</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

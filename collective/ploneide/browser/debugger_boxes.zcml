@@ -1,0 +1,40 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="collective.ploneide">
+
+  <include file="debugger_boxes.zcml" />
+  
+  <browser:page
+      for="*"
+      name="local-variables-box"
+      class=".debugger_boxes.localVariablesBox"
+      template="templates/local_variables_box.pt"
+      permission="zope.Public"
+      />
+
+  <browser:page
+      for="*"
+      name="global-variables-box"
+      class=".debugger_boxes.globalVariablesBox"
+      template="templates/global_variables_box.pt"
+      permission="zope.Public"
+      />
+      
+  <browser:page
+      for="*"
+      name="watched-variables-box"
+      class=".debugger_boxes.watchedVariablesBox"
+      template="templates/watched_variables_box.pt"
+      permission="zope.Public"
+      />
+      
+  <browser:page
+      for="*"
+      name="debugger-console-box"
+      class=".debugger_boxes.consoleBox"
+      template="templates/debugger_console_box.pt"
+      permission="zope.Public"
+      />
+
+</configure>

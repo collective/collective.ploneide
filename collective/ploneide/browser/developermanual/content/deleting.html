@@ -1,0 +1,363 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Deleting &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Content management" href="index.html" />
+    <link rel="next" title="Renaming objects (changing object ids)" href="rename.html" />
+    <link rel="prev" title="Manipulating objects" href="manipulating.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="rename.html" title="Renaming objects (changing object ids)"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="manipulating.html" title="Manipulating objects"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Content management</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="deleting">
+<h1>Deleting<a class="headerlink" href="#deleting" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">Deleting content items in Plone programmatically.
+How link integrity checks works and how to avoid it.</p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
+<li><a class="reference internal" href="#deleting-content-by-id" id="id2">Deleting content by id</a><ul>
+<li><a class="reference internal" href="#permissions" id="id3">Permissions</a></li>
+<li><a class="reference internal" href="#bypassing-permissios" id="id4">Bypassing permissios</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#deleting-all-content-in-a-folder" id="id5">Deleting all content in a folder</a></li>
+<li><a class="reference internal" href="#bypassing-link-integrity-check" id="id6">Bypassing link integrity check</a></li>
+<li><a class="reference internal" href="#fail-safe-deleting" id="id7">Fail safe deleting</a></li>
+<li><a class="reference internal" href="#purging-site-from-old-content" id="id8">Purging site from old content</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>This document tells how to programmatically delete objects in Plone.</p>
+</div>
+<div class="section" id="deleting-content-by-id">
+<h2><a class="toc-backref" href="#id2">Deleting content by id</a><a class="headerlink" href="#deleting-content-by-id" title="Permalink to this headline">¶</a></h2>
+<p>Deleting content objects is done by IObjectManager.</p>
+<p><a class="reference external" href="http://svn.zope.org/Zope/trunk/src/OFS/interfaces.py?rev=96262&amp;view=auto">IObjectManager definition</a>.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># manage_delObjects takes list of ids as an argument</span>
+<span class="n">folder</span><span class="o">.</span><span class="n">manage_delObjects</span><span class="p">([</span><span class="s">&quot;list&quot;</span><span class="p">,</span> <span class="s">&quot;of&quot;</span><span class="p">,</span> <span class="s">&quot;ids&quot;</span><span class="p">,</span> <span class="s">&quot;to&quot;</span><span class="p">,</span> <span class="s">&quot;delete&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Or:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">parent</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">aq_parent</span>
+<span class="n">parent</span><span class="o">.</span><span class="n">manage_delObjects</span><span class="p">([</span><span class="n">context</span><span class="o">.</span><span class="n">getId</span><span class="p">()])</span>
+</pre></div>
+</div>
+<div class="section" id="permissions">
+<h3><a class="toc-backref" href="#id3">Permissions</a><a class="headerlink" href="#permissions" title="Permalink to this headline">¶</a></h3>
+<p>The user must have Zope 2 <em>Delete objects</em> permission on the <em>content item</em> being
+deleted. This is checked in <tt class="docutils literal"><span class="pre">Products.CMFPlone.PloneFolder.manage_delObjects()</span></tt>.</p>
+<p>Otherwise Unauthorized exception is risen.</p>
+<p>Example how to check for this permission:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">Products.CMFCore</span> <span class="kn">import</span> <span class="n">permissions</span>
+
+<span class="n">hospital</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">portal</span><span class="o">.</span><span class="n">country</span><span class="o">.</span><span class="n">hospital</span>
+<span class="n">item</span> <span class="o">=</span> <span class="n">hospital</span><span class="o">.</span><span class="n">patient1</span>
+
+<span class="n">mt</span> <span class="o">=</span> <span class="n">getToolByName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">portal</span><span class="p">,</span> <span class="s">&#39;portal_membership&#39;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">mt</span><span class="o">.</span><span class="n">checkPermission</span><span class="p">(</span><span class="n">permissions</span><span class="o">.</span><span class="n">DeleteObjects</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+    <span class="c"># Can delete</span>
+    <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s">&quot;Oooops. Deletion allowed&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="bypassing-permissios">
+<h3><a class="toc-backref" href="#id4">Bypassing permissios</a><a class="headerlink" href="#bypassing-permissios" title="Permalink to this headline">¶</a></h3>
+<p>This is handy if you work e.g. in a <a class="reference internal" href="../misc/commandline.html"><em>debug shell</em></a>
+and you are deleting badly behaving objects.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">AccessControl.SecurityManagement</span> <span class="kn">import</span> <span class="n">newSecurityManager</span>
+<span class="n">admin</span><span class="o">=</span><span class="n">app</span><span class="o">.</span><span class="n">acl_users</span><span class="o">.</span><span class="n">getUserById</span><span class="p">(</span><span class="s">&quot;admin&quot;</span><span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">folder_sits</span><span class="o">.</span><span class="n">sitsngta</span><span class="o">.</span><span class="n">manage_delObjects</span><span class="p">(</span><span class="s">&quot;examples&quot;</span><span class="p">)</span>
+<span class="c"># Try harder:</span>
+<span class="c"># app.folder_sits.sitsngta._delObject(&quot;examples&quot;, suppress_events=True)</span>
+<span class="kn">import</span> <span class="nn">transaction</span> <span class="p">;</span> <span class="n">transaction</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="deleting-all-content-in-a-folder">
+<h2><a class="toc-backref" href="#id5">Deleting all content in a folder</a><a class="headerlink" href="#deleting-all-content-in-a-folder" title="Permalink to this headline">¶</a></h2>
+<p>Little tricky. An example:</p>
+<div class="highlight-python"><pre>    ids = folder.objectIds() # Plone 3 or older
+    ids = folder.keys()      # Plone 4 or newer
+
+if len(ids) &gt; 0:
+    # manage_delObject will mutate the list
+    # so we cannot give it tuple returned by objectIds()
+    ids = list(ids)
+    folder.manage_delObjects(ids)</pre>
+</div>
+</div>
+<div class="section" id="bypassing-link-integrity-check">
+<h2><a class="toc-backref" href="#id6">Bypassing link integrity check</a><a class="headerlink" href="#bypassing-link-integrity-check" title="Permalink to this headline">¶</a></h2>
+<p>If link integrity check is on in the site setup, you cannot
+delete objects which themselves are link targets or their children
+are link targets.</p>
+<p>Instead, a LinkIntegrityException is raised. The LinkIntegrityException
+constains information about objects referring to the content
+which is not allowed to delete.</p>
+<p><tt class="docutils literal"><span class="pre">plone.app.linkintegrity.browser.remote</span></tt> module contains
+code which allows you to delete the object in any case.
+It catches the exception, modifies the HTTP request
+to contain a marker interface allowing delete to happen
+and then replays the transaction.</p>
+<p>In the case the link integrity check fails for manage_delObjects(),
+you will be shown a confirmation dialog. The orignal request payload
+gots pickled and is stored in HTML form as an encoded.</p>
+<p>When the user presses confirm, the orignal request gets unpickled
+from HTTP POST payload. Then the view modifies Zope publisher
+so that it will play the orignal unpickled HTTP POST with the marker interface
+&quot;Do not care about link integrity breaches&quot; turned on.</p>
+</div>
+<div class="section" id="fail-safe-deleting">
+<h2><a class="toc-backref" href="#id7">Fail safe deleting</a><a class="headerlink" href="#fail-safe-deleting" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes object delete might not be possible, because deletion dispatches
+events which might raise exception due to bad broken objects or badly behaving code.</p>
+<p><a class="reference external" href="http://svn.zope.org/Zope/trunk/src/OFS/ObjectManager.py?rev=115507&amp;view=auto">OFS.ObjectManager</a> which is base class for Zope folders, provides internal method to delete
+objects from folder without firing any events:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Delete object with id &quot;broken-folder&quot; without firing any delete events</span>
+<span class="n">site</span><span class="o">.</span><span class="n">_delObject</span><span class="p">(</span><span class="s">&quot;broken-folder&quot;</span><span class="p">,</span> <span class="n">suppress_events</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The best way to clean up bad objects on your site is via <a class="reference internal" href="../misc/commandline.html"><em>command line script</em></a> in which case remember to commit the transaction
+after removing the broken objects.</p>
+</div>
+<div class="section" id="purging-site-from-old-content">
+<h2><a class="toc-backref" href="#id8">Purging site from old content</a><a class="headerlink" href="#purging-site-from-old-content" title="Permalink to this headline">¶</a></h2>
+<p>This ZMI script allows you to find content items of certain type and delete if they are created too long ago.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Delete FeedfeederItem content items which are more than three months old</span>
+
+<span class="kn">from</span> <span class="nn">StringIO</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="kn">import</span> <span class="nn">DateTime</span>
+
+<span class="n">buf</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">()</span>
+
+<span class="c"># DateTime deltas are days as floating points</span>
+<span class="n">end</span> <span class="o">=</span> <span class="n">DateTime</span><span class="o">.</span><span class="n">DateTime</span><span class="p">()</span> <span class="o">-</span> <span class="mi">30</span><span class="o">*</span><span class="mi">3</span>
+<span class="n">start</span> <span class="o">=</span> <span class="n">DateTime</span><span class="o">.</span><span class="n">DateTime</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">date_range_query</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&#39;query&#39;</span><span class="p">:(</span><span class="n">start</span><span class="p">,</span><span class="n">end</span><span class="p">),</span> <span class="s">&#39;range&#39;</span><span class="p">:</span> <span class="s">&#39;min:max&#39;</span><span class="p">}</span>
+
+<span class="n">items</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">portal_catalog</span><span class="o">.</span><span class="n">queryCatalog</span><span class="p">({</span><span class="s">&quot;portal_type&quot;</span><span class="p">:</span><span class="s">&quot;FeedFeederItem&quot;</span><span class="p">,</span>
+                                     <span class="s">&quot;created&quot;</span> <span class="p">:</span> <span class="n">date_range_query</span><span class="p">,</span>
+                                     <span class="s">&quot;sort_on&quot;</span> <span class="p">:</span> <span class="s">&quot;created&quot;</span>
+                                    <span class="p">})</span>
+
+<span class="n">items</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
+
+<span class="k">print</span> <span class="o">&gt;&gt;</span> <span class="n">buf</span><span class="p">,</span> <span class="s">&quot;Found </span><span class="si">%d</span><span class="s"> items to be purged&quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
+
+<span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+    <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">obj</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">getObject</span><span class="p">()</span>
+    <span class="k">print</span> <span class="o">&gt;&gt;</span> <span class="n">buf</span><span class="p">,</span> <span class="s">&quot;Deleting:&quot;</span> <span class="o">+</span> <span class="n">obj</span><span class="o">.</span><span class="n">absolute_url</span><span class="p">()</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">created</span><span class="p">())</span>
+    <span class="n">obj</span><span class="o">.</span><span class="n">aq_parent</span><span class="o">.</span><span class="n">manage_delObjects</span><span class="p">([</span><span class="n">obj</span><span class="o">.</span><span class="n">getId</span><span class="p">()])</span>
+
+
+<span class="k">return</span> <span class="n">buf</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Deleting</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#deleting-content-by-id">Deleting content by id</a><ul>
+<li><a class="reference internal" href="#permissions">Permissions</a></li>
+<li><a class="reference internal" href="#bypassing-permissios">Bypassing permissios</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#deleting-all-content-in-a-folder">Deleting all content in a folder</a></li>
+<li><a class="reference internal" href="#bypassing-link-integrity-check">Bypassing link integrity check</a></li>
+<li><a class="reference internal" href="#fail-safe-deleting">Fail safe deleting</a></li>
+<li><a class="reference internal" href="#purging-site-from-old-content">Purging site from old content</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="manipulating.html"
+                        title="previous chapter">Manipulating objects</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="rename.html"
+                        title="next chapter">Renaming objects (changing object ids)</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/content/deleting.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="rename.html" title="Renaming objects (changing object ids)"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="manipulating.html" title="Manipulating objects"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Content management</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

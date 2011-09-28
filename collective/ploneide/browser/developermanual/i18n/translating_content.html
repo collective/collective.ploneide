@@ -1,0 +1,538 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Translated content &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Internationalization (i18n)" href="index.html" />
+    <link rel="next" title="How to contribute to Plone core translations" href="contribute_to_translations.html" />
+    <link rel="prev" title="Language functions" href="language.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="contribute_to_translations.html" title="How to contribute to Plone core translations"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="language.html" title="Language functions"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Internationalization (i18n)</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="translated-content">
+<h1>Translated content<a class="headerlink" href="#translated-content" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
+<li><a class="reference internal" href="#translation-aware-content-types-archetypes" id="id2">Translation-aware content types (Archetypes)</a></li>
+<li><a class="reference internal" href="#getting-content-item-in-another-language" id="id3">Getting content item in another language</a></li>
+<li><a class="reference internal" href="#translating-content" id="id4">Translating content</a></li>
+<li><a class="reference internal" href="#serving-translated-content-from-a-correct-domain-name" id="id5">Serving translated content from a correct domain name</a></li>
+<li><a class="reference internal" href="#following-another-approach-raptus-multilanguageplone" id="id6">Following another approach (raptus.multilanguageplone)</a></li>
+<li><a class="reference internal" href="#installation" id="id7">Installation</a></li>
+<li><a class="reference internal" href="#migration-from-linguaplone" id="id8">Migration from Linguaplone</a></li>
+</ul>
+</div>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">Translating content items in Plone, creating translation programmatically
+and working with translator.</p>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Content translations are handled by well-established <a class="reference external" href="http://plone.org/products/linguaplone">LinguaPlone add-on product</a>.</p>
+<p>See example:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://svn.plone.org/svn/plone/LinguaPlone/tags/2.1.1/Products/LinguaPlone/examples/LinguaItem.py">http://svn.plone.org/svn/plone/LinguaPlone/tags/2.1.1/Products/LinguaPlone/examples/LinguaItem.py</a></li>
+</ul>
+</div>
+<div class="section" id="translation-aware-content-types-archetypes">
+<h2><a class="toc-backref" href="#id2">Translation-aware content types (Archetypes)</a><a class="headerlink" href="#translation-aware-content-types-archetypes" title="Permalink to this headline">¶</a></h2>
+<p>LinguaPlone makes it possible to mark fields language independent or language dependent.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">To have language aware behavior you need to use Products.LinguaPlone.public.*
+API functions instead of Products.Archetypes.atapi.*</p>
+</div>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">Products.LinguaPlone</span> <span class="kn">import</span> <span class="n">public</span> <span class="k">as</span> <span class="n">atapi</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="c"># No multilingual support</span>
+    <span class="kn">from</span> <span class="nn">Products.Archetypes</span> <span class="kn">import</span> <span class="n">atapi</span>
+
+
+<span class="k">class</span> <span class="nc">MyContent</span><span class="p">(</span><span class="n">atapi</span><span class="o">.</span><span class="n">ATContent</span><span class="p">):</span>
+      <span class="k">pass</span>
+
+<span class="n">atapi</span><span class="o">.</span><span class="n">registerType</span><span class="p">(</span><span class="n">MyContent</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For more information, see</p>
+<ul class="simple">
+<li><a class="reference external" href="http://pypi.python.org/pypi/Products.LinguaPlone/3.1a2#language-independent-fields">http://pypi.python.org/pypi/Products.LinguaPlone/3.1a2#language-independent-fields</a></li>
+<li><a class="reference external" href="http://n2.nabble.com/languageIndependent-fields-not-updated-td2430489.html">http://n2.nabble.com/languageIndependent-fields-not-updated-td2430489.html</a></li>
+</ul>
+</div>
+<div class="section" id="getting-content-item-in-another-language">
+<h2><a class="toc-backref" href="#id3">Getting content item in another language</a><a class="headerlink" href="#getting-content-item-in-another-language" title="Permalink to this headline">¶</a></h2>
+<p>Possible use cases</p>
+<ul class="simple">
+<li>Getting translated content item by known path: E.g. You can have content item called &quot;portal/footer&quot; containing dynamic text and
+having different variations for different languages</li>
+<li>Displaying content in many languages simultaneously</li>
+</ul>
+<p>To display the translation of current user language of some content you can use ITranslatable.getTranslation():</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">getTranslation</span><span class="p">(</span><span class="n">language</span><span class="o">=</span><span class="s">&#39;language&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return the object corresponding to a translated version or None.</span>
+<span class="sd">    If called without arguments it returns the translation in the currently</span>
+<span class="sd">    selected language, or self.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Footer</span><span class="p">(</span><span class="n">BaseViewlet</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A footer viewlet which will pull editable and translated footer text.</span>
+
+<span class="sd">    The localized text is available as Archetypes Page object which id</span>
+<span class="sd">    is &quot;footer-text&quot; in the site root. LinguaPlone translation look-up</span>
+<span class="sd">    is performed.</span>
+
+<span class="sd">        1. Create the footer in your site main language as a hidden</span>
+<span class="sd">           Page which id is set to &quot;footer-text&quot;</span>
+
+<span class="sd">        2. Use &quot;Translate to...&quot; action to create localized versions</span>
+<span class="sd">           of this footer</span>
+
+<span class="sd">        3. Leave footer private so that it does not appear in the</span>
+<span class="sd">           search results etc.</span>
+
+<span class="sd">    Note that the workflow state of the footer content is not considered.</span>
+
+<span class="sd">    Note that &quot;footer&quot; is reserved id in Plone, thus we use &quot;footer-text&quot;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">grok</span><span class="o">.</span><span class="n">name</span><span class="p">(</span><span class="s">&quot;plone.footer&quot;</span><span class="p">)</span>
+    <span class="n">grok</span><span class="o">.</span><span class="n">viewletmanager</span><span class="p">(</span><span class="n">IPortalFooter</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">getFooterText</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Call this from your viewlet template.</span>
+
+<span class="sd">        Example::</span>
+
+<span class="sd">            &lt;div id=&quot;portal-footer&quot;&gt;</span>
+<span class="sd">              &lt;div tal:replace=&quot;structure viewlet/getFooterText&quot; /&gt;</span>
+<span class="sd">            &lt;/div&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="kn">from</span> <span class="nn">Products.LinguaPlone.interfaces</span> <span class="kn">import</span> <span class="n">ITranslatable</span>
+
+        <span class="n">portal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">portal_state</span><span class="p">()</span><span class="o">.</span><span class="n">portal</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="s">&quot;footer-text&quot;</span> <span class="ow">in</span> <span class="n">portal</span><span class="o">.</span><span class="n">objectIds</span><span class="p">():</span> <span class="c"># Note that you can use has_key() for BTree based folders</span>
+            <span class="n">footer</span> <span class="o">=</span> <span class="n">portal</span><span class="p">[</span><span class="s">&quot;footer-text&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">ITranslatable</span><span class="o">.</span><span class="n">providedBy</span><span class="p">(</span><span class="n">footer</span><span class="p">):</span>
+                <span class="n">translated</span> <span class="o">=</span> <span class="n">footer</span><span class="o">.</span><span class="n">getTranslation</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">translated</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">translated</span><span class="o">.</span><span class="n">getText</span><span class="p">()</span>
+
+            <span class="k">return</span> <span class="n">footer</span><span class="o">.</span><span class="n">getText</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="s">&quot;&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="translating-content">
+<h2><a class="toc-backref" href="#id4">Translating content</a><a class="headerlink" href="#translating-content" title="Permalink to this headline">¶</a></h2>
+<p>LinguaPlone contains some unit test code which shows how to create translations.
+You can use context.addTranslation(language_code) and context.getTranslation(language_code) methods.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">Products.LinguaPlone.I18NBaseObject</span> <span class="kn">import</span> <span class="n">AlreadyTranslated</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="nb">object</span><span class="o">.</span><span class="n">addTranslation</span><span class="p">(</span><span class="n">lang</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">AlreadyTranslated</span><span class="p">:</span>
+    <span class="c"># Note: AlreadyTranslated is always risen if Products.Linguaplone is not installed</span>
+    <span class="k">pass</span>
+
+<span class="n">translated</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="n">getTranslation</span><span class="p">(</span><span class="n">lang</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>See <a class="reference external" href="http://svn.plone.org/svn/plone/LinguaPlone/tags/2.1.1/Products/LinguaPlone/tests/translate_edit.txt">http://svn.plone.org/svn/plone/LinguaPlone/tags/2.1.1/Products/LinguaPlone/tests/translate_edit.txt</a></p>
+</div>
+<div class="section" id="serving-translated-content-from-a-correct-domain-name">
+<h2><a class="toc-backref" href="#id5">Serving translated content from a correct domain name</a><a class="headerlink" href="#serving-translated-content-from-a-correct-domain-name" title="Permalink to this headline">¶</a></h2>
+<p>The following applies if</p>
+<ul class="simple">
+<li>You use one Plone instance to host several language versions</li>
+<li>Plone instance is mapped to different domain names</li>
+<li>Language is resolved based top level domain name or subdomain name</li>
+</ul>
+<p>For SEO and usability reasons, you might want to force certain content to come up from a certain domain.
+Plone does not prevent you to access context /news on Finnish domain or /uutiset on English domain.
+If these URLs leak to search engines, they cause confusion.</p>
+<p>Below is a complex post-publication hook which redirects users to correct domain where
+the language should be served:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Domain aware language redirects.</span>
+
+<span class="sd">    Redirect the user to a correct domain where the language should be served,</span>
+<span class="sd">    if mixing and matching different domain names and language versions.</span>
+
+<span class="sd">    http://mfabrik.com</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">urlparse</span>
+
+<span class="kn">from</span> <span class="nn">zope.interface</span> <span class="kn">import</span> <span class="n">Interface</span>
+<span class="kn">from</span> <span class="nn">zope.component</span> <span class="kn">import</span> <span class="n">adapter</span><span class="p">,</span> <span class="n">getUtility</span><span class="p">,</span> <span class="n">getMultiAdapter</span>
+<span class="kn">from</span> <span class="nn">plone.postpublicationhook.interfaces</span> <span class="kn">import</span> <span class="n">IAfterPublicationEvent</span>
+
+<span class="kn">from</span> <span class="nn">gomobile.mobile.utilities</span> <span class="kn">import</span> <span class="n">get_host_domain_name</span>
+<span class="kn">from</span> <span class="nn">gomobile.mobile.interfaces</span> <span class="kn">import</span> <span class="n">IMobileRequestDiscriminator</span><span class="p">,</span> <span class="n">MobileRequestType</span>
+
+<span class="kn">from</span> <span class="nn">Products.CMFCore.interfaces</span> <span class="kn">import</span> <span class="n">IContentish</span>
+
+<span class="k">def</span> <span class="nf">get_contentish</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Traverse acquisition upwards until we get contentish object used for the HTTP response.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">contentish</span> <span class="o">=</span> <span class="nb">object</span>
+    <span class="k">while</span> <span class="ow">not</span> <span class="n">IContentish</span><span class="o">.</span><span class="n">providedBy</span><span class="p">(</span><span class="n">contentish</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">contentish</span><span class="p">,</span> <span class="s">&quot;aq_parent&quot;</span><span class="p">):</span>
+            <span class="n">contentish</span> <span class="o">=</span> <span class="n">contentish</span><span class="o">.</span><span class="n">aq_parent</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">break</span>
+
+    <span class="k">return</span> <span class="n">contentish</span>
+
+
+<span class="k">def</span> <span class="nf">redirect_domain</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="n">new_domain</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Redirect user to a new domain, but having URI in intact.</span>
+
+<span class="sd">    This also keeps port part of netloc in intact.</span>
+
+<span class="sd">    @param new_domain: New domain name to redirect, without port.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c"># Get the</span>
+
+    <span class="n">url</span> <span class="o">=</span> <span class="n">request</span><span class="p">[</span><span class="s">&quot;ACTUAL_URL&quot;</span><span class="p">]</span>
+    <span class="n">parts</span> <span class="o">=</span> <span class="n">urlparse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+    <span class="c"># Replace domain name</span>
+    <span class="n">parts</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span>
+    <span class="n">netloc</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c"># TODO: Handle @ and HTTP Basic auth here</span>
+    <span class="k">if</span> <span class="s">&quot;:&quot;</span> <span class="ow">in</span> <span class="n">netloc</span><span class="p">:</span>
+        <span class="n">domain</span><span class="p">,</span> <span class="n">port</span> <span class="o">=</span> <span class="n">netloc</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;:&quot;</span><span class="p">)</span>
+        <span class="n">netloc</span> <span class="o">=</span> <span class="n">new_domain</span> <span class="o">+</span> <span class="s">&quot;:&quot;</span> <span class="o">+</span> <span class="n">port</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">netloc</span> <span class="o">=</span> <span class="n">new_domain</span>
+
+    <span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">netloc</span>
+    <span class="n">new_url</span> <span class="o">=</span> <span class="n">urlparse</span><span class="o">.</span><span class="n">urlunparse</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span>
+
+    <span class="c"># Make 301 Permanent Redirect response</span>
+    <span class="n">response</span><span class="o">.</span><span class="n">redirect</span><span class="p">(</span><span class="n">new_url</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="mi">301</span><span class="p">)</span>
+    <span class="n">response</span><span class="o">.</span><span class="n">body</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+    <span class="n">response</span><span class="o">.</span><span class="n">setHeader</span><span class="p">(</span><span class="s">&quot;Content-length&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">ensure_in_domain</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="n">language_now</span><span class="p">,</span> <span class="n">wanted_language</span><span class="p">,</span> <span class="n">wanted_domain</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Make sure that certain language gets served from a correct domain.</span>
+
+<span class="sd">    If the user tries to access URI of page, and the page language</span>
+<span class="sd">    does not match the domain we expect, redirect the user to the correct domain.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">domain_now</span> <span class="o">=</span> <span class="n">get_host_domain_name</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">language_now</span> <span class="o">==</span> <span class="n">wanted_language</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">domain_now</span> <span class="o">!=</span> <span class="n">wanted_domain</span><span class="p">:</span>
+            <span class="c"># print &quot;Fixing language &quot; + language_now + &quot; to go to &quot; + wanted_domain + &quot; from &quot; + domain_now</span>
+            <span class="n">redirect_domain</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="n">wanted_domain</span><span class="p">)</span>
+
+<span class="nd">@adapter</span><span class="p">(</span><span class="n">Interface</span><span class="p">,</span> <span class="n">IAfterPublicationEvent</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">language_fixer</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Redirect mobile users to mobile site using gomobile.mobile.interfaces.IRedirector.</span>
+
+<span class="sd">    Note: Plone does not provide a good hook doing this before traversing, so we must</span>
+<span class="sd">    do it in post-publication. This adds extra latency, but is doable.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c"># print &quot;language_fixer&quot;</span>
+
+    <span class="n">request</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">request</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">response</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="n">get_contentish</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="s">&quot;Language&quot;</span><span class="p">):</span>
+        <span class="c"># Check whether the context has a Language() accessor to get</span>
+        <span class="c"># the language where it was written in</span>
+        <span class="n">language_now</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">Language</span><span class="p">()</span>
+
+        <span class="c">#print &quot;Resolving mobility&quot;</span>
+        <span class="n">discriminator</span> <span class="o">=</span> <span class="n">getUtility</span><span class="p">(</span><span class="n">IMobileRequestDiscriminator</span><span class="p">)</span>
+        <span class="n">flags</span> <span class="o">=</span> <span class="n">discriminator</span><span class="o">.</span><span class="n">discriminate</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">MobileRequestType</span><span class="o">.</span><span class="n">MOBILE</span> <span class="ow">in</span> <span class="n">flags</span><span class="p">:</span>
+            <span class="c"># Do mobile</span>
+            <span class="n">ensure_in_domain</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="n">language_now</span><span class="p">,</span> <span class="s">&quot;fi&quot;</span><span class="p">,</span> <span class="s">&quot;m.mfabrik.fi&quot;</span><span class="p">)</span>
+            <span class="n">ensure_in_domain</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="n">language_now</span><span class="p">,</span> <span class="s">&quot;en&quot;</span><span class="p">,</span> <span class="s">&quot;mfabrik.mobi&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c"># Do web</span>
+            <span class="n">ensure_in_domain</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="n">language_now</span><span class="p">,</span> <span class="s">&quot;fi&quot;</span><span class="p">,</span> <span class="s">&quot;mfabrik.fi&quot;</span><span class="p">)</span>
+            <span class="n">ensure_in_domain</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="n">language_now</span><span class="p">,</span> <span class="s">&quot;en&quot;</span><span class="p">,</span> <span class="s">&quot;mfabrik.com&quot;</span><span class="p">)</span>
+
+    <span class="c"># print &quot;Done&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="following-another-approach-raptus-multilanguageplone">
+<h2><a class="toc-backref" href="#id6">Following another approach (raptus.multilanguageplone)</a><a class="headerlink" href="#following-another-approach-raptus-multilanguageplone" title="Permalink to this headline">¶</a></h2>
+<p>Another Plone extension for multilingual content is raptus.multilanguageplone.
+raptus.multilanguageplone isn't meant to be a fully fledged multilanguage tool,
+like LinguaPlone. Translation is done directly in the edit view of a content type
+and provides a widget to use google's translation api to translate the different
+fields.</p>
+<p>Unlike LinguaPlone raptus.multilanguageplone doesn't create an object for each
+translation, it stores the translation on the object itself and therefor doesn't
+support translation workflows and language aware object paths.</p>
+<p>If you have other than default content types, then you have to provide your own
+multilanguagefields adapter.</p>
+<p>See <a class="reference external" href="https://svn.plone.org/svn/collective/raptus.multilanguagefields/trunk/raptus/multilanguagefields/samples/">https://svn.plone.org/svn/collective/raptus.multilanguagefields/trunk/raptus/multilanguagefields/samples/</a></p>
+</div>
+<div class="section" id="installation">
+<h2><a class="toc-backref" href="#id7">Installation</a><a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>Installation of raptus.multilanguageplone is straight forward with buildout. If
+the site contains already articles then you have to migrate them.</p>
+<p>See <a class="reference external" href="http://pypi.python.org/pypi/raptus.multilanguagefields">http://pypi.python.org/pypi/raptus.multilanguagefields</a></p>
+</div>
+<div class="section" id="migration-from-linguaplone">
+<h2><a class="toc-backref" href="#id8">Migration from Linguaplone</a><a class="headerlink" href="#migration-from-linguaplone" title="Permalink to this headline">¶</a></h2>
+<p>If you want to switch from Linguaplone to raptus.multilanguageplone be aware that
+you will loose already translated content.</p>
+<ol class="arabic">
+<li><p class="first">Uninstall Products.Linguaplone.</p>
+</li>
+<li><p class="first">Unfortunately Linguaplone does not uninstall cleanly. 2 utilities remain in
+your database. You can remove them in an interactive session from your site
+with the name 'plone' in this example:</p>
+<div class="highlight-python"><pre>(Pdb) site = plone.getSiteManager()
+(Pdb) from plone.i18n.locales.interfaces import IContentLanguageAvailability
+(Pdb) utils = site.getAllUtilitiesRegisteredFor(IContentLanguageAvailability)
+(Pdb) utils
+[&lt;plone.i18n.locales.languages.ContentLanguageAvailability object at 0xb63c4cc&gt;,
+&lt;ContentLanguages at /plone/plone_app_content_languages&gt;,
+&lt;Products.LinguaPlone.vocabulary.SyncedLanguages object at 0xfa32e8c&gt;,
+&lt;Products.LinguaPlone.vocabulary.SyncedLanguages object at 0xfa32eac&gt;]
+(Pdb) utils = utils[:-2]
+(Pdb) del site.utilities._subscribers[0][IContentLanguageAvailability]</pre>
+</div>
+<p>Repeat the procedure for IMetadataLanguageAvailability and commit the transaction:</p>
+<div class="highlight-python"><pre>(Pdb) import transaction
+(Pdb) site._p_changed = True
+(Pdb) site.utilities._p_changed = True
+(Pdb) transaction.commit()
+(Pdb) app._p_jar.sync()   # if zeo setup</pre>
+</div>
+</li>
+<li><p class="first">Run buildout without Linguaplone and restart.</p>
+</li>
+<li><p class="first">Run the import step of the Plone Language Tool. Otherwise language switching will not work.</p>
+</li>
+<li><p class="first">Install raptus.multilanguageplone by buildout and portal_quickinstaller.</p>
+</li>
+<li><p class="first">Migrate the content.</p>
+</li>
+</ol>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Translated content</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#translation-aware-content-types-archetypes">Translation-aware content types (Archetypes)</a></li>
+<li><a class="reference internal" href="#getting-content-item-in-another-language">Getting content item in another language</a></li>
+<li><a class="reference internal" href="#translating-content">Translating content</a></li>
+<li><a class="reference internal" href="#serving-translated-content-from-a-correct-domain-name">Serving translated content from a correct domain name</a></li>
+<li><a class="reference internal" href="#following-another-approach-raptus-multilanguageplone">Following another approach (raptus.multilanguageplone)</a></li>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#migration-from-linguaplone">Migration from Linguaplone</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="language.html"
+                        title="previous chapter">Language functions</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="contribute_to_translations.html"
+                        title="next chapter">How to contribute to Plone core translations</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/i18n/translating_content.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="contribute_to_translations.html" title="How to contribute to Plone core translations"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="language.html" title="Language functions"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Internationalization (i18n)</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

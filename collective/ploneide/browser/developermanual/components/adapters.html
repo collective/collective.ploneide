@@ -1,0 +1,447 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Adapters &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Component architecture" href="index.html" />
+    <link rel="next" title="Utilities" href="utilities.html" />
+    <link rel="prev" title="Interfaces" href="interfaces.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="utilities.html" title="Utilities"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="interfaces.html" title="Interfaces"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Component architecture</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="adapters">
+<h1>Adapters<a class="headerlink" href="#adapters" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a><ul>
+<li><a class="reference internal" href="#example-adapters-users" id="id2">Example adapters users</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#registering-an-adapter" id="id3">Registering an adapter</a><ul>
+<li><a class="reference internal" href="#generic-adapter-contexts" id="id4">Generic adapter contexts</a></li>
+<li><a class="reference internal" href="#multi-adapter-registration" id="id5">Multi-adapter registration</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#getting-the-adapter" id="id6">Getting the adapter</a></li>
+<li><a class="reference internal" href="#listing-adapter-registers" id="id7">Listing adapter registers</a><ul>
+<li><a class="reference internal" href="#alternative-listing-adapters" id="id8">Alternative listing adapters</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#local-adapters" id="id9">Local adapters</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Adapters allow extending the class behavior outside the class itself. This allows more modular,
+nice looking code in complex systems where there are hundreds of applicable methods per class.</p>
+<ul class="simple">
+<li>Class interface itself is more readable (less visible clutter)</li>
+<li>Class functionality can be extended outside the class source code</li>
+<li>Add-on products may extend or override parts of the class functionality.
+Frameworks use adapters excessively, because adapters provide easy joint points.
+External code can override adapters to retrofit/modify functiolity. An example
+is that a theme product might want to override a searchbox viewlet to have
+little different search box functionality with theme specific goodies.</li>
+</ul>
+<p>The downside is that adapters cannot be found by &quot;exploring&quot; classes or source code. They must
+be well documented to be discoverable.</p>
+<p>Read more about adapters in <a class="reference external" href="http://apidoc.zope.org/++apidoc++/Code/zope/component/README.txt/index.html">zope.component README</a>.</p>
+<p><a class="reference external" href="http://apidoc.zope.org/++apidoc++/ZCML/http_co__sl__sl_namespaces.zope.org_sl_zope/adapter/index.html">Adapter ZCML</a>.</p>
+<p>Adapters are matched by</p>
+<ul class="simple">
+<li>Provider interface (what functionality adapter provides)</li>
+<li>Parameter interfaces</li>
+</ul>
+<p>There are two kinds of adapters</p>
+<ul class="simple">
+<li>Normal adapters take in only one parameter</li>
+<li>Multi-adapters take many parameters as tuple</li>
+</ul>
+<div class="section" id="example-adapters-users">
+<h3><a class="toc-backref" href="#id2">Example adapters users</a><a class="headerlink" href="#example-adapters-users" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference external" href="http://plone.org/documentation/manual/theme-reference/buildingblocks/components/themespecific">http://plone.org/documentation/manual/theme-reference/buildingblocks/components/themespecific</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="registering-an-adapter">
+<h2><a class="toc-backref" href="#id3">Registering an adapter</a><a class="headerlink" href="#registering-an-adapter" title="Permalink to this headline">¶</a></h2>
+<p>Adapter provides functionality for an class and this functionality
+becomes available when interface is queried from the instance of class.</p>
+<p>Below is an example how to make a custom &quot;image provider&quot;. Image provider
+provides a list of images for arbitary content.</p>
+<p>This is the image provider interface:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">zope.interface</span> <span class="kn">import</span> <span class="n">Interface</span>
+
+<span class="k">class</span> <span class="nc">IProductImageProvider</span><span class="p">(</span><span class="n">Interface</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">getImages</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Get Images associated with the product.</span>
+
+<span class="sd">        @return: iterable of Image objects</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p>This is our content class:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">MyShoppableItemType</span><span class="p">(</span><span class="n">folder</span><span class="o">.</span><span class="n">ATFolder</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Buyable physical good with variants of title and price and multiple images &quot;&quot;&quot;</span>
+    <span class="n">implements</span><span class="p">(</span><span class="n">IVariantProduct</span><span class="p">)</span>
+
+    <span class="n">meta_type</span> <span class="o">=</span> <span class="s">&quot;VariantProduct&quot;</span>
+    <span class="n">schema</span> <span class="o">=</span> <span class="n">VariantProductSchema</span>
+</pre></div>
+</div>
+<p>This is the adapter for the content class:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">zope.interface</span>
+
+<span class="kn">from</span> <span class="nn">getpaid.variantsproduct.interfaces.multiimageproduct</span> <span class="kn">import</span> <span class="n">IProductImageProvider</span>
+
+<span class="k">class</span> <span class="nc">FolderishProductImageProvider</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Mix-in class which provide product image management functions.</span>
+
+<span class="sd">    Assume the content itself is folderish archetype content type and</span>
+<span class="sd">    all contained image objects are product images.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">zope</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">implements</span><span class="p">(</span><span class="n">IProductImageProvider</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="c"># Each adapter takes the object itself as the contruction parameter</span>
+        <span class="c"># and possibly provided other parameters for the interface adaption</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="n">context</span>
+
+    <span class="k">def</span> <span class="nf">getImages</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Return sequence of images.</span>
+
+<span class="sd">        Perform folder listing and filter image content from it.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">images</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">listFolderContents</span><span class="p">(</span><span class="n">contentFilter</span><span class="o">=</span><span class="p">{</span><span class="s">&quot;portal_type&quot;</span> <span class="p">:</span> <span class="s">&quot;Image&quot;</span><span class="p">})</span>
+        <span class="k">return</span> <span class="n">images</span>
+</pre></div>
+</div>
+<p>configure.zcml registers the adapter for my custom content type MyShoppableItemType:</p>
+<div class="highlight-python"><pre>&lt;adapter for=".shop.MyShoppableItemType"
+         provides=".interfaces.IProductImageProvider"
+         factory=".images.FolderishProductImageProvider" /&gt;</pre>
+</div>
+<p>Then we can query the adapter and use it. Unit testing example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">test_get_images</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">loginAsPortalOwner</span><span class="p">()</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">portal</span><span class="o">.</span><span class="n">invokeFactory</span><span class="p">(</span><span class="s">&quot;MyShoppableItemType&quot;</span><span class="p">,</span> <span class="s">&quot;product&quot;</span><span class="p">)</span>
+
+    <span class="n">product</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">portal</span><span class="o">.</span><span class="n">product</span>
+
+    <span class="n">image_provider</span> <span class="o">=</span> <span class="n">IProductImageProvider</span><span class="p">(</span><span class="n">product</span><span class="p">)</span>
+
+    <span class="n">images</span> <span class="o">=</span> <span class="n">image_provider</span><span class="o">.</span><span class="n">getImages</span><span class="p">()</span>
+
+    <span class="c"># Not yet any uploaded images</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">images</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="generic-adapter-contexts">
+<h3><a class="toc-backref" href="#id4">Generic adapter contexts</a><a class="headerlink" href="#generic-adapter-contexts" title="Permalink to this headline">¶</a></h3>
+<p>Following interfaces are useful when registering adapters</p>
+<ul class="simple">
+<li>zope.interface.Interface: Adapts to any object</li>
+<li>Products.CMFCore.interfaces.IContentish: Adapts to any Plone content object</li>
+<li>zope.publisher.interfaces.IBrowserView: Adapts to any BrowserView(context, request) object</li>
+</ul>
+</div>
+<div class="section" id="multi-adapter-registration">
+<h3><a class="toc-backref" href="#id5">Multi-adapter registration</a><a class="headerlink" href="#multi-adapter-registration" title="Permalink to this headline">¶</a></h3>
+<p>You can specify any number of interface in &lt;adapter for=&quot;&quot; /&gt; . Separate them with space or newline.</p>
+<p>Below is a view like example which registers against</p>
+<ul class="simple">
+<li>any context (zope.interface.Interace)</li>
+<li>HTTP request objects (zope.publisher.interfaces.browser.IBrowserRequest)</li>
+</ul>
+<p>Emulate view registration (context, request):</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;adapter</span> <span class="na">for=</span><span class="s">&quot;zope.interface.Interface zope.publisher.interfaces.browser.IBrowserRequest&quot;</span>
+       <span class="na">provides=</span><span class="s">&quot;gomobile.mobile.interfaces.IMobileTracker&quot;</span>
+       <span class="na">factory=</span><span class="s">&quot;.bango.BangoTracker&quot;</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="getting-the-adapter">
+<h2><a class="toc-backref" href="#id6">Getting the adapter</a><a class="headerlink" href="#getting-the-adapter" title="Permalink to this headline">¶</a></h2>
+<p>There are two functions</p>
+<blockquote>
+<ul class="simple">
+<li>zope.component.getAdapter will raise exception if adapter is not found</li>
+<li>zope.component.queryAdapter will return None if adapter is not found</li>
+</ul>
+</blockquote>
+<p>getAdapter/queryAdapter arguments</p>
+<p># Tuple consisting of (Object implementing interface in &lt;adapter for=&quot;&quot;&gt; first declaration, object implementing interface in &lt;adapter for=&quot;&quot;&gt; second declaration, ...)</p>
+<p># Adapter marker interface</p>
+<p>Example registration:</p>
+<div class="highlight-python"><pre>&lt;!-- Register header animation picking logic - override this for your custom logic --&gt;
+&lt;adapter
+ provides="plone.app.headeranimation.interfaces.IHeaderAnimationPicker"
+ for="plone.app.headeranimation.behaviors.IHeaderBehavior
+      Products.CMFCore.interfaces.IContentish
+      zope.publisher.interfaces.browser.IBrowserRequest
+      "
+ factory=".picker.RandomHeaderAnimationPicker" /&gt;</pre>
+</div>
+<p>Corresponding query code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">zope.component</span> <span class="kn">import</span> <span class="n">getUtility</span><span class="p">,</span> <span class="n">getAdapter</span><span class="p">,</span> <span class="n">getMultiAdapter</span>
+
+<span class="c"># header implements IHeaderBehavior</span>
+<span class="c"># doc implements Products.CMFCore.interfaces.IContentish</span>
+<span class="c"># request implements zope.publisher.interfaces.browser.IBrowserRequest</span>
+
+<span class="kn">from</span> <span class="nn">Products.CMFCore.interfaces</span> <span class="kn">import</span> <span class="n">IContentish</span>
+<span class="kn">from</span> <span class="nn">zope.publisher.interfaces.browser</span> <span class="kn">import</span> <span class="n">IBrowserRequest</span>
+
+<span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">IHeaderBehavior</span><span class="o">.</span><span class="n">providedBy</span><span class="p">(</span><span class="n">header</span><span class="p">))</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">IContentish</span><span class="o">.</span><span class="n">providedBy</span><span class="p">(</span><span class="n">doc</span><span class="p">))</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">IBrowserRequest</span><span class="o">.</span><span class="n">providedBy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">portal</span><span class="o">.</span><span class="n">REQUEST</span><span class="p">))</span>
+
+<span class="c"># Throws exception if not found</span>
+<span class="n">picker</span> <span class="o">=</span> <span class="n">getMultiAdapter</span><span class="p">((</span><span class="n">header</span><span class="p">,</span> <span class="n">doc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">portal</span><span class="o">.</span><span class="n">REQUEST</span><span class="p">),</span> <span class="n">IHeaderAnimationPicker</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You cannot get adapters on module body level code
+during import, as Zope Component Architecture is not yet initialized.</p>
+</div>
+</div>
+<div class="section" id="listing-adapter-registers">
+<h2><a class="toc-backref" href="#id7">Listing adapter registers</a><a class="headerlink" href="#listing-adapter-registers" title="Permalink to this headline">¶</a></h2>
+<p>The following code checks if IHeaderBehavior adapter is registered correctly:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">zope.component</span> <span class="kn">import</span> <span class="n">getGlobalSiteManager</span>
+<span class="n">sm</span> <span class="o">=</span> <span class="n">getGlobalSiteManager</span><span class="p">()</span>
+
+<span class="n">registrations</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">sm</span><span class="o">.</span><span class="n">registeredAdapters</span><span class="p">()</span> <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">provided</span> <span class="o">==</span> <span class="n">IHeaderBehavior</span> <span class="p">]</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">registrations</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="alternative-listing-adapters">
+<h3><a class="toc-backref" href="#id8">Alternative listing adapters</a><a class="headerlink" href="#alternative-listing-adapters" title="Permalink to this headline">¶</a></h3>
+<p>Getting all multi-adapters (context, request)</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">zope.component</span> <span class="kn">import</span> <span class="n">getAdapters</span>
+<span class="n">adapters</span> <span class="o">=</span> <span class="n">getAdapters</span><span class="p">((</span><span class="n">context</span><span class="p">,</span> <span class="n">request</span><span class="p">),</span> <span class="n">provided</span><span class="o">=</span><span class="n">Interface</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This does not list locally registered adapters like Zope views.</p>
+</div>
+</div>
+</div>
+<div class="section" id="local-adapters">
+<h2><a class="toc-backref" href="#id9">Local adapters</a><a class="headerlink" href="#local-adapters" title="Permalink to this headline">¶</a></h2>
+<p>Local adapters are effective only inside a certain container,
+like a folder. They use five.localsitemanager to register themselves.</p>
+<ul class="simple">
+<li><a class="reference external" href="http://opkode.net/media/blog/schema-extending-an-object-only-inside-a-specific-folder">http://opkode.net/media/blog/schema-extending-an-object-only-inside-a-specific-folder</a></li>
+</ul>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Adapters</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a><ul>
+<li><a class="reference internal" href="#example-adapters-users">Example adapters users</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#registering-an-adapter">Registering an adapter</a><ul>
+<li><a class="reference internal" href="#generic-adapter-contexts">Generic adapter contexts</a></li>
+<li><a class="reference internal" href="#multi-adapter-registration">Multi-adapter registration</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#getting-the-adapter">Getting the adapter</a></li>
+<li><a class="reference internal" href="#listing-adapter-registers">Listing adapter registers</a><ul>
+<li><a class="reference internal" href="#alternative-listing-adapters">Alternative listing adapters</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#local-adapters">Local adapters</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="interfaces.html"
+                        title="previous chapter">Interfaces</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="utilities.html"
+                        title="next chapter">Utilities</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/components/adapters.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="utilities.html" title="Utilities"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="interfaces.html" title="Interfaces"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Component architecture</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

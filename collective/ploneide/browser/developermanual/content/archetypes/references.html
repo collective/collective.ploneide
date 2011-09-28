@@ -1,0 +1,270 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>References &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../../index.html" />
+    <link rel="up" title="Archetypes" href="index.html" />
+    <link rel="next" title="Dexterity" href="../dexterity.html" />
+    <link rel="prev" title="Templates" href="templates.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../dexterity.html" title="Dexterity"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="templates.html" title="Templates"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Content management</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Archetypes</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="references">
+<h1>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">Inter-content references in Plone are done using reference_catalog</p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id3">Introduction</a></li>
+<li><a class="reference internal" href="#using-references" id="id4">Using references</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id3">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Plone uses a persistent tool <tt class="docutils literal"><span class="pre">reference_catalog</span></tt> to store (Archetypes) object references.
+It is used by the out of the box &quot;Related items&quot; and you can use it in your
+own content types with ReferenceField.</p>
+<p>reference_catalog references can be bidirectional.</p>
+<p>reference_catalog acts like <a href="#id1"><span class="problematic" id="id2">:doc:`portal_catalog &lt;/searching_and_indexing/catalog&gt;`_</span></a>,
+but just uses different indexes and metadata.</p>
+<p>reference_catalog is defined in <a class="reference external" href="http://svn.plone.org/svn/archetypes/Products.Archetypes/trunk/Products/Archetypes/ReferenceEngine.py">ReferenceEngine.py</a>.</p>
+</div>
+<div class="section" id="using-references">
+<h2><a class="toc-backref" href="#id4">Using references</a><a class="headerlink" href="#using-references" title="Permalink to this headline">¶</a></h2>
+<p>Here is an example how to use reference field to make
+<em>programme</em> -&gt; <em>researcher</em> references and reverse look-up for them.</p>
+<p>You use <tt class="docutils literal"><span class="pre">getReferences()</span></tt> and <tt class="docutils literal"><span class="pre">getBackReferences()</span></tt> method
+to look up relationships.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">Products.CMFCore.utils</span> <span class="kn">import</span> <span class="n">getToolByName</span>
+
+<span class="kn">from</span> <span class="nn">Products.Archetypes.config</span> <span class="kn">import</span> <span class="n">REFERENCE_CATALOG</span>
+
+<span class="k">def</span> <span class="nf">getResearcherProgrammes</span><span class="p">(</span><span class="n">researcher</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Look all Programme contents which refer to this researcher.</span>
+
+
+<span class="sd">    Relationship Programme &lt;-&gt; Researcher is defined in Programme as::</span>
+
+<span class="sd">      atapi.ReferenceField(</span>
+<span class="sd">        name=&#39;researchers&#39;,</span>
+<span class="sd">        widget=ReferenceBrowserWidget(</span>
+<span class="sd">            label=&quot;Researchers&quot;,</span>
+<span class="sd">            description=&quot;Researchers involved in this project&quot;,</span>
+<span class="sd">            base_query={&#39;object_provides&#39;: IResearcher.__identifier__ },</span>
+<span class="sd">            allow_browse=0,</span>
+<span class="sd">            show_results_without_query=1,</span>
+<span class="sd">        ),</span>
+<span class="sd">        multiValued=1,</span>
+<span class="sd">        relationship=&quot;researchers_in_theme&quot;</span>
+<span class="sd">      ),</span>
+
+
+<span class="sd">    @param researcher: Content item on the site</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c"># Do acquisition look-up</span>
+    <span class="n">reference_catalog</span> <span class="o">=</span> <span class="n">getToolByName</span><span class="p">(</span><span class="n">researcher</span><span class="p">,</span> <span class="n">REFERENCE_CATALOG</span><span class="p">)</span>
+
+    <span class="c"># relationship: field name used</span>
+    <span class="c"># Plone 4.1: objects=True argument to fetch full objects, not just index brains</span>
+    <span class="n">references</span> <span class="o">=</span> <span class="n">reference_catalog</span><span class="o">.</span><span class="n">getBackReferences</span><span class="p">(</span><span class="n">researcher</span><span class="p">,</span> <span class="n">relationship</span><span class="o">=</span><span class="s">&quot;researchers_in_theme&quot;</span><span class="p">)</span>
+    <span class="c"># Resolve Reference objects to full objects</span>
+    <span class="c"># Return a generator method which will yield all full objects</span>
+    <span class="k">return</span> <span class="p">[</span> <span class="n">ref</span><span class="o">.</span><span class="n">getSourceObject</span><span class="p">()</span> <span class="k">for</span> <span class="n">ref</span> <span class="ow">in</span> <span class="n">references</span> <span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../../index.html"><img src="../../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">References</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#using-references">Using references</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="templates.html"
+                        title="previous chapter">Templates</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../dexterity.html"
+                        title="next chapter">Dexterity</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/content/archetypes/references.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../dexterity.html" title="Dexterity"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="templates.html" title="Templates"
+             >previous</a> |</li>
+        <li><a href="../../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Content management</a> &raquo;</li>
+          <li><a href="index.html" >Archetypes</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

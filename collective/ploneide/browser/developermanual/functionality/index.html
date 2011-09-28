@@ -1,0 +1,289 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Functionality and features &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="next" title="Actions" href="actions.html" />
+    <link rel="prev" title="Dexterity" href="../content/dexterity.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="actions.html" title="Actions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../content/dexterity.html" title="Dexterity"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="functionality-and-features">
+<h1>Functionality and features<a class="headerlink" href="#functionality-and-features" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">Explanations how specific user visible features
+are programmed in Plone.</p>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="actions.html">Actions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="actions.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actions.html#creating-actions-through-the-web">Creating actions through-the-web</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actions.html#creating-actions-xml-by-hand">Creating actions.xml by hand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actions.html#action-urls">Action URLs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actions.html#default-action">Default action</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actions.html#content-type-specific-actions">Content-type specific actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actions.html#toggling-action-visibility-programmatically">Toggling action visibility programmatically</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actions.html#visibility-expressions">Visibility expressions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actions.html#using-actions-in-views-and-viewlets">Using actions in views and viewlets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actions.html#tabs-sections">Tabs (sections)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actions.html#different-tabs-per-section-folder">Different tabs per section/folder</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="expressions.html">Expressions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="expressions.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="expressions.html#expression-types">Expression types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="expressions.html#expression-variables">Expression variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="expressions.html#using-expression-in-your-own-code">Using expression in your own code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="expressions.html#custom-expression-using-a-helper-view">Custom expression using a helper view</a></li>
+<li class="toctree-l2"><a class="reference internal" href="expressions.html#expression-examples">Expression examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contactform.html">Contact forms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contactform.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contactform.html#customizing-site-contact-form">Customizing site contact form</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="controlpanel.html">Site setup and configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="controlpanel.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="controlpanel.html#plone-registry">plone.registry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="controlpanel.html#configlets-without-plone-registry">Configlets without plone.registry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="controlpanel.html#content-type-choice-setting">Content type choice setting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="controlpanel.html#configuring-plone-products-from-buildout">Configuring plone products from buildout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="controlpanel.html#configuration-using-environment-variables">Configuration using environment variables</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dashboard.html">Dashboard</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dashboard.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dashboard.html#tutorial">Tutorial</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rss.html">RSS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rss.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rss.html#creating-a-global-language-neutral-plone-site-content-aggregator">Creating a global, language neutral, Plone site content aggregator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rss.html#portal-syndication">portal_syndication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rss.html#rss-feed-content">RSS feed content</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rss.html#changing-rss-feed-template">Changing RSS feed template</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="collections.html">Collections</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="collections.html#adding-new-collection-criteria">Adding new collection criteria</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="locks.html">Locked content</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="locks.html#unlocking-content">Unlocking content</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="breadcrumbs.html">Breadcrumbs (path bar)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="breadcrumbs.html#navigation-level-sensitive-breadcrumbs">Navigation level sensitive breadcrumbs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="breadcrumbs.html#back-button">Back button</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="webdav.html">WebDAV notes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="webdav.html#background">Background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="webdav.html#head">HEAD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="webdav.html#get">GET</a></li>
+<li class="toctree-l2"><a class="reference internal" href="webdav.html#put">PUT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="webdav.html#delete">DELETE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="webdav.html#propfind">PROPFIND</a></li>
+<li class="toctree-l2"><a class="reference internal" href="webdav.html#proppatch">PROPPATCH</a></li>
+<li class="toctree-l2"><a class="reference internal" href="webdav.html#mkcol">MKCOL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="webdav.html#copy">COPY</a></li>
+<li class="toctree-l2"><a class="reference internal" href="webdav.html#move">MOVE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="webdav.html#lock">LOCK</a></li>
+<li class="toctree-l2"><a class="reference internal" href="webdav.html#unlock">UNLOCK</a></li>
+<li class="toctree-l2"><a class="reference internal" href="webdav.html#fields-on-container-objects">Fields on container objects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sitemap.html">Sitemap protocol</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sitemap.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sitemap.html#plone-sitemap">Plone sitemap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sitemap.html#customized-sitemap">Customized sitemap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sitemap.html#enabling-sitemap-programmatically">Enabling sitemap programmatically</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="discussion.html">Discussion and comments</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="discussion.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="discussion.html#content-type-support">Content type support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="discussion.html#getting-total-comment-count">Getting total comment count</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../content/dexterity.html"
+                        title="previous chapter">Dexterity</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="actions.html"
+                        title="next chapter">Actions</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/functionality/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="actions.html" title="Actions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../content/dexterity.html" title="Dexterity"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

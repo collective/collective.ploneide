@@ -1,0 +1,387 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Stereotypes &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../../../index.html" />
+    <link rel="up" title="Reference" href="index.html" />
+    <link rel="next" title="Step by Step Instructions" href="../step-by-step-instructions/index.html" />
+    <link rel="prev" title="Tagged Values" href="tagged-values.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../step-by-step-instructions/index.html" title="Step by Step Instructions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="tagged-values.html" title="Tagged Values"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Tutorials</a> &raquo;</li>
+          <li><a href="../index.html" >Using ArchGenXML</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="stereotypes">
+<h1>Stereotypes<a class="headerlink" href="#stereotypes" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#abstraction" id="id1">abstraction</a></li>
+<li><a class="reference internal" href="#class" id="id2">class</a></li>
+<li><a class="reference internal" href="#dependency" id="id3">dependency</a></li>
+<li><a class="reference internal" href="#interface" id="id4">interface</a></li>
+<li><a class="reference internal" href="#method" id="id5">method</a></li>
+<li><a class="reference internal" href="#model" id="id6">model</a></li>
+<li><a class="reference internal" href="#operation" id="id7">operation</a></li>
+<li><a class="reference internal" href="#package" id="id8">package</a></li>
+</ul>
+</div>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">All stereotypes available in its context.</p>
+</div>
+<p><em>This file was generated 2009-05-12 with bin/agx_stereotypes 2.4.1.</em></p>
+<div class="section" id="abstraction">
+<h2><a class="toc-backref" href="#id1">abstraction</a><a class="headerlink" href="#abstraction" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>adapts</dt>
+<dd>On a realization, specify a class (<tt class="docutils literal"><span class="pre">&lt;&lt;adapter&gt;&gt;</span></tt>, <tt class="docutils literal"><span class="pre">&lt;&lt;named_adapter&gt;&gt;</span></tt>, <tt class="docutils literal"><span class="pre">&lt;&lt;extender&gt;&gt;</span></tt>) adapts another class (<tt class="docutils literal"><span class="pre">&lt;&lt;stub&gt;&gt;</span></tt>, <tt class="docutils literal"><span class="pre">&lt;&lt;interface&gt;&gt;</span></tt>).</dd>
+</dl>
+</div>
+<div class="section" id="class">
+<h2><a class="toc-backref" href="#id2">class</a><a class="headerlink" href="#class" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>adapter</dt>
+<dd>Is a (non-named) adapter.</dd>
+<dt>archetype</dt>
+<dd>Explicitly specify that a class represents an Archetypes type. This may be necessary if you are including a class as a base class for another class and ArchGenXML is unable to determine whether the parent class is an Archetype or not. Without knowing that the parent class in an Archetype, ArchGenXML cannot ensure that the parent's schema is available in the derived class.</dd>
+<dt>atblob</dt>
+<dd>Turns the class into an plone.app.blob.content.ATBlob subclass.</dd>
+<dt>atdocument</dt>
+<dd>Turns the class into an Atdocument subclass.</dd>
+<dt>atevent</dt>
+<dd>Turns the class into an ATEvent subclass.</dd>
+<dt>atfile</dt>
+<dd>Turns the class into an ATFile subclass.</dd>
+<dt>atfolder</dt>
+<dd>Turns the class into an ATFolder subclass.</dd>
+<dt>atimage</dt>
+<dd>Turns the class into an ATImage subclass.</dd>
+<dt>atlink</dt>
+<dd>Turns the class into an ATLink subclass.</dd>
+<dt>atnewsitem</dt>
+<dd>Turns the class into an ATNewsItem subclass.</dd>
+<dt>btree</dt>
+<dd>Like <tt class="docutils literal"><span class="pre">&lt;&lt;folder&gt;&gt;</span></tt>, it generates a folderish object. But it uses a BTree folder for support of large amounts of content. The same as <tt class="docutils literal"><span class="pre">&lt;&lt;large&gt;&gt;</span></tt>.</dd>
+<dt>content_class</dt>
+<dd>TODO</dd>
+<dt>doc_testcase</dt>
+<dd>Turns a class into a doctest class. It must subclass a <tt class="docutils literal"><span class="pre">&lt;&lt;plone_testcase&gt;&gt;</span></tt>.</dd>
+<dt>extender</dt>
+<dd>Is a schema extender supported by archetypes.schemaextender.</dd>
+<dt>field</dt>
+<dd>Class will target in a ObjectField or CompoundField (latter if Attributes are provided)</dd>
+<dt>flavor</dt>
+<dd>Generates a ContentFlavors flavor from this class.</dd>
+<dt>folder</dt>
+<dd>Turns the class into a folderish object. When a UML class contains or aggregates other classes, it is automatically turned into a folder; this stereotype can be used to turn normal classes into folders, too.</dd>
+<dt>functional_doc_testcase</dt>
+<dd>Turns a class into a functional doctest class. It must subclass a <tt class="docutils literal"><span class="pre">&lt;&lt;plone_testcase&gt;&gt;</span></tt>.</dd>
+<dt>functional_testcase</dt>
+<dd>Turns a class into a functional testcase. It must subclass a <tt class="docutils literal"><span class="pre">&lt;&lt;functional_testcase&gt;&gt;</span></tt>. Adding an interface arrow to another class automatically adds that class's methods to the testfile for testing.</dd>
+<dt>hidden</dt>
+<dd>Generate the class, but turn off &quot;global_allow&quot;, thereby making it unavailable in the portal by default. Note that if you use composition to specify that a type should be addable only inside another (folderish) type, then &quot;global_allow&quot; will be turned off automatically, and the type be made addable only inside the designated parent. (You can use aggregation instead of composition to make a type both globally addable and explicitly addable inside another folderish type).</dd>
+<dt>interface</dt>
+<dd>Is an interface.</dd>
+<dt>interface_testcase</dt>
+<dd>Turns a class into a testcase for the interfaces.</dd>
+<dt>large</dt>
+<dd>Like <tt class="docutils literal"><span class="pre">&lt;&lt;folder&gt;&gt;</span></tt>, it generates a folderish object. But it uses a BTree folder for support of large amounts of content. The same as <tt class="docutils literal"><span class="pre">&lt;&lt;large&gt;&gt;</span></tt>.</dd>
+<dt>mixin</dt>
+<dd>Don't inherit automatically from &quot;BaseContent&quot; and so. This makes the class suitable as a mixin class. See also <tt class="docutils literal"><span class="pre">&lt;&lt;archetype&gt;&gt;</span></tt>.</dd>
+<dt>named_adapter</dt>
+<dd>Is a named adapter.</dd>
+<dt>odStub</dt>
+<dd>Prevents a class/package/model from being generated. Same as <tt class="docutils literal"><span class="pre">&lt;&lt;stub&gt;&gt;</span></tt>.</dd>
+<dt>ordered</dt>
+<dd>For folderish types, include folder ordering support. This will allow the user to re-order items in the folder manually.</dd>
+<dt>plone_testcase</dt>
+<dd>Turns a class into the (needed) base class for all other <tt class="docutils literal"><span class="pre">&lt;&lt;testcase&gt;&gt;</span></tt> and <tt class="docutils literal"><span class="pre">&lt;&lt;doc_testcase&gt;&gt;</span></tt> classes inside a <tt class="docutils literal"><span class="pre">&lt;&lt;test&gt;&gt;</span></tt> package.</dd>
+<dt>plonefunctional_testcase</dt>
+<dd>Turns a class into the base class for all other <tt class="docutils literal"><span class="pre">&lt;&lt;functionaltestcase&gt;&gt;</span></tt> classes inside a <tt class="docutils literal"><span class="pre">&lt;&lt;test&gt;&gt;</span></tt> package.</dd>
+<dt>portal_tool</dt>
+<dd>Turns the class into a portal tool.</dd>
+<dt>portlet_class</dt>
+<dd>Generate this class as a zope3 portlet class instead of as an Archetypes class.</dd>
+<dt>python_class</dt>
+<dd>Generate this class as a plain python class instead of as an Archetypes class.</dd>
+<dt>remember</dt>
+<dd>The class will be treated as a remember member type. It will derive from remember's Member class and be installed as a member data type. Note that you need to install the separate remember product.</dd>
+<dt>setup_testcase</dt>
+<dd>Turns a class into a testcase for the setup, with pre-defined common checks.</dd>
+<dt>stub</dt>
+<dd>Prevents a class/package/model from being generated.</dd>
+<dt>testcase</dt>
+<dd>Turns a class into a testcase. It must subclass a <tt class="docutils literal"><span class="pre">&lt;&lt;plone_testcase&gt;&gt;</span></tt>. Adding an interface arrow to another class automatically adds that class's methods to the testfile for testing.</dd>
+<dt>tool</dt>
+<dd>Turns the class into a portal tool. Similar to <tt class="docutils literal"><span class="pre">&lt;&lt;portal_tool&gt;&gt;</span></tt>.</dd>
+<dt>variable_schema</dt>
+<dd>Include variable schema support in a content type by deriving from the VariableSchema mixin class.</dd>
+<dt>view_class</dt>
+<dd>Generate this class as a zope3 view class instead of as an Archetypes class.</dd>
+<dt>vocabulary</dt>
+<dd>TODO</dd>
+<dt>vocabulary_term</dt>
+<dd>TODO</dd>
+<dt>widget</dt>
+<dd>A simple stub archetypes-widget class will be created.</dd>
+<dt>zope_class</dt>
+<dd>Generate this class as a plain Zope class instead of as an Archetypes class.</dd>
+</dl>
+</div>
+<div class="section" id="dependency">
+<h2><a class="toc-backref" href="#id3">dependency</a><a class="headerlink" href="#dependency" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>value_class</dt>
+<dd>Declares a class to be used as value class for a certain field class (see <tt class="docutils literal"><span class="pre">&lt;&lt;field&gt;&gt;</span></tt> stereotype).</dd>
+</dl>
+</div>
+<div class="section" id="interface">
+<h2><a class="toc-backref" href="#id4">interface</a><a class="headerlink" href="#interface" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>stub</dt>
+<dd>Prevents a class/package/model from being generated.</dd>
+<dt>z3</dt>
+<dd>Generate this interface class as zope 3 interface. This will inherit from zope.interface.Interface.</dd>
+</dl>
+</div>
+<div class="section" id="method">
+<h2><a class="toc-backref" href="#id5">method</a><a class="headerlink" href="#method" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>action</dt>
+<dd>Generate a CMF action which will be available on the object. The tagged values &quot;action&quot; (defaults to method name), &quot;id&quot; (defaults to method name), &quot;category&quot; (defaults to &quot;object&quot;), &quot;label&quot; (defaults to method name), &quot;condition&quot; (defaults to empty), and &quot;permission&quot; (defaults to empty) set on the method and mapped to the equivalent fields of any CMF action can be used to control the behaviour of the action.</dd>
+<dt>form</dt>
+<dd>Generate an action like with the <tt class="docutils literal"><span class="pre">&lt;&lt;action&gt;&gt;</span></tt> stereotype, but also copy an empty controller page template to the skins directory with the same name as the method and set this up as the target of the action. If the template already exists, it is not overwritten.</dd>
+<dt>noaction</dt>
+<dd>Disables standard actions, applied to a method out of 'view', 'edit', 'metadata', 'references.</dd>
+<dt>view</dt>
+<dd>Generate an action like with the <tt class="docutils literal"><span class="pre">&lt;&lt;action&gt;&gt;</span></tt> stereotype, but also copy an empty page template to the skins directory with the same name as the method and set this up as the target of the action. If the template exists, it is not overwritten.</dd>
+</dl>
+</div>
+<div class="section" id="model">
+<h2><a class="toc-backref" href="#id6">model</a><a class="headerlink" href="#model" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>odStub</dt>
+<dd>Prevents a class/package/model from being generated. Same as <tt class="docutils literal"><span class="pre">&lt;&lt;stub&gt;&gt;</span></tt>.</dd>
+<dt>stub</dt>
+<dd>Prevents a class/package/model from being generated.</dd>
+</dl>
+</div>
+<div class="section" id="operation">
+<h2><a class="toc-backref" href="#id7">operation</a><a class="headerlink" href="#operation" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>action</dt>
+<dd>Generate a CMF action which will be available on the object. The tagged values &quot;action&quot; (defaults to method name), &quot;id&quot; (defaults to method name), &quot;category&quot; (defaults to &quot;object&quot;), &quot;label&quot; (defaults to method name), &quot;condition&quot; (defaults to empty), and &quot;permission&quot; (defaults to empty) set on the method and mapped to the equivalent fields of any CMF action can be used to control the behaviour of the action.</dd>
+<dt>form</dt>
+<dd>Generate an action like with the <tt class="docutils literal"><span class="pre">&lt;&lt;action&gt;&gt;</span></tt> stereotype, but also copy an empty controller page template to the skins directory with the same name as the method and set this up as the target of the action. If the template already exists, it is not overwritten.</dd>
+<dt>noaction</dt>
+<dd>Disables standard actions, applied to a method out of 'view', 'edit', 'metadata', 'references.</dd>
+<dt>view</dt>
+<dd>Generate an action like with the <tt class="docutils literal"><span class="pre">&lt;&lt;action&gt;&gt;</span></tt> stereotype, but also copy an empty page template to the skins directory with the same name as the method and set this up as the target of the action. If the template exists, it is not overwritten.</dd>
+</dl>
+</div>
+<div class="section" id="package">
+<h2><a class="toc-backref" href="#id8">package</a><a class="headerlink" href="#package" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>odStub</dt>
+<dd>Prevents a class/package/model from being generated. Same as <tt class="docutils literal"><span class="pre">&lt;&lt;stub&gt;&gt;</span></tt>.</dd>
+<dt>stub</dt>
+<dd>Prevents a class/package/model from being generated.</dd>
+<dt>tests</dt>
+<dd>Treats a package as test package. Inside such a test package, you need at a <tt class="docutils literal"><span class="pre">&lt;&lt;plone_testcase&gt;&gt;</span></tt> and a <tt class="docutils literal"><span class="pre">&lt;&lt;setup_testcase&gt;&gt;</span></tt>.</dd>
+</dl>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../../../index.html"><img src="../../../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Stereotypes</a><ul>
+<li><a class="reference internal" href="#abstraction">abstraction</a></li>
+<li><a class="reference internal" href="#class">class</a></li>
+<li><a class="reference internal" href="#dependency">dependency</a></li>
+<li><a class="reference internal" href="#interface">interface</a></li>
+<li><a class="reference internal" href="#method">method</a></li>
+<li><a class="reference internal" href="#model">model</a></li>
+<li><a class="reference internal" href="#operation">operation</a></li>
+<li><a class="reference internal" href="#package">package</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="tagged-values.html"
+                        title="previous chapter">Tagged Values</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../step-by-step-instructions/index.html"
+                        title="next chapter">Step by Step Instructions</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../../_sources/tutorials/archgenxml/reference/stereotypes.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../step-by-step-instructions/index.html" title="Step by Step Instructions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="tagged-values.html" title="Tagged Values"
+             >previous</a> |</li>
+        <li><a href="../../../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Tutorials</a> &raquo;</li>
+          <li><a href="../index.html" >Using ArchGenXML</a> &raquo;</li>
+          <li><a href="index.html" >Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

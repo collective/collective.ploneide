@@ -1,0 +1,501 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Login and logout &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Sessions and cookies" href="index.html" />
+    <link rel="next" title="Images" href="../images/index.html" />
+    <link rel="prev" title="Status messages" href="statusmessages.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../images/index.html" title="Images"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="statusmessages.html" title="Status messages"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Sessions and cookies</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="login-and-logout">
+<h1>Login and logout<a class="headerlink" href="#login-and-logout" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">Login and logout related programming activities in Plone</p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id2">Introduction</a></li>
+<li><a class="reference internal" href="#login-entry-points" id="id3">Login entry points</a></li>
+<li><a class="reference internal" href="#extracting-credentials" id="id4">Extracting credentials</a></li>
+<li><a class="reference internal" href="#authenticating-the-user" id="id5">Authenticating the user</a></li>
+<li><a class="reference internal" href="#post-login-actions" id="id6">Post-login actions</a></li>
+<li><a class="reference internal" href="#entry-points-to-logged-in-member-handling" id="id7">Entry points to logged in member handling</a><ul>
+<li><a class="reference internal" href="#pas-cache-settings" id="id8">PAS cache settings</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#login-as-another-user-sudo" id="id9">Login as another user (&quot;sudo&quot;)</a></li>
+<li><a class="reference internal" href="#getting-logged-in-users" id="id10">Getting logged in users</a></li>
+<li><a class="reference internal" href="#locking-user-account-after-too-many-retries" id="id11">Locking user account after too many retries</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id2">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>This chapter contains login and logout related code snippets.</p>
+</div>
+<div class="section" id="login-entry-points">
+<h2><a class="toc-backref" href="#id3">Login entry points</a><a class="headerlink" href="#login-entry-points" title="Permalink to this headline">¶</a></h2>
+<p>There are two login points in Plone</p>
+<p><tt class="docutils literal"><span class="pre">/login</span></tt> view (appended to any content URL) directs you to the page where you came from after the login.</p>
+<p><tt class="docutils literal"><span class="pre">/login_form</span></tt> view does login without the redirect back to the original page.</p>
+</div>
+<div class="section" id="extracting-credentials">
+<h2><a class="toc-backref" href="#id4">Extracting credentials</a><a class="headerlink" href="#extracting-credentials" title="Permalink to this headline">¶</a></h2>
+<p>Extracting credentials try to extract log-in (username, password) from HTTP request.</p>
+<p>Below is an example how to extract and authenticate the user manually.
+It is mostly sui    le for unit testing.
+Note that given login field isn't necessarily the username. For example,
+<a class="reference external" href="http://pypi.python.org/pypi/betahaus.emaillogin">betahaus.emaillogin</a> add-on authenticates users by their email addresses.</p>
+<p>Credential extraction will go through all plug-ins registered for
+<a class="reference external" href="http://svn.plone.org/svn/collective/Products.PlonePAS/branches/3.x/README.txt">PlonePAS</a> system.</p>
+<p>The first found login/password pair attempt will be used for user authentication.</p>
+<p>Unit test example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">extract_credentials</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">login</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Spoof HTTP login attempt.</span>
+
+<span class="sd">    Functional test using zope.testbrowser would be</span>
+<span class="sd">    more appropriate way to test this.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">request</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">portal</span><span class="o">.</span><span class="n">REQUEST</span>
+
+    <span class="c"># Assume publishing process has succeeded and object has been found by traversing</span>
+    <span class="c"># (this is usually set by ZPublisher)</span>
+    <span class="n">request</span><span class="p">[</span><span class="s">&#39;PUBLISHED&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">portal</span>
+
+    <span class="c"># More ugly ZPublisher stubs</span>
+    <span class="n">request</span><span class="p">[</span><span class="s">&#39;PARENTS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">portal</span><span class="p">]</span>
+    <span class="n">request</span><span class="o">.</span><span class="n">steps</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">portal</span><span class="p">]</span>
+
+    <span class="c"># Spoof HTTP request login fields</span>
+    <span class="n">request</span><span class="p">[</span><span class="s">&quot;__ac_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">login</span>
+    <span class="n">request</span><span class="p">[</span><span class="s">&quot;__ac_password&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">password</span>
+
+    <span class="c"># Call PluggableAuthService._extractUserIds()</span>
+    <span class="c"># which will return a list of user ids  extracted from the request</span>
+    <span class="n">plugins</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">portal</span><span class="o">.</span><span class="n">acl_users</span><span class="o">.</span><span class="n">plugins</span>
+
+    <span class="n">users</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">portal</span><span class="o">.</span><span class="n">acl_users</span><span class="o">.</span><span class="n">_extractUserIds</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">plugins</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">users</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">users</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="c"># User will be none if the authentication fails</span>
+    <span class="c"># or anonymous if there were no credential fields in HTTP request</span>
+    <span class="k">return</span> <span class="n">users</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="authenticating-the-user">
+<h2><a class="toc-backref" href="#id5">Authenticating the user</a><a class="headerlink" href="#authenticating-the-user" title="Permalink to this headline">¶</a></h2>
+<p>Authenticating the user will check that username and password are correct.</p>
+<p>Pluggable Authentication Service (acl_users under site root)
+will go through all authentication plug-ins and return the first succesful
+authenticated users.</p>
+<p>Read more in
+<a class="reference external" href="http://svn.plone.org/svn/collective/Products.PlonePAS/branches/3.x/README.txt">PlonePAS</a>.</p>
+<p>Unit test example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">authenticate_using_credentials</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">login</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+
+    <span class="n">request</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">portal</span><span class="o">.</span><span class="n">REQUEST</span>
+
+    <span class="c"># Will return valid user object</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">portal</span><span class="o">.</span><span class="n">acl_users</span><span class="o">.</span><span class="n">authenticate</span><span class="p">(</span><span class="n">login</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertNotEqual</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="post-login-actions">
+<h2><a class="toc-backref" href="#id6">Post-login actions</a><a class="headerlink" href="#post-login-actions" title="Permalink to this headline">¶</a></h2>
+<p>Post-login actions are executed after a successful login. Post-login actions which you could want to change are</p>
+<ul class="simple">
+<li>Where to redirect the user after login</li>
+<li>Setting the status message after login</li>
+</ul>
+<p>#ANTTI:./eggs/Plone-3.2.3-py2.4.egg/Products/CMFPlone/skins/plone_login/logged_in.cpy.metadata
+#ANTTI:./eggs/Plone-3.2.3-py2.4.egg/Products/CMFPlone/skins/plone_login/logged_in.cpy</p>
+<p>Post-login code is defined in CMFPlone/skins/plone_scripts/logged_in.cpy.</p>
+<p>You need make a copy of both logged_in.cpy and logged_in.cpy.metadata to your add-on product skins structure to override these.</p>
+<p>Example logged_in.cpy:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">## Controller Python Script &quot;logged_in&quot;</span>
+<span class="c">##bind container=container</span>
+<span class="c">##bind context=context</span>
+<span class="c">##bind namespace=</span>
+<span class="c">##bind script=script</span>
+<span class="c">##bind state=state</span>
+<span class="c">##bind subpath=traverse_subpath</span>
+<span class="c">##parameters=</span>
+<span class="c">##title=Initial post-login actions</span>
+<span class="c">##</span>
+
+<span class="kn">from</span> <span class="nn">Products.CMFCore.utils</span> <span class="kn">import</span> <span class="n">getToolByName</span>
+<span class="kn">from</span> <span class="nn">Products.CMFPlone</span> <span class="kn">import</span> <span class="n">PloneMessageFactory</span> <span class="k">as</span> <span class="n">_</span>
+<span class="n">REQUEST</span><span class="o">=</span><span class="n">context</span><span class="o">.</span><span class="n">REQUEST</span>
+
+<span class="n">membership_tool</span><span class="o">=</span><span class="n">getToolByName</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="s">&#39;portal_membership&#39;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">membership_tool</span><span class="o">.</span><span class="n">isAnonymousUser</span><span class="p">():</span>
+    <span class="n">REQUEST</span><span class="o">.</span><span class="n">RESPONSE</span><span class="o">.</span><span class="n">expireCookie</span><span class="p">(</span><span class="s">&#39;__ac&#39;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s">&#39;/&#39;</span><span class="p">)</span>
+    <span class="n">context</span><span class="o">.</span><span class="n">plone_utils</span><span class="o">.</span><span class="n">addPortalMessage</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">u&#39;Login failed. Both login name and password are case sensitive, check that caps lock is not enabled.&#39;</span><span class="p">),</span> <span class="s">&#39;error&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">state</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">status</span><span class="o">=</span><span class="s">&#39;failure&#39;</span><span class="p">)</span>
+
+<span class="n">member</span> <span class="o">=</span> <span class="n">membership_tool</span><span class="o">.</span><span class="n">getAuthenticatedMember</span><span class="p">()</span>
+<span class="n">login_time</span> <span class="o">=</span> <span class="n">member</span><span class="o">.</span><span class="n">getProperty</span><span class="p">(</span><span class="s">&#39;login_time&#39;</span><span class="p">,</span> <span class="s">&#39;2000/01/01&#39;</span><span class="p">)</span>
+<span class="n">initial_login</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">login_time</span><span class="p">)</span> <span class="o">==</span> <span class="s">&#39;2000/01/01&#39;</span><span class="p">)</span>
+<span class="n">state</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">initial_login</span><span class="o">=</span><span class="n">initial_login</span><span class="p">)</span>
+
+<span class="n">must_change_password</span> <span class="o">=</span> <span class="n">member</span><span class="o">.</span><span class="n">getProperty</span><span class="p">(</span><span class="s">&#39;must_change_password&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">state</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">must_change_password</span><span class="o">=</span><span class="n">must_change_password</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">initial_login</span><span class="p">:</span>
+    <span class="n">state</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">status</span><span class="o">=</span><span class="s">&#39;initial_login&#39;</span><span class="p">)</span>
+<span class="k">elif</span> <span class="n">must_change_password</span><span class="p">:</span>
+    <span class="n">state</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">status</span><span class="o">=</span><span class="s">&#39;change_password&#39;</span><span class="p">)</span>
+
+<span class="n">membership_tool</span><span class="o">.</span><span class="n">loginUser</span><span class="p">(</span><span class="n">REQUEST</span><span class="p">)</span>
+
+<span class="c">#</span>
+<span class="c"># Special login code specific login code</span>
+<span class="c">#</span>
+
+<span class="c"># Debug log output about the user we are dealing with</span>
+<span class="n">context</span><span class="o">.</span><span class="n">plone_log</span><span class="p">(</span><span class="s">&quot;Got member:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">member</span><span class="p">))</span>
+
+<span class="c"># Check that if the user has a custom method which marks our special members</span>
+<span class="c"># needing special actions</span>
+<span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">member</span><span class="p">,</span> <span class="s">&quot;getLoginRedirect&quot;</span><span class="p">):</span>
+
+    <span class="c"># Show a custom login message</span>
+    <span class="n">context</span><span class="o">.</span><span class="n">plone_utils</span><span class="o">.</span><span class="n">addPortalMessage</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">u&#39;You are now logged in. Welcome to supa-dupa-system.&#39;</span><span class="p">),</span> <span class="s">&#39;info&#39;</span><span class="p">)</span> <span class="c"># This message is in Plone i18n domain</span>
+
+    <span class="c"># Go to a custom page after login</span>
+    <span class="n">REQUEST</span><span class="o">.</span><span class="n">RESPONSE</span><span class="o">.</span><span class="n">redirect</span><span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">portal_url</span><span class="p">()</span> <span class="o">+</span> <span class="s">&quot;/some_folder&quot;</span><span class="p">)</span>
+
+<span class="k">return</span> <span class="n">state</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="entry-points-to-logged-in-member-handling">
+<h2><a class="toc-backref" href="#id7">Entry points to logged in member handling</a><a class="headerlink" href="#entry-points-to-logged-in-member-handling" title="Permalink to this headline">¶</a></h2>
+<p>See <tt class="docutils literal"><span class="pre">Products.PluggableAuthService.PluggableAuthService._extractUserIds()</span></tt>.
+It will try to extract credentials from incoming HTTP request, using
+different &quot;extract&quot; plug-ins of PAS framework.</p>
+<p><tt class="docutils literal"><span class="pre">PluggableAuthService</span></tt> is also known as <tt class="docutils literal"><span class="pre">acl_users</span></tt> persistent
+object in the site root.</p>
+<p>For each set of extracted credentials, try to authenticate
+a user;  accumulate a list of the IDs of such users over all
+our authentication and extraction plugins.</p>
+<p><tt class="docutils literal"><span class="pre">PluggableAuthService</span></tt> may use <a class="reference internal" href="../performance/ramcache.html"><em>ZCacheable</em></a>
+pattern to see if the user data exists already in the cache, based on
+any extractd credentials, instead of actually checking whether
+the credentials are valid or not. PluggableAuthService must
+be set to have cache end. By default it is not set,
+but installing LDAP sets it to RAM cache.</p>
+<p>More info</p>
+<ul class="simple">
+<li><a class="reference external" href="http://svn.plone.org/svn/plone/plone.app.ldap/trunk/plone/app/ldap/ploneldap/util.py">http://svn.plone.org/svn/plone/plone.app.ldap/trunk/plone/app/ldap/ploneldap/util.py</a></li>
+</ul>
+<div class="section" id="pas-cache-settings">
+<h3><a class="toc-backref" href="#id8">PAS cache settings</a><a class="headerlink" href="#pas-cache-settings" title="Permalink to this headline">¶</a></h3>
+<p>Here is a short view snippet to set PAS cache state:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">Products.Five.browser</span> <span class="kn">import</span> <span class="n">BrowserView</span>
+<span class="kn">from</span> <span class="nn">zope.app.component.hooks</span> <span class="kn">import</span> <span class="n">getSite</span>
+
+<span class="kn">from</span> <span class="nn">Products.CMFCore.utils</span> <span class="kn">import</span> <span class="n">getToolByName</span>
+
+<span class="k">class</span> <span class="nc">PASCacheController</span><span class="p">(</span><span class="n">BrowserView</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set PAS caching parameters from browser address bar.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">getPAS</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">site</span><span class="o">=</span><span class="n">getSite</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">getToolByName</span><span class="p">(</span><span class="n">site</span><span class="p">,</span> <span class="s">&quot;acl_users&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">setPASCache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Enables or disables pluggable authentication servive caching.</span>
+
+<span class="sd">        The setting is stored persistently in PAS</span>
+
+<span class="sd">        This caches credentials for authenticated users after the first login.</span>
+
+<span class="sd">        This will make authentication and permission operations little bit faster.</span>
+<span class="sd">        The downside is that the cache must be purged if you want to remove old values from there.</span>
+<span class="sd">        (user has been deleted, etc.)</span>
+
+<span class="sd">        More info</span>
+
+<span class="sd">        * http://svn.plone.org/svn/plone/plone.app.ldap/trunk/plone/app/ldap/ploneldap/util.py</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">pas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getPAS</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">value</span><span class="p">:</span>
+
+            <span class="c"># Enable</span>
+
+            <span class="k">if</span> <span class="n">pas</span><span class="o">.</span><span class="n">ZCacheable_getManager</span><span class="p">()</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">pas</span><span class="o">.</span><span class="n">ZCacheable_setManagerId</span><span class="p">(</span><span class="n">manager_id</span><span class="o">=</span><span class="s">&quot;RAMCache&quot;</span><span class="p">)</span>
+
+            <span class="n">pas</span><span class="o">.</span><span class="n">ZCacheable_setEnabled</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c"># Disable</span>
+            <span class="n">pas</span><span class="o">.</span><span class="n">ZCacheable_setManagerId</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+            <span class="n">pas</span><span class="o">.</span><span class="n">ZCacheable_setEnabled</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Serve HTTP GET queries.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">cache_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;cache&quot;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">cache_value</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="c"># Output help text</span>
+            <span class="k">return</span> <span class="s">&quot;Use: http://localhost/@@pas-cache-controller?cache=true&quot;</span>
+
+        <span class="n">value</span> <span class="o">=</span> <span class="p">(</span><span class="n">cache_value</span> <span class="o">==</span> <span class="s">&quot;true&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">setPASCache</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="s">&quot;Set value to:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>... and related ZCML</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;browser:page</span>
+ <span class="na">for=</span><span class="s">&quot;Products.CMFCore.interfaces.ISiteRoot&quot;</span>
+ <span class="na">name=</span><span class="s">&quot;pas-cache-controller&quot;</span>
+ <span class="na">class=</span><span class="s">&quot;.pascache.PASCacheController&quot;</span>
+ <span class="na">permission=</span><span class="s">&quot;cmf.ManagePortal&quot;</span>
+<span class="nt">/&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="login-as-another-user-sudo">
+<h2><a class="toc-backref" href="#id9">Login as another user (&quot;sudo&quot;)</a><a class="headerlink" href="#login-as-another-user-sudo" title="Permalink to this headline">¶</a></h2>
+<p>If you need to login to production system another user and you do not know the password,
+there is an add-on product for it</p>
+<ul class="simple">
+<li><a class="reference external" href="http://pypi.python.org/pypi/niteoweb.loginas">http://pypi.python.org/pypi/niteoweb.loginas</a></li>
+</ul>
+<p>Another option</p>
+<ul class="simple">
+<li><a class="reference external" href="http://pypi.python.org/pypi/Products.OneTimeTokenPAS">http://pypi.python.org/pypi/Products.OneTimeTokenPAS</a></li>
+</ul>
+</div>
+<div class="section" id="getting-logged-in-users">
+<h2><a class="toc-backref" href="#id10">Getting logged in users</a><a class="headerlink" href="#getting-logged-in-users" title="Permalink to this headline">¶</a></h2>
+<p>TODO: Was somewhere, but can't find where.</p>
+</div>
+<div class="section" id="locking-user-account-after-too-many-retries">
+<h2><a class="toc-backref" href="#id11">Locking user account after too many retries</a><a class="headerlink" href="#locking-user-account-after-too-many-retries" title="Permalink to this headline">¶</a></h2>
+<p>For security reasons, you might want to locking users after too many tries of logins.
+This protects user accounts against brute force attacks.</p>
+<ul class="simple">
+<li><a class="reference external" href="https://svn.plone.org/svn/collective/PASPlugins/Products.LoginLockout/branches/ajung-login-logging/">https://svn.plone.org/svn/collective/PASPlugins/Products.LoginLockout/branches/ajung-login-logging/</a></li>
+</ul>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Login and logout</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#login-entry-points">Login entry points</a></li>
+<li><a class="reference internal" href="#extracting-credentials">Extracting credentials</a></li>
+<li><a class="reference internal" href="#authenticating-the-user">Authenticating the user</a></li>
+<li><a class="reference internal" href="#post-login-actions">Post-login actions</a></li>
+<li><a class="reference internal" href="#entry-points-to-logged-in-member-handling">Entry points to logged in member handling</a><ul>
+<li><a class="reference internal" href="#pas-cache-settings">PAS cache settings</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#login-as-another-user-sudo">Login as another user (&quot;sudo&quot;)</a></li>
+<li><a class="reference internal" href="#getting-logged-in-users">Getting logged in users</a></li>
+<li><a class="reference internal" href="#locking-user-account-after-too-many-retries">Locking user account after too many retries</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="statusmessages.html"
+                        title="previous chapter">Status messages</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../images/index.html"
+                        title="next chapter">Images</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/sessions/login.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../images/index.html" title="Images"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="statusmessages.html" title="Status messages"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Sessions and cookies</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

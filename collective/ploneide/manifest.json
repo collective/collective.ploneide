@@ -1,0 +1,17 @@
+{
+    "output_dir": "../out",
+    "plugins": ["embedded", 
+                "html", 
+                "js_syntax",
+                "stylesheet",
+                "command_line",
+                "uicommands",
+                "completion",
+                "file_commands",
+                "toolbar",
+                "python",
+                "smart_highlighter"],
+    "include_sample": false,
+    "search_path": ["../bespinplugins/"],
+    "jquery": "global"
+}

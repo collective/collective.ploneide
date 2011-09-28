@@ -1,0 +1,305 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Miscellaneous information &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="next" title="Context helpers" href="context.html" />
+    <link rel="prev" title="Python Imaging Library (PIL)" href="../images/pil.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="context.html" title="Context helpers"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../images/pil.html" title="Python Imaging Library (PIL)"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="miscellaneous-information">
+<h1>Miscellaneous information<a class="headerlink" href="#miscellaneous-information" title="Permalink to this headline">¶</a></h1>
+<p>This section describes functions and APIs which are not directly related to any bigger subsystems.</p>
+<p># Managing member profile (portal_membership under site root)</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="context.html">Context helpers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="context.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="context.html#iportalstate-and-icontextstate">IPortalState and IContextState</a></li>
+<li class="toctree-l2"><a class="reference internal" href="context.html#using-in-templates-and-expressions">Using in templates and expressions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="context.html#tools">Tools</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="datetime.html">Zope DateTime</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="datetime.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datetime.html#datetime-api">DateTime API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datetime.html#converting-between-datetime-and-datetime">Converting between DateTime and datetime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datetime.html#datetime-problems-and-pitfalls">DateTime problems and pitfalls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datetime.html#parsing-both-us-and-european-dates">Parsing both US and European dates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datetime.html#friendly-date-time-formatting">Friendly date/time formatting</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="email.html">Sending email</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="email.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="email.html#manually-calling-mailhost">Manually calling MailHost</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="annotations.html">Annotations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="annotations.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="annotations.html#http-request-example">HTTP request example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="annotations.html#content-annotations">Content annotations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="annotations.html#cleaning-up-content-annotations">Cleaning up content annotations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="annotations.html#other-resources">Other resources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="normalizing_ids.html">Normalizing ids</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="normalizing_ids.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="normalizing_ids.html#creating-ids-programmatically">Creating ids programmatically</a></li>
+<li class="toctree-l2"><a class="reference internal" href="normalizing_ids.html#other">Other</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="monkeypatch.html">Monkey-patching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="commandline.html">Command-line interaction and scripting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="commandline.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="commandline.html#starting-interactive-interpreter">Starting interactive interpreter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="commandline.html#running-scripts">Running scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="commandline.html#cron-and-timed-jobs">Cron and timed jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="commandline.html#scripting-context">Scripting context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="commandline.html#committing-transactions">Committing transactions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="commandline.html#zopepy">zopepy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="commandline.html#setting-up-zeo-for-command-line-processing">Setting up ZEO for command line-processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="commandline.html#posing-as-user">Posing as user</a></li>
+<li class="toctree-l2"><a class="reference internal" href="commandline.html#spoofing-http-request">Spoofing HTTP request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="commandline.html#screen">screen</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="asyncronoustasks.html">Clocking and asyncronous tasks</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="asyncronoustasks.html#clock-server">Clock server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncronoustasks.html#asynchronous">Asynchronous</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="porg.html">Running plone.org site locally</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="porg.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porg.html#base-buildout-and-zope">Base buildout and Zope</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porg.html#xdv-theming">XDV theming</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porg.html#notes">Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="flowplayer.html">Flowplayer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="flowplayer.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="flowplayer.html#creating-a-custom-flowplayer">Creating a custom Flowplayer</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="portal_transforms.html">Changing Portal Transforms Settings via Python</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="portal_transforms.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="portal_transforms.html#writing-an-generic-setup-import-step-method">Writing an Generic Setup Import Step Method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="portal_transforms.html#registering-the-import-step-method-with-generic-setup">Registering the Import Step Method with Generic Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="portal_transforms.html#calling-the-import-step-method-in-zmi-portal-setup">Calling the Import Step Method in ZMI, portal_setup</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="navigationtree.html">Navigation trees</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="navigationtree.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="navigationtree.html#creating-a-custom-navigation-tree">Creating a custom navigation tree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="navigationtree.html#excluding-items-in-the-navigation-tree">Excluding items in the navigation tree</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="seo.html">Search engine optimization</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="seo.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="seo.html#robots-txt">robots.txt</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="paster_templates.html">Paster templates</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="paster_templates.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="paster_templates.html#extending-zopeskel">Extending ZopeSkel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="paster_templates.html#developing-template-egg-with-paster-and-buildout-cfg">Developing template egg with paster and buildout.cfg</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="facebook.html">Facebook integration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="facebook.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="facebook.html#like-button">Like button</a></li>
+<li class="toctree-l2"><a class="reference internal" href="facebook.html#opengraph-metadata">OpenGraph metadata</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="slideshow.html">Slidehows and carousels</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="slideshow.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="slideshow.html#migrate-products-slideshow-to-products-carousel">Migrate Products.Slideshow to Products.Carousel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="slideshow.html#setting-every-carousel-widths-on-the-site">Setting every carousel widths on the site</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="upgrade.html">Upgrade tips</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="upgrade.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="upgrade.html#clear-catalog">Clear catalog</a></li>
+<li class="toctree-l2"><a class="reference internal" href="upgrade.html#fix-persistent-utilities">Fix persistent utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="upgrade.html#upgrading-theme">Upgrading theme</a></li>
+<li class="toctree-l2"><a class="reference internal" href="upgrade.html#theme-fixing-and-portal-skins">Theme fixing and portal_skins</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../images/pil.html"
+                        title="previous chapter">Python Imaging Library (PIL)</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="context.html"
+                        title="next chapter">Context helpers</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/misc/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="context.html" title="Context helpers"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../images/pil.html" title="Python Imaging Library (PIL)"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

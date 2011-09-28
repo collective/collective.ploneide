@@ -1,0 +1,188 @@
+<div id="editor-main" class="ui-layout-center">
+    <!--<div class="top-bar"><span>PloneIDE</span></div> -->
+    <div class="editor-wrapper">
+        <div id="tabs"><div id="editor-files-tabs"></div></div>
+        <div id="editor-toolbar">
+            <a href="#"><span class="logo"></span><a>
+            <img src="++resource++collective.ploneide.icons/new_file.png" 
+                 alt="New File" 
+                 id="new-empty-file" 
+                 name="new-empty-file" 
+                 onclick="createNewEmptySession()" />
+
+            <img src="++resource++collective.ploneide.icons/open_file.png" 
+                 alt="Open File" 
+                 id="open-file" 
+                 name="open-file" />
+
+            <img src="++resource++collective.ploneide.icons/save_file.png" 
+                 alt="Save File" 
+                 id="save-file" 
+                 name="save-file" 
+                 onclick="saveCurrentFile()"/>
+
+            <a href="@@save-as"  id="save-as" name="save-as">
+                <img src="++resource++collective.ploneide.icons/save_file_as.png" alt="Save File As" />
+            </a>  
+            
+            <select id="fontsize" size="1" onchange="setFontSize()">
+              <option value="8px">8px</option>
+              <option value="10px">10px</option>
+              <option value="11px">11px</option>
+              <option value="12px" selected="selected">12px</option>
+              <option value="14px">14px</option>
+              <option value="16px">16px</option>
+              <option value="18px">18px</option>
+              <option value="20px">20px</option>
+              <option value="22px">22px</option>
+              <option value="24px">24px</option>
+              <option value="26px">26px</option>
+              <option value="28px">28px</option>
+              <option value="30px">30px</option>
+              <option value="32px">32px</option>
+            </select>
+            
+            <select id="syntax" name="syntax" onchange="changeSyntax()">
+                <option value="python">python</option>
+                <option value="javascript">javascript</option>
+                <option value="css">css</option>
+                <option value="html">html</option>
+                <option value="xml">xml</option>
+                <option value="text">text</option>
+            </select>
+            
+            <img src="++resource++collective.ploneide.icons/split_vertical.png" 
+                 alt="Vertical split" 
+                 id="split-vertical" 
+                 name="split-vertical" 
+                 onclick="splitVertical()" />
+            <img src="++resource++collective.ploneide.icons/split_horizontal.png" 
+                 alt="Horizontal split" 
+                 id="split-horizontal" 
+                 name="split-horizontal" 
+                 onclick="splitHorizontal()" />
+                 
+            <a href="@@manage-sessions"  id="manage-sessions" name="manage-sessions">
+                <img src="++resource++collective.ploneide.icons/manage_sessions.png" alt="Manage Sessions" />
+            </a>
+            <a href="@@plone-reload"  id="plone-reload" name="plone-reload">
+                <img src="++resource++collective.ploneide.icons/plone_reload.png" alt="Plone Reload" />
+            </a>
+            
+            <a href="++resource++collective.ploneide.developermanual/index.html"  
+               target="_blank"
+               id="developermanual" 
+               name="developermanual">
+                <img src="++resource++collective.ploneide.icons/help.png" alt="Save File As" />
+            </a>
+            <a href="@@context-info"  id="context-info" name="context-info">
+                <img
+                 src="++resource++collective.ploneide.icons/plone_restart.png" 
+                 alt="Context info"/>
+            </a>
+        </div>
+        <div id="editor"></div>
+        <!--<input id="cockpitInput" type="text"/>-->
+        <div id="debugger-console">
+            <tal:debugger_boxes content="structure context/@@debugger-console-box"/>
+        </div>
+    </div>
+</div>
+<div id="tree" class="ui-layout-east">
+    <ul class="panel-tabs">
+        <li class="tab">
+            <a href="#" class="item-tree" title="tree"><span>Tree</span></a>
+        </li>
+        <li class="tab">
+            <a href="#" class="item-debug" title="tree"><span>Debug</span></a>
+        </li>
+        <li class="tab">
+            <a href="#" class="item-plone" title="tree"><span>Plone</span></a>
+        </li>
+    </ul>
+    <div class="panels">
+        <div>
+            <div id="tree-placeholder" class="panel-box" >
+              <ul class="ultree" tal:repeat="egg view/getDevelopEggs">
+                  <li tal:define="path python:egg[0];
+                                  directory python:egg[1]">
+                      <a class="folder" href="" tal:content="directory" tal:attributes="rel path"></a>
+                      <ul></ul>                  
+                  </li>
+              </ul>
+                
+            </div>
+
+            <div class="panel-box">
+                <div id="project-tree">
+                    <select id="project-eggs" name="project-eggs">
+                        <option tal:repeat="egg view/getCurrentEggs"
+                                tal:attributes="value python:egg[0]"
+                                tal:content="python:egg[1]"/>
+                    </select>
+                    <input type="button" value="Update" onclick="loadTreeView()">
+                </div>
+
+                <div id="file-explorer">
+                    <input type="hidden" id="directory" name="directory" size=30/>
+                    <select id="directory-area" name="directory-area" size=10 onclick="updateTreeView()">
+                    </select>
+                </div>
+                
+                <!--        <input type="button" value="Update" onclick="getDirectoryContents()">
+                <br/>
+                <select id="folder-contents" name="folder-contents">
+                </select>
+                <br/>
+                <input type="button" value="Open" onclick="loadFileInEditor()">-->
+                <br/>
+
+                <!-- Sessions -->
+                <!--<select id="sessions-group-list" name="sessions-group-list">
+                </select>-->
+            </div>
+        </div>
+        
+        <div>
+            <div class="panel-box">
+                <input type="checkbox" 
+                       name="debugger-checkbox" 
+                       id="debugger-checkbox"
+                       value="True" 
+                       onclick="toggleDebugging()"/> Enable debugger
+            </div>
+            <div class="debugger-controls panel-box">
+                <img
+                    src="++resource++collective.ploneide.icons/debugger_step.png"
+                    alt="Debugger continue"
+                    onclick="debuggerStep()"/>
+                    
+                <img
+                    src="++resource++collective.ploneide.icons/debugger_next.png"
+                    alt="Debugger next"
+                    onclick="debuggerNext()"/>
+
+                <img
+                    src="++resource++collective.ploneide.icons/debugger_continue.png"
+                    alt="Debugger continue"
+                    onclick="debuggerContinue()"/>
+                    
+                <img
+                    src="++resource++collective.ploneide.icons/debugger_return.png"
+                    alt="Debugger continue"
+                    onclick="debuggerReturn()"/>
+            </div>
+            <div id="watched-scope-placeholder" class="panel-box" >
+              <tal:debugger_boxes content="structure context/@@watched-variables-box"/>
+            </div>
+            <div id="local-scope-placeholder" class="panel-box" >
+              <tal:debugger_boxes content="structure context/@@local-variables-box"/>
+            </div>
+            <div id="global-scope-placeholder" class="panel-box" >
+              <tal:debugger_boxes content="structure context/@@global-variables-box"/>
+            </div>
+        </div>    
+        
+        <div>asdasd2</div>        
+    </div>        
+</div>

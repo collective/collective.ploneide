@@ -1,0 +1,72 @@
+==============
+Cookies
+==============
+
+.. admonition:: Description
+
+        Handling session and other cookies in Plone
+
+.. contents:: :local:
+
+Introduction
+-----------------
+
+* http://www.dieter.handshake.de/pyprojects/zope/book/chap3.html
+
+* http://stackoverflow.com/questions/1034252/how-do-you-get-and-set-cookies-in-zope-and-plone
+
+Default Plone cookies
+----------------------
+
+Zope session cookie
+========================
+
+Cookie is like::
+
+	_ZopeId="25982744A40dimYreFU"
+
+Set when first time session data is written?
+
+Language cookie
+====================
+
+Example::
+
+	I18N_LANGUAGE="fi"; 
+	
+Google Analytics cookies	
+==========================
+
+(not strictly Plone related)::
+
+	__utma=238136706.718116287.1300739182.1300739182.1300739182.1; __utmb=238136706; __utmc=238136706; __utmz=238136706.1300739182.1.1.utmccn=(direct)|utmcsr=(direct)|utmcmd=(none); _ZopeId="25982744A40dimYreFU"
+
+TODO: Are there more
+
+Reading cookies
+---------------
+
+Usually you want to read incoming cookies sent by the browser.
+
+Example:
+
+    self.request.cookies.get("cookie_name", "default_value_if_cookie_not_set")
+
+It is also possible to read 
+
+Setting cookies
+----------------
+
+Setting session cookie lifetime
+
+* http://plone.org/documentation/kb/cookie-duration 
+
+Creating subdomain cookies
+--------------------------
+
+xxx
+
+Other resources
+---------------
+
+xxx

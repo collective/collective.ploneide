@@ -1,0 +1,325 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Storage &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Persistency and transactions" href="index.html" />
+    <link rel="next" title="Migrations" href="migrations.html" />
+    <link rel="prev" title="ZODB Database" href="database.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="migrations.html" title="Migrations"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="database.html" title="ZODB Database"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Persistency and transactions</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="storage">
+<h1>Storage<a class="headerlink" href="#storage" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">What kind of different storages (storing backends) ZODB has and
+how to use them.</p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
+<li><a class="reference internal" href="#pickling" id="id2">Pickling</a></li>
+<li><a class="reference internal" href="#binary-trees" id="id3">Binary trees</a></li>
+<li><a class="reference internal" href="#buckets" id="id4">Buckets</a></li>
+<li><a class="reference internal" href="#storing-as-attribute-vs-storing-in-btree" id="id5">Storing as attribute vs. storing in BTree</a></li>
+<li><a class="reference internal" href="#blobs" id="id6">BLOBs</a></li>
+<li><a class="reference internal" href="#sql-values" id="id7">SQL values</a></li>
+<li><a class="reference internal" href="#transaction-sizes" id="id8">Transaction sizes</a></li>
+<li><a class="reference internal" href="#analysing-data-fs-content-offline" id="id9">Analysing Data.fs content offline</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>This page explains details how ZODB stores data. The information here
+is important to know to understand Plone database behavior and how to optimize your application.</p>
+</div>
+<div class="section" id="pickling">
+<h2><a class="toc-backref" href="#id2">Pickling</a><a class="headerlink" href="#pickling" title="Permalink to this headline">¶</a></h2>
+<p>ZODB is object oriented database. All data in ZODB is <cite>pickled Python objects &lt;http://docs.python.org/library/pickle.html&gt;</cite>.
+Pickle is object serialization module for Python.</p>
+<ul class="simple">
+<li>Each time object is read and it is not cached, object is read from ZODB data storage and unpickled</li>
+<li>Each time object is written, it is pickled and transaction machinery appends it to ZODB data storage</li>
+</ul>
+<p>Pickle format is series of bytes. Here is example what it does look like:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pickle</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&quot;key&quot;</span> <span class="p">:</span> <span class="s">&quot;value&quot;</span> <span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pickled</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">pickled</span>
+<span class="go">(dp0</span>
+<span class="go">S&#39;key&#39;</span>
+<span class="go">p1</span>
+<span class="go">S&#39;value&#39;</span>
+<span class="go">p2</span>
+<span class="go">s.</span>
+</pre></div>
+</div>
+<p>It is not very human readable format.</p>
+<p>Even if you use SQL based <a class="reference external" href="http://pypi.python.org/pypi/RelStorage/">RelStorage</a> ZODB backends, the objects
+are still pickled to the database; SQL does not support varying table schema per row and Python objects
+do not have fixed schema format.</p>
+</div>
+<div class="section" id="binary-trees">
+<h2><a class="toc-backref" href="#id3">Binary trees</a><a class="headerlink" href="#binary-trees" title="Permalink to this headline">¶</a></h2>
+<p>Data is usually organized to binary trees or <a class="reference external" href="http://wiki.zope.org/ZODB/guide/node6.html">BTrees</a> .
+More specifically, data is usually stored as Object Oriented Binary Tree
+<a class="reference external" href="http://docs.zope.org/zope3/Code/BTrees/OOBTree/OOBTree/index.html">OOBtree</a>
+which provides Python object as key and Python object value mappings. Key is the object id in the parent container as a string and value
+is any pickleable Python object or primitive you store in your database.</p>
+<p><a class="reference external" href="http://svn.zope.org/ZODB/trunk/src/BTrees/Interfaces.py?rev=88776&amp;view=markup">ZODB data structure interfaces</a>.</p>
+</div>
+<div class="section" id="buckets">
+<h2><a class="toc-backref" href="#id4">Buckets</a><a class="headerlink" href="#buckets" title="Permalink to this headline">¶</a></h2>
+<p>BTree stores data in buckets (<a class="reference external" href="http://docs.zope.org/zope3/Code/BTrees/OOBTree/OOBucket/index.html">OOBucket</a>).</p>
+<p>Bucket is the smallest unit of data
+which is written to the database once. Buckets are loaded lazily: BTree only loads
+buckets storing values of keys being accessed.</p>
+<p>BTree tries to stick as much data into one bucket once as possible.
+When one value in bucket is changed the whole bucket must be rewritten to the disk.</p>
+<p><a class="reference external" href="http://svn.zope.org/ZODB/trunk/src/BTrees/_OOBTree.c?rev=25186&amp;view=markup">Default bucket size is 30 objects</a>.</p>
+</div>
+<div class="section" id="storing-as-attribute-vs-storing-in-btree">
+<h2><a class="toc-backref" href="#id5">Storing as attribute vs. storing in BTree</a><a class="headerlink" href="#storing-as-attribute-vs-storing-in-btree" title="Permalink to this headline">¶</a></h2>
+<p>Plone has two kinds of fundamental way to store data:</p>
+<ul class="simple">
+<li>Attribute storage (stores values directly in the pickled objects).</li>
+<li>Annotation storage (OOBTree based). Plone objects have attribute __annotations__ which is
+OOBtree for storing objects in name-conflict free way.</li>
+</ul>
+<p>When storing objects in annotation storage, reading object
+values need at least one extra database look up to load the first bucket
+of OOBTree.</p>
+<p>If the value is going to be used frequently, and especially if it is read when viewing the content object,
+storing it in an attribute is more efficient than storing it in an annotation.
+This is because the __annotations__ BTree is a separate persistent object which has to be loaded into memory,
+and may push something else out of the ZODB cache.</p>
+<p>If the attribute stores a large value, it will increase memory usage,
+as it will be loaded into memory each time the object is fetched from the ZODB.</p>
+</div>
+<div class="section" id="blobs">
+<h2><a class="toc-backref" href="#id6">BLOBs</a><a class="headerlink" href="#blobs" title="Permalink to this headline">¶</a></h2>
+<p>BLOBs are large binary objects like files or images.</p>
+<p>BLOBs are supported since ZODB 3.8.x. Plone 3.x still uses
+ZODB 3.7.x by default. ZODB 3.8.x works but it is not officially
+supported.</p>
+<p>When you use BLOB interface to store and retrieve data, they are stored
+physically as files on your file systems. File system, as the name says,
+was designed to handle files and has far better performance on large binary
+data as sticking the data into ZODB.</p>
+<p>BLOBs are streamable which means that you can start serving the file from
+the beginning of the file to HTTP wire without needing to buffer
+the whole data to the memory first (slow).</p>
+</div>
+<div class="section" id="sql-values">
+<h2><a class="toc-backref" href="#id7">SQL values</a><a class="headerlink" href="#sql-values" title="Permalink to this headline">¶</a></h2>
+<p>Plone's Archetypes subsystem supports storing individual Archetypes fields in SQL database.
+This is mainly <a class="reference external" href="http://plone.293351.n2.nabble.com/Work-with-Contents-in-SQL-database-td5868800.html">an integration feature</a>. Read more about this in <a class="reference external" href="http://plone.org/products/archetypes/documentation/old/ArchetypesDeveloperGuide/index_html#advanced-storage-manual">Archetypes manual</a>.</p>
+</div>
+<div class="section" id="transaction-sizes">
+<h2><a class="toc-backref" href="#id8">Transaction sizes</a><a class="headerlink" href="#transaction-sizes" title="Permalink to this headline">¶</a></h2>
+<p>Discussion pointers</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.mail-archive.com/zodb-dev&#64;zope.org/msg03398.html">http://www.mail-archive.com/zodb-dev&#64;zope.org/msg03398.html</a></li>
+</ul>
+</div>
+<div class="section" id="analysing-data-fs-content-offline">
+<h2><a class="toc-backref" href="#id9">Analysing Data.fs content offline</a><a class="headerlink" href="#analysing-data-fs-content-offline" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://plone.org/documentation/kb/debug-zodb-bloat">http://plone.org/documentation/kb/debug-zodb-bloat</a></li>
+</ul>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Storage</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#pickling">Pickling</a></li>
+<li><a class="reference internal" href="#binary-trees">Binary trees</a></li>
+<li><a class="reference internal" href="#buckets">Buckets</a></li>
+<li><a class="reference internal" href="#storing-as-attribute-vs-storing-in-btree">Storing as attribute vs. storing in BTree</a></li>
+<li><a class="reference internal" href="#blobs">BLOBs</a></li>
+<li><a class="reference internal" href="#sql-values">SQL values</a></li>
+<li><a class="reference internal" href="#transaction-sizes">Transaction sizes</a></li>
+<li><a class="reference internal" href="#analysing-data-fs-content-offline">Analysing Data.fs content offline</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="database.html"
+                        title="previous chapter">ZODB Database</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="migrations.html"
+                        title="next chapter">Migrations</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/persistency/storage.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="migrations.html" title="Migrations"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="database.html" title="ZODB Database"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Persistency and transactions</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Views and viewlets &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="next" title="Views" href="browserviews.html" />
+    <link rel="prev" title="FTP" href="../serving/ftp.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="browserviews.html" title="Views"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../serving/ftp.html" title="FTP"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="views-and-viewlets">
+<h1>Views and viewlets<a class="headerlink" href="#views-and-viewlets" title="Permalink to this headline">¶</a></h1>
+<p>View and viewlet patterns used to create dynamic pages in plone.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="browserviews.html">Views</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="browserviews.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="browserviews.html#finding-a-view-to-override">Finding a view to override</a></li>
+<li class="toctree-l2"><a class="reference internal" href="browserviews.html#creating-and-registering-a-view">Creating and registering a view</a></li>
+<li class="toctree-l2"><a class="reference internal" href="browserviews.html#layers">Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="browserviews.html#content-type-mimetype-and-template-start-tag">Content type, mimetype and Template start tag</a></li>
+<li class="toctree-l2"><a class="reference internal" href="browserviews.html#zope-viewpagetemplatefile-vs-five-viewpagetemplatefile">Zope ViewPageTemplateFile vs. Five ViewPageTemplateFile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="browserviews.html#overriding-a-view-class-in-a-product">Overriding a view class in a product</a></li>
+<li class="toctree-l2"><a class="reference internal" href="browserviews.html#helper-views">Helper views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="browserviews.html#reusing-view-template-snippets-or-embedding-another-view">Reusing view template snippets or embedding another view</a></li>
+<li class="toctree-l2"><a class="reference internal" href="browserviews.html#accessing-a-view-instance-in-code">Accessing a view instance in code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="browserviews.html#listing-available-views">Listing available views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="browserviews.html#default-view-of-a-content-item">Default view of a content item</a></li>
+<li class="toctree-l2"><a class="reference internal" href="browserviews.html#views-and-magical-acquisition">Views and magical acquisition</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="viewlets.html">Viewlets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="viewlets.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="viewlets.html#finding-viewlets">Finding viewlets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="viewlets.html#creating-a-viewlet">Creating a viewlet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="viewlets.html#viewlet-behavior">Viewlet behavior</a></li>
+<li class="toctree-l2"><a class="reference internal" href="viewlets.html#conditionally-rendering-viewlets">Conditionally rendering viewlets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="viewlets.html#rendering-viewlet-by-name">Rendering viewlet by name</a></li>
+<li class="toctree-l2"><a class="reference internal" href="viewlets.html#rendering-viewlets-with-accurate-layout">Rendering viewlets with accurate layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="viewlets.html#viewlets-for-one-page-only">Viewlets for one page only</a></li>
+<li class="toctree-l2"><a class="reference internal" href="viewlets.html#head-viewlets">&lt;head&gt; viewlets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="viewlets.html#finding-viewlets-programmatically">Finding viewlets programmatically</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="layers.html">Layers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="layers.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layers.html#using-layers">Using layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layers.html#creating-a-layer">Creating a layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layers.html#checking-active-layers">Checking active layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layers.html#testing-layers">Testing Layers</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../serving/ftp.html"
+                        title="previous chapter">FTP</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="browserviews.html"
+                        title="next chapter">Views</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/views/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="browserviews.html" title="Views"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../serving/ftp.html" title="FTP"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

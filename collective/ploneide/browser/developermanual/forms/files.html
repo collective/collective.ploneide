@@ -1,0 +1,695 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Files &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Forms, fields and widgets" href="index.html" />
+    <link rel="next" title="Using zope.formlib" href="formlib/index.html" />
+    <link rel="prev" title="z3c.form" href="z3c.form.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="formlib/index.html" title="Using zope.formlib"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="z3c.form.html" title="z3c.form"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Forms, fields and widgets</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="files">
+<h1>Files<a class="headerlink" href="#files" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">Using files with z3c.forms, plone.formwidget.namedfile</p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
+<li><a class="reference internal" href="#simple-upload-form-example" id="id2">Simple upload form example</a></li>
+<li><a class="reference internal" href="#file-system-access-in-load-balanced-configurations" id="id3">File-system access in load balanced configurations</a></li>
+<li><a class="reference internal" href="#form-encoding" id="id4">Form encoding</a></li>
+<li><a class="reference internal" href="#file-field-contents" id="id5">File field contents</a></li>
+<li><a class="reference internal" href="#constring-download-urls" id="id6">Constring download URLs</a><ul>
+<li><a class="reference internal" href="#simple-example" id="id7">Simple example</a></li>
+<li><a class="reference internal" href="#complex-example" id="id8">Complex example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#streaming-file-data" id="id9">Streaming file data</a></li>
+<li><a class="reference internal" href="#poskeyerror" id="id10">POSKeyError</a></li>
+<li><a class="reference internal" href="#widget-download-urls" id="id11">Widget download URLs</a></li>
+<li><a class="reference internal" href="#migrating-custom-content-for-blobs" id="id12">Migrating custom content for blobs</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>This chapter discuss about file uploads and downloads in zope.schema and z3c.form packages.</p>
+<p>ZODB is not especially good handling large files - file systems were designed for that purpose.
+BLOBs are a way to store file data outside the database, but still maintaining database references</p>
+<p>For more about <a class="reference external" href="http://myriadicity.net/Sundry/PloneBlobs">Plone and BLOBs read these notes</a>.</p>
+<ul class="simple">
+<li><a class="reference external" href="http://svn.plone.org/svn/plone/plone.namedfile/trunk/plone/namedfile/">plone.namedfield BLOB support</a> and
+<a class="reference external" href="http://svn.plone.org/svn/plone/plone.formwidget.namedfile/trunk/plone/formwidget/namedfile/widget.txt">plone.formwidget.namefield File upload and download</a>.</li>
+</ul>
+<p>If you are not storing NamedFile objects directly in content objects, you might need to create a
+special publisher which makes files available from some URL.</p>
+<ul class="simple">
+<li>See <a class="reference external" href="http://svn.plone.org/svn/plone/plone.namedfile/trunk/plone/namedfile/browser.py">plone.namedfile.browser</a>.</li>
+<li>See <a class="reference external" href="http://svn.plone.org/svn/plone/plone.formwidget.namedfile/trunk/plone/formwidget/namedfile/widget.py">plone.formwidget.namedfile.widget</a>.</li>
+</ul>
+<p>BLOBs pose a problem for unit-tests, because default ZODB DemoStorage doesn't support writing BLOBS.
+Please read <cite>how z3c.blobfile &lt;http://svn.zope.org/z3c.blobfile/trunk/src/z3c/blobfile/testing.py?rev=98849&amp;view=auto&gt;</cite>
+tests this.</p>
+</div>
+<div class="section" id="simple-upload-form-example">
+<h2><a class="toc-backref" href="#id2">Simple upload form example</a><a class="headerlink" href="#simple-upload-form-example" title="Permalink to this headline">¶</a></h2>
+<p>The example below uses <a class="reference internal" href="../components/grok.html"><em>five.grok</em></a>
+to declare the form schema and form.</p>
+<p>We use <a class="reference external" href="http://pypi.python.org/pypi/plone.namedfile">plone.namedfile</a>
+for the upload field, which is CSV file. We accept the upload
+and then process the file.</p>
+<p>You need to declare <tt class="docutils literal"><span class="pre">extends</span></tt> directive to pin down
+required dependency versions in <tt class="docutils literal"><span class="pre">buildout.cfg</span></tt>.
+For more information, see <a class="reference internal" href="../troubleshooting/buildout.html"><em>buildout troubleshooting</em></a>.</p>
+<p>You also need to declare packages <tt class="docutils literal"><span class="pre">five.grok</span></tt>, <tt class="docutils literal"><span class="pre">plone.autoform</span></tt>,
+<tt class="docutils literal"><span class="pre">plone.directives.form</span></tt> packages as dependencies in your <tt class="docutils literal"><span class="pre">setup,py</span></tt>
+<tt class="docutils literal"><span class="pre">install_dependencies</span></tt> directive. After this, rerunning <tt class="docutils literal"><span class="pre">buildout</span></tt>
+will pull these packages for you and you can import them succesfully.
+For more information, see <a class="reference external" href="http://pypi.python.org/pypi/plone.directives.form">plone.directives.form README</a>.</p>
+<p>Code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Core Zope 2 + Zope 3 + Plone</span>
+<span class="kn">from</span> <span class="nn">zope.interface</span> <span class="kn">import</span> <span class="n">Interface</span>
+<span class="kn">from</span> <span class="nn">zope</span> <span class="kn">import</span> <span class="n">schema</span>
+<span class="kn">from</span> <span class="nn">zope.app.component.hooks</span> <span class="kn">import</span> <span class="n">getSite</span>
+<span class="kn">from</span> <span class="nn">five</span> <span class="kn">import</span> <span class="n">grok</span>
+<span class="kn">from</span> <span class="nn">Products.CMFCore.interfaces</span> <span class="kn">import</span> <span class="n">ISiteRoot</span>
+<span class="kn">from</span> <span class="nn">Products.CMFCore.utils</span> <span class="kn">import</span> <span class="n">getToolByName</span>
+<span class="kn">from</span> <span class="nn">Products.CMFCore</span> <span class="kn">import</span> <span class="n">permissions</span>
+<span class="kn">from</span> <span class="nn">Products.statusmessages.interfaces</span> <span class="kn">import</span> <span class="n">IStatusMessage</span>
+
+<span class="c"># Form and validation</span>
+<span class="kn">from</span> <span class="nn">z3c.form</span> <span class="kn">import</span> <span class="n">field</span>
+<span class="kn">import</span> <span class="nn">z3c.form.button</span>
+<span class="kn">from</span> <span class="nn">plone.directives</span> <span class="kn">import</span> <span class="n">form</span>
+<span class="kn">from</span> <span class="nn">collective.z3cform.grok.grok</span> <span class="kn">import</span> <span class="n">PloneFormWrapper</span>
+<span class="kn">import</span> <span class="nn">plone.autoform.form</span>
+
+<span class="kn">import</span> <span class="nn">StringIO</span>
+<span class="kn">import</span> <span class="nn">csv</span>
+
+
+<span class="kn">from</span> <span class="nn">plone.namedfile.field</span> <span class="kn">import</span> <span class="n">NamedFile</span>
+<span class="kn">from</span> <span class="nn">plone.i18n.normalizer</span> <span class="kn">import</span> <span class="n">idnormalizer</span>
+
+
+<span class="k">class</span> <span class="nc">IImportUsersFormSchema</span><span class="p">(</span><span class="n">form</span><span class="o">.</span><span class="n">Schema</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Define fields used on the form &quot;&quot;&quot;</span>
+
+    <span class="n">csv_file</span> <span class="o">=</span> <span class="n">NamedFile</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">_</span><span class="p">(</span><span class="s">u&quot;CSV file&quot;</span><span class="p">))</span>
+
+<span class="k">class</span> <span class="nc">ImportUsersForm</span><span class="p">(</span><span class="n">form</span><span class="o">.</span><span class="n">SchemaForm</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A sample form how to mass import users using uploaded CSV file.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c"># Form label</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s">u&quot;Import Companies&quot;</span><span class="p">)</span>
+
+    <span class="c"># Which plone.directives.form.Schema subclass is used to define</span>
+    <span class="c"># fields for this form</span>
+    <span class="n">schema</span> <span class="o">=</span> <span class="n">IImportUsersFormSchema</span>
+
+    <span class="c"># Permission required to</span>
+    <span class="n">grok</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="s">&quot;cmf.ManagePortal&quot;</span><span class="p">)</span>
+
+    <span class="n">ignoreContext</span> <span class="o">=</span> <span class="bp">True</span>
+
+    <span class="c"># This form is available at the site root only</span>
+    <span class="n">grok</span><span class="o">.</span><span class="n">context</span><span class="p">(</span><span class="n">ISiteRoot</span><span class="p">)</span>
+
+    <span class="c"># appear as @@import_companies view</span>
+    <span class="n">grok</span><span class="o">.</span><span class="n">name</span><span class="p">(</span><span class="s">&quot;import_companies&quot;</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">processCSV</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">io</span> <span class="o">=</span>  <span class="n">StringIO</span><span class="o">.</span><span class="n">StringIO</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">io</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s">&#39;,&#39;</span><span class="p">,</span> <span class="n">dialect</span><span class="o">=</span><span class="s">&quot;excel&quot;</span><span class="p">,</span> <span class="n">quotechar</span><span class="o">=</span><span class="s">&#39;&quot;&#39;</span><span class="p">)</span>
+
+        <span class="n">header</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+        <span class="k">print</span> <span class="n">header</span>
+
+        <span class="k">def</span> <span class="nf">get_cell</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot; Read one cell on a</span>
+
+<span class="sd">            @param row: CSV row as list</span>
+
+<span class="sd">            @param name: Column name: 1st row cell content value, header</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+
+            <span class="k">assert</span> <span class="nb">type</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="o">==</span> <span class="nb">unicode</span><span class="p">,</span> <span class="s">&quot;Column names must be unicode&quot;</span>
+
+            <span class="n">index</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">header</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="n">header</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&quot;utf-8&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="n">name</span><span class="p">:</span>
+                    <span class="n">index</span> <span class="o">=</span> <span class="n">i</span>
+
+            <span class="k">if</span> <span class="n">index</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&quot;CSV data does not have column:&quot;</span> <span class="o">+</span> <span class="n">name</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">row</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&quot;utf-8&quot;</span><span class="p">)</span>
+
+
+        <span class="c"># Map CSV import fields to a corresponding content item AT fields</span>
+        <span class="n">mappings</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s">u&quot;Puhnro&quot;</span> <span class="p">:</span> <span class="s">&quot;phonenumber&quot;</span><span class="p">,</span>
+                    <span class="s">u&quot;Fax&quot;</span> <span class="p">:</span> <span class="s">&quot;faxnumber&quot;</span><span class="p">,</span>
+                    <span class="s">u&quot;Postinumero&quot;</span> <span class="p">:</span> <span class="s">&quot;postalCode&quot;</span><span class="p">,</span>
+                    <span class="s">u&quot;Postitoimipaikka&quot;</span> <span class="p">:</span> <span class="s">&quot;postOffice&quot;</span><span class="p">,</span>
+                    <span class="s">u&quot;Www-osoite&quot;</span> <span class="p">:</span> <span class="s">&quot;homepageLink&quot;</span><span class="p">,</span>
+                    <span class="s">u&quot;Lähiosoite&quot;</span> <span class="p">:</span> <span class="s">&quot;streetAddress&quot;</span><span class="p">,</span>
+                    <span class="p">}</span>
+
+        <span class="n">updated</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
+
+            <span class="c"># do stuff ...</span>
+            <span class="n">updated</span> <span class="o">+=</span> <span class="mi">1</span>
+
+
+        <span class="k">return</span> <span class="n">updated</span>
+
+
+    <span class="nd">@z3c.form.button.buttonAndHandler</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">&#39;Import&#39;</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;import&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">importCompanies</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Create and handle form button &quot;Create company&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c"># Extract form field values and errors from HTTP request</span>
+        <span class="n">data</span><span class="p">,</span> <span class="n">errors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extractData</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">errors</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">formErrorsMessage</span>
+            <span class="k">return</span>
+
+        <span class="c"># Do magic</span>
+        <span class="nb">file</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&quot;csv_file&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
+
+        <span class="n">number</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">processCSV</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span>
+
+        <span class="c"># If everything was ok post success note</span>
+        <span class="c"># Note you can also use self.status here unless you do redirects</span>
+        <span class="k">if</span> <span class="n">number</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="c"># mark only as finished if we get the new object</span>
+            <span class="n">IStatusMessage</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">)</span><span class="o">.</span><span class="n">addStatusMessage</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">u&quot;Created/updated companies:&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">number</span><span class="p">),</span> <span class="s">&quot;info&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="file-system-access-in-load-balanced-configurations">
+<h2><a class="toc-backref" href="#id3">File-system access in load balanced configurations</a><a class="headerlink" href="#file-system-access-in-load-balanced-configurations" title="Permalink to this headline">¶</a></h2>
+<p><cite>plone.namedfiled &lt;http://plone.org/products/plone.app.blob&gt;</cite>
+product page contains configuration instructions
+for plone.namedfile and ZEO.</p>
+</div>
+<div class="section" id="form-encoding">
+<h2><a class="toc-backref" href="#id4">Form encoding</a><a class="headerlink" href="#form-encoding" title="Permalink to this headline">¶</a></h2>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Make sure that all forms containing file content are posted as enctype=&quot;multipart/form-data&quot;.
+Otherwise Zope decodes request POST values as string input and you get either empty strings
+or filenames as your file content data. The older plone.app.z3cform templates
+do not necessarily declare enctype, meaning that you need to use custom page template
+file for forms doing uploads.</p>
+</div>
+<p>Example correct form header:</p>
+<div class="highlight-python"><pre>&lt;form action="." enctype="multipart/form-data" method="post" tal:attributes="action request/getURL"&gt;</pre>
+</div>
+</div>
+<div class="section" id="file-field-contents">
+<h2><a class="toc-backref" href="#id5">File field contents</a><a class="headerlink" href="#file-field-contents" title="Permalink to this headline">¶</a></h2>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">zope</span> <span class="kn">import</span> <span class="n">schema</span>
+<span class="kn">from</span> <span class="nn">zope.interface</span> <span class="kn">import</span> <span class="n">implements</span><span class="p">,</span> <span class="n">alsoProvides</span>
+<span class="kn">from</span> <span class="nn">persistent</span> <span class="kn">import</span> <span class="n">Persistent</span>
+<span class="kn">from</span> <span class="nn">plone.namedfile.field</span> <span class="kn">import</span> <span class="n">NamedBlobFile</span><span class="p">,</span> <span class="n">NamedBlobImage</span>
+<span class="kn">from</span> <span class="nn">zope.schema.fieldproperty</span> <span class="kn">import</span> <span class="n">FieldProperty</span>
+
+<span class="k">class</span> <span class="nc">IHeaderAnimation</span><span class="p">(</span><span class="n">form</span><span class="o">.</span><span class="n">Schema</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Alternative header flash animation/imagae &quot;&quot;&quot;</span>
+
+    <span class="n">animation</span> <span class="o">=</span> <span class="n">NamedBlobFile</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">u&quot;Header flash animation&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s">u&quot;Upload SWF file which is shown in the header&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+
+<span class="c"># Sample file data used in simulated uploads</span>
+<span class="n">sample_data</span> <span class="o">=</span> <span class="p">(</span>
+         <span class="s">&#39;GIF89a</span><span class="se">\x10\x00\x10\x00\xd5\x00\x00\xff\xff\xff\xff\xff\xfe\xfc\xfd\xfd</span><span class="s">&#39;</span>
+         <span class="s">&#39;</span><span class="se">\xfa\xfb\xfc\xf7\xf9\xfa\xf5\xf8\xf9\xf3\xf6\xf8\xf2\xf5\xf7\xf0\xf4\xf6</span><span class="s">&#39;</span>
+         <span class="s">&#39;</span><span class="se">\xeb\xf1\xf3\xe5\xed\xef\xde\xe8\xeb\xdc\xe6\xea\xd9\xe4\xe8\xd7\xe2\xe6</span><span class="s">&#39;</span>
+         <span class="s">&#39;</span><span class="se">\xd2\xdf\xe3\xd0\xdd\xe3\xcd\xdc\xe1\xcb\xda\xdf\xc9\xd9\xdf\xc8\xd8\xdd</span><span class="s">&#39;</span>
+         <span class="s">&#39;</span><span class="se">\xc6\xd7\xdc\xc4\xd6\xdc\xc3\xd4\xda\xc2\xd3\xd9\xc1\xd3\xd9\xc0\xd2\xd9</span><span class="s">&#39;</span>
+         <span class="s">&#39;</span><span class="se">\xbd\xd1\xd8\xbd\xd0\xd7\xbc\xcf\xd7\xbb\xcf\xd6\xbb\xce\xd5\xb9\xcd\xd4</span><span class="s">&#39;</span>
+         <span class="s">&#39;</span><span class="se">\xb6\xcc\xd4\xb6\xcb\xd3\xb5\xcb\xd2\xb4\xca\xd1\xb2\xc8\xd0\xb1\xc7\xd0</span><span class="s">&#39;</span>
+         <span class="s">&#39;</span><span class="se">\xb0\xc7\xcf\xaf\xc6\xce\xae\xc4\xce\xad\xc4\xcd\xab\xc3\xcc\xa9\xc2\xcb</span><span class="s">&#39;</span>
+         <span class="s">&#39;</span><span class="se">\xa8\xc1\xca\xa6\xc0\xc9\xa4\xbe\xc8\xa2\xbd\xc7\xa0\xbb\xc5\x9e\xba\xc4</span><span class="s">&#39;</span>
+         <span class="s">&#39;</span><span class="se">\x9b\xbf\xcc\x98\xb6\xc1\x8d\xae\xba</span><span class="s">Fgs</span><span class="se">\x00\x00\x00\x00\x00\x00\x00\x00</span><span class="s">&#39;</span>
+         <span class="s">&#39;</span><span class="se">\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00</span><span class="s">&#39;</span>
+         <span class="s">&#39;</span><span class="se">\x00</span><span class="s">,</span><span class="se">\x00\x00\x00\x00\x10\x00\x10\x00\x00\x06</span><span class="s">z@</span><span class="se">\x80</span><span class="s">pH,</span><span class="se">\x12</span><span class="s">k</span><span class="se">\xc8</span><span class="s">$</span><span class="se">\xd2</span><span class="s">f</span><span class="se">\x04</span><span class="s">&#39;</span>
+         <span class="s">&#39;</span><span class="se">\xd4\x84\x01\x01\xe1\xf0</span><span class="s">d</span><span class="se">\x16\x9f\x80</span><span class="s">A</span><span class="se">\x01\x91\xc0</span><span class="s">ZmL</span><span class="se">\xb0\xcd\x00</span><span class="s">V</span><span class="se">\xd4</span><span class="s">&#39;</span>
+         <span class="s">&#39;</span><span class="se">\xc4</span><span class="s">a</span><span class="se">\x87</span><span class="s">z</span><span class="se">\xed\xb0</span><span class="s">-</span><span class="se">\x1a\xb3\xb8\x95\xbd</span><span class="s">f8</span><span class="se">\x1e\x11\xca</span><span class="s">,MoC$</span><span class="se">\x15\x18</span><span class="s">{&#39;</span>
+         <span class="s">&#39;</span><span class="se">\x00</span><span class="s">6}m</span><span class="se">\x13\x16\x1a\x1f\x83\x85</span><span class="s">}6</span><span class="se">\x17\x1b</span><span class="s"> $</span><span class="se">\x83\x00\x86\x19\x1d</span><span class="s">!%)</span><span class="se">\x8c</span><span class="s">&#39;</span>
+         <span class="s">&#39;</span><span class="se">\x86</span><span class="s">6#</span><span class="se">\&#39;</span><span class="s">+.</span><span class="se">\x8c</span><span class="s">a`</span><span class="se">\x1c</span><span class="s">`(,/1</span><span class="se">\x94</span><span class="s">B5</span><span class="se">\x19\x1e</span><span class="s">&quot;&amp;*-024</span><span class="se">\xac</span><span class="s">Nq</span><span class="se">\xba\xbb\xb8</span><span class="s">h</span><span class="se">\xbe</span><span class="s">b&#39;</span>
+         <span class="s">&#39;</span><span class="se">\x00</span><span class="s">A</span><span class="se">\x00</span><span class="s">;&#39;</span>
+         <span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">HeaderAnimation</span><span class="p">(</span><span class="n">Persistent</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Persistent storage object used in IHeaderBehavior.alternatives list.</span>
+
+<span class="sd">    This holds information about one animation/image upload.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">implements</span><span class="p">(</span><span class="n">IHeaderAnimation</span><span class="p">)</span>
+
+    <span class="n">animation</span> <span class="o">=</span> <span class="n">FieldProperty</span><span class="p">(</span><span class="n">IHeaderAnimation</span><span class="p">[</span><span class="s">&quot;animation&quot;</span><span class="p">])</span>
+
+<span class="n">animation</span> <span class="o">=</span> <span class="n">HeaderAnimation</span><span class="p">()</span>
+<span class="n">animation</span><span class="o">.</span><span class="n">file</span> <span class="o">=</span> <span class="n">namedfile</span><span class="o">.</span><span class="n">NamedBlobFile</span><span class="p">(</span><span class="n">sample_data</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s">u&quot;flash.swf&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="constring-download-urls">
+<h2><a class="toc-backref" href="#id6">Constring download URLs</a><a class="headerlink" href="#constring-download-urls" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="simple-example">
+<h3><a class="toc-backref" href="#id7">Simple example</a><a class="headerlink" href="#simple-example" title="Permalink to this headline">¶</a></h3>
+<p>In Dexterity you can <tt class="docutils literal"><span class="pre">&#64;&#64;download</span></tt> field for content types</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="c">&lt;!-- Render link to video file if it&#39;s uploaded to this context item --&gt;</span>
+<span class="nt">&lt;tal:video</span> <span class="na">define=</span><span class="s">&quot;video nocall:context/videoFile&quot;</span>
+     <span class="na">tal:condition=</span><span class="s">&quot;nocall:video&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;flow-player&quot;</span> <span class="na">tal:attributes=</span><span class="s">&quot;href string:${context/absolute_url}/@@download/videoFile/${video/filename}&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;/a&gt;</span>
+<span class="nt">&lt;/tal:video&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="complex-example">
+<h3><a class="toc-backref" href="#id8">Complex example</a><a class="headerlink" href="#complex-example" title="Permalink to this headline">¶</a></h3>
+<p>You need to expose file content to the site user through a view and then
+refer to the URL of the view in your HTML template. There are some tricks you need to keep in mind</p>
+<ul class="simple">
+<li>All file download URLs should be timestamped or the reupload file change is not reflected in the browser</li>
+<li>You might want to serve different file types from different URLs and set
+special HTTP headers for them</li>
+</ul>
+<p>Complex example (plone.app.headeranimations):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">plone.namedfile.interfaces</span> <span class="kn">import</span> <span class="n">INamedBlobFile</span><span class="p">,</span> <span class="n">INamedBlobImage</span>
+
+<span class="c"># &lt;browser:page&gt; providing blob object traverse and streaming</span>
+<span class="c"># using download_blob() function below</span>
+<span class="n">download_view_name</span> <span class="o">=</span> <span class="s">&quot;@@header_animation_helper&quot;</span>
+
+<span class="k">def</span> <span class="nf">construct_url</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">animation_object_id</span><span class="p">,</span> <span class="n">blob</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Construct download URL for delivering files.</span>
+
+<span class="sd">    Adds file upload timestamp to URL to prevent cache issues.</span>
+
+<span class="sd">    @param context: Content object who own the files</span>
+
+<span class="sd">    @param animation_object_id: Unique identified for the animation in the animation container</span>
+<span class="sd">           (in the case there are several of them)</span>
+
+<span class="sd">    @param field_value: NamedBlobFile or NamedBlobImage or None</span>
+
+<span class="sd">    @return: None if there is no blob or the blob field value is empty (file has been removed from admin interface)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">blob</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="c"># This case occurs when the file has been removed thorugh form interfaces</span>
+    <span class="c"># (one of keep, replace, remove options on file widget)</span>
+
+
+    <span class="k">if</span> <span class="n">animation_object_id</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&quot;Cannot have None id&quot;</span><span class="p">)</span>
+
+    <span class="c"># Timestamping prevents caching issues,</span>
+    <span class="c"># otherwise the browser shows the old version after reupload</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">blob</span><span class="p">,</span> <span class="s">&quot;_p_mtime&quot;</span><span class="p">):</span>
+        <span class="c"># Zope persistency timestamp is float seconds since epoch</span>
+        <span class="n">timestamp</span> <span class="o">=</span> <span class="n">blob</span><span class="o">.</span><span class="n">_p_mtime</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">timestamp</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+
+    <span class="c"># We have different BrowserView methods for download depending on the file type</span>
+    <span class="c"># (to apply Flash fix)</span>
+    <span class="k">if</span> <span class="n">INamedBlobFile</span><span class="o">.</span><span class="n">providedBy</span><span class="p">(</span><span class="n">blob</span><span class="p">):</span>
+        <span class="n">func_name</span> <span class="o">=</span> <span class="s">&quot;download_animation&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">func_name</span> <span class="o">=</span> <span class="s">&quot;download_image&quot;</span>
+
+    <span class="c"># This looks like</span>
+    <span class="k">return</span> <span class="n">context</span><span class="o">.</span><span class="n">absolute_url</span><span class="p">()</span> <span class="o">+</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="n">download_view_name</span> <span class="o">+</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="n">func_name</span> <span class="o">+</span> <span class="s">&quot;?timestamp=&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">timestamp</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="streaming-file-data">
+<h2><a class="toc-backref" href="#id9">Streaming file data</a><a class="headerlink" href="#streaming-file-data" title="Permalink to this headline">¶</a></h2>
+<p>File data is deliever to the browser as stream. The view function returns streaming iterator instead
+of data as is. This greatly reduces the latency and memory usage when the file must not be buffered
+as whole to the memory before sending to the wite.</p>
+<p>Example (plone.app.headeranimation):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">zope.publisher.interfaces</span> <span class="kn">import</span> <span class="n">IPublishTraverse</span><span class="p">,</span> <span class="n">NotFound</span>
+
+<span class="kn">from</span> <span class="nn">plone.namedfile.utils</span> <span class="kn">import</span> <span class="n">set_headers</span><span class="p">,</span> <span class="n">stream_data</span>
+<span class="kn">from</span> <span class="nn">plone.namedfile.interfaces</span> <span class="kn">import</span> <span class="n">INamedBlobFile</span><span class="p">,</span> <span class="n">INamedBlobImage</span>
+
+<span class="k">def</span> <span class="nf">download_blob</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="nb">file</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Stream animation or image BLOB to the browser.</span>
+
+<span class="sd">    @param context: Context object name is used to set the filename if blob itself doesn&#39;t provide one</span>
+
+<span class="sd">    @param request: HTTP request</span>
+
+<span class="sd">    @param file: Blob object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">file</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">NotFound</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
+
+    <span class="c"># Try determine blob name and default to &quot;context_id_download&quot;</span>
+    <span class="c"># This is only visible if the user tried to save the file to local computer</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="s">&#39;filename&#39;</span><span class="p">,</span> <span class="n">context</span><span class="o">.</span><span class="n">id</span> <span class="o">+</span> <span class="s">&quot;_download&quot;</span><span class="p">)</span>
+
+    <span class="n">set_headers</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">response</span><span class="p">)</span>
+
+    <span class="c"># Set headers for Flash 10</span>
+    <span class="c"># http://www.littled.net/new/2008/10/17/plone-and-flash-player-10/</span>
+    <span class="n">cd</span> <span class="o">=</span> <span class="s">&#39;inline; filename=</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">filename</span>
+    <span class="n">request</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">setHeader</span><span class="p">(</span><span class="s">&quot;Content-Disposition&quot;</span><span class="p">,</span> <span class="n">cd</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">stream_data</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">HeaderAnimationFieldDownload</span><span class="p">(</span><span class="n">BrowserView</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Allow file and image downloads in form widgets.</span>
+
+<span class="sd">    Unlike HeaderAnimationHelper, this does not do</span>
+<span class="sd">    any kind of header resolving, but serves files always</span>
+<span class="sd">    from the context object itself.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="n">context</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request</span> <span class="o">=</span> <span class="n">request</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">behavior</span> <span class="o">=</span> <span class="n">IHeaderBehavior</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">animation_object_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&quot;animation_object_id&quot;</span><span class="p">]</span>
+
+
+    <span class="k">def</span> <span class="nf">lookUpAnimation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Don&#39;t do look-up in init, since failure there will raise ComponentLookupError instead of NotFound.</span>
+
+<span class="sd">        @return: Blob object to be streamed</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">animation_object_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">behavior</span><span class="o">.</span><span class="n">alternatives</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">NotFound</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&quot;Bad animation id:&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">animation_object_id</span> <span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">behavior</span><span class="o">.</span><span class="n">alternatives</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">animation_object_id</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">download_animation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; &quot;&quot;&quot;</span>
+        <span class="n">animation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lookUpAnimation</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">download_blob</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">,</span> <span class="n">animation</span><span class="o">.</span><span class="n">animation</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">download_image</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; &quot;&quot;&quot;</span>
+        <span class="n">animation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lookUpAnimation</span><span class="p">()</span>
+        <span class="n">stream_iterator</span> <span class="o">=</span> <span class="n">download_blob</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">,</span> <span class="n">animation</span><span class="o">.</span><span class="n">image</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">stream_iterator</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="poskeyerror">
+<h2><a class="toc-backref" href="#id10">POSKeyError</a><a class="headerlink" href="#poskeyerror" title="Permalink to this headline">¶</a></h2>
+<p>POSKeyError is raised when you try to access blob <em>attributes</em>, but the actual
+file is not available on the disk. You can still load the blob object itself
+fine (as its being stored in ZODB, not FS).</p>
+<p>Example:</p>
+<div class="highlight-python"><pre>Module ZPublisher.Publish, line 119, in publish
+Module ZPublisher.mapply, line 88, in mapply
+Module ZPublisher.Publish, line 42, in call_object
+Module plone.app.headeranimation.browser.views, line 92, in download_image
+Module plone.app.headeranimation.browser.views, line 75, in _download_blob
+Module plone.app.headeranimation.browser.download, line 90, in download_blob
+Module plone.namedfile.utils, line 58, in stream_data
+Module ZODB.Connection, line 811, in setstate
+Module ZODB.Connection, line 876, in _setstate
+Module ZODB.blob, line 623, in loadBlob
+POSKeyError: 'No blob file'</pre>
+</div>
+<p>This might occur for example because you have copied Data.fs to another computer, but
+not blob files.</p>
+<p>You probably want to catch POSKeyErrors and make them return something
+more sane:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">download_blob</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="nb">file</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Stream animation or image BLOB to the browser.</span>
+
+<span class="sd">    @param context: Context object name is used to set the filename if blob itself doesn&#39;t provide one</span>
+
+<span class="sd">    @param request: HTTP request</span>
+
+<span class="sd">    @param file: Blob object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="kn">from</span> <span class="nn">ZODB.POSException</span> <span class="kn">import</span> <span class="n">POSKeyError</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">file</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">NotFound</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
+
+        <span class="c"># Try determine blob name and default to &quot;context_id_download&quot;</span>
+        <span class="c"># This is only visible if the user tried to save the file to local computer</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="s">&#39;filename&#39;</span><span class="p">,</span> <span class="n">context</span><span class="o">.</span><span class="n">id</span> <span class="o">+</span> <span class="s">&quot;_download&quot;</span><span class="p">)</span>
+
+        <span class="n">set_headers</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">response</span><span class="p">)</span>
+
+        <span class="c"># Set headers for Flash 10</span>
+        <span class="c"># http://www.littled.net/new/2008/10/17/plone-and-flash-player-10/</span>
+        <span class="n">cd</span> <span class="o">=</span> <span class="s">&#39;inline; filename=</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">filename</span>
+        <span class="n">request</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">setHeader</span><span class="p">(</span><span class="s">&quot;Content-Disposition&quot;</span><span class="p">,</span> <span class="n">cd</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">stream_data</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">POSKeyError</span><span class="p">:</span>
+        <span class="c"># Blob storage damaged</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Could not load blob for &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">context</span><span class="p">))</span>
+        <span class="k">raise</span> <span class="n">NotFound</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="widget-download-urls">
+<h2><a class="toc-backref" href="#id11">Widget download URLs</a><a class="headerlink" href="#widget-download-urls" title="Permalink to this headline">¶</a></h2>
+<p>Some things you might want to keep in mind when playing with forms and images</p>
+<ul class="simple">
+<li>Image data might be incomplete (no width/height) during the first POST</li>
+<li>Image URL might change in the middle of request (image was updated)</li>
+</ul>
+<p>If you form content is something else than traversable context object then you must fix
+file download URLs manually.</p>
+<p><a class="reference external" href="https://svn.plone.org/svn/collective/plone.app.headeranimation/trunk/plone/app/headeranimation/browser/widgets.py">See example in plone.app.headeranimations</a>.</p>
+</div>
+<div class="section" id="migrating-custom-content-for-blobs">
+<h2><a class="toc-backref" href="#id12">Migrating custom content for blobs</a><a class="headerlink" href="#migrating-custom-content-for-blobs" title="Permalink to this headline">¶</a></h2>
+<p>Some hints how to migrate your custom content</p>
+<ul class="simple">
+<li><a class="reference external" href="http://plone.293351.n2.nabble.com/plone-4-upgrade-blob-and-large-files-tp5500503p5500503.html">http://plone.293351.n2.nabble.com/plone-4-upgrade-blob-and-large-files-tp5500503p5500503.html</a></li>
+</ul>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Files</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#simple-upload-form-example">Simple upload form example</a></li>
+<li><a class="reference internal" href="#file-system-access-in-load-balanced-configurations">File-system access in load balanced configurations</a></li>
+<li><a class="reference internal" href="#form-encoding">Form encoding</a></li>
+<li><a class="reference internal" href="#file-field-contents">File field contents</a></li>
+<li><a class="reference internal" href="#constring-download-urls">Constring download URLs</a><ul>
+<li><a class="reference internal" href="#simple-example">Simple example</a></li>
+<li><a class="reference internal" href="#complex-example">Complex example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#streaming-file-data">Streaming file data</a></li>
+<li><a class="reference internal" href="#poskeyerror">POSKeyError</a></li>
+<li><a class="reference internal" href="#widget-download-urls">Widget download URLs</a></li>
+<li><a class="reference internal" href="#migrating-custom-content-for-blobs">Migrating custom content for blobs</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="z3c.form.html"
+                        title="previous chapter">z3c.form</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="formlib/index.html"
+                        title="next chapter">Using zope.formlib</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/forms/files.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="formlib/index.html" title="Using zope.formlib"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="z3c.form.html" title="z3c.form"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Forms, fields and widgets</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

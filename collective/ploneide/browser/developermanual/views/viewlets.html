@@ -1,0 +1,1035 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Viewlets &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Views and viewlets" href="index.html" />
+    <link rel="next" title="Layers" href="layers.html" />
+    <link rel="prev" title="Views" href="browserviews.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="layers.html" title="Layers"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="browserviews.html" title="Views"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Views and viewlets</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="viewlets">
+<h1>Viewlets<a class="headerlink" href="#viewlets" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">Viewlets are parts of the page in Plone page rendering process.
+You can create, hide and shuffle them freely.</p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id2">Introduction</a></li>
+<li><a class="reference internal" href="#finding-viewlets" id="id3">Finding viewlets</a></li>
+<li><a class="reference internal" href="#creating-a-viewlet" id="id4">Creating a viewlet</a><ul>
+<li><a class="reference internal" href="#creating-a-viewlet-using-grok" id="id5">Creating a viewlet using Grok</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#viewlet-behavior" id="id6">Viewlet behavior</a><ul>
+<li><a class="reference internal" href="#creating-a-viewlet-using-python-code-and-zcml" id="id7">Creating a viewlet using Python code and ZCML</a></li>
+<li><a class="reference internal" href="#registering-a-viewlet-using-zcml" id="id8">Registering a viewlet using ZCML</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#conditionally-rendering-viewlets" id="id9">Conditionally rendering viewlets</a></li>
+<li><a class="reference internal" href="#rendering-viewlet-by-name" id="id10">Rendering viewlet by name</a></li>
+<li><a class="reference internal" href="#rendering-viewlets-with-accurate-layout" id="id11">Rendering viewlets with accurate layout</a></li>
+<li><a class="reference internal" href="#viewlets-for-one-page-only" id="id12">Viewlets for one page only</a></li>
+<li><a class="reference internal" href="#head-viewlets" id="id13">&lt;head&gt; viewlets</a></li>
+<li><a class="reference internal" href="#finding-viewlets-programmatically" id="id14">Finding viewlets programmatically</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id2">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Viewlets are view snippets which will render a part of the HTML page.
+Viewlets provide conflict-free way to contribute new user-interface actions and
+HTML snippets to Plone pages.</p>
+<ul class="simple">
+<li>Viewlets are managed using /&#64;&#64;manage-viewlets page</li>
+<li>Viewlets can shown and hidden through-the-web</li>
+<li>Viewlets can be reordered (limited to reordering within container in Plone 3.x)</li>
+<li>Viewlets can be registered and overridden in theme specific manner <a class="reference internal" href="layers.html"><em>using layers</em></a></li>
+<li>Viewlets have update() and render() methods</li>
+<li>Viewlets should honour <a class="reference external" href="http://svn.zope.org/zope.contentprovider/trunk/src/zope/contentprovider/interfaces.py?rev=98212&amp;view=auto">zope.contentprovider.interfaces.IContentProvider call contract</a>.</li>
+</ul>
+<p>Viewlets can be discriminated to</p>
+<ul class="simple">
+<li>certain content type (<tt class="docutils literal"><span class="pre">for=</span></tt> in ZCML)</li>
+<li>certain view (<tt class="docutils literal"><span class="pre">view=</span></tt> in ZCML)</li>
+</ul>
+<p>More info</p>
+<ul class="simple">
+<li><a class="reference external" href="http://plone.org/documentation/manual/theme-reference/elements/elementsindexsunburst4">Plone 4 Viewlet and viewlet manager reference</a></li>
+<li><a class="reference external" href="http://apidoc.zope.org/++apidoc++/ZCML/http_co__sl__sl_namespaces.zope.org_sl_browser/viewlet/index.html">ZCML viewlet definition</a>.</li>
+</ul>
+</div>
+<div class="section" id="finding-viewlets">
+<h2><a class="toc-backref" href="#id3">Finding viewlets</a><a class="headerlink" href="#finding-viewlets" title="Permalink to this headline">¶</a></h2>
+<p>There are two through-the-web tools to start looking what viewlets are available on your installation. The
+available viewlets may depend on installed Plone version and installed add-ons.</p>
+<ul class="simple">
+<li>The <tt class="docutils literal"><span class="pre">portal_view_customizations</span></tt> tool in ZMI will show you viewlet registrations (and the viewlet managers they are registered for). As with views, you can hover over the viewlet name to see where it is registered in a tool tip.</li>
+<li>To discover the name of a particular viewlet, you can use the &#64;&#64;manage-viewlets view, e.g. as <a class="reference external" href="http://localhost:8080/plone/&#64;&#64;manage-viewlets">http://localhost:8080/plone/&#64;&#64;manage-viewlets</a>.</li>
+</ul>
+</div>
+<div class="section" id="creating-a-viewlet">
+<h2><a class="toc-backref" href="#id4">Creating a viewlet</a><a class="headerlink" href="#creating-a-viewlet" title="Permalink to this headline">¶</a></h2>
+<p>Viewlet consists of</p>
+<ul class="simple">
+<li>Python class</li>
+<li>Page template (.pt) file</li>
+<li>A <a class="reference internal" href="layers.html"><em>browser layer</em></a> defining which add-on product must be installed, so that the viewlet is rendered</li>
+<li>A related Grok or ZCML directives to register the viewlet to a correct viewlet manager with a correct layer</li>
+</ul>
+<div class="section" id="creating-a-viewlet-using-grok">
+<h3><a class="toc-backref" href="#id5">Creating a viewlet using Grok</a><a class="headerlink" href="#creating-a-viewlet-using-grok" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="../components/grok.html"><em>Grok framework</em></a> allows you to register a viewlet easily using Python directives.</p>
+<p>It is recommended that you use <a class="reference internal" href="../tutorials/paste.html"><em>Dexterity ZopeSkel add-on product code skeleton</em></a>
+where you add this code.</p>
+<p>Create <em>yourcomponent.app/yourcomponent/app/browser/viewlets.py</em>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Viewlets related to application logic.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c"># Zope imports</span>
+<span class="kn">from</span> <span class="nn">Acquisition</span> <span class="kn">import</span> <span class="n">aq_inner</span>
+<span class="kn">from</span> <span class="nn">zope.interface</span> <span class="kn">import</span> <span class="n">Interface</span>
+<span class="kn">from</span> <span class="nn">five</span> <span class="kn">import</span> <span class="n">grok</span>
+<span class="kn">from</span> <span class="nn">zope.component</span> <span class="kn">import</span> <span class="n">getMultiAdapter</span>
+
+<span class="c"># Plone imports</span>
+<span class="kn">from</span> <span class="nn">plone.app.layout.viewlets.interfaces</span> <span class="kn">import</span> <span class="n">IHtmlHead</span>
+
+<span class="kn">from</span> <span class="nn">yourcompany.app.behavior.lsmintegration</span> <span class="kn">import</span> <span class="n">ISomeDexterityBehavior</span>
+
+<span class="c"># The viewlets in this file are rendered on every content item type</span>
+<span class="n">grok</span><span class="o">.</span><span class="n">context</span><span class="p">(</span><span class="n">Interface</span><span class="p">)</span>
+
+<span class="c"># Use templates directory to search for templates.</span>
+<span class="n">grok</span><span class="o">.</span><span class="n">templatedir</span><span class="p">(</span><span class="s">&#39;templates&#39;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">JavascriptSnippet</span><span class="p">(</span><span class="n">grok</span><span class="o">.</span><span class="n">Viewlet</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A viewlet which will include some custom code in &lt;head&gt; if the condition is met &quot;&quot;&quot;</span>
+
+    <span class="n">grok</span><span class="o">.</span><span class="n">viewletmanager</span><span class="p">(</span><span class="n">IHtmlHead</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">available</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Check if we are in a specific content type.</span>
+
+<span class="sd">        Check that the Dexerity content type has a certain</span>
+<span class="sd">        behavior set on it through Dexterity settings panel.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">avail</span> <span class="o">=</span> <span class="n">ISomeDexterityBehavior</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+
+        <span class="k">return</span> <span class="bp">True</span>
+</pre></div>
+</div>
+<p>Then create folder <tt class="docutils literal"><span class="pre">yourcomponent.app/yourcomponent/app/browser/templates</span></tt> where you add the related <tt class="docutils literal"><span class="pre">javascripthead.pt</span></tt>:</p>
+<div class="highlight-html"><pre>&lt;tal:extra-head omit-tag="" condition="viewlet/available"&gt;
+        &lt;meta name="something" content="your custom meta"&gt;
+&lt;/tal:extra-head&gt;</pre>
+</div>
+<p>More info</p>
+<ul class="simple">
+<li><a class="reference external" href="http://vincentfretin.ecreall.com/articles/using-five.grok-to-add-viewlets">http://vincentfretin.ecreall.com/articles/using-five.grok-to-add-viewlets</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="viewlet-behavior">
+<h2><a class="toc-backref" href="#id6">Viewlet behavior</a><a class="headerlink" href="#viewlet-behavior" title="Permalink to this headline">¶</a></h2>
+<p>Viewlets have two important methods</p>
+<ol class="arabic simple">
+<li>update() - set up all variables</li>
+<li>render() - generate the resulting HTML code by evaluating the template with context variables set up in update()</li>
+</ol>
+<p>These methods should honour <a class="reference external" href="http://svn.zope.org/zope.contentprovider/trunk/src/zope/contentprovider/interfaces.py?rev=98212&amp;view=auto">zope.contentprovider.interfaces.IContentProvider call contract</a>.</p>
+<p>See</p>
+<ul class="simple">
+<li><a class="reference external" href="http://svn.zope.org/zope.contentprovider/trunk/src/zope/contentprovider/interfaces.py?rev=98212&amp;view=auto">http://svn.zope.org/zope.contentprovider/trunk/src/zope/contentprovider/interfaces.py?rev=98212&amp;view=auto</a></li>
+<li><a class="reference external" href="http://svn.plone.org/svn/plone/plone.app.layout/trunk/plone/app/layout/viewlets/common.py">http://svn.plone.org/svn/plone/plone.app.layout/trunk/plone/app/layout/viewlets/common.py</a></li>
+</ul>
+<div class="section" id="creating-a-viewlet-using-python-code-and-zcml">
+<h3><a class="toc-backref" href="#id7">Creating a viewlet using Python code and ZCML</a><a class="headerlink" href="#creating-a-viewlet-using-python-code-and-zcml" title="Permalink to this headline">¶</a></h3>
+<p>Here is an example code which extends an existing Plone base viewlet (found from plone.app.layout.viewlets.base package)
+and then puts this viewlet to a one of viewlet managers using <a class="reference internal" href="../components/zcml.html"><em>ZCML</em></a>.</p>
+<p>Example Python code for viewlets.py:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Facebook like viewlet for Plone.</span>
+
+<span class="sd">    http://mfabrik.com</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">urllib</span>
+
+<span class="kn">from</span> <span class="nn">plone.app.layout.viewlets</span> <span class="kn">import</span> <span class="n">common</span> <span class="k">as</span> <span class="n">base</span>
+
+<span class="k">class</span> <span class="nc">LikeViewlet</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">ViewletBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Add a Like button</span>
+
+<span class="sd">    http://developers.facebook.com/docs/reference/plugins/like</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">contructParameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Create HTTP GET query parameters send to Facebook used to render the button.</span>
+
+<span class="sd">        href=http%253A%252F%252Fexample.com%252Fpage%252Fto%252Flike&amp;amp;layout=standard&amp;amp;show_faces=true&amp;amp;width=450&amp;amp;action=like&amp;amp;font&amp;amp;colorscheme=light&amp;amp;height=80</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+
+        <span class="n">context</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">aq_inner</span>
+        <span class="n">href</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">absolute_url</span><span class="p">()</span>
+
+        <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+                  <span class="s">&quot;href&quot;</span> <span class="p">:</span> <span class="n">href</span><span class="p">,</span>
+                  <span class="s">&quot;layout&quot;</span> <span class="p">:</span> <span class="s">&quot;standard&quot;</span><span class="p">,</span>
+                  <span class="s">&quot;show_faces&quot;</span> <span class="p">:</span> <span class="s">&quot;true&quot;</span><span class="p">,</span>
+                  <span class="s">&quot;width&quot;</span> <span class="p">:</span> <span class="s">&quot;450&quot;</span><span class="p">,</span>
+                  <span class="s">&quot;height&quot;</span> <span class="p">:</span> <span class="s">&quot;40&quot;</span><span class="p">,</span>
+                  <span class="s">&quot;action&quot;</span> <span class="p">:</span> <span class="s">&quot;like&quot;</span><span class="p">,</span>
+                  <span class="s">&quot;colorscheme&quot;</span> <span class="p">:</span> <span class="s">&quot;light&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">params</span>
+
+    <span class="k">def</span> <span class="nf">getIFrameSource</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @return: &lt;iframe src=&quot;&quot;&gt; string</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">contructParameters</span><span class="p">()</span>
+        <span class="k">return</span> <span class="s">&quot;http://www.facebook.com/plugins/like.php&quot;</span> <span class="o">+</span> <span class="s">&quot;?&quot;</span> <span class="o">+</span> <span class="n">urllib</span><span class="o">.</span><span class="n">urlencode</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">getStyle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Construct CSS style for Like-button IFRAME.</span>
+
+<span class="sd">        Use width and height from contstructParameters()</span>
+
+<span class="sd">        style=&quot;border:none; overflow:hidden; width:450px; height:80px;&quot;</span>
+
+<span class="sd">        @return: style=&quot;&quot; for &lt;iframe&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">contructParameters</span><span class="p">()</span>
+        <span class="k">return</span> <span class="s">&quot;margin-left: 10px; border:none; overflow:hidden; width:</span><span class="si">%s</span><span class="s">px; height:</span><span class="si">%s</span><span class="s">px;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s">&quot;width&quot;</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s">&quot;height&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Then a sample page template (like.pt). You can use TAL template variable <em>view</em> to refer to your viewlet class instance:</p>
+<div class="highlight-python"><pre>&lt;iframe scrolling="no"
+        frameborder="0"
+        allowTransparency="true"
+        tal:attributes="src view/getIFrameSource; style view/getStyle"
+        &gt;
+&lt;/iframe&gt;</pre>
+</div>
+</div>
+<div class="section" id="registering-a-viewlet-using-zcml">
+<h3><a class="toc-backref" href="#id8">Registering a viewlet using ZCML</a><a class="headerlink" href="#registering-a-viewlet-using-zcml" title="Permalink to this headline">¶</a></h3>
+<p>Example configuration ZCML snippets below. You usually &lt;viewlet&gt; to <em>browser/configure.zcml</em> folder.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;configure</span>
+    <span class="na">xmlns=</span><span class="s">&quot;http://namespaces.zope.org/zope&quot;</span>
+    <span class="na">xmlns:five=</span><span class="s">&quot;http://namespaces.zope.org/five&quot;</span>
+    <span class="na">xmlns:browser=</span><span class="s">&quot;http://namespaces.zope.org/browser&quot;</span>
+    <span class="na">xmlns:genericsetup=</span><span class="s">&quot;http://namespaces.zope.org/genericsetup&quot;</span>
+    <span class="na">i18n_domain=</span><span class="s">&quot;mfabrik.like&quot;</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;browser:viewlet</span>
+      <span class="na">name=</span><span class="s">&quot;mfabrik.like&quot;</span>
+      <span class="na">manager=</span><span class="s">&quot;Plone.App.Layout.Viewlets.Interfaces.IBelowContent&quot;</span>
+      <span class="na">template=</span><span class="s">&quot;like.pt&quot;</span>
+      <span class="na">layer=</span><span class="s">&quot;mfabrik.like.interfaces.IAddOnInstalled&quot;</span>
+      <span class="na">permission=</span><span class="s">&quot;zope2.View&quot;</span>
+      <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;/configure&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="conditionally-rendering-viewlets">
+<h2><a class="toc-backref" href="#id9">Conditionally rendering viewlets</a><a class="headerlink" href="#conditionally-rendering-viewlets" title="Permalink to this headline">¶</a></h2>
+<p>There are two primary methods to render viewlets only on some pages</p>
+<ul class="simple">
+<li>Register viewlet against some marker interface or content type class -
+the viewlet is rendered on this content type only. You can
+use <a class="reference internal" href="../components/interfaces.html"><em>dynamic marker interfaces</em></a>
+to toggle interface on some individual pages through ZMI</li>
+<li>Hard-code a condition to your viewlet in Python code.</li>
+</ul>
+<p>Below is an example of overriding a render() method to conditionally render your viewlet using Grok viewlets.</p>
+<p>Viewlet code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">zope.interface</span> <span class="kn">import</span> <span class="n">Interface</span>
+<span class="kn">from</span> <span class="nn">five</span> <span class="kn">import</span> <span class="n">grok</span>
+<span class="kn">from</span> <span class="nn">Products.CMFCore.interfaces</span> <span class="kn">import</span> <span class="n">IContentish</span>
+<span class="kn">from</span> <span class="nn">plone.app.layout.viewlets.interfaces</span> <span class="kn">import</span> <span class="n">IAboveContentTitle</span>
+
+<span class="k">class</span> <span class="nc">TopTabNavigation</span><span class="p">(</span><span class="n">grok</span><span class="o">.</span><span class="n">Viewlet</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">grok</span><span class="o">.</span><span class="n">context</span><span class="p">(</span><span class="n">Interface</span><span class="p">)</span>
+    <span class="n">grok</span><span class="o">.</span><span class="n">viewletmanager</span><span class="p">(</span><span class="n">IAboveContentTitle</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">getTabSources</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; List content items in the folder of this item.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">aq_parent</span>
+        <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">parent</span><span class="o">.</span><span class="n">objectValues</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">IContentish</span><span class="o">.</span><span class="n">providedBy</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+                <span class="k">yield</span> <span class="n">obj</span>
+
+
+    <span class="k">def</span> <span class="nf">getTabData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate dict of data needed to render navigation tabs.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tabs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getTabSources</span><span class="p">()</span>
+
+        <span class="n">published</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;PUBLISHED&quot;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">published</span><span class="p">,</span> <span class="s">&quot;context&quot;</span><span class="p">):</span>
+            <span class="n">published</span> <span class="o">=</span> <span class="n">published</span><span class="o">.</span><span class="n">context</span>
+
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tabs</span><span class="p">:</span>
+
+            <span class="n">active</span> <span class="o">=</span> <span class="p">(</span><span class="n">t</span> <span class="o">==</span> <span class="n">published</span><span class="p">)</span>
+
+            <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s">&quot;url&quot;</span> <span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">absolute_url</span><span class="p">(),</span>
+                    <span class="s">&quot;class&quot;</span> <span class="p">:</span> <span class="s">&quot;navbar_selected&quot;</span> <span class="k">if</span> <span class="n">active</span> <span class="k">else</span> <span class="s">&quot;navbar_normal&quot;</span><span class="p">,</span>
+                    <span class="s">&quot;title&quot;</span> <span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">Title</span><span class="p">(),</span>
+                    <span class="s">&quot;id&quot;</span> <span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">getId</span><span class="p">()</span>
+            <span class="p">}</span>
+            <span class="k">yield</span> <span class="n">data</span>
+
+    <span class="k">def</span> <span class="nf">hasTabs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defined in dynamicpage.py</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="s">&quot;showTabs&quot;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Page template code</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;navmenubar navmenubar-viewlet&quot;</span> <span class="na">tal:condition=</span><span class="s">&quot;viewlet/hasTabs&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;ul</span> <span class="na">id=</span><span class="s">&quot;navigationBar&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;tal:tab</span> <span class="na">repeat=</span><span class="s">&quot;tab viewlet/getTabData&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;li</span> <span class="na">tal:attributes=</span><span class="s">&quot;class tab/class; id tab/id&quot;</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;a</span> <span class="na">tal:attributes=</span><span class="s">&quot;href tab/url&quot;</span> <span class="na">tal:content=</span><span class="s">&quot;tab/title&quot;</span> <span class="nt">/&gt;</span>
+
+            <span class="nt">&lt;/tal:tab&gt;</span>
+
+            <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;visualClear&quot;</span><span class="nt">&gt;</span><span class="c">&lt;!-- --&gt;</span><span class="nt">&lt;/li&gt;</span>
+    <span class="nt">&lt;/ul&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+</div>
+<p>Below is an example of overriding a render() method to conditionally render your viewlet using Zope 3 viewlets:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">Acquisition</span>
+<span class="kn">from</span> <span class="nn">zope.component</span> <span class="kn">import</span> <span class="n">getUtility</span>
+
+<span class="kn">from</span> <span class="nn">plone.app.layout.viewlets</span> <span class="kn">import</span> <span class="n">common</span> <span class="k">as</span> <span class="n">base</span>
+<span class="kn">from</span> <span class="nn">plone.registry.interfaces</span> <span class="kn">import</span> <span class="n">IRegistry</span>
+
+
+<span class="k">class</span> <span class="nc">LikeViewlet</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">ViewletBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Add a Like button</span>
+
+<span class="sd">    http://developers.facebook.com/docs/reference/plugins/like</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">isEnabledOnContent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @return: True if the current content type supports Like-button</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">registry</span> <span class="o">=</span> <span class="n">getUtility</span><span class="p">(</span><span class="n">IRegistry</span><span class="p">)</span>
+        <span class="n">content_types</span> <span class="o">=</span> <span class="n">registry</span><span class="p">[</span><span class="s">&#39;mfabrik.like.content_types&#39;</span><span class="p">]</span>
+
+        <span class="c"># Don&#39;t assume that all content items would have portal_type attribute</span>
+        <span class="c"># available (might be changed in the future / very specialized content)</span>
+        <span class="n">current_content_type</span> <span class="o">=</span>  <span class="n">portal_type</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">Acquisition</span><span class="o">.</span><span class="n">aq_base</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">),</span> <span class="s">&#39;portal_type&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+
+        <span class="c"># Note that plone.registry keeps values as unicode strings</span>
+        <span class="c"># make sure that we have one also</span>
+        <span class="n">current_content_type</span> <span class="o">=</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">current_content_type</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">current_content_type</span> <span class="ow">in</span> <span class="n">content_types</span>
+
+
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Render viewlet only if it is enabled.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c"># Perform some condition check</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isEnabledOnContent</span><span class="p">():</span>
+            <span class="c"># Call parent method which performs the actual rendering</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">LikeViewlet</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c"># No output when the viewlet is disabled</span>
+            <span class="k">return</span> <span class="s">&quot;&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="rendering-viewlet-by-name">
+<h2><a class="toc-backref" href="#id10">Rendering viewlet by name</a><a class="headerlink" href="#rendering-viewlet-by-name" title="Permalink to this headline">¶</a></h2>
+<p>Below is a complex example how to expose viewlets without going through a viewlet manager.</p>
+<p>See <a class="reference external" href="http://svn.plone.org/svn/collective/collective.fastview/trunk/">collective.fastview</a> for updates
+and more information.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">Acquisition</span> <span class="kn">import</span> <span class="n">aq_inner</span>
+<span class="kn">import</span> <span class="nn">zope.interface</span>
+
+<span class="kn">from</span> <span class="nn">plone.app.customerize</span> <span class="kn">import</span> <span class="n">registration</span>
+
+<span class="kn">from</span> <span class="nn">Products.Five.browser</span> <span class="kn">import</span> <span class="n">BrowserView</span>
+
+<span class="kn">from</span> <span class="nn">zope.traversing.interfaces</span> <span class="kn">import</span> <span class="n">ITraverser</span><span class="p">,</span> <span class="n">ITraversable</span>
+<span class="kn">from</span> <span class="nn">zope.publisher.interfaces</span> <span class="kn">import</span> <span class="n">IPublishTraverse</span>
+<span class="kn">from</span> <span class="nn">zope.publisher.interfaces.browser</span> <span class="kn">import</span> <span class="n">IBrowserRequest</span>
+<span class="kn">from</span> <span class="nn">zope.viewlet.interfaces</span> <span class="kn">import</span> <span class="n">IViewlet</span>
+<span class="kn">from</span> <span class="nn">zExceptions</span> <span class="kn">import</span> <span class="n">NotFound</span>
+
+<span class="k">class</span> <span class="nc">Viewlets</span><span class="p">(</span><span class="n">BrowserView</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Expose arbitary viewlets to traversing by name.</span>
+
+<span class="sd">    Exposes viewlets to templates by names.</span>
+
+<span class="sd">    Example how to render plone.logo viewlet in arbitary template code point::</span>
+
+<span class="sd">        &lt;div tal:content=&quot;context/@@viewlets/plone.logo&quot; /&gt;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">zope</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">implements</span><span class="p">(</span><span class="n">ITraversable</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">getViewletByName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Viewlets allow through-the-web customizations.</span>
+
+<span class="sd">        Through-the-web customization magic is managed by five.customerize.</span>
+<span class="sd">        We need to think of this when looking up viewlets.</span>
+
+<span class="sd">        @return: Viewlet registration object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">views</span> <span class="o">=</span> <span class="n">registration</span><span class="o">.</span><span class="n">getViews</span><span class="p">(</span><span class="n">IBrowserRequest</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">views</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">provided</span> <span class="o">==</span> <span class="n">IViewlet</span><span class="p">:</span>
+                <span class="c"># Note that we might have conflicting BrowserView with the same name,</span>
+                <span class="c"># thus we need to check for provided</span>
+                <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">name</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">v</span>
+
+        <span class="k">return</span> <span class="bp">None</span>
+
+
+    <span class="k">def</span> <span class="nf">setupViewletByName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Constructs a viewlet instance by its name.</span>
+
+<span class="sd">        Viewlet update() and render() method are not called.</span>
+
+<span class="sd">        @return: Viewlet instance of None if viewlet with name does not exist</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="n">aq_inner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
+        <span class="n">request</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span>
+
+        <span class="c"># Perform viewlet regisration look-up</span>
+        <span class="c"># from adapters registry</span>
+        <span class="n">reg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getViewletByName</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">reg</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+        <span class="c"># factory method is responsible for creating the viewlet instance</span>
+        <span class="n">factory</span> <span class="o">=</span> <span class="n">reg</span><span class="o">.</span><span class="n">factory</span>
+
+        <span class="c"># Create viewlet and put it to the acquisition chain</span>
+        <span class="c"># Viewlet need initialization parameters: context, request, view</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">viewlet</span> <span class="o">=</span> <span class="n">factory</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span><span class="o">.</span><span class="n">__of__</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+            <span class="c"># Bad constructor call parameters</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&quot;Unable to initialize viewlet </span><span class="si">%s</span><span class="s">. Factory method </span><span class="si">%s</span><span class="s"> call failed.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">factory</span><span class="p">)))</span>
+
+        <span class="k">return</span> <span class="n">viewlet</span>
+
+    <span class="k">def</span> <span class="nf">traverse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">further_path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Allow travering intoviewlets by viewlet name.</span>
+
+<span class="sd">        @return: Viewlet HTML output</span>
+
+<span class="sd">        @raise: RuntimeError if viewlet is not found</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">viewlet</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">setupViewletByName</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">viewlet</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">NotFound</span><span class="p">(</span><span class="s">&quot;Viewlet does not exist by name </span><span class="si">%s</span><span class="s"> for theme layer </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+
+        <span class="n">viewlet</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">viewlet</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="rendering-viewlets-with-accurate-layout">
+<h2><a class="toc-backref" href="#id11">Rendering viewlets with accurate layout</a><a class="headerlink" href="#rendering-viewlets-with-accurate-layout" title="Permalink to this headline">¶</a></h2>
+<p>Default viewlet managers render viewlets as HTML code string concatenation, in the order of appearance.
+This is unsuitable to build complex layouts.</p>
+<p>Below is an example which defines master viewlet <em>HeaderViewlet</em> which will place other viewlets
+into the manually tuned HTMLable.</p>
+<p>header.py:</p>
+<div class="highlight-python"><pre>from Acquisition import aq_inner
+
+# Use template files with acquisition support
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+
+# Import default Plone viewlet classes
+from plone.app.layout.viewlets import common as base
+
+# Import our customized viewlet classes
+import plonetheme.something.browser.viewlets.common as something
+
+def render_viewlet(factory, context, request):
+    """ Helper method to render a viewlet """
+
+    context = aq_inner(context)
+    viewlet = factory(context, request, None, None).__of__(context)
+    viewlet.update()
+    return viewlet.render()
+
+
+class HeaderViewlet(base.ViewletBase):
+    """ Render header with special     le layout.
+
+    Though we render viewlets internally we not inherit from the viewlet manager,
+    since we do not offer the option for the site manager or integrator
+    shuffle viewlets - they are fixed to our templates.
+    """
+
+    index = ViewPageTemplateFile('header_items.pt')
+
+    def update(self):
+
+        base.ViewletBase.update(self)
+
+        # Dictionary containing all viewlets which are rendered inside this viewlet.
+        # This is populated during render()
+        self.subviewlets = {}
+
+    def renderViewlet(self, viewlet_class):
+        """ Render one viewlet
+
+        @param viewlet_class: Class which manages the viewlet
+        @return: Resulting HTML as string
+        """
+        return render_viewlet(viewlet_class, self.context, self.request)
+
+
+    def render(self):
+
+        self.subviewlets["logo"] = self.renderViewlet(something.SomethingLogoViewlet) # Customized viewlet
+        self.subviewlets["second_level_navigation"] = self.renderViewlet(something.SecondLevelSectionsViewlet)
+        self.subviewlets["sections"] = self.renderViewlet(something.SomethingGlobalSectionsViewlet)
+        self.subviewlets["search"] = self.renderViewlet(base.SearchBoxViewlet) # Default Plone viewlet
+        self.subviewlets["selector"] = self.renderViewlet(something.SomethingTransla    leLanguageSelector)
+        self.subviewlets["site_actions"] = self.renderViewlet(something.SiteActionsViewlet)
+
+        # Call template to perform rendering
+        return self.index()</pre>
+</div>
+<p>header_items.pt</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;table</span> <span class="na">class=</span><span class="s">&quot;something-header&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;tbody&gt;</span>
+        <span class="nt">&lt;tr</span> <span class="na">class=</span><span class="s">&quot;upper&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">&quot;left&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;div</span> <span class="na">tal:replace=</span><span class="s">&quot;structure view/subviewlets/logo&quot;</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;/td&gt;</span>
+
+            <span class="nt">&lt;td&gt;</span>
+                <span class="nt">&lt;    le</span> <span class="na">class=</span><span class="s">&quot;right&quot;</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;tbody&gt;</span>
+                        <span class="nt">&lt;tr&gt;</span>
+                            <span class="nt">&lt;td&gt;</span>
+                                <span class="nt">&lt;div</span> <span class="na">tal:replace=</span><span class="s">&quot;structure view/subviewlets/search&quot;</span> <span class="nt">/&gt;</span>
+                            <span class="nt">&lt;/td&gt;</span>
+                        <span class="nt">&lt;/tr&gt;</span>
+
+                        <span class="nt">&lt;tr&gt;</span>
+
+                            <span class="nt">&lt;td&gt;</span>
+                                <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;http://www.something.fi&quot;</span><span class="nt">&gt;</span>
+                                    <span class="nt">&lt;img</span> <span class="na">tal:attributes=</span><span class="s">&quot;src string:${view/site_url}/++resource++plonetheme.something/something_logo.gif&quot;</span> <span class="nt">/&gt;</span>
+                                <span class="nt">&lt;/a&gt;</span>
+                            <span class="nt">&lt;/td&gt;</span>
+
+                            <span class="nt">&lt;td&gt;</span>
+                                <span class="nt">&lt;div</span> <span class="na">tal:replace=</span><span class="s">&quot;structure view/subviewlets/selector&quot;</span> <span class="nt">/&gt;</span>
+                            <span class="nt">&lt;/td&gt;</span>
+                        <span class="nt">&lt;/tr&gt;</span>
+
+                    <span class="nt">&lt;/tbody&gt;</span>
+                <span class="nt">&lt;/    le&gt;</span>
+            <span class="nt">&lt;/td&gt;</span>
+        <span class="nt">&lt;/tr&gt;</span>
+
+        <span class="nt">&lt;tr</span> <span class="na">class=</span><span class="s">&quot;lower&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">&quot;left&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;div</span> <span class="na">tal:replace=</span><span class="s">&quot;structure view/subviewlets/sections&quot;</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;/td&gt;</span>
+            <span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">&quot;right&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;div</span> <span class="na">tal:replace=</span><span class="s">&quot;structure view/subviewlets/site_actions&quot;</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;/td&gt;</span>
+        <span class="nt">&lt;/tr&gt;</span>
+    <span class="nt">&lt;/tbody&gt;</span>
+<span class="nt">&lt;/    le&gt;</span>
+</pre></div>
+</div>
+<p>configure.zcml</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;configure</span> <span class="na">xmlns=</span><span class="s">&quot;http://namespaces.zope.org/zope&quot;</span>
+           <span class="na">xmlns:browser=</span><span class="s">&quot;http://namespaces.zope.org/browser&quot;</span>
+           <span class="na">xmlns:plone=</span><span class="s">&quot;http://namespaces.plone.org/plone&quot;</span>
+           <span class="na">xmlns:zcml=</span><span class="s">&quot;http://namespaces.zope.org/zcml&quot;</span>
+           <span class="nt">&gt;</span>
+
+    <span class="c">&lt;!--</span>
+
+<span class="c">        Public localizable site header</span>
+
+<span class="c">        See viewlets.xml for order/hidden</span>
+<span class="c">    --&gt;</span>
+
+
+    <span class="c">&lt;!-- Header viewlet which replaces the standard plone.header--&gt;</span>
+    <span class="nt">&lt;browser:viewlet</span>
+        <span class="na">name=</span><span class="s">&quot;plone.header&quot;</span>
+        <span class="na">manager=</span><span class="s">&quot;plone.app.layout.viewlets.interfaces.IPortalTop&quot;</span>
+        <span class="na">class=</span><span class="s">&quot;.header.HeaderViewlet&quot;</span>
+        <span class="na">permission=</span><span class="s">&quot;zope2.View&quot;</span>
+        <span class="na">layer=</span><span class="s">&quot;..interfaces.IThemeSpecific&quot;</span>
+        <span class="nt">/&gt;</span>
+
+
+     <span class="c">&lt;!-- Site actions--&gt;</span>
+     <span class="nt">&lt;browser:viewlet</span>
+         <span class="na">name=</span><span class="s">&quot;plonetheme.something.site_actions&quot;</span>
+         <span class="na">class=</span><span class="s">&quot;.common.SiteActionsViewlet&quot;</span>
+         <span class="na">permission=</span><span class="s">&quot;zope2.View&quot;</span>
+         <span class="na">template=</span><span class="s">&quot;site_actions.pt&quot;</span>
+         <span class="na">layer=</span><span class="s">&quot;..interfaces.IThemeSpecific&quot;</span>
+         <span class="na">allowed_attributes=</span><span class="s">&quot;site_actions&quot;</span>
+         <span class="na">manager=</span><span class="s">&quot;..interfaces.IHeader&quot;</span>
+         <span class="nt">/&gt;</span>
+
+    <span class="c">&lt;!-- The logo --&gt;</span>
+    <span class="nt">&lt;browser:viewlet</span>
+        <span class="na">name=</span><span class="s">&quot;plonetheme.something.logo&quot;</span>
+        <span class="na">class=</span><span class="s">&quot;.common.SomethingLogoViewlet&quot;</span>
+        <span class="na">permission=</span><span class="s">&quot;zope2.View&quot;</span>
+        <span class="na">layer=</span><span class="s">&quot;..interfaces.IThemeSpecific&quot;</span>
+        <span class="na">template=</span><span class="s">&quot;logo.pt&quot;</span>
+        <span class="na">manager=</span><span class="s">&quot;..interfaces.IHeader&quot;</span>
+        <span class="nt">/&gt;</span>
+
+    <span class="c">&lt;!-- Searchbox --&gt;</span>
+     <span class="nt">&lt;browser:viewlet</span>
+         <span class="na">name=</span><span class="s">&quot;plone.searchbox&quot;</span>
+         <span class="na">for=</span><span class="s">&quot;*&quot;</span>
+         <span class="na">class=</span><span class="s">&quot;plone.app.layout.viewlets.common.SearchBoxViewlet&quot;</span>
+         <span class="na">permission=</span><span class="s">&quot;zope2.View&quot;</span>
+         <span class="na">template=</span><span class="s">&quot;searchbox.pt&quot;</span>
+         <span class="na">layer=</span><span class="s">&quot;..interfaces.IThemeSpecific&quot;</span>
+         <span class="na">manager=</span><span class="s">&quot;..interfaces.IHeader&quot;</span>
+         <span class="nt">/&gt;</span>
+
+     <span class="c">&lt;!-- First level navigation --&gt;</span>
+     <span class="nt">&lt;browser:viewlet</span>
+         <span class="na">name=</span><span class="s">&quot;plonetheme.something.global_sections&quot;</span>
+         <span class="na">for=</span><span class="s">&quot;*&quot;</span>
+         <span class="na">class=</span><span class="s">&quot;.common.SomethingGlobalSectionsViewlet&quot;</span>
+         <span class="na">permission=</span><span class="s">&quot;zope2.View&quot;</span>
+         <span class="na">template=</span><span class="s">&quot;sections.pt&quot;</span>
+         <span class="na">layer=</span><span class="s">&quot;..interfaces.IThemeSpecific&quot;</span>
+         <span class="na">manager=</span><span class="s">&quot;..interfaces.IHeader&quot;</span>
+         <span class="nt">/&gt;</span>
+
+    <span class="c">&lt;!-- Second level navigation --&gt;</span>
+     <span class="nt">&lt;browser:viewlet</span>
+         <span class="na">name=</span><span class="s">&quot;plonetheme.something.second_level_sections&quot;</span>
+         <span class="na">class=</span><span class="s">&quot;.common.SecondLevelSectionsViewlet&quot;</span>
+         <span class="na">permission=</span><span class="s">&quot;zope2.View&quot;</span>
+         <span class="na">template=</span><span class="s">&quot;second_level_sections.pt&quot;</span>
+         <span class="na">layer=</span><span class="s">&quot;..interfaces.IThemeSpecific&quot;</span>
+         <span class="na">manager=</span><span class="s">&quot;..interfaces.IHeader&quot;</span>
+         <span class="nt">/&gt;</span>
+
+
+    <span class="c">&lt;!-- Language selector--&gt;</span>
+        <span class="nt">&lt;browser:viewlet</span>
+          <span class="na">name=</span><span class="s">&quot;something.languageselector&quot;</span>
+          <span class="na">class=</span><span class="s">&quot;.common.SomethingTransla    leLanguageSelector&quot;</span>
+          <span class="na">permission=</span><span class="s">&quot;zope2.View&quot;</span>
+          <span class="na">layer=</span><span class="s">&quot;..interfaces.IThemeSpecific&quot;</span>
+          <span class="na">manager=</span><span class="s">&quot;..interfaces.IHeader&quot;</span>
+         <span class="nt">/&gt;</span>
+<span class="nt">&lt;/configure&gt;</span>
+</pre></div>
+</div>
+<p>portal_header.pt</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;portal-header&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">tal:replace=</span><span class="s">&quot;structure provider:something.header&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="viewlets-for-one-page-only">
+<h2><a class="toc-backref" href="#id12">Viewlets for one page only</a><a class="headerlink" href="#viewlets-for-one-page-only" title="Permalink to this headline">¶</a></h2>
+<p>Viewlets can be registered to one special page only
+using a marker interface. This allow loading
+a page specific CSS files.</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.starzel.de/blog/how-to-get-a-different-look-for-some-pages-of-a-plone-site">How to get a different look for some pages of a plone-site</a></li>
+</ul>
+</div>
+<div class="section" id="head-viewlets">
+<h2><a class="toc-backref" href="#id13">&lt;head&gt; viewlets</a><a class="headerlink" href="#head-viewlets" title="Permalink to this headline">¶</a></h2>
+<p>You can register custom Javascript or CSS files to HTML &lt;head&gt; section using viewlets.</p>
+<p>Below is an head.pt which will be injected in &lt;head&gt;. This examples shows how to dynamically generate
+<tt class="docutils literal"><span class="pre">&lt;script&gt;</span></tt> elements. Example is taken from <a class="reference external" href="https://svn.plone.org/svn/collective/mfabrik.like/trunk">mfabrik.like add-on</a>.</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">tal:attributes=</span><span class="s">&quot;src view/getConnectScriptSource&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">tal:replace=</span><span class="s">&quot;structure view/getInitScriptTag&quot;</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<p>Then you register it against viewlewt manager <tt class="docutils literal"><span class="pre">plone.app.layout.viewlets.interfaces.IHtmlHead</span></tt>  in <tt class="docutils literal"><span class="pre">configure.zcml</span></tt></p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;browser:viewlet</span>
+   <span class="na">name=</span><span class="s">&quot;mfabrik.like.facebook-connect-head&quot;</span>
+   <span class="na">class=</span><span class="s">&quot;.viewlets.FacebookConnectJavascriptViewlet&quot;</span>
+   <span class="na">manager=</span><span class="s">&quot;plone.app.layout.viewlets.interfaces.IHtmlHead&quot;</span>
+   <span class="na">template=</span><span class="s">&quot;facebook-connect-head.pt&quot;</span>
+   <span class="na">layer=</span><span class="s">&quot;mfabrik.like.interfaces.IAddOnInstalled&quot;</span>
+   <span class="na">permission=</span><span class="s">&quot;zope2.View&quot;</span>
+   <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<p>viewlet.py code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">FacebookConnectJavascriptViewlet</span><span class="p">(</span><span class="n">LikeButtonOnConnectFacebookBaseViewlet</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; This will render Facebook Javascript load in &lt;head&gt;.</span>
+
+<span class="sd">    &lt;head&gt; section is retrofitted only if the viewlet is enabled.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">getConnectScriptSource</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="s">&quot;http://static.ak.connect.facebook.com/connect.php/&quot;</span>
+        <span class="k">return</span> <span class="n">base</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">getLocale</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">getInitScriptTag</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Get &lt;script&gt; which boostraps Facebook stuff.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s">&#39;&lt;script type=&quot;text/javascript&quot;&gt;FB.init(&quot;</span><span class="si">%s</span><span class="s">&quot;);&lt;/script&gt;&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">api_key</span>
+
+    <span class="k">def</span> <span class="nf">isEnabled</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @return: Should this viewlet be rendered on this page.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># Some logic based self.context here whether Javascript should be included on this page or not</span>
+        <span class="k">return</span> <span class="bp">True</span>
+
+
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Render viewlet only if it is enabled.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c"># Perform some condition check</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isEnabled</span><span class="p">():</span>
+            <span class="c"># Call parent method which performs the actual rendering</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">LikeButtonOnConnectFacebookBaseViewlet</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c"># No output when the viewlet is disabled</span>
+            <span class="k">return</span> <span class="s">&quot;&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="finding-viewlets-programmatically">
+<h2><a class="toc-backref" href="#id14">Finding viewlets programmatically</a><a class="headerlink" href="#finding-viewlets-programmatically" title="Permalink to this headline">¶</a></h2>
+<p>Occasionaly, you may need to get hold of your viewlets in python code, perhaps in tests.  Since the availability of a viewlet is ultimately controlled by the viewlet manager to which it has been registered, using that manager is a good way to go</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">zope.component</span> <span class="kn">import</span> <span class="n">queryMultiAdapter</span>
+<span class="kn">from</span> <span class="nn">zope.viewlet.interfaces</span> <span class="kn">import</span> <span class="n">IViewletManager</span>
+
+<span class="kn">from</span> <span class="nn">Products.Five.browser</span> <span class="kn">import</span> <span class="n">BrowserView</span> <span class="k">as</span> <span class="n">View</span>
+
+<span class="kn">from</span> <span class="nn">my.package.tests.base</span> <span class="kn">import</span> <span class="n">MyPackageTestCase</span>
+
+<span class="k">class</span> <span class="nc">TestMyViewlet</span><span class="p">(</span><span class="n">MyPackageTestCase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; test demonstrates that registration variables worked</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">test_viewlet_is_present</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; looking up and updating the manager should list our viewlet</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># we need a context and request</span>
+        <span class="n">request</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">REQUEST</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">portal</span>
+
+        <span class="c"># viewlet managers also require a view object for adaptation</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
+
+        <span class="c"># finally, you need the name of the manager you want to find</span>
+        <span class="n">manager_name</span> <span class="o">=</span> <span class="s">&#39;plone.portalfooter&#39;</span>
+
+        <span class="c"># viewlet managers are found by Multi-Adapter lookup</span>
+        <span class="n">manager</span> <span class="o">=</span> <span class="n">queryMultiAdapter</span><span class="p">((</span><span class="n">context</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">view</span><span class="p">),</span> <span class="n">IViewletManager</span><span class="p">,</span> <span class="n">manager_name</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">failUnless</span><span class="p">(</span><span class="n">manager</span><span class="p">)</span>
+
+        <span class="c"># calling update() on a manager causes it to set up its viewlets</span>
+        <span class="n">manager</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+        <span class="c"># now our viewlet should be in the list of viewlets for the manager</span>
+        <span class="c"># we can verify this by looking for a viewlet with the name we used</span>
+        <span class="c"># to register the viewlet in zcml</span>
+        <span class="n">my_viewlet</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">manager</span><span class="o">.</span><span class="n">viewlets</span> <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;mypackage.myviewlet&#39;</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">failUnlessEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">my_viewlet</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Since it is possible to register a viewlet for a specific content type and for
+a browser layer, you may also need to use these elements in looking up your
+viewlet</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">zope.component</span> <span class="kn">import</span> <span class="n">queryMultiAdapter</span>
+<span class="kn">from</span> <span class="nn">zope.viewlet.interfaces</span> <span class="kn">import</span> <span class="n">IViewletManager</span>
+<span class="kn">from</span> <span class="nn">Products.Five.browser</span> <span class="kn">import</span> <span class="n">BrowserView</span> <span class="k">as</span> <span class="n">View</span>
+<span class="kn">from</span> <span class="nn">my.package.tests.base</span> <span class="kn">import</span> <span class="n">MyPackageTestCase</span>
+
+<span class="c"># this time, we need to add an interface to the request</span>
+<span class="kn">from</span> <span class="nn">zope.interface</span> <span class="kn">import</span> <span class="n">alsoProvides</span>
+
+<span class="c"># we also need our content type and browser layer</span>
+<span class="kn">from</span> <span class="nn">my.package.content.mytype</span> <span class="kn">import</span> <span class="n">MyType</span>
+<span class="kn">from</span> <span class="nn">my.package.interfaces</span> <span class="kn">import</span> <span class="n">IMyBrowserLayer</span>
+
+<span class="k">class</span> <span class="nc">TestMyViewlet</span><span class="p">(</span><span class="n">MyPackageTestCase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; test demonstrates that zcml registration variables worked properly</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">test_viewlet_is_present</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; looking up and updating the manager should list our viewlet</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># our viewlet is registered for a browser layer.  Browser layers</span>
+        <span class="c"># are applied to the request during traversal in the publisher.  We</span>
+        <span class="c"># need to do the same thing manually here</span>
+        <span class="n">request</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">REQUEST</span>
+        <span class="n">alsoProvides</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">IMyBrowserLayer</span><span class="p">)</span>
+
+        <span class="c"># we also have to make our context an instance of our content type</span>
+        <span class="n">content_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">folder</span><span class="o">.</span><span class="n">invokeFactory</span><span class="p">(</span><span class="s">&#39;MyType&#39;</span><span class="p">,</span> <span class="s">&#39;my-id&#39;</span><span class="p">)</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">folder</span><span class="p">[</span><span class="n">content_id</span><span class="p">]</span>
+
+        <span class="c"># and that&#39;s it.  Everything else from here out is identical to the</span>
+        <span class="c"># example above.</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Viewlets</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#finding-viewlets">Finding viewlets</a></li>
+<li><a class="reference internal" href="#creating-a-viewlet">Creating a viewlet</a><ul>
+<li><a class="reference internal" href="#creating-a-viewlet-using-grok">Creating a viewlet using Grok</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#viewlet-behavior">Viewlet behavior</a><ul>
+<li><a class="reference internal" href="#creating-a-viewlet-using-python-code-and-zcml">Creating a viewlet using Python code and ZCML</a></li>
+<li><a class="reference internal" href="#registering-a-viewlet-using-zcml">Registering a viewlet using ZCML</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#conditionally-rendering-viewlets">Conditionally rendering viewlets</a></li>
+<li><a class="reference internal" href="#rendering-viewlet-by-name">Rendering viewlet by name</a></li>
+<li><a class="reference internal" href="#rendering-viewlets-with-accurate-layout">Rendering viewlets with accurate layout</a></li>
+<li><a class="reference internal" href="#viewlets-for-one-page-only">Viewlets for one page only</a></li>
+<li><a class="reference internal" href="#head-viewlets">&lt;head&gt; viewlets</a></li>
+<li><a class="reference internal" href="#finding-viewlets-programmatically">Finding viewlets programmatically</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="browserviews.html"
+                        title="previous chapter">Views</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="layers.html"
+                        title="next chapter">Layers</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/views/viewlets.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="layers.html" title="Layers"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="browserviews.html" title="Views"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Views and viewlets</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

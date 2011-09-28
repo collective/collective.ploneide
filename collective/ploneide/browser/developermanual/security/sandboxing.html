@@ -1,0 +1,356 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Sandboxing &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Security" href="index.html" />
+    <link rel="next" title="Templates, CSS and Javascript" href="../templates_css_and_javascripts/index.html" />
+    <link rel="prev" title="Dynamic roles" href="dynamic_roles.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../templates_css_and_javascripts/index.html" title="Templates, CSS and Javascript"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="dynamic_roles.html" title="Dynamic roles"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Security</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="sandboxing">
+<h1><a class="toc-backref" href="#id1">Sandboxing</a><a class="headerlink" href="#sandboxing" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">Legacy Plone code uses RestrictedPython sandboxing to secure
+each module and class functions. This documentation
+tells how it happens.</p>
+</div>
+<div class="contents topic" id="local">
+<p class="topic-title first">local</p>
+<ul class="simple">
+<li><a class="reference internal" href="#sandboxing" id="id1">Sandboxing</a><ul>
+<li><a class="reference internal" href="#introduction" id="id2">Introduction</a></li>
+<li><a class="reference internal" href="#travesing-special-cases" id="id3">Travesing special cases</a></li>
+<li><a class="reference internal" href="#unit-testing-restrictedpython-code" id="id4">Unit testing RestrictedPython code</a></li>
+<li><a class="reference internal" href="#other-references" id="id5">Other references</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id2">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Plone has two sandboxing modes</p>
+<ul class="simple">
+<li>Unrestricted: Python code is executed normally and the code can access the full
+Zope application server environment. This includes other site instances too.
+This is generally what happens when you write your own add-on and
+add views for it.</li>
+<li>Restricted (RestrictedPython): scripts and evalutions are specially compiled, have limited Python
+language functionality and every function call is checked against the security manager.
+This is what happens when you try to add Python code or customize
+page templates through Zope Management Interface.</li>
+</ul>
+<p>Restricted execution is enabled only for <strong>legacy code</strong>:</p>
+<ul class="simple">
+<li>Old style TAL page templates: everything you put inside page template
+tal:content, tal:condition, etc. These templates are .pt templates
+<strong>without</strong> accomppaning BrowserView</li>
+<li>Script (Python) code is executed (plone_skins layer Python scripts and old style form management)</li>
+</ul>
+<p>Restricted execution has performance penalty.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">RestrictedPython was bad idea and mostly causes headache. Do not use it.</p>
+</div>
+<p>For further information, read</p>
+<ul class="simple">
+<li><a class="reference external" href="http://plone.293351.n2.nabble.com/Update-was-Plone-4-Chameleon-compatibility-tp5612838p5614466.html">http://plone.293351.n2.nabble.com/Update-was-Plone-4-Chameleon-compatibility-tp5612838p5614466.html</a></li>
+</ul>
+</div>
+<div class="section" id="travesing-special-cases">
+<h2><a class="toc-backref" href="#id3">Travesing special cases</a><a class="headerlink" href="#travesing-special-cases" title="Permalink to this headline">¶</a></h2>
+<p>Old style Zope object traversing mechanism does not expose</p>
+<ul class="simple">
+<li>Functions without docstring (the &quot;&quot;&quot; comment at the beginning of the function)</li>
+<li>Functions whose name begins with underscore (&quot;_&quot;-character)</li>
+</ul>
+</div>
+<div class="section" id="unit-testing-restrictedpython-code">
+<h2><a class="toc-backref" href="#id4">Unit testing RestrictedPython code</a><a class="headerlink" href="#unit-testing-restrictedpython-code" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="http://pypi.python.org/pypi/RestrictedPython&gt;">RestrictedPython</a> code is problematic, because RestrictedPython hardening is done on Abstract Syntax Tree level and
+effectively means all evaluated code must be available in the source code form. This makes testing RestrictedPython
+code little difficult.</p>
+<p>Below are few useful unit test functions:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Zope security imports</span>
+<span class="kn">from</span> <span class="nn">AccessControl</span> <span class="kn">import</span> <span class="n">getSecurityManager</span>
+<span class="kn">from</span> <span class="nn">AccessControl.SecurityManagement</span> <span class="kn">import</span> <span class="n">newSecurityManager</span>
+<span class="kn">from</span> <span class="nn">AccessControl.SecurityManagement</span> <span class="kn">import</span> <span class="n">noSecurityManager</span>
+<span class="kn">from</span> <span class="nn">AccessControl.SecurityManager</span> <span class="kn">import</span> <span class="n">setSecurityPolicy</span>
+<span class="kn">from</span> <span class="nn">AccessControl</span> <span class="kn">import</span> <span class="n">ZopeGuards</span>
+<span class="kn">from</span> <span class="nn">AccessControl.ZopeGuards</span> <span class="kn">import</span> <span class="n">guarded_getattr</span><span class="p">,</span> <span class="n">get_safe_globals</span><span class="p">,</span> <span class="n">safe_builtins</span>
+<span class="kn">from</span> <span class="nn">AccessControl.ImplPython</span> <span class="kn">import</span> <span class="n">ZopeSecurityPolicy</span>
+<span class="kn">from</span> <span class="nn">AccessControl</span> <span class="kn">import</span> <span class="n">Unauthorized</span>
+
+<span class="c"># Restricted Python imports</span>
+<span class="kn">from</span> <span class="nn">RestrictedPython</span> <span class="kn">import</span> <span class="n">compile_restricted</span>
+<span class="kn">from</span> <span class="nn">RestrictedPython.SafeMapping</span> <span class="kn">import</span> <span class="n">SafeMapping</span>
+
+<span class="k">def</span> <span class="nf">_execUntrusted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">debug</span><span class="p">,</span> <span class="n">function_body</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Sets up a sandboxed Python environment with Zope security in place.</span>
+
+<span class="sd">    Calls func() in an sandboxed environment. The security mechanism</span>
+<span class="sd">    should catch all unauthorized function calls (declared</span>
+<span class="sd">    with a class SecurityManager).</span>
+
+<span class="sd">    Security is effective only inside the function itself -</span>
+<span class="sd">    The function security declarations themselves are ignored.</span>
+
+<span class="sd">    @param func: Function object</span>
+<span class="sd">    @param args: Parameters delivered to func</span>
+<span class="sd">    @param kwargs: Parameters delivered to func</span>
+<span class="sd">    @param debug: If True, break into pdb debugger just before evaluation</span>
+<span class="sd">    @return: Function return value</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c"># Create global variable environment for the sandbox</span>
+    <span class="nb">globals</span> <span class="o">=</span> <span class="n">get_safe_globals</span><span class="p">()</span>
+    <span class="nb">globals</span><span class="p">[</span><span class="s">&#39;__builtins__&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">safe_builtins</span>
+
+    <span class="c"># Zope seems to have some hacks with guaded_getattr.</span>
+    <span class="c"># guarded_getattr is used to check the permission when the</span>
+    <span class="c"># object is being traversed in the restricted code.</span>
+    <span class="c"># E.g. this controls function call permissions.</span>
+    <span class="kn">from</span> <span class="nn">AccessControl.ImplPython</span> <span class="kn">import</span> <span class="n">guarded_getattr</span> <span class="k">as</span> <span class="n">guarded_getattr_safe</span>
+    <span class="nb">globals</span><span class="p">[</span><span class="s">&#39;_getattr_&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">guarded_getattr_safe</span>
+    <span class="c">#globals[&#39;getattr&#39;] = guarded_getattr_safe</span>
+    <span class="c">#globals[&#39;guarded_getattr&#39;] = guarded_getattr_safe</span>
+
+
+    <span class="nb">globals</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c"># Our magic code</span>
+
+    <span class="c"># The following will compile the parsed Python code</span>
+    <span class="c"># and applies a special AST mutator</span>
+    <span class="c"># which will proxy __getattr__ and function calls</span>
+    <span class="c"># through guarded_getattr</span>
+    <span class="n">code</span> <span class="o">=</span> <span class="n">compile_restricted</span><span class="p">(</span><span class="n">function_body</span><span class="p">,</span> <span class="s">&quot;&lt;string&gt;&quot;</span><span class="p">,</span> <span class="s">&quot;eval&quot;</span><span class="p">)</span>
+
+    <span class="c"># Here is a good place to break in</span>
+    <span class="c"># if you need to do some ugly permission debugging</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+        <span class="k">pass</span> <span class="c"># go pdb here</span>
+
+    <span class="k">return</span> <span class="nb">eval</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="nb">globals</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">execUntrusted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Sets up a sandboxed Python environment with Zope security in place. &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execUntrusted</span><span class="p">(</span><span class="bp">False</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">execUntrustedDebug</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Sets up a sandboxed Python debug environment with Zope security in place. &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execUntrusted</span><span class="p">(</span><span class="bp">True</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">assertUnauthorized</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Check that calling func with currently effective roles will raise Unauthroized error. &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">execUntrusted</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">Unauthorized</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span>
+
+    <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">,</span> <span class="s">&#39;Unauthorized exception was expected&#39;</span>
+
+<span class="k">def</span> <span class="nf">test_xxx</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="c"># Run RestrictedPython in unit test code</span>
+    <span class="c"># myCustomUserCreationFunction() is view/Python script/method you must call in the restricted mode</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">execUntrusted</span><span class="p">(</span><span class="s">&#39;portal.myCustomUserCreationFunction(username=&quot;national_coordinator&quot;, email=&quot;nationalcoordinator@redinnovation.com&quot;)&#39;</span><span class="p">,</span> <span class="n">portal</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">portal</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="other-references">
+<h2><a class="toc-backref" href="#id5">Other references</a><a class="headerlink" href="#other-references" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://pypi.python.org/pypi/zope.security">zope.security</a></li>
+</ul>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Sandboxing</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#travesing-special-cases">Travesing special cases</a></li>
+<li><a class="reference internal" href="#unit-testing-restrictedpython-code">Unit testing RestrictedPython code</a></li>
+<li><a class="reference internal" href="#other-references">Other references</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="dynamic_roles.html"
+                        title="previous chapter">Dynamic roles</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../templates_css_and_javascripts/index.html"
+                        title="next chapter">Templates, CSS and Javascript</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/security/sandboxing.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../templates_css_and_javascripts/index.html" title="Templates, CSS and Javascript"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="dynamic_roles.html" title="Dynamic roles"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Security</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

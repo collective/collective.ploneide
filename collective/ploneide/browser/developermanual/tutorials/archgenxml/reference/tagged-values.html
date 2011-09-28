@@ -1,0 +1,954 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Tagged Values &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../../../index.html" />
+    <link rel="up" title="Reference" href="index.html" />
+    <link rel="next" title="Stereotypes" href="stereotypes.html" />
+    <link rel="prev" title="Quick Reference" href="quick-reference.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="stereotypes.html" title="Stereotypes"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="quick-reference.html" title="Quick Reference"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Tutorials</a> &raquo;</li>
+          <li><a href="../index.html" >Using ArchGenXML</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="tagged-values">
+<span id="agx-tagged-values"></span><h1>Tagged Values<a class="headerlink" href="#tagged-values" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#action" id="id1">action</a></li>
+<li><a class="reference internal" href="#association" id="id2">association</a></li>
+<li><a class="reference internal" href="#attribute" id="id3">attribute</a></li>
+<li><a class="reference internal" href="#class" id="id4">class</a></li>
+<li><a class="reference internal" href="#field" id="id5">field</a></li>
+<li><a class="reference internal" href="#method" id="id6">method</a></li>
+<li><a class="reference internal" href="#model" id="id7">model</a></li>
+<li><a class="reference internal" href="#package" id="id8">package</a></li>
+<li><a class="reference internal" href="#portlet" id="id9">portlet</a></li>
+<li><a class="reference internal" href="#state" id="id10">state</a></li>
+<li><a class="reference internal" href="#state-action" id="id11">state action</a></li>
+<li><a class="reference internal" href="#state-machine" id="id12">state machine</a></li>
+<li><a class="reference internal" href="#state-transition" id="id13">state transition</a></li>
+<li><a class="reference internal" href="#tool" id="id14">tool</a></li>
+<li><a class="reference internal" href="#unknown" id="id15">unknown</a></li>
+<li><a class="reference internal" href="#view" id="id16">view</a></li>
+<li><a class="reference internal" href="#widget" id="id17">widget</a></li>
+</ul>
+</div>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">All tagged values available in its context.</p>
+</div>
+<p><em>This file was generated 2009-05-12 with bin/agx_taggedvalues 2.4.1.</em></p>
+<div class="section" id="action">
+<h2><a class="toc-backref" href="#id1">action</a><a class="headerlink" href="#action" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>action</dt>
+<dd>For a stereotype 'action', this tagged value can be used to overwrite the default URL ('..../name_of_method') into '..../tagged_value'.</dd>
+<dt>category</dt>
+<dd>The category for the action. Defaults to 'object'.</dd>
+<dt>condition</dt>
+<dd>A TALES expression defining a condition which will be evaluated to determine whether the action should be displayed.</dd>
+<dt>id</dt>
+<dd>The id of the action. Use 'id',</dd>
+<dt>label</dt>
+<dd>The label of the action - displayed to the user.</dd>
+<dt>permission</dt>
+<dd>The permission used for the action, a string or comma separated list of strings, default to 'View'.</dd>
+<dt>visible</dt>
+<dd>Sets the visible property, default to 'True'</dd>
+</dl>
+</div>
+<div class="section" id="association">
+<h2><a class="toc-backref" href="#id2">association</a><a class="headerlink" href="#association" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>association_class</dt>
+<dd>You can use associations classes to store content on the association itself. The class used is specified by this setting. Don't forget to import the used class properly.</dd>
+<dt>association_vocabulary</dt>
+<dd>Switch, defaults to False. Needs Product 'ATVocabularyManager'. Generates an empty vocabulary with the name of the relation.</dd>
+<dt>back_reference_field</dt>
+<dd>Use a custom field instead of ReferenceField.</dd>
+<dt>field</dt>
+<dd>Synonymous with either reference_field or relation_field, depending on whether you use it on the <em>from</em> end or the <em>to</em> end of a relation. Works only together with 'Relations' Product and relation_implementation set to 'relations'.</dd>
+<dt>inverse_relation_name</dt>
+<dd>Together with 'Relations' Product you have inverse relations. the name default to 'name_of_your_relation_inverse', but you can overrrule it using this tagged value.</dd>
+<dt>label</dt>
+<dd>Sets the readable name.</dd>
+<dt>reference_field</dt>
+<dd>Use a custom field instead of ReferenceField.</dd>
+<dt>relation_field</dt>
+<dd>Use a custom field instead of RelationField. Works only together with 'Relations' Product and relation_implementation set to 'relations'.</dd>
+<dt>relation_implementation</dt>
+<dd>Sets the type of implementation is used for an association: 'basic' (used as default) for classic style archetypes references or 'relations' for use of the 'Relations' Product.</dd>
+<dt>relationship</dt>
+<dd>Standard relationship for ReferenceField</dd>
+</dl>
+</div>
+<div class="section" id="attribute">
+<h2><a class="toc-backref" href="#id3">attribute</a><a class="headerlink" href="#attribute" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>accessor</dt>
+<dd>Set the name of the accessor (getter) method. If you are overriding one of the DC metadata fields such as 'title' or 'description' be sure to set the correct accessor names such as 'Title' and 'Description'; by default these accessors would be generated as getTitle() or getDescription().</dd>
+<dt>allowed_types</dt>
+<dd>Sets the types allowed for a ReferenceField. Default is []</dd>
+<dt>array:widget</dt>
+<dd>specify which custom ArrayWidget should be used for a field (only applies if the field has cardinality &gt;1.</dd>
+<dt>catalog:index</dt>
+<dd>Add the field (or all fields of a class, package, model) to the index. Boolean, 1 or 0. Default is 0. If set, you may need to provide <tt class="docutils literal"><span class="pre">index:*</span></tt> tagged values too.</dd>
+<dt>catalog:metadata</dt>
+<dd>Adds the field to the metadata record on the query result. Boolean, 1 or 0. If you do not provide 'index:attributes', the name of the accessor of the field is the default. If 'catalog:attributes' is given for each attribute one field at the record will be created.</dd>
+<dt>catalog:name</dt>
+<dd>Sometimes you need to add an index to a other catalog than 'portal_catalog' and its XML-File 'catalog.xml'. Provide a tuple of comma separated strings, id of the catalog and the filename of its configuration file. default is &quot;portal_catalog, Plone Catalog Tool'.</dd>
+<dt>collection:criteria</dt>
+<dd>Add the index to the Collection (aka Smart Folder) Indexes available for defining Criteria. Provide a comma separated list of criteria that will be available by default. Available criterias are: ATBooleanCriterion, ATDateCriteria, ATDateRangeCriterion, ATListCriterion, ATPortalTypeCriterion, ATReferenceCriterion, ATSelectionCriterion, ATSimpleIntCriterion, ATSimpleStringCriterion, ATSortCriterion, ATCurrentAuthorCriterion, ATPathCriterion, ATRelativePathCriterion. You must provide an index:type as well.</dd>
+<dt>collection:criteria_description</dt>
+<dd>A help text (string), used for collection:criteria. Its added to the generated.pot as a literal. If not provided the widget:description is used.</dd>
+<dt>collection:criteria_label</dt>
+<dd>The display name of the collection:criteria, called friendly name (string). Its added to the generated.pot as a literal. If not given the widget:label is taken if provided.</dd>
+<dt>collection:metadata</dt>
+<dd>register the catalog:metadata as an available column in a Collection. Can be used as an alternative for catalog:metadata. catalog:metadata_accessor is used if given.</dd>
+<dt>collection:metadata_description</dt>
+<dd>A help text (string), used for collection:criteria. Its added to the generated.pot as a literal. If not provided the collection:criteria_help or - if not provided - widget:description is used.</dd>
+<dt>collection:metadata_label</dt>
+<dd>the display name of the collection:metadata, called friendly name (string), used for index:criteria. Its added to the generated.pot as a literal. If not given the widget:label is taken if provided.</dd>
+<dt>copy_from</dt>
+<dd>To copy an attribute from another schema, give it the type 'copy'. The tagged value 'copy_from' is then used to specify which schema to copy it from (for instance, 'BaseSchema' when copying Description from the base schema). For copying your own schemas, add an 'imports' tagged value to import your class (say 'MyClass') and then put 'MyClass.schema' in your 'copy_from' value.</dd>
+<dt>default</dt>
+<dd>Set a value to use as the default value of the field.</dd>
+<dt>default_method</dt>
+<dd>Set the name of a method on the object which will be called to determine the default value of the field.</dd>
+<dt>enforceVocabulary</dt>
+<dd>Set to true (1) to ensure that only items from the vocabulary are permitted.</dd>
+<dt>expression</dt>
+<dd>evaluation expression for computed fields.</dd>
+<dt>i18ncontent</dt>
+<dd>Enables the content type(s) for LinguaPlone. Only allowed value is 'linguaplone'.</dd>
+<dt>index</dt>
+<dd>DEPRECATED: Add an index to the attribute. Use catalog:index and the index:* tagged value instead.</dd>
+<dt>index:attributes</dt>
+<dd>The attributes to use for index or metadata (string or comma separated list of strings). This are the methods called at indexing time. Normally it is enough to provide one index method, but for some specific use cases you might need to provide alternatives. If you don not provide this tagged value, the name of the accessor of the field is the default.</dd>
+<dt>index:extras</dt>
+<dd>Some indexes are using so called 'extras' on installation as configuration. If the index need extras you'll need to declare them here. Provide a comma separated list.</dd>
+<dt>index:name</dt>
+<dd>the name of the index used (string). Use this name in your queries. If you do not provide a name, the name of the accessor of the field is the default.</dd>
+<dt>index:properties</dt>
+<dd>Some indexes are using 'properties' on installation as configuration. If the index need properties you'll need to declare them here. Provide a comma separated list.</dd>
+<dt>index:type</dt>
+<dd>the type of index used as (string), for example 'FieldIndex', 'KeywordIndex', 'DateIndex' or any available index in your portal. For known types a default is guessed, such as FieldIndex for StringFields or DateIndex for DateFields. If no guess is possible, we assume a FieldIndex.</dd>
+<dt>indexMethod</dt>
+<dd>DEPRECATED: Declares method used for indexing.</dd>
+<dt>label</dt>
+<dd>Sets the readable name.</dd>
+<dt>move:after</dt>
+<dd>Move the current field after the given field (put the field name between quote).</dd>
+<dt>move:before</dt>
+<dd>Move the current field before the given field (put the field name between quote).</dd>
+<dt>move:bottom</dt>
+<dd>Move the current field to the bottom (put 1 for the value).</dd>
+<dt>move:pos</dt>
+<dd>Move the current field at the given position (an int).</dd>
+<dt>move:top</dt>
+<dd>Move the current field to the top (put 1 for the value).</dd>
+<dt>multiValued</dt>
+<dd>Certain fields, such as reference fields, can optionally accept more than one value if multiValued is set to true (1)</dd>
+<dt>mutator</dt>
+<dd>Similarly, set the name of the mutator (setter) method.</dd>
+<dt>original_size</dt>
+<dd>Sets the maximum size for the original for an ImageField widget.</dd>
+<dt>read_permission</dt>
+<dd>Defines archetypes fields read-permission. Use it together with workflow to control ability to view fields based on roles/permissions.</dd>
+<dt>required</dt>
+<dd>Set to true (1) to make the field required</dd>
+<dt>schemata</dt>
+<dd>If you want to split your form with many, many attibutes in multiple schemata (&quot;sub-forms&quot;), add a tagged value 'schemata' to the attributes you want in a different schemata with the name of that schemata (for instance &quot;personal data&quot;). The default schemata is called &quot;default&quot;, btw.</dd>
+<dt>searchable</dt>
+<dd>Whether or not the field should be searchable when performing a search in the portal.</dd>
+<dt>sizes</dt>
+<dd>Sets the allowed sizes for an ImageField widget.</dd>
+<dt>source_name</dt>
+<dd>With attribute type 'copy' sometimes schema-recycling is fun, together with copy_from you can specify the source name of the field in the schema given by copy_from.</dd>
+<dt>validation_expression</dt>
+<dd>Use an ExpressionValidator and sets the by value given expression.</dd>
+<dt>validation_expression_errormsg</dt>
+<dd>Sets the error message to the ExpressionValidator (use with validation_expression to define the validation expression to which this error message applies).</dd>
+<dt>validators</dt>
+<dd>TODO. Not supported for now.</dd>
+<dt>vocabulary</dt>
+<dd>Set to a python list, a DisplayList or a method name (quoted) which provides the vocabulary for a selection widget.</dd>
+<dt>vocabulary:name</dt>
+<dd>Together with Products 'ATVocabularyManager' this sets the name of the vocabulary.</dd>
+<dt>vocabulary:term_type</dt>
+<dd>For use with 'ATVocabularyManager'. Defaults to 'SimplevocabularyTerm'. Let you define the portal_type of the vocabularyterm used for the default term that is created in Install.py.</dd>
+<dt>vocabulary:type</dt>
+<dd>Enables support for Products 'ATVocabularyManager' by setting value to 'ATVocabularyManager'.</dd>
+<dt>widget</dt>
+<dd>Allows you to set the widget to be used for this attribute.</dd>
+<dt>widget:description</dt>
+<dd>Set the widget's description.</dd>
+<dt>widget:description_msgid</dt>
+<dd>Set the description i18n message id. Defaults to a name generated from the field name.</dd>
+<dt>widget:i18n_domain</dt>
+<dd>Set the i18n domain. Defaults to the product name.</dd>
+<dt>widget:label</dt>
+<dd>Set the widget's label.</dd>
+<dt>widget:label_msgid</dt>
+<dd>Set the label i18n message id. Defaults to a name generated from the field name.</dd>
+<dt>widget:type</dt>
+<dd>Set the name of the widget to use. Each field has an associated default widget, but if you need a different one (e.g. a SelectionWidget for a string field), use this value to override.</dd>
+<dt>write_permission</dt>
+<dd>Defines archetypes fields write-permission. Use it together with workflow to control ability to write data to a field based on roles/permissions.</dd>
+</dl>
+</div>
+<div class="section" id="class">
+<h2><a class="toc-backref" href="#id4">class</a><a class="headerlink" href="#class" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>active_workflow_states</dt>
+<dd>The active workflow states for a remember type. MUST be set on <tt class="docutils literal"><span class="pre">&lt;&lt;remember&gt;&gt;</span></tt> types. Format is ['state', 'anotherstate'].</dd>
+<dt>additional_parents</dt>
+<dd>A comma-separated list of the names of classes which should be used as additional parents to this class, in addition to the Archetypes BaseContent, BaseFolder or OrderedBaseFolder. Usually used in conjunction with 'imports' to import the class before it is referenced.</dd>
+<dt>alias</dt>
+<dd>FTI Alias definition in the form alias=fromvalue,tovalue</dd>
+<dt>allow_discussion</dt>
+<dd>Whether or not the content type should be discussable in the portal by default.</dd>
+<dt>allowable_content_types</dt>
+<dd>A comma-separated list of allowed test format for a textarea widget.</dd>
+<dt>allowed_content_types</dt>
+<dd>A comma-separated list of allowed sub-types for a (folderish) content type. Note that allowed content types are automatically set when using aggregation and composition between classes to specify containment.</dd>
+<dt>archetype_name</dt>
+<dd>The name which will be shown in the &quot;add new item&quot; drop-down and other user-interface elements. Defaults to the class name, but whilst the class name must be valid and unique python identifier, the archetype_name can be any string.</dd>
+<dt>author</dt>
+<dd>You can set the author project-wide with the '--author' commandline parameter (or in the config file). This TGV allows you to use/ overwrite it on a class level.</dd>
+<dt>base_actions</dt>
+<dd>Sets the base actions in the class's factory type information (FTI).</dd>
+<dt>base_class</dt>
+<dd>Explicitly set the base class of a content type, overriding the automatic selection of BaseContent, BaseFolder or OrderedBaseFolder as well as any parent classes in the model. What you specify here ends up as the first item (or items: comma-separate them) in the classes it inherits from. So this is also a handy way to place one class explicitly in front of the other. See also additional_parents.</dd>
+<dt>base_schema</dt>
+<dd>Explicitly set the base schema for a content type, overriding the automatic selection of the parent's schema or BaseSchema, BaseFolderSchema or OrderedBaseFolderSchema.</dd>
+<dt>catalog:index</dt>
+<dd>Add the field (or all fields of a class, package, model) to the index. Boolean, 1 or 0. Default is 0. If set, you may need to provide <tt class="docutils literal"><span class="pre">index:*</span></tt> tagged values too.</dd>
+<dt>catalog:metadata</dt>
+<dd>Adds the field to the metadata record on the query result. Boolean, 1 or 0. If you do not provide 'index:attributes', the name of the accessor of the field is the default. If 'catalog:attributes' is given for each attribute one field at the record will be created.</dd>
+<dt>catalog:name</dt>
+<dd>Sometimes you need to add an index to a other catalog than 'portal_catalog' and its XML-File 'catalog.xml'. Provide a tuple of comma separated strings, id of the catalog and the filename of its configuration file. default is &quot;portal_catalog, Plone Catalog Tool'.</dd>
+<dt>catalogmultiplex:black</dt>
+<dd>Remove an archetypes class (identified by meta_type) from one or more catalogs to be cataloged in. Comma-separated list of catalogs. Example-value: 'portal_catalog, another_catalog'. Explaination: Instances of the class wont be catalogged in portal_catalog anymore.</dd>
+<dt>catalogmultiplex:white</dt>
+<dd>Add an archetypes class (identified by meta_type) to one or more catalogs to be cataloged in. Comma-separated list of catalogs. Example-value: 'myfancy_catalog, another_catalog'. Explaination: Additionally to the default 'portal_catalog' the instances of this class will be catalogged in the two given catalogs.</dd>
+<dt>content_icon</dt>
+<dd>The name of an image file, which must be found in the skins directory of the product. This will be used to represent the content type in the user interface.</dd>
+<dt>copyright</dt>
+<dd>You can set the copyright project-wide with the '--copyright' commandline parameter (or in the config file). This TGV allows you to use/ overwrite it on a class level.</dd>
+<dt>creation_permission</dt>
+<dd>Sets the creation permission for the class. Example: 'Add portal content'.</dd>
+<dt>creation_roles</dt>
+<dd>You can set an own role who should be able to add a type. Use an Tuple of Strings. Default and example for this value: '(&quot;Manager&quot;, &quot;Owner&quot;, &quot;Member&quot;)'.</dd>
+<dt>default_interface_type</dt>
+<dd>default type of interfaces (z2 or z3).</dd>
+<dt>default_view</dt>
+<dd>The TemplateMixin class in Archetypes allows your class to present several alternative view templates for a content type. The default_view value sets the default one. Defaults to 'base_view'. Only relevant if you use TemplateMixin.</dd>
+<dt>description</dt>
+<dd>A description of the type, a sentence or two in length. Used to describe the type to the user.</dd>
+<dt>detailed_creation_permissions</dt>
+<dd>Give the content-type (types in the package, model) own creation permissions, named automagically 'ProductName: Add ClassName'.</dd>
+<dt>disable_polymorphing</dt>
+<dd>Normally, archgenxml looks at the parents of the current class for content types that are allowed as items in a folderish class. So: parent's allowed content is also allowed in the child. Likewise, subclasses of classes allowed as content are also allowed on this class. Classic polymorphing. In case this isn't desired, set the tagged value 'disable_polymorphing' to 1.</dd>
+<dt>display_in_navigation</dt>
+<dd>Setting this boolean value adds the type to 'Displayed content types' in the portals navigation settings. Default is True</dd>
+<dt>doctest_name</dt>
+<dd>In a tests package, setting the stereotype <tt class="docutils literal"><span class="pre">&lt;&lt;doc_testcase&gt;&gt;</span></tt> on a class turns it into a doctest. The doctest itself is placed in the doc/ subdirectory. The 'doctest_name' tagged value overwrites the default name for the file (which is the name of the doctestcase class + '.txt'). ArchGenXML appends the '.txt' extension automatically, so you don't need to specify it.</dd>
+<dt>email</dt>
+<dd>You can set the email project-wide with the '--email' commandline parameter (or in the config file). This TGV allows you to use/ overwrite it on a class level.</dd>
+<dt>filter_content_types</dt>
+<dd>If set to true (1), explicitly turn on the filter_content_types factory type information value. If this is off, all globally addable content types will be addable inside a (folderish) type; if it is on, only those values in the allowed_content_types list will be enabled. Note that when aggregation or composition is used to define containment, filtered_content_types will be automatically turned on.</dd>
+<dt>folder_base_class</dt>
+<dd>Useful when using the '&lt;&lt;folder&gt;&gt;' stereotype in order to set the folderish base class.</dd>
+<dt>generate_reference_fields</dt>
+<dd>Per default (True) navigable reference (or relation) ends are resulting in a ReferenceField (or RelationField). Setting this value to False results in not generating ReferenceFields automagically.</dd>
+<dt>global_allow</dt>
+<dd>Overwrite the AGX-calculated 'global_allow' setting of class. Setting it to '1' makes your content type addable everywhere (in principle), setting it to '0' limits it to places where it's explicitly allowed as content.</dd>
+<dt>hide_actions</dt>
+<dd>A comma- or newline-separated list of action ids to hide on the class. For example, set to 'metadata, sharing' to turn off the metadata (properties) and sharing tabs.</dd>
+<dt>hide_folder_tabs</dt>
+<dd>When you want to hide the folder tabs (mostly the &quot;contents&quot; tab, just set this tagged value to 1.</dd>
+<dt>i18ncontent</dt>
+<dd>Enables the content type(s) for LinguaPlone. Only allowed value is 'linguaplone'.</dd>
+<dt>immediate_view</dt>
+<dd>Set the immediate_view factory type information value. This should be the name of a page template, and defaults to 'base_view'. Note that Plone at this time does not make use of immediate_view, which in CMF core allows you to specify a different template to be used when an object is first created from when it is subsequently accessed.</dd>
+<dt>import_from</dt>
+<dd>If you wish to include a class in your model (as a base class or aggregated class, for example) which is actually defined in another product, add the class to your model and set the import_from tagged value to the class that should be imported in its place. You probably don't want the class to be generated, so add a stereotype '&lt;&lt;stub&gt;&gt;' as well.</dd>
+<dt>imports</dt>
+<dd>A list of python import statements which will be placed at the top of the generated file. Use this to make new field and widget types available, for example. Note that in the generated code you will be able to enter additional import statements in a preserved code section near the top of the file. Prefer using the imports tagged value when it imports something that is directly used by another element in your model. You can have several import statements, one per line, or by adding several tagged values with the name 'imports'.</dd>
+<dt>index:type</dt>
+<dd>the type of index used as (string), for example 'FieldIndex', 'KeywordIndex', 'DateIndex' or any available index in your portal. For known types a default is guessed, such as FieldIndex for StringFields or DateIndex for DateFields. If no guess is possible, we assume a FieldIndex.</dd>
+<dt>inherit_allowed_types</dt>
+<dd>By default, a child type will inherit the allowable content types from its parents. Set this property to false (0) to turn this off.</dd>
+<dt>label</dt>
+<dd>Sets the readable name.</dd>
+<dt>license</dt>
+<dd>You can set the license project-wide with the '--license' commandline parameter (or in the config file). This TGV allows you to use/ overwrite it on a class level.</dd>
+<dt>marshaller</dt>
+<dd>Specify a marshaller to use for the class' schema.</dd>
+<dt>module</dt>
+<dd>Like 'module_name', it overwrites the name of the directory it'd be normally placed in.</dd>
+<dt>module_name</dt>
+<dd>Like 'module', it overwrites the name of the directory it'd be normally placed in.</dd>
+<dt>parentclass_first</dt>
+<dd>if this tgv is set to true generalization parents are used before the standard base classes (e.g. BaseContent) this option is sometimes necessary when inheriting from some special parents (e.g. 'remember' style classes).</dd>
+<dt>parentclasses_first</dt>
+<dd>if this tgv is set to true generalization parents are used before the standard base classes (e.g. BaseContent) this option is sometimes necessary when inheriting from some special parents (e.g. 'remember' style classes).</dd>
+<dt>portal_type</dt>
+<dd>Sets the CMF portal-type this class will be registered with, defaults to the class-name.</dd>
+<dt>read_permission</dt>
+<dd>Defines archetypes fields read-permission. Use it together with workflow to control ability to view fields based on roles/permissions.</dd>
+<dt>register</dt>
+<dd>'Remember' related. Set as default member type.</dd>
+<dt>searchable</dt>
+<dd>Per default a fields 'searchable' property is set to False. Sometimes you want it for all fields True. This TGV let you define the default for a class, package or model.</dd>
+<dt>searchable_type</dt>
+<dd>Setting this boolean value adds the type to 'types to be searched' in the portals search settings. Default is True</dd>
+<dt>strict</dt>
+<dd>On a class with the <tt class="docutils literal"><span class="pre">&lt;&lt;interface_doctest&gt;&gt;</span></tt> stereotype: check for inherited interfaces as well.</dd>
+<dt>suppl_views</dt>
+<dd>The TemplateMixin class in Archetypes allows your class to present several alternative view templates for a content type. The suppl_views value sets the available views. Example: '(&quot;my_view&quot;, &quot;myother_view&quot;)'. Defaults to '()'. Only relevant if you use TemplateMixin.</dd>
+<dt>typeDescription</dt>
+<dd>DEPRECATED. Use 'description' instead.</dd>
+<dt>use_dynamic_view</dt>
+<dd>Controles wether CMFDynamicViewFTI is used for a type/class. Boolean, default is True.</dd>
+<dt>use_portal_factory</dt>
+<dd>This boolean value controls the registration of the type for use with portal_factory. Default: True.</dd>
+<dt>use_workflow</dt>
+<dd>Tie the class to the named workflow. A state diagram (=workflow) attached to a class in the UML diagram is automatically used as that class's workflow; this tagged value allows you to tie the workflow to other classes.</dd>
+<dt>version_info</dt>
+<dd>Add ArchGenXML version information to the generated file (default is 1).</dd>
+<dt>vocabulary:type</dt>
+<dd>Enables support for Products 'ATVocabularyManager' by setting value to 'ATVocabularyManager'.</dd>
+<dt>vocabulary:vocabulary_type</dt>
+<dd>For use with 'ATVocabularyManager'. Defaults to 'Simplevocabulary'. Let you define the portal_type of the vocabulary used as initial vocabulary at Product install time. If VdexVocabulary is used, the install-script tries to install a vocabulary from a vdex file names 'Products/PRODUCTNAME/data/VOCABULARYNAME.vdex'.</dd>
+<dt>write_permission</dt>
+<dd>Defines archetypes fields write-permission. Use it together with workflow to control ability to write data to a field based on roles/permissions.</dd>
+</dl>
+</div>
+<div class="section" id="field">
+<h2><a class="toc-backref" href="#id5">field</a><a class="headerlink" href="#field" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>description</dt>
+<dd>Sets a description for this field. It's used for field documentation while registering inside Archetypes.</dd>
+<dt>label</dt>
+<dd>Sets the readable name.</dd>
+<dt>validation_expression</dt>
+<dd>Use an ExpressionValidator and sets the by value given expression.</dd>
+<dt>validation_expression_errormsg</dt>
+<dd>Sets the error message to the ExpressionValidator (use with validation_expression to define the validation expression to which this error message applies).</dd>
+</dl>
+</div>
+<div class="section" id="method">
+<h2><a class="toc-backref" href="#id6">method</a><a class="headerlink" href="#method" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>code</dt>
+<dd>The actual python code of the method. Only use this for simple one-liners. Code filled into the generated file will be preserved when the model is re-generated.</dd>
+<dt>documentation</dt>
+<dd>You can add documention via this tag; it's better to use your UML tool's documentation field.</dd>
+<dt>label</dt>
+<dd>Sets the readable name.</dd>
+<dt>permission</dt>
+<dd>For method with public visibility only, if a permission is set, declare the method to be protected by this permission. Methods with private or protected visiblity are always declared private since they are not intended for through-the-web unsafe code to access. Methods with package visibility use the class default security and do not get security declarations at all.</dd>
+</dl>
+</div>
+<div class="section" id="model">
+<h2><a class="toc-backref" href="#id7">model</a><a class="headerlink" href="#model" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>alias</dt>
+<dd>FTI Alias definition in the form alias=fromvalue,tovalue</dd>
+<dt>association_class</dt>
+<dd>You can use associations classes to store content on the association itself. The class used is specified by this setting. Don't forget to import the used class properly.</dd>
+<dt>association_vocabulary</dt>
+<dd>Switch, defaults to False. Needs Product 'ATVocabularyManager'. Generates an empty vocabulary with the name of the relation.</dd>
+<dt>author</dt>
+<dd>You can set the author project-wide with the '--author' commandline parameter (or in the config file). This TGV allows you to use/ overwrite it on a model level.</dd>
+<dt>catalog:index</dt>
+<dd>Add the field (or all fields of a class, package, model) to the index. Boolean, 1 or 0. Default is 0. If set, you may need to provide <tt class="docutils literal"><span class="pre">index:*</span></tt> tagged values too.</dd>
+<dt>catalog:metadata</dt>
+<dd>Adds the field to the metadata record on the query result. Boolean, 1 or 0. If you do not provide 'index:attributes', the name of the accessor of the field is the default. If 'catalog:attributes' is given for each attribute one field at the record will be created.</dd>
+<dt>catalog:name</dt>
+<dd>Sometimes you need to add an index to a other catalog than 'portal_catalog' and its XML-File 'catalog.xml'. Provide a tuple of comma separated strings, id of the catalog and the filename of its configuration file. default is &quot;portal_catalog, Plone Catalog Tool'.</dd>
+<dt>catalogmultiplex:black</dt>
+<dd>Remove an archetypes class (identified by meta_type) from one or more catalogs to be cataloged in. Comma-separated list of catalogs. Example-value: 'portal_catalog, another_catalog'. Explaination: Instances of the class wont be catalogged in portal_catalog anymore.</dd>
+<dt>catalogmultiplex:white</dt>
+<dd>Add an archetypes class (identified by meta_type) to one or more catalogs to be cataloged in. Comma-separated list of catalogs. Example-value: 'myfancy_catalog, another_catalog'. Explaination: Additionally to the default 'portal_catalog' the instances of this class will be catalogged in the two given catalogs.</dd>
+<dt>copyright</dt>
+<dd>You can set the copyright project-wide with the '--copyright' commandline parameter (or in the config file). This TGV allows you to use/ overwrite it on a model level.</dd>
+<dt>creation_permission</dt>
+<dd>Sets the creation permission for the class. Example: 'Add portal content'.</dd>
+<dt>creation_roles</dt>
+<dd>You can set an own role who should be able to add a type. Use an Tuple of Strings. Default and example for this value: '(&quot;Manager&quot;, &quot;Owner&quot;, &quot;Member&quot;)'.</dd>
+<dt>default_interface_type</dt>
+<dd>default type of interfaces (z2 or z3).</dd>
+<dt>default_view</dt>
+<dd>The TemplateMixin class in Archetypes allows your class to present several alternative view templates for a content type. The default_view value sets the default one. Defaults to 'base_view'. Only relevant if you use TemplateMixin.</dd>
+<dt>dependency_step_qi</dt>
+<dd>Generate Quickinstaller dependency installation for your product. Boolean (1 or 0), default 0 (off). Dependencies can be declared in AppConfig.py in a variable DEPENDENCIES.</dd>
+<dt>dependend_profiles</dt>
+<dd>GenericSetup profiles your product depends on. A list of profile names separated by commas. This list is used for the dependencies tag inside the metadata.xml file of the product's profile</dd>
+<dt>detailed_creation_permissions</dt>
+<dd>Give the content-type (types in the package, model) own creation permissions, named automagically 'ProductName: Add ClassName'.</dd>
+<dt>display_in_navigation</dt>
+<dd>Setting this boolean value adds the type to 'Displayed content types' in the portals navigation settings. Default is True</dd>
+<dt>email</dt>
+<dd>You can set the email project-wide with the '--email' commandline parameter (or in the config file). This TGV allows you to use/ overwrite it on a model level.</dd>
+<dt>fixtools</dt>
+<dd>Generate fixTools function in setuphandlers.py. It calls initializeArchetypes for generated tools, thus reset existing data in the tools. Boolean (1 or 0), default 0 (off).</dd>
+<dt>generate_reference_fields</dt>
+<dd>Per default (True) navigable reference (or relation) ends are resulting in a ReferenceField (or RelationField). Setting this value to False results in not generating ReferenceFields automagically.</dd>
+<dt>global_allow</dt>
+<dd>Overwrite the AGX-calculated 'global_allow' setting of class. Setting it to '1' makes your content type addable everywhere (in principle), setting it to '0' limits it to places where it's explicitly allowed as content.</dd>
+<dt>i18ncontent</dt>
+<dd>Enables the content type(s) for LinguaPlone. Only allowed value is 'linguaplone'.</dd>
+<dt>immediate_view</dt>
+<dd>Set the immediate_view factory type information value. This should be the name of a page template, and defaults to 'base_view'. Note that Plone at this time does not make use of immediate_view, which in CMF core allows you to specify a different template to be used when an object is first created from when it is subsequently accessed.</dd>
+<dt>imports</dt>
+<dd>A list of python import statements which will be placed at the top of the generated file. Use this to make new field and widget types available, for example. Note that in the generated code you will be able to enter additional import statements in a preserved code section near the top of the file. Prefer using the imports tagged value when it imports something that is directly used by another element in your model. You can have several import statements, one per line, or by adding several tagged values with the name 'imports'.</dd>
+<dt>index:type</dt>
+<dd>the type of index used as (string), for example 'FieldIndex', 'KeywordIndex', 'DateIndex' or any available index in your portal. For known types a default is guessed, such as FieldIndex for StringFields or DateIndex for DateFields. If no guess is possible, we assume a FieldIndex.</dd>
+<dt>label</dt>
+<dd>Sets the readable name.</dd>
+<dt>license</dt>
+<dd>You can set the license project-wide with the '--license' commandline parameter (or in the config file). This TGV allows you to use/ overwrite it on a model level.</dd>
+<dt>module</dt>
+<dd>Like 'module_name', it overwrites the name of the directory it'd be normally placed in.</dd>
+<dt>module_name</dt>
+<dd>Like 'module', it overwrites the name of the directory it'd be normally placed in.</dd>
+<dt>plone_target_version</dt>
+<dd>The target version of Plone. Defaults to 3.0 Possible values are 2.5 and 3.0</dd>
+<dt>product_description</dt>
+<dd>The description of the Product. This is placed as description tag in the metadata.xml file of the product's profile</dd>
+<dt>read_permission</dt>
+<dd>Defines archetypes fields read-permission. Use it together with workflow to control ability to view fields based on roles/permissions.</dd>
+<dt>relation_implementation</dt>
+<dd>Sets the type of implementation is used for an association: 'basic' (used as default) for classic style archetypes references or 'relations' for use of the 'Relations' Product.</dd>
+<dt>searchable</dt>
+<dd>Per default a fields 'searchable' property is set to False. Sometimes you want it for all fields True. This TGV let you define the default for a class, package or model.</dd>
+<dt>searchable_type</dt>
+<dd>Setting this boolean value adds the type to 'types to be searched' in the portals search settings. Default is True</dd>
+<dt>skin_directories</dt>
+<dd>A comma separated list of subdirectories to be generated inside the product skins directory. Each of this directories is prefixed with productname in lowercase. The default value is &quot;'templates', 'styles', 'images'&quot;.</dd>
+<dt>suppl_views</dt>
+<dd>The TemplateMixin class in Archetypes allows your class to present several alternative view templates for a content type. The suppl_views value sets the available views. Example: '(&quot;my_view&quot;, &quot;myother_view&quot;)'. Defaults to '()'. Only relevant if you use TemplateMixin.</dd>
+<dt>use_dynamic_view</dt>
+<dd>Controles wether CMFDynamicViewFTI is used for a type/class. Boolean, default is True.</dd>
+<dt>use_portal_factory</dt>
+<dd>This boolean value controls the registration of the type for use with portal_factory. Default: True.</dd>
+<dt>use_workflow</dt>
+<dd>Tie the class to the named workflow. A state diagram (=workflow) attached to a class in the UML diagram is automatically used as that class's workflow; this tagged value allows you to tie the workflow to other classes.</dd>
+<dt>version_info</dt>
+<dd>Add ArchGenXML version information to the generated file (default is 1).</dd>
+<dt>vocabulary:type</dt>
+<dd>Enables support for Products 'ATVocabularyManager' by setting value to 'ATVocabularyManager'.</dd>
+<dt>vocabulary:vocabulary_type</dt>
+<dd>For use with 'ATVocabularyManager'. Defaults to 'Simplevocabulary'. Let you define the portal_type of the vocabulary used as initial vocabulary at Product install time. If VdexVocabulary is used, the install-script tries to install a vocabulary from a vdex file names 'Products/PRODUCTNAME/data/VOCABULARYNAME.vdex'.</dd>
+<dt>write_permission</dt>
+<dd>Defines archetypes fields write-permission. Use it together with workflow to control ability to write data to a field based on roles/permissions.</dd>
+</dl>
+</div>
+<div class="section" id="package">
+<h2><a class="toc-backref" href="#id8">package</a><a class="headerlink" href="#package" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>alias</dt>
+<dd>FTI Alias definition in the form alias=fromvalue,tovalue</dd>
+<dt>association_class</dt>
+<dd>You can use associations classes to store content on the association itself. The class used is specified by this setting. Don't forget to import the used class properly.</dd>
+<dt>association_vocabulary</dt>
+<dd>Switch, defaults to False. Needs Product 'ATVocabularyManager'. Generates an empty vocabulary with the name of the relation.</dd>
+<dt>author</dt>
+<dd>You can set the author project-wide with the '--author' commandline parameter (or in the config file). This TGV allows you to use/ overwrite it on a package level.</dd>
+<dt>catalog:index</dt>
+<dd>Add the field (or all fields of a class, package, model) to the index. Boolean, 1 or 0. Default is 0. If set, you may need to provide <tt class="docutils literal"><span class="pre">index:*</span></tt> tagged values too.</dd>
+<dt>catalog:metadata</dt>
+<dd>Adds the field to the metadata record on the query result. Boolean, 1 or 0. If you do not provide 'index:attributes', the name of the accessor of the field is the default. If 'catalog:attributes' is given for each attribute one field at the record will be created.</dd>
+<dt>catalog:name</dt>
+<dd>Sometimes you need to add an index to a other catalog than 'portal_catalog' and its XML-File 'catalog.xml'. Provide a tuple of comma separated strings, id of the catalog and the filename of its configuration file. default is &quot;portal_catalog, Plone Catalog Tool'.</dd>
+<dt>catalogmultiplex:black</dt>
+<dd>Remove an archetypes class (identified by meta_type) from one or more catalogs to be cataloged in. Comma-separated list of catalogs. Example-value: 'portal_catalog, another_catalog'. Explaination: Instances of the class wont be catalogged in portal_catalog anymore.</dd>
+<dt>catalogmultiplex:white</dt>
+<dd>Add an archetypes class (identified by meta_type) to one or more catalogs to be cataloged in. Comma-separated list of catalogs. Example-value: 'myfancy_catalog, another_catalog'. Explaination: Additionally to the default 'portal_catalog' the instances of this class will be catalogged in the two given catalogs.</dd>
+<dt>copyright</dt>
+<dd>You can set the copyright project-wide with the '--copyright' commandline parameter (or in the config file). This TGV allows you to use/ overwrite it on a package level.</dd>
+<dt>creation_permission</dt>
+<dd>Sets the creation permission for the class. Example: 'Add portal content'.</dd>
+<dt>creation_roles</dt>
+<dd>You can set an own role who should be able to add a type. Use an Tuple of Strings. Default and example for this value: '(&quot;Manager&quot;, &quot;Owner&quot;, &quot;Member&quot;)'.</dd>
+<dt>default_view</dt>
+<dd>The TemplateMixin class in Archetypes allows your class to present several alternative view templates for a content type. The default_view value sets the default one. Defaults to 'base_view'. Only relevant if you use TemplateMixin.</dd>
+<dt>detailed_creation_permissions</dt>
+<dd>Give the content-type (types in the package, model) own creation permissions, named automagically 'ProductName: Add ClassName'.</dd>
+<dt>display_in_navigation</dt>
+<dd>Setting this boolean value adds the type to 'Displayed content types' in the portals navigation settings. Default is True</dd>
+<dt>email</dt>
+<dd>You can set the email project-wide with the '--email' commandline parameter (or in the config file). This TGV allows you to use/ overwrite it on a package level.</dd>
+<dt>generate_reference_fields</dt>
+<dd>Per default (True) navigable reference (or relation) ends are resulting in a ReferenceField (or RelationField). Setting this value to False results in not generating ReferenceFields automagically.</dd>
+<dt>global_allow</dt>
+<dd>Overwrite the AGX-calculated 'global_allow' setting of class. Setting it to '1' makes your content type addable everywhere (in principle), setting it to '0' limits it to places where it's explicitly allowed as content.</dd>
+<dt>i18ncontent</dt>
+<dd>Enables the content type(s) for LinguaPlone. Only allowed value is 'linguaplone'.</dd>
+<dt>immediate_view</dt>
+<dd>Set the immediate_view factory type information value. This should be the name of a page template, and defaults to 'base_view'. Note that Plone at this time does not make use of immediate_view, which in CMF core allows you to specify a different template to be used when an object is first created from when it is subsequently accessed.</dd>
+<dt>imports</dt>
+<dd>A list of python import statements which will be placed at the top of the generated file. Use this to make new field and widget types available, for example. Note that in the generated code you will be able to enter additional import statements in a preserved code section near the top of the file. Prefer using the imports tagged value when it imports something that is directly used by another element in your model. You can have several import statements, one per line, or by adding several tagged values with the name 'imports'.</dd>
+<dt>index:type</dt>
+<dd>the type of index used as (string), for example 'FieldIndex', 'KeywordIndex', 'DateIndex' or any available index in your portal. For known types a default is guessed, such as FieldIndex for StringFields or DateIndex for DateFields. If no guess is possible, we assume a FieldIndex.</dd>
+<dt>label</dt>
+<dd>Sets the readable name.</dd>
+<dt>license</dt>
+<dd>You can set the license project-wide with the '--license' commandline parameter (or in the config file). This TGV allows you to use/ overwrite it on a package level.</dd>
+<dt>module</dt>
+<dd>Like 'module_name', it overwrites the name of the directory it'd be normally placed in.</dd>
+<dt>module_name</dt>
+<dd>Like 'module', it overwrites the name of the directory it'd be normally placed in.</dd>
+<dt>read_permission</dt>
+<dd>Defines archetypes fields read-permission. Use it together with workflow to control ability to view fields based on roles/permissions.</dd>
+<dt>relation_implementation</dt>
+<dd>Sets the type of implementation is used for an association: 'basic' (used as default) for classic style archetypes references or 'relations' for use of the 'Relations' Product.</dd>
+<dt>searchable</dt>
+<dd>Per default a fields 'searchable' property is set to False. Sometimes you want it for all fields True. This TGV let you define the default for a class, package or model.</dd>
+<dt>searchable_type</dt>
+<dd>Setting this boolean value adds the type to 'types to be searched' in the portals search settings. Default is True</dd>
+<dt>suppl_views</dt>
+<dd>The TemplateMixin class in Archetypes allows your class to present several alternative view templates for a content type. The suppl_views value sets the available views. Example: '(&quot;my_view&quot;, &quot;myother_view&quot;)'. Defaults to '()'. Only relevant if you use TemplateMixin.</dd>
+<dt>use_dynamic_view</dt>
+<dd>Controles wether CMFDynamicViewFTI is used for a type/class. Boolean, default is True.</dd>
+<dt>use_portal_factory</dt>
+<dd>This boolean value controls the registration of the type for use with portal_factory. Default: True.</dd>
+<dt>use_workflow</dt>
+<dd>Tie the class to the named workflow. A state diagram (=workflow) attached to a class in the UML diagram is automatically used as that class's workflow; this tagged value allows you to tie the workflow to other classes.</dd>
+<dt>version_info</dt>
+<dd>Add ArchGenXML version information to the generated file (default is 1).</dd>
+<dt>vocabulary:type</dt>
+<dd>Enables support for Products 'ATVocabularyManager' by setting value to 'ATVocabularyManager'.</dd>
+<dt>vocabulary:vocabulary_type</dt>
+<dd>For use with 'ATVocabularyManager'. Defaults to 'Simplevocabulary'. Let you define the portal_type of the vocabulary used as initial vocabulary at Product install time. If VdexVocabulary is used, the install-script tries to install a vocabulary from a vdex file names 'Products/PRODUCTNAME/data/VOCABULARYNAME.vdex'.</dd>
+<dt>write_permission</dt>
+<dd>Defines archetypes fields write-permission. Use it together with workflow to control ability to write data to a field based on roles/permissions.</dd>
+</dl>
+</div>
+<div class="section" id="portlet">
+<h2><a class="toc-backref" href="#id9">portlet</a><a class="headerlink" href="#portlet" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>label</dt>
+<dd>Sets the readable name.</dd>
+<dt>template_name</dt>
+<dd>Specify a template for the portlet (without .pt). Default is the class name. (on classes with the stereotype <tt class="docutils literal"><span class="pre">&lt;&lt;portlet_class&gt;&gt;</span></tt>)</dd>
+</dl>
+</div>
+<div class="section" id="state">
+<h2><a class="toc-backref" href="#id10">state</a><a class="headerlink" href="#state" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>access</dt>
+<dd>Shortcut for 'Access contents information'.</dd>
+<dt>add</dt>
+<dd>Shortcut for 'Add portal content'.</dd>
+<dt>delete</dt>
+<dd>Shortcut for 'Delete objects'.</dd>
+<dt>description</dt>
+<dd>Sets the state description.</dd>
+<dt>inactive</dt>
+<dd>Shortcut for 'Access inactive portal content'.</dd>
+<dt>initial_state</dt>
+<dd>Sets this state to be the initial state. This allows you to use a normal state in your UML diagram instead of the special round starting-state symbol.</dd>
+<dt>label</dt>
+<dd>Sets the readable name.</dd>
+<dt>list</dt>
+<dd>Shortcut for 'List folder contents'.</dd>
+<dt>modify</dt>
+<dd>Shortcut for 'Modify portal content'.</dd>
+<dt>review</dt>
+<dd>Shortcut for 'Review portal content'.</dd>
+<dt>role</dt>
+<dd>Shortcut for 'Change local roles'.</dd>
+<dt>view</dt>
+<dd>Shortcut for 'View'.</dd>
+<dt>worklist</dt>
+<dd>Attach objects in this state to the named worklist. An example of a worklist is the to-review list.</dd>
+<dt>worklist:guard_permissions</dt>
+<dd>Sets the permissions needed to be allowed to view the worklist. Default value is 'Review portal content'. Set to 'False' for no guard_permission.</dd>
+<dt>worklist:guard_roles</dt>
+<dd>Sets the roles needed to be allowed to view the worklist. No default value</dd>
+</dl>
+</div>
+<div class="section" id="state-action">
+<h2><a class="toc-backref" href="#id11">state action</a><a class="headerlink" href="#state-action" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>after:binding</dt>
+<dd>Interface to bind the after effect to.</dd>
+<dt>before:binding</dt>
+<dd>Interface to bind the before effect to.</dd>
+<dt>label</dt>
+<dd>Sets the readable name.</dd>
+</dl>
+</div>
+<div class="section" id="state-machine">
+<h2><a class="toc-backref" href="#id12">state machine</a><a class="headerlink" href="#state-machine" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>bindings</dt>
+<dd>List of portal-types this workflow should be bound to. Comma-separated, i.e. 'Document, Image, File'.</dd>
+<dt>default</dt>
+<dd>A workflow id to be set as the default workflow.</dd>
+<dt>label</dt>
+<dd>Sets the readable name.</dd>
+</dl>
+</div>
+<div class="section" id="state-transition">
+<h2><a class="toc-backref" href="#id13">state transition</a><a class="headerlink" href="#state-transition" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>label</dt>
+<dd>Sets the readable name.</dd>
+<dt>trigger_type</dt>
+<dd>Sets the trigger type, following what is defined by DCWorkflow: automatic user action (default) workflow method</dd>
+<dt>url</dt>
+<dd>Action URL, need 'PloneWorkflowTransitions' to see it in Plone.</dd>
+</dl>
+</div>
+<div class="section" id="tool">
+<h2><a class="toc-backref" href="#id14">tool</a><a class="headerlink" href="#tool" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>author</dt>
+<dd>You can set the author project-wide with the '--author' commandline parameter (or in the config file). This TGV allows you to use/ overwrite it on a tool level.</dd>
+<dt>autoinstall</dt>
+<dd>Controls, wether the tool is automatically installed when your product is installed. Boolean, default is True.</dd>
+<dt>configlet</dt>
+<dd>Set to true (1) to set up a configlet in the Plone control panel for your tool.</dd>
+<dt>configlet:condition</dt>
+<dd>A TALES expression defining a condition which will be evaluated to determine whether the configlet should be displayed.</dd>
+<dt>configlet:description</dt>
+<dd>A description of the configlet.</dd>
+<dt>configlet:icon</dt>
+<dd>The name of an image file, which must be in your product's skin directory, used as the configlet icon.</dd>
+<dt>configlet:permission</dt>
+<dd>A permission which is required for the configlet to be displayed.</dd>
+<dt>configlet:section</dt>
+<dd>The section of the control panel where the configlet should be displayed. One of 'Plone', 'Products' (default) or 'Member'. <strong>warning</strong>: older documentation versions mentioned 'Members' here.</dd>
+<dt>configlet:title</dt>
+<dd>The name of the configlet.</dd>
+<dt>configlet:view</dt>
+<dd>The id of the view template to use when first opening the configlet. By default, the 'view' action of the object is used (which is usually base_view)</dd>
+<dt>copyright</dt>
+<dd>You can set the copyright project-wide with the '--copyright' commandline parameter (or in the config file). This TGV allows you to use/ overwrite it on a tool level.</dd>
+<dt>creation_permission</dt>
+<dd>Sets the creation permission for the class. Example: 'Add portal content'.</dd>
+<dt>creation_roles</dt>
+<dd>You can set an own role who should be able to add a type. Use an Tuple of Strings. Default and example for this value: '(&quot;Manager&quot;, &quot;Owner&quot;, &quot;Member&quot;)'.</dd>
+<dt>default_view</dt>
+<dd>The TemplateMixin class in Archetypes allows your class to present several alternative view templates for a content type. The default_view value sets the default one. Defaults to 'base_view'. Only relevant if you use TemplateMixin.</dd>
+<dt>email</dt>
+<dd>You can set the email project-wide with the '--email' commandline parameter (or in the config file). This TGV allows you to use/ overwrite it on a tool level.</dd>
+<dt>immediate_view</dt>
+<dd>Set the immediate_view factory type information value. This should be the name of a page template, and defaults to 'base_view'. Note that Plone at this time does not make use of immediate_view, which in CMF core allows you to specify a different template to be used when an object is first created from when it is subsequently accessed.</dd>
+<dt>imports</dt>
+<dd>A list of python import statements which will be placed at the top of the generated file. Use this to make new field and widget types available, for example. Note that in the generated code you will be able to enter additional import statements in a preserved code section near the top of the file. Prefer using the imports tagged value when it imports something that is directly used by another element in your model. You can have several import statements, one per line, or by adding several tagged values with the name 'imports'.</dd>
+<dt>label</dt>
+<dd>Sets the readable name.</dd>
+<dt>license</dt>
+<dd>You can set the license project-wide with the '--license' commandline parameter (or in the config file). This TGV allows you to use/ overwrite it on a tool level.</dd>
+<dt>module</dt>
+<dd>Like 'module_name', it overwrites the name of the directory it'd be normally placed in.</dd>
+<dt>module_name</dt>
+<dd>Like 'module', it overwrites the name of the directory it'd be normally placed in.</dd>
+<dt>suppl_views</dt>
+<dd>The TemplateMixin class in Archetypes allows your class to present several alternative view templates for a content type. The suppl_views value sets the available views. Example: '(&quot;my_view&quot;, &quot;myother_view&quot;)'. Defaults to '()'. Only relevant if you use TemplateMixin.</dd>
+<dt>tool_instance_name</dt>
+<dd>The id to use for the tool. Defaults to 'portal_&lt;name&gt;', where <tt class="docutils literal"><span class="pre">&lt;name&gt;</span></tt> is the class name in lowercase.</dd>
+<dt>toolicon</dt>
+<dd>The name of an image file, which must be found in the skins directory of the product. This will be used to represent your tool in the Zope Management Interface.</dd>
+</dl>
+</div>
+<div class="section" id="unknown">
+<h2><a class="toc-backref" href="#id15">unknown</a><a class="headerlink" href="#unknown" title="Permalink to this headline">¶</a></h2>
+<p>Modify</p>
+<p>access</p>
+<p>allow_empty_rows</p>
+<p>columns</p>
+<p>default:widget:Reference</p>
+<p>default_content_type</p>
+<p>default_output_type</p>
+<p>default_page_type</p>
+<p>i18ncontent</p>
+<p>index_method</p>
+<p>languageIndependent</p>
+<p>max_size</p>
+<p>mode</p>
+<p>pil_quality</p>
+<p>pil_resize_algo</p>
+<p>rename_after_creation</p>
+<p>storage</p>
+<p>swallowResizeExceptions</p>
+<p>widget:addable</p>
+<p>widget:allow_brightness</p>
+<p>widget:allow_browse</p>
+<p>widget:allow_file_upload</p>
+<p>widget:allow_search</p>
+<p>widget:allow_sorting</p>
+<p>widget:append_only</p>
+<p>widget:auto_insert</p>
+<p>widget:available_indexes</p>
+<p>widget:base_query</p>
+<p>widget:checkbox_bound</p>
+<p>widget:cols</p>
+<p>widget:columns</p>
+<p>widget:default_search_index</p>
+<p>widget:destination</p>
+<p>widget:destination_types</p>
+<p>widget:divider</p>
+<p>widget:dollars_and_cents</p>
+<p>widget:ending_year</p>
+<p>widget:force_close_on_insert</p>
+<p>widget:format</p>
+<p>widget:future_years</p>
+<p>widget:history_length</p>
+<p>widget:image_method</p>
+<p>widget:image_portal_types</p>
+<p>widget:maxlength</p>
+<p>widget:nullValueTitle</p>
+<p>widget:omitCountries</p>
+<p>widget:only_for_review_states</p>
+<p>widget:provideNullValue</p>
+<p>widget:restrict_browsing_to_startup_directory</p>
+<p>widget:rows</p>
+<p>widget:search_catalog</p>
+<p>widget:show_hm</p>
+<p>widget:show_indexes</p>
+<p>widget:show_path</p>
+<p>widget:show_review_state</p>
+<p>widget:show_ymd</p>
+<p>widget:size</p>
+<p>widget:starting_year</p>
+<p>widget:startup_directory</p>
+<p>widget:thousands_commas</p>
+<p>widget:visible</p>
+<p>widget:whole_dollars</p>
+</div>
+<div class="section" id="view">
+<h2><a class="toc-backref" href="#id16">view</a><a class="headerlink" href="#view" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>label</dt>
+<dd>Sets the readable name.</dd>
+<dt>name</dt>
+<dd>Specify a name for the zope3 view.. Default is the class name. (on classes with the stereotype <tt class="docutils literal"><span class="pre">&lt;&lt;view_class&gt;&gt;</span></tt>)</dd>
+</dl>
+</div>
+<div class="section" id="widget">
+<h2><a class="toc-backref" href="#id17">widget</a><a class="headerlink" href="#widget" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>description</dt>
+<dd>Sets a description for this widget. It's used for widget documentation while registering inside Archetypes.</dd>
+<dt>label</dt>
+<dd>Sets the readable name.</dd>
+<dt>macro</dt>
+<dd>Sets the macro used by the widget. This will be used as the name of the auto-created page template for the widget.</dd>
+<dt>title</dt>
+<dd>Sets the widget title. It's used for widget documentation while registering inside Archetypes.</dd>
+<dt>used_for</dt>
+<dd>Sets the possible fields which can use this widget. It's used for widget documentation while registering inside Archetypes. The list has the form: '&quot;Products.Archetypes.Field.Field1Name&quot;, &quot;Products.Archetypes.Field.FieldName2&quot;'.</dd>
+</dl>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../../../index.html"><img src="../../../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Tagged Values</a><ul>
+<li><a class="reference internal" href="#action">action</a></li>
+<li><a class="reference internal" href="#association">association</a></li>
+<li><a class="reference internal" href="#attribute">attribute</a></li>
+<li><a class="reference internal" href="#class">class</a></li>
+<li><a class="reference internal" href="#field">field</a></li>
+<li><a class="reference internal" href="#method">method</a></li>
+<li><a class="reference internal" href="#model">model</a></li>
+<li><a class="reference internal" href="#package">package</a></li>
+<li><a class="reference internal" href="#portlet">portlet</a></li>
+<li><a class="reference internal" href="#state">state</a></li>
+<li><a class="reference internal" href="#state-action">state action</a></li>
+<li><a class="reference internal" href="#state-machine">state machine</a></li>
+<li><a class="reference internal" href="#state-transition">state transition</a></li>
+<li><a class="reference internal" href="#tool">tool</a></li>
+<li><a class="reference internal" href="#unknown">unknown</a></li>
+<li><a class="reference internal" href="#view">view</a></li>
+<li><a class="reference internal" href="#widget">widget</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="quick-reference.html"
+                        title="previous chapter">Quick Reference</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="stereotypes.html"
+                        title="next chapter">Stereotypes</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../../_sources/tutorials/archgenxml/reference/tagged-values.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="stereotypes.html" title="Stereotypes"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="quick-reference.html" title="Quick Reference"
+             >previous</a> |</li>
+        <li><a href="../../../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Tutorials</a> &raquo;</li>
+          <li><a href="../index.html" >Using ArchGenXML</a> &raquo;</li>
+          <li><a href="index.html" >Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

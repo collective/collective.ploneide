@@ -1,0 +1,1051 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Querying &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Searching and indexing" href="index.html" />
+    <link rel="next" title="Forms, fields and widgets" href="../forms/index.html" />
+    <link rel="prev" title="Indexes and metadata" href="indexing.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../forms/index.html" title="Forms, fields and widgets"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="indexing.html" title="Indexes and metadata"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Searching and indexing</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="querying">
+<h1>Querying<a class="headerlink" href="#querying" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">How to programmatically search and query content from a Plone site.</p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
+<li><a class="reference internal" href="#accesing-the-portal-catalog-tool" id="id2">Accesing the portal catalog tool</a></li>
+<li><a class="reference internal" href="#querying-portal-catalog" id="id3">Querying portal_catalog</a><ul>
+<li><a class="reference internal" href="#available-indexes" id="id4">Available indexes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#brain-result-id" id="id5">Brain result id</a></li>
+<li><a class="reference internal" href="#brain-result-path" id="id6">Brain result path</a></li>
+<li><a class="reference internal" href="#brain-object-schema" id="id7">Brain object schema</a><ul>
+<li><a class="reference internal" href="#getting-the-underlying-object-its-path-and-its-url-from-a-brain" id="id8">Getting the underlying object, its path, and its URL from a brain</a></li>
+<li><a class="reference internal" href="#counting-value-of-an-specific-index" id="id9">Counting value of an specific index</a></li>
+<li><a class="reference internal" href="#sorting-and-limiting-the-number-of-results" id="id10">Sorting and limiting the number of results</a><ul>
+<li><a class="reference internal" href="#getobject-and-unrestrictedsearchresults" id="id11">getObject() and unrestrictedSearchResults()</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#text-format" id="id12">Text format</a></li>
+<li><a class="reference internal" href="#accessing-indexed-data" id="id13">Accessing indexed data</a></li>
+<li><a class="reference internal" href="#dumping-portal-catalog-content" id="id14">Dumping portal catalog content</a></li>
+<li><a class="reference internal" href="#bypassing-query-security-check" id="id15">Bypassing query security check</a></li>
+<li><a class="reference internal" href="#bypassing-language-check" id="id16">Bypassing language check</a></li>
+<li><a class="reference internal" href="#expired-content-check" id="id17">Expired content check</a></li>
+<li><a class="reference internal" href="#none-as-query-parameter" id="id18">None as query parameter</a></li>
+<li><a class="reference internal" href="#query-by-path" id="id19">Query by path</a><ul>
+<li><a class="reference internal" href="#searching-for-content-within-a-folder" id="id20">Searching for content within a folder</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#query-multiple-values" id="id21">Query multiple values</a></li>
+<li><a class="reference internal" href="#querying-by-interface" id="id22">Querying by interface</a></li>
+<li><a class="reference internal" href="#query-by-content-type" id="id23">Query by content type</a></li>
+<li><a class="reference internal" href="#query-published-items" id="id24">Query published items</a></li>
+<li><a class="reference internal" href="#getting-a-random-item" id="id25">Getting a random item</a></li>
+<li><a class="reference internal" href="#querying-fieldindexes-by-range" id="id26">Querying FieldIndexes by Range</a></li>
+<li><a class="reference internal" href="#querying-by-date" id="id27">Querying by date</a></li>
+<li><a class="reference internal" href="#query-by-language" id="id28">Query by language</a></li>
+<li><a class="reference internal" href="#boolean-queries-advancedquery" id="id29">Boolean queries (AdvancedQuery)</a></li>
+<li><a class="reference internal" href="#unique-values" id="id30">Unique values</a></li>
+<li><a class="reference internal" href="#performance" id="id31">Performance</a></li>
+<li><a class="reference internal" href="#batching" id="id32">Batching</a></li>
+<li><a class="reference internal" href="#walking-through-all-content" id="id33">Walking through all content</a></li>
+<li><a class="reference internal" href="#other-notes" id="id34">Other notes</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Quering is the action to retrieve data from search indexes.
+On Plone's case this usually means querying content items using <tt class="docutils literal"><span class="pre">portal_catalog</span></tt> tool.
+Plone uses <a class="reference internal" href="catalog.html"><em>portal_catalog</em></a> tool to perform most of content related
+queries. Special catalogs, like <tt class="docutils literal"><span class="pre">reference_catalog</span></tt>, exists, for specialized and optimized queries.</p>
+</div>
+<div class="section" id="accesing-the-portal-catalog-tool">
+<h2><a class="toc-backref" href="#id2">Accesing the portal catalog tool</a><a class="headerlink" href="#accesing-the-portal-catalog-tool" title="Permalink to this headline">¶</a></h2>
+<p>Plone queries are performed using <tt class="docutils literal"><span class="pre">portal_catalog</span></tt> persistent tool which is available as
+an persistent object at the site root.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># portal_catalog is defined in the site root</span>
+<span class="n">portal_catalog</span> <span class="o">=</span> <span class="n">site</span><span class="o">.</span><span class="n">portal_catalog</span>
+</pre></div>
+</div>
+<p>You can also use <a class="reference internal" href="../misc/context.html"><em>ITools</em></a> tool to get access to portal_catalog
+if you do not have Plone site object directly available:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">context</span> <span class="o">=</span> <span class="n">aq_inner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
+<span class="n">tools</span> <span class="o">=</span> <span class="n">getMultiAdapter</span><span class="p">((</span><span class="n">context</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s">u&#39;plone_tools&#39;</span><span class="p">)</span>
+
+<span class="n">portal_url</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">catalog</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>There is also a third way, using traversing. This is discouraged,
+as this includes extra processing overhead:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Use magical Zope acquisition mechanism</span>
+<span class="n">portal_catalog</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">portal_catalog</span>
+</pre></div>
+</div>
+<p>...and the same in TAL template:</p>
+<div class="highlight-python"><pre>&lt;div tal:define="portal_catalog context/portal_catalog" /&gt;</pre>
+</div>
+<p>A safer method is to use the getToolByName helper function:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">Products.CMFCore.utils</span> <span class="kn">import</span> <span class="n">getToolByName</span>
+<span class="n">catalog</span> <span class="o">=</span> <span class="n">getToolByName</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="s">&#39;portal_catalog&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="querying-portal-catalog">
+<h2><a class="toc-backref" href="#id3">Querying portal_catalog</a><a class="headerlink" href="#querying-portal-catalog" title="Permalink to this headline">¶</a></h2>
+<p>To search for something and get the resulting brains, write:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">results</span> <span class="o">=</span> <span class="n">catalog</span><span class="o">.</span><span class="n">searchResults</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Where <tt class="docutils literal"><span class="pre">kwargs</span></tt> is a dictionary of index names and their
+associated query values. Only the indexes that you care about need
+to be included. This is really useful if you have variable
+searching criteria, for example, coming from a form where the users
+can select different fields to search for. For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">results</span> <span class="o">=</span> <span class="n">catalog</span><span class="o">.</span><span class="n">searchResults</span><span class="p">({</span><span class="s">&#39;portal_type&#39;</span><span class="p">:</span> <span class="s">&#39;Event&#39;</span><span class="p">,</span> <span class="s">&#39;review_state&#39;</span><span class="p">:</span> <span class="s">&#39;pending&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>It is worth pointing out at this point that the indexes that you
+include are treated as a logical AND, rather than OR. In other
+words, the query above will find all the items that are both an
+Event, AND in the review state of pending.</p>
+<p>Additionally, you can call the catalog tool directly, which is
+equivalent to calling <tt class="docutils literal"><span class="pre">catalog.searchResults()</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">results</span> <span class="o">=</span> <span class="n">catalog</span><span class="p">(</span><span class="n">portal_type</span><span class="o">=</span><span class="s">&#39;Event&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If you call portal_catalog() without arguments it will return all indexed content objects:</p>
+<div class="highlight-python"><pre># Print all content on the site
+all_brains = catalog()
+for brain in all_brains:
+        print "Name:" + brain["Title"] + " URL:" + brain.getURL()</pre>
+</div>
+<p>The catalog tool queries return an iterable of catalog brain objects.</p>
+<p>As mentioned previously, brains contain a subset of the actual content
+object information. The available subset is defined by the metadata
+columns in portal_catalog. You can see available metadata columns on
+the portal_catalog &quot;Metadata&quot; tab in ZMI. For more information, see <a class="reference internal" href="indexing.html"><em>indexing</em></a>.</p>
+<div class="section" id="available-indexes">
+<h3><a class="toc-backref" href="#id4">Available indexes</a><a class="headerlink" href="#available-indexes" title="Permalink to this headline">¶</a></h3>
+<p>To see the full list of available indexes in your catalog, open the
+ZMI (what usually means navigating to <em>http://yoursiteURL/manage</em>)
+look for the <em>portal_catalog</em> object tool into the root of your
+Plone site and check the <em>Indexes</em> tab. Note that there are
+different types of indexes, and each one admits different types of
+search parameters, and behave differently. For example,
+<em>FieldIndex</em> and <em>KeywordIndex</em> support sorting, but <em>ZCTextIndex</em>
+doesn't. To learn more about indexes, see
+<a class="reference external" href="http://docs.zope.org/zope2/zope2book/SearchingZCatalog.html">The Zope Book, Searching and Categorizing Content</a>.</p>
+<p>Some of the most commonly used ones are:</p>
+<dl class="docutils">
+<dt>Title</dt>
+<dd>The title of the content object.</dd>
+<dt>Description</dt>
+<dd>The description field of the content.</dd>
+<dt>Subject</dt>
+<dd><p class="first">The keywords used to categorize the content. Example:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="n">catalog</span><span class="o">.</span><span class="n">searchResults</span><span class="p">(</span><span class="n">Subject</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;cats&#39;</span><span class="p">,</span> <span class="s">&#39;dogs&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</dd>
+<dt>portal_type</dt>
+<dd><p class="first">As its name suggest, search for content whose portal type is
+indicated. For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">catalog</span><span class="o">.</span><span class="n">searchResults</span><span class="p">(</span><span class="n">portal_type</span><span class="o">=</span><span class="s">&#39;News Item&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can also specify several types using a list or tuple format:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="n">catalog</span><span class="o">.</span><span class="n">searchResults</span><span class="p">(</span><span class="n">portal_type</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;News Item&#39;</span><span class="p">,</span> <span class="s">&#39;Event&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</dd>
+<dt>review_state</dt>
+<dd><p class="first">The current workflow review state of the content. For example:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="n">catalog</span><span class="o">.</span><span class="n">searchResults</span><span class="p">(</span><span class="n">review_state</span><span class="o">=</span><span class="s">&#39;pending&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt>object_provides</dt>
+<dd><p class="first">From Plone 3, you can search by the interface provided by the
+content. Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">Products.MyProduct.path.to</span> <span class="kn">import</span> <span class="n">IIsCauseForCelebration</span>
+<span class="n">catalog</span><span class="p">(</span><span class="n">object_provides</span><span class="o">=</span><span class="n">IIsCauseForCelebration</span><span class="o">.</span><span class="n">__identifier__</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="last">Searching for interfaces can have some benefits. Suppose you have
+several types, for example, event types like <em>Birthday</em>, <em>Wedding</em>
+and <em>Graduation</em>, in your portal which implement the same interface
+(for example, <tt class="docutils literal"><span class="pre">IIsCauseForCelebration</span></tt>). Suppose you want to get
+items of these types from the catalog by their interface. This is
+more exact than naming the types explicitly (like
+portal_type=['Birthday','Wedding','Graduation' ]), because you
+don't really care what the types' names really are: all you really
+care for is the interface.
+This has the additional advantage that if products added or
+modified later add types which implement the interface, these new
+types will also show up in your query.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="brain-result-id">
+<h2><a class="toc-backref" href="#id5">Brain result id</a><a class="headerlink" href="#brain-result-id" title="Permalink to this headline">¶</a></h2>
+<p>Result ID (RID) is given with the brain object and you can use this ID to query
+further info about the object from the catalog.</p>
+<p>Example:</p>
+<div class="highlight-python"><pre>(Pdb) brain.getRID()
+872272330</pre>
+</div>
+</div>
+<div class="section" id="brain-result-path">
+<h2><a class="toc-backref" href="#id6">Brain result path</a><a class="headerlink" href="#brain-result-path" title="Permalink to this headline">¶</a></h2>
+<p>Brain result path can be extraced as string using <tt class="docutils literal"><span class="pre">getPath()</span></tt> method:</p>
+<div class="highlight-python"><pre>print r.getPath()
+/site/sisalto/ajankohtaista</pre>
+</div>
+</div>
+<div class="section" id="brain-object-schema">
+<h2><a class="toc-backref" href="#id7">Brain object schema</a><a class="headerlink" href="#brain-object-schema" title="Permalink to this headline">¶</a></h2>
+<p>To see what metadata columns a brain object contain, you can access
+this information from <tt class="docutils literal"><span class="pre">__record_schema__</span></tt> attribute which is a dict.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">brain</span><span class="o">.</span><span class="n">__record_schema__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span> <span class="k">print</span> <span class="n">i</span>
+
+<span class="p">(</span><span class="s">&#39;startDate&#39;</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
+<span class="p">(</span><span class="s">&#39;endDate&#39;</span><span class="p">,</span> <span class="mi">33</span><span class="p">)</span>
+<span class="p">(</span><span class="s">&#39;Title&#39;</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+<span class="p">(</span><span class="s">&#39;color&#39;</span><span class="p">,</span> <span class="mi">31</span><span class="p">)</span>
+<span class="p">(</span><span class="s">&#39;data_record_score_&#39;</span><span class="p">,</span> <span class="mi">35</span><span class="p">)</span>
+<span class="p">(</span><span class="s">&#39;exclude_from_nav&#39;</span><span class="p">,</span> <span class="mi">13</span><span class="p">)</span>
+<span class="p">(</span><span class="s">&#39;Type&#39;</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span>
+<span class="p">(</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="mi">19</span><span class="p">)</span>
+<span class="p">(</span><span class="s">&#39;cmf_uid&#39;</span><span class="p">,</span> <span class="mi">29</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">TODO: What do those numbers represent?</p>
+</div>
+<div class="section" id="getting-the-underlying-object-its-path-and-its-url-from-a-brain">
+<h3><a class="toc-backref" href="#id8">Getting the underlying object, its path, and its URL from a brain</a><a class="headerlink" href="#getting-the-underlying-object-its-path-and-its-url-from-a-brain" title="Permalink to this headline">¶</a></h3>
+<p>As it was said earlier, searching inside the catalog returns
+catalog brains, not the object themselves. If you want to get the
+object associated with a brain, do:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">brain</span><span class="o">.</span><span class="n">getObject</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>To get the path of the object without fetching it:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">brain</span><span class="o">.</span><span class="n">getPath</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>which is equivalent to <tt class="docutils literal"><span class="pre">obj.getPhysicalPath()</span></tt>.</p>
+<p>And finally, to get the URL of the underlying object, usually to
+provide a link to it:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">brain</span><span class="o">.</span><span class="n">getURL</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>which is equivalent to <tt class="docutils literal"><span class="pre">obj.absolute_url()</span></tt>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Calling getObject() has performance implications. Waking up
+each object needs a separate query to the database.</p>
+</div>
+</div>
+<div class="section" id="counting-value-of-an-specific-index">
+<h3><a class="toc-backref" href="#id9">Counting value of an specific index</a><a class="headerlink" href="#counting-value-of-an-specific-index" title="Permalink to this headline">¶</a></h3>
+<p>The efficient way of counting the number value of an index is to work directly in this index. For example we want to count the number of each portal_type. Quering via search results is a performance bootleneck for that. Iterating on all brains put those in zodb cache. This method is also a memory bottleneck.
+So the good way for do that</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">### count portal_type index</span>
+<span class="n">stats</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">getToolByName</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="s">&#39;portal_catalog&#39;</span><span class="p">)</span>
+<span class="n">index</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">_catalog</span><span class="o">.</span><span class="n">indexes</span><span class="p">[</span><span class="s">&#39;portal_type&#39;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">index</span><span class="o">.</span><span class="n">uniqueValues</span><span class="p">():</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">_index</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">stats</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">)]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">stats</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="sorting-and-limiting-the-number-of-results">
+<h3><a class="toc-backref" href="#id10">Sorting and limiting the number of results</a><a class="headerlink" href="#sorting-and-limiting-the-number-of-results" title="Permalink to this headline">¶</a></h3>
+<p>To sort the results, use the sort_on and sort_order arguments.
+The sort_on argument accepts any available index, even if you're
+not searching by it. The sort_order can be either 'ascending' or
+'descending', where 'ascending' means from A to Z for a text field.
+'reverse' is an alias equivalent to 'descending'. For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">results</span> <span class="o">=</span> <span class="n">catalog_searchResults</span><span class="p">(</span><span class="n">Description</span><span class="o">=</span><span class="s">&#39;Plone documentation&#39;</span><span class="p">,</span>
+                                <span class="n">sort_on</span><span class="o">=</span><span class="s">&#39;sortable_title&#39;</span><span class="p">,</span> <span class="n">sort_order</span><span class="o">=</span><span class="s">&#39;ascending&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The catalog.searchResults() returns a list-like object, so to limit
+the number of results you can just use Python's slicing. For
+example, to get only the first 3 items:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">results</span> <span class="o">=</span> <span class="n">catalog</span><span class="o">.</span><span class="n">searchResults</span><span class="p">(</span><span class="n">Description</span><span class="o">=</span><span class="s">&#39;Plone documentation&#39;</span><span class="p">)[:</span><span class="mi">3</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>In addition, ZCatalogs allow a sort_limit argument. The
+sort_limit is only a hint for the search algorhitms and can
+potentially return a few more items, so it's preferable to use both
+<tt class="docutils literal"><span class="pre">sort_limit</span></tt> and slicing simultaneously:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">limit</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">catalog</span><span class="o">.</span><span class="n">searchResults</span><span class="p">(</span><span class="n">Description</span><span class="o">=</span><span class="s">&#39;Plone documentation&#39;</span><span class="p">,</span>
+                                <span class="n">sort_limit</span><span class="o">=</span><span class="n">limit</span><span class="p">)[:</span><span class="n">limit</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>portal_catalog query takes <em>sort_on</em> argument which tells the index used for sorting.
+<em>sort_order</em> defines sort direction. It can be string &quot;reverse&quot;.</p>
+<p>Sorting is supported only on FieldIndexes.
+Due to nature of searchable text indexes (they index split text, not strings) they
+cannot be used for sorting. For example, to do sorting by title, an index
+called <em>sortable_tite</em> should be used.</p>
+<p>Example how to sort by id:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">results</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">portal_catalog</span><span class="o">.</span><span class="n">searchResults</span><span class="p">(</span><span class="n">sort_on</span><span class="o">=</span><span class="s">&quot;id&quot;</span><span class="p">,</span>
+                                               <span class="n">portal_type</span><span class="o">=</span><span class="s">&quot;Document&quot;</span><span class="p">,</span>
+                                               <span class="n">sort_order</span><span class="o">=</span><span class="s">&quot;reverse&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="getobject-and-unrestrictedsearchresults">
+<h4><a class="toc-backref" href="#id11">getObject() and unrestrictedSearchResults()</a><a class="headerlink" href="#getobject-and-unrestrictedsearchresults" title="Permalink to this headline">¶</a></h4>
+<p>You cannot call getObject() for a restricted result, even in trusted code.</p>
+<p>Instead, you need to use:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">unrestrictedTraverse</span><span class="p">(</span><span class="n">brain</span><span class="o">.</span><span class="n">getPath</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>For more information, see</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.mail-archive.com/zope-dev&#64;zope.org/msg17514.html">http://www.mail-archive.com/zope-dev&#64;zope.org/msg17514.html</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="text-format">
+<h2><a class="toc-backref" href="#id12">Text format</a><a class="headerlink" href="#text-format" title="Permalink to this headline">¶</a></h2>
+<p>Since most indexes use Archetypes accessors to index the field value,
+the returned text is UTF-8 encoded. This is a limitation
+inherited from the early ages of Plone.</p>
+<p>To get unicode value for e.g. title you need to do the following:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">title</span> <span class="o">=</span> <span class="n">brain</span><span class="p">[</span><span class="s">&quot;Title&quot;</span><span class="p">]</span>
+<span class="n">title</span> <span class="o">=</span> <span class="n">title</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&quot;utf-8&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">title</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">u&quot;å&quot;</span><span class="p">:</span>
+    <span class="c"># Unicode text matching etc. functions work correctly now</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="accessing-indexed-data">
+<h2><a class="toc-backref" href="#id13">Accessing indexed data</a><a class="headerlink" href="#accessing-indexed-data" title="Permalink to this headline">¶</a></h2>
+<p>Normally you don't get copy of indexed data with brains, only metadata.
+You can still access the raw indexed data if you know what you are doing
+by using RID of the brain object.</p>
+<p>Example:</p>
+<div class="highlight-python"><pre>(Pdb) data = self.context.portal_catalog.getIndexDataForRID(872272330)
+(Pdb) for i in data.items(): print i
+('Title', ['ulkomuseon', 'tarinaopastukset'])
+('effectiveRange', (21305115, 278752140))
+('object_provides', ['Products.CMFCore.interfaces._content.IDublinCore', 'Products.ATContentTypes.interface.interfaces.IHistoryAware', 'AccessControl.interfaces.IOwned', 'OFS.interfaces.ITraversable', 'plone.portlets.interfaces.ILocalPortletAssignable', 'Products.Archetypes.interfaces._base.IBaseObject', 'zope.annotation.interfaces.IAttributeAnnotatable', 'vs.event.interfaces.IVSEvent', 'Products.CMFCore.interfaces._content.IMutableMinimalDublinCore', 'OFS.interfaces.IPropertyManager', 'OFS.interfaces.IZopeObject', 'AccessControl.interfaces.IRoleManager', 'zope.annotation.interfaces.IAnnotatable', 'Acquisition.interfaces.IAcquirer', 'Products.ATContentTypes.interface.event.IATEvent', 'OFS.interfaces.ICopySource', 'Products.LinguaPlone.interfaces.ITranslatable', 'Products.ATContentTypes.interface.interfaces.ICalendarSupport', 'Products.ATContentTypes.interface.interfaces.IATContentType', 'plone.app.iterate.interfaces.IIterateAware', 'Products.Archetypes.interfaces._base.IBaseContent', 'Products.CMFCore.interfaces._content.ICatalogableDublinCore', 'Products.CMFDynamicViewFTI.interface._base.IBrowserDefault', 'Products.Archetypes.interfaces._referenceable.IReferenceable', 'plone.locking.interfaces.ITTWLockable', 'plone.app.imaging.interfaces.IBaseObject', 'persistent.interfaces.IPersistent', 'webdav.interfaces.IDAVResource', 'AccessControl.interfaces.IPermissionMappingSupport', 'OFS.interfaces.ISimpleItem', 'plone.app.kss.interfaces.IPortalObject', 'plone.app.kss.interfaces.IContentish', 'archetypes.schemaextender.interfaces.IExtensible', 'App.interfaces.IUndoSupport', 'OFS.interfaces.IManageable', 'App.interfaces.IPersistentExtra', 'Products.CMFCore.interfaces._content.IMutableDublinCore', 'Products.Archetypes.interfaces._athistoryaware.IATHistoryAware', 'dateable.kalends.IRecurringEvent', 'OFS.interfaces.IItem', 'zope.interface.Interface', 'OFS.interfaces.IFTPAccess', 'Products.CMFDynamicViewFTI.interface._base.ISelectableBrowserDefault', 'webdav.interfaces.IWriteLock', 'Products.CMFCore.interfaces._content.IMinimalDublinCore', 'Products.CMFCore.interfaces._content.IDynamicType', 'Products.CMFCore.interfaces._content.IContentish'])
+('Type', u'VSEvent')
+('id', 'ulkomuseon-tarinaopastukset')
+('cmf_uid', 2)
+('recurrence_days', [733960, 733981, 733974, 733967])
+('end', 1077028380)
+('Description', ['saamelaismuseon', 'ulkomuseossa', ...
+('is_folderish', False)
+('getId', 'ulkomuseon-tarinaopastukset')
+('start', 1077028380)
+('is_default_page', False)
+('Date', 1077036795)
+('review_state', 'published')
+('Language', &lt;LanguageIndex.IndexEntry id 872272330 language fi, cid 8b9a08c216b8e086f3446775ad71a748&gt;)
+('portal_type', 'VSEvent')
+('expires', 1339244460)
+('allowedRolesAndUsers', ['Anonymous'])
+('getObjPositionInParent', 10)
+('path', '/siida/sisalto/8-vuodenaikaa/ulkomuseon-tarinaopastukset')
+('in_reply_to', '')
+('UID', '8b9a08c216b8e086f3446775ad71a748')
+('Creator', 'admin')
+('effective', 1077036795)
+('getRawRelatedItems', [])
+('getEventType', [])
+('created', 1077036792)
+('modified', 1077048720)
+('SearchableText', ['ulkomuseon', 'tarinaopastukset', ...
+('sortable_title', 'ulkomuseon tarinaopastukset')
+('meta_type', 'VSEvent')
+('Subject', [])</pre>
+</div>
+<p>You can also directly access a single index:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Get event brain result id</span>
+<span class="n">rid</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">getRID</span><span class="p">()</span>
+<span class="c"># Get list of recurrence_days indexed value.</span>
+<span class="c"># ZCatalog holds internal Catalog object which we can directly poke in evil way</span>
+<span class="c"># This call goes to Products.PluginIndexes.UnIndex.Unindex class and we</span>
+<span class="c"># read the persistent value from there what it has stored in our index</span>
+<span class="c"># recurrence_days</span>
+<span class="n">indexed_days</span> <span class="o">=</span> <span class="n">portal_catalog</span><span class="o">.</span><span class="n">_catalog</span><span class="o">.</span><span class="n">getIndex</span><span class="p">(</span><span class="s">&quot;recurrence_days&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">getEntryForObject</span><span class="p">(</span><span class="n">rid</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">[])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="dumping-portal-catalog-content">
+<h2><a class="toc-backref" href="#id14">Dumping portal catalog content</a><a class="headerlink" href="#dumping-portal-catalog-content" title="Permalink to this headline">¶</a></h2>
+<p>Following is useful in unit test debugging:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Print all objects visible to the currently logged in user</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">portal_catalog</span><span class="p">():</span> <span class="k">print</span> <span class="n">i</span><span class="o">.</span><span class="n">getURL</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="bypassing-query-security-check">
+<h2><a class="toc-backref" href="#id15">Bypassing query security check</a><a class="headerlink" href="#bypassing-query-security-check" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Security: All portal_catalog queries are limited to the current user permissions by default.</p>
+</div>
+<p>If you want to bypass this restrictions, use the
+unrestrictedSearchResults() method.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Print absolute content of portal_catalog</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">portal_catalog</span><span class="o">.</span><span class="n">unrestrictedSearchResults</span><span class="p">():</span> <span class="k">print</span> <span class="n">i</span><span class="o">.</span><span class="n">getURL</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="bypassing-language-check">
+<h2><a class="toc-backref" href="#id16">Bypassing language check</a><a class="headerlink" href="#bypassing-language-check" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">All portal_catalog() queries are limited to the selected language of
+current user. You need to explicitly bypass the language check if you
+want to do multilingual queries.</p>
+</div>
+<p>Example of how to bypass language check:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">all_content_brains</span> <span class="o">=</span> <span class="n">portal_catalog</span><span class="p">(</span><span class="n">Language</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Some older LinguaPlone versions, which are still using <tt class="docutils literal"><span class="pre">LanguageIndex</span></tt> to
+keep language information in portal_catalog() may require:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">all_content_brains</span> <span class="o">=</span> <span class="n">portal_catalog</span><span class="p">(</span><span class="n">Language</span><span class="o">=</span><span class="s">&quot;all&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>More information</p>
+<ul class="simple">
+<li><a class="reference external" href="http://plone.293351.n2.nabble.com/Products-LinguaPlone-LanguageIndex-vs-FieldIndex-td5554729.html#a5747819">http://plone.293351.n2.nabble.com/Products-LinguaPlone-LanguageIndex-vs-FieldIndex-td5554729.html#a5747819</a></li>
+</ul>
+</div>
+<div class="section" id="expired-content-check">
+<h2><a class="toc-backref" href="#id17">Expired content check</a><a class="headerlink" href="#expired-content-check" title="Permalink to this headline">¶</a></h2>
+<p>Plone and portal_catalog have a mechanism to list only
+active (non-expired) content by default.</p>
+<p>Below is an example of how the expired content check is made:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">mtool</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">portal_membership</span>
+<span class="n">show_inactive</span> <span class="o">=</span> <span class="n">mtool</span><span class="o">.</span><span class="n">checkPermission</span><span class="p">(</span><span class="s">&#39;Access inactive portal content&#39;</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+
+<span class="n">contents</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">portal_catalog</span><span class="o">.</span><span class="n">queryCatalog</span><span class="p">(</span><span class="n">show_inactive</span><span class="o">=</span><span class="n">show_inactive</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>See also:</p>
+<div class="highlight-python"><pre>* :doc:`Listing &lt;/content/listing&gt;`</pre>
+</div>
+</div>
+<div class="section" id="none-as-query-parameter">
+<h2><a class="toc-backref" href="#id18">None as query parameter</a><a class="headerlink" href="#none-as-query-parameter" title="Permalink to this headline">¶</a></h2>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Usually if you pass in None as the query value, it will match all the objects instead of zero objects.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Querying for None values is possible with <a class="reference external" href="http://www.dieter.handshake.de/pyprojects/zope/AdvancedQuery.html">AdvancedQuery</a> (see below).</p>
+</div>
+</div>
+<div class="section" id="query-by-path">
+<h2><a class="toc-backref" href="#id19">Query by path</a><a class="headerlink" href="#query-by-path" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://svn.plone.org/svn/plone/Products.ExtendedPathIndex/trunk/README.txt">ExtendedPathIndex</a> is the index used for content object paths.
+The <em>path</em> index stores the physical path of the objects.</p>
+<dl class="docutils">
+<dt>** Warning: ** If you ever rename your Plone site instance, the path</dt>
+<dd>index needs to be completely rebuilt.</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">portal_catalog</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="p">{</span> <span class="s">&quot;query&quot;</span><span class="p">:</span> <span class="s">&quot;/myploneinstance/myfolder&quot;</span> <span class="p">})</span> <span class="c"># return myfolder and all child content</span>
+</pre></div>
+</div>
+<div class="section" id="searching-for-content-within-a-folder">
+<h3><a class="toc-backref" href="#id20">Searching for content within a folder</a><a class="headerlink" href="#searching-for-content-within-a-folder" title="Permalink to this headline">¶</a></h3>
+<p>Use the 'path' argument to specify the physical path to the folder
+you want to search into.</p>
+<p>By default, this will match objects into the specified folder and
+all existing sub-folders. To change this behaviour, pass a
+dictionary with the keys 'query' and 'depth' to the 'path'
+argument, where</p>
+<ul class="simple">
+<li>'query' is the physical path, and</li>
+<li>'depth' can be either 0, which will return only the brain for
+the path queried against, or some number greater, which will query
+all items down to that depth (eg, 1 means searching just inside the
+specified folder, or 2, which means searching inside the folder,
+and inside all child folders, etc).</li>
+</ul>
+<p>The most common use case is listing the contents of an existing
+folder, which we'll assume to be the <tt class="docutils literal"><span class="pre">context</span></tt> object in this
+example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">folder_path</span> <span class="o">=</span> <span class="s">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">getPhysicalPath</span><span class="p">())</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">catalog</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;query&#39;</span><span class="p">:</span> <span class="n">folder_path</span><span class="p">,</span> <span class="s">&#39;depth&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="query-multiple-values">
+<h2><a class="toc-backref" href="#id21">Query multiple values</a><a class="headerlink" href="#query-multiple-values" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">KeywordIndex</span></tt> index type indexes list of values.
+It is used e.g. by Plone's categories (subject) feature
+and <cite>object_provides`</cite> provided interfaces index.</p>
+<p>You can either query</p>
+<ul class="simple">
+<li>a single value in the list</li>
+<li>many values in the list (all must present)</li>
+<li>any value in the list</li>
+</ul>
+<p>The index of the catalog to query is either the name of the
+keyword argument, a key in a mapping, or an attribute of a record
+object.</p>
+<p>Attributes of record objects</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">query</span></tt> -- either a sequence of objects or a single value to be
+passed as query to the index (mandatory)</li>
+<li><tt class="docutils literal"><span class="pre">operator</span></tt> -- specifies the combination of search results when
+query is a sequence of values. (optional, default: 'or'). Allowed values:
+'and', 'or'</li>
+</ul>
+<p>Below is an example of matching any of multiple values gives as a Python list in KeywordIndex.
+It queries all event types and recurrence_days KeywordIndex must match
+any of given dates:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Query all events on the site</span>
+<span class="c"># Note that there is no separate list for recurrent events</span>
+<span class="c"># so if you want to speed up you can hardcode</span>
+<span class="c"># recurrent event type list here.</span>
+<span class="n">matched_recurrence_events</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">portal_catalog</span><span class="p">(</span>
+                <span class="n">portal_type</span><span class="o">=</span><span class="n">supported_event_types</span><span class="p">,</span>
+                <span class="n">recurrence_days</span><span class="o">=</span><span class="p">{</span>
+                    <span class="s">&quot;query&quot;</span><span class="p">:</span><span class="n">recurrence_days_in_this_month</span><span class="p">,</span>
+                    <span class="s">&quot;operator&quot;</span> <span class="p">:</span> <span class="s">&quot;or&quot;</span>
+                <span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="querying-by-interface">
+<h2><a class="toc-backref" href="#id22">Querying by interface</a><a class="headerlink" href="#querying-by-interface" title="Permalink to this headline">¶</a></h2>
+<p>See <a class="reference external" href="http://plone.org/documentation/how-to/query-portal_catalog-for-interfaces">this tutorial</a>.</p>
+</div>
+<div class="section" id="query-by-content-type">
+<h2><a class="toc-backref" href="#id23">Query by content type</a><a class="headerlink" href="#query-by-content-type" title="Permalink to this headline">¶</a></h2>
+<p>To get all catalog brains of certain content type on the whole site:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">campaign_brains</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">portal_catalog</span><span class="p">(</span><span class="n">portal_type</span><span class="o">=</span><span class="s">&quot;News Item&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To see available type names, visit in portal_types tool in ZMI.</p>
+</div>
+<div class="section" id="query-published-items">
+<h2><a class="toc-backref" href="#id24">Query published items</a><a class="headerlink" href="#query-published-items" title="Permalink to this headline">¶</a></h2>
+<p>By default, the portal_catalog query does not care about the workflow state.
+You might want to limit the query to published items.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">campaign_brains</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">portal_catalog</span><span class="p">(</span><span class="n">portal_type</span><span class="o">=</span><span class="s">&quot;News Item&quot;</span><span class="p">,</span> <span class="n">review_state</span><span class="o">=</span><span class="s">&quot;published&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>review_state is a portal_catalog index which reads portal_workflow variable &quot;review_state&quot;.
+For more information, see what portal_workflow tool <em>Content</em> tab in ZMI contains.</p>
+</div>
+<div class="section" id="getting-a-random-item">
+<h2><a class="toc-backref" href="#id25">Getting a random item</a><a class="headerlink" href="#getting-a-random-item" title="Permalink to this headline">¶</a></h2>
+<p>The following view snippet allows you to get one random item on the site:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">random</span>
+
+<span class="k">def</span> <span class="nf">getRandomCampaign</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+    <span class="n">campaign_brains</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">portal_catalog</span><span class="p">(</span><span class="n">portal_type</span><span class="o">=</span><span class="s">&quot;CampaignPage&quot;</span><span class="p">,</span> <span class="n">review_state</span><span class="o">=</span><span class="s">&quot;published&quot;</span><span class="p">)</span>
+
+    <span class="c"># Filter out the current item which we have</span>
+
+    <span class="n">bad_ids</span> <span class="o">=</span> <span class="p">[</span> <span class="s">&quot;you&quot;</span><span class="p">,</span> <span class="s">&quot;might&quot;</span><span class="p">,</span> <span class="s">&quot;want to black  list some ids here&quot;</span> <span class="p">]</span>
+
+    <span class="n">items</span> <span class="o">=</span> <span class="p">[</span> <span class="n">brain</span> <span class="k">for</span> <span class="n">brain</span> <span class="ow">in</span> <span class="n">campaign_brains</span> <span class="k">if</span> <span class="n">brain</span><span class="p">[</span><span class="s">&quot;getId&quot;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">bad_ids</span> <span class="p">]</span>
+
+    <span class="c"># Check that we have items left after filtering</span>
+
+    <span class="n">items</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="c"># Pick one</span>
+        <span class="n">chosen</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">chosen</span><span class="o">.</span><span class="n">getObject</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c"># Fallback to the current content item if no random options available</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="querying-fieldindexes-by-range">
+<h2><a class="toc-backref" href="#id26">Querying FieldIndexes by Range</a><a class="headerlink" href="#querying-fieldindexes-by-range" title="Permalink to this headline">¶</a></h2>
+<p>The following examples demonstrate how to do range based queries.
+This is useful if you want to find the &quot;minimum&quot; or &quot;maximum&quot; values
+of something, the example assumes that there is an index called 'getPrice'.</p>
+<p>Get a value that is greater than or equal to 2:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">items</span> <span class="o">=</span> <span class="n">portal_catalog</span><span class="p">({</span><span class="s">&#39;getPrice&#39;</span><span class="p">:{</span><span class="s">&#39;query&#39;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="s">&#39;range&#39;</span><span class="p">:</span><span class="s">&#39;min&#39;</span><span class="p">}})</span>
+</pre></div>
+</div>
+<p>Get a value that is less than or equal to 40:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">items</span> <span class="o">=</span> <span class="n">portal_catalog</span><span class="p">({</span><span class="s">&#39;getPrice&#39;</span><span class="p">:{</span><span class="s">&#39;query&#39;</span><span class="p">:</span><span class="mi">40</span><span class="p">,</span><span class="s">&#39;range&#39;</span><span class="p">:</span><span class="s">&#39;max&#39;</span><span class="p">}})</span>
+</pre></div>
+</div>
+<p>Get a value that falls between 2 and 1000:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">items</span> <span class="o">=</span> <span class="n">portal_catalog</span><span class="p">({</span><span class="s">&#39;getPrice&#39;</span><span class="p">:{</span><span class="s">&#39;query&#39;</span><span class="p">:[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1000</span><span class="p">],</span><span class="s">&#39;range&#39;</span><span class="p">:</span><span class="s">&#39;min:max&#39;</span><span class="p">}})</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="querying-by-date">
+<h2><a class="toc-backref" href="#id27">Querying by date</a><a class="headerlink" href="#querying-by-date" title="Permalink to this headline">¶</a></h2>
+<p>See <a class="reference external" href="http://svn.zope.org/Zope/trunk/src/Products/PluginIndexes/DateIndex/tests/test_DateIndex.py?rev=102443&amp;view=auto">DateIndex</a>.</p>
+<p>Example:</p>
+<div class="highlight-python"><pre>items = portal_catalog(effective_date = {'date': {'query':(DateTime('2002-05-08 15:16:17'),
+                                        DateTime('2062-05-08 15:16:17')),
+                               'range': 'min:max'})</pre>
+</div>
+<p>Example 2:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># DateTime deltas are days as floating points</span>
+<span class="n">end</span> <span class="o">=</span> <span class="n">DateTime</span><span class="o">.</span><span class="n">DateTime</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="c"># If we have some clock skew peek a little to the future</span>
+<span class="n">start</span> <span class="o">=</span> <span class="n">DateTime</span><span class="o">.</span><span class="n">DateTime</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span>
+
+<span class="n">date_range_query</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&#39;query&#39;</span><span class="p">:(</span><span class="n">start</span><span class="p">,</span><span class="n">end</span><span class="p">),</span> <span class="s">&#39;range&#39;</span><span class="p">:</span> <span class="s">&#39;min:max&#39;</span><span class="p">}</span>
+
+<span class="n">items</span> <span class="o">=</span> <span class="n">portal_catalog</span><span class="o">.</span><span class="n">queryCatalog</span><span class="p">({</span><span class="s">&quot;portal_type&quot;</span><span class="p">:</span><span class="s">&quot;FeedFeederItem&quot;</span><span class="p">,</span>
+                                     <span class="s">&quot;created&quot;</span> <span class="p">:</span> <span class="n">date_range_query</span><span class="p">,</span>
+                                     <span class="s">&quot;sort_on&quot;</span><span class="p">:</span><span class="s">&quot;positive_ratings&quot;</span><span class="p">,</span>
+                                     <span class="s">&quot;sort_order&quot;</span><span class="p">:</span><span class="s">&quot;reverse&quot;</span><span class="p">,</span>
+                                     <span class="s">&quot;sort_limit&quot;</span><span class="p">:</span><span class="n">count</span><span class="p">,</span>
+                                     <span class="s">&quot;review_state&quot;</span><span class="p">:</span><span class="s">&quot;published&quot;</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>Another example how to get news items for a particular year in the template code:</p>
+<div class="highlight-python"><pre>&lt;div metal:fill-slot="main" id="content-news"
+ tal:define="boundLanguages here/portal_languages/getLanguageBindings;
+             prefLang python:boundLanguages[0];
+             DateTime python:modules['DateTime'].DateTime;
+             start_year request/year| python: 2004;
+             end_year request/year| python: 2099;
+             start_year python: int(start_year);
+             end_year python: int(end_year);
+             results python:container.portal_catalog(
+                portal_type='News Item',
+                sort_on='Date',
+                sort_order='reverse',
+                review_state='published',
+                id=prefLang,
+                created={ 'query' : [DateTime(start_year,1,1), DateTime(end_year,12,31)], 'range':'minmax'}
+                );
+             results python:[r for r in results if r.getObject()];
+             Batch python:modules['Products.CMFPlone'].Batch;
+             b_start python:request.get('b_start',0);
+             portal_discussion nocall:here/portal_discussion;
+             isDiscussionAllowedFor nocall:portal_discussion/isDiscussionAllowedFor;
+             getDiscussionFor nocall:portal_discussion/getDiscussionFor;
+             home_url python: mtool.getHomeUrl;
+             localized_time python: modules['Products.CMFPlone.PloneUtilities'].localized_time;"&gt;
+    ...
+&lt;/div&gt;</pre>
+</div>
+<p>More info</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.ifpeople.net/fairsource/courses/material/apiPlone_en">http://www.ifpeople.net/fairsource/courses/material/apiPlone_en</a></li>
+</ul>
+</div>
+<div class="section" id="query-by-language">
+<h2><a class="toc-backref" href="#id28">Query by language</a><a class="headerlink" href="#query-by-language" title="Permalink to this headline">¶</a></h2>
+<p>You can query by language:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">portal_catalog</span><span class="p">({</span><span class="s">&quot;Language&quot;</span><span class="p">:</span><span class="s">&quot;en&quot;</span><span class="p">})</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Products.LinguaPlone must be installed.</p>
+</div>
+</div>
+<div class="section" id="boolean-queries-advancedquery">
+<h2><a class="toc-backref" href="#id29">Boolean queries (AdvancedQuery)</a><a class="headerlink" href="#boolean-queries-advancedquery" title="Permalink to this headline">¶</a></h2>
+<p>AdvancedQuery is an add-on product for Zope's ZCatalog providing queries
+using boolean logic. AdvancedQuery is developer level product,
+providing Python interface for constructing boolean queries.</p>
+<p>AdvancedQuery monkey-patches <tt class="docutils literal"><span class="pre">portal_catalog</span></tt> to provide
+new method <tt class="docutils literal"><span class="pre">portal_catalog.evalAdvancedQuery()</span></tt>.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">Products</span> <span class="kn">import</span> <span class="n">AdvancedQuery</span>
+
+<span class="n">portal_catalog</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">portal_catalog</span> <span class="c"># Acquire portal_catalog from higher hierarchy level</span>
+
+<span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getPhysicalPath</span><span class="p">()</span> <span class="c"># Limit the search to the current folder and its children</span>
+
+<span class="c"># object.getPhysicalPath() returns the path as tuples of path parts</span>
+<span class="c"># Convert path to string</span>
+<span class="n">path</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+<span class="c"># Limit search to path in the current contex object and</span>
+<span class="c"># match all children implementing either of two interfaces</span>
+<span class="c"># AdvancedQuery operations can be combined using Python expressions &amp; | and ~</span>
+<span class="c"># or AdvancedQuery objects</span>
+<span class="n">query</span> <span class="o">=</span> <span class="n">AdvancedQuery</span><span class="o">.</span><span class="n">Eq</span><span class="p">(</span><span class="s">&quot;path&quot;</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">AdvancedQuery</span><span class="o">.</span><span class="n">Eq</span><span class="p">(</span><span class="s">&quot;getMyIndexGetter1&quot;</span><span class="p">,</span> <span class="s">&quot;foo&quot;</span><span class="p">)</span> <span class="o">|</span> <span class="n">AdvancedQuery</span><span class="o">.</span><span class="n">Eq</span><span class="p">(</span><span class="s">&quot;getMyIndexGetter2&quot;</span><span class="p">,</span> <span class="s">&quot;bar&quot;</span><span class="p">))</span>
+
+<span class="c"># The following result variable contains iterable of CatalogBrain objects</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">portal_catalog</span><span class="o">.</span><span class="n">evalAdvancedQuery</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+
+<span class="c"># Convert the catalog brains to a Python list containing tuples of object unique ID and Title</span>
+<span class="n">pairs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">nc</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+    <span class="n">pairs</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">nc</span><span class="p">[</span><span class="s">&quot;UID&quot;</span><span class="p">],</span> <span class="n">nc</span><span class="p">[</span><span class="s">&quot;Title&quot;</span><span class="p">]))</span>
+
+
+<span class="c"># query = Eq(&quot;path&quot;, diagnose_path) &amp; Eq(&quot;SearchableText&quot;, text_query_target)</span>
+
+<span class="n">query</span> <span class="o">=</span> <span class="n">Eq</span><span class="p">(</span><span class="s">&quot;path&quot;</span><span class="p">,</span> <span class="n">diagnose_path</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">Eq</span><span class="p">(</span><span class="s">&quot;SearchableText&quot;</span><span class="p">,</span> <span class="n">text_query_target</span><span class="p">)</span>
+
+<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">portal_catalog</span><span class="o">.</span><span class="n">evalAdvancedQuery</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Plone 3 ships with AdvancedQuery but it is not part of Plone. Always declare
+AdvancedQuery dependency in your egg's setup.py install_requires.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">AdvancedQuery does not necessarily apply the same automatic limitations which normal
+portal_catalog() queries do, like language and expiration date.
+Always check your query code against these limitations.</p>
+</div>
+<p>More information</p>
+<ul class="simple">
+<li>See <a class="reference external" href="http://www.dieter.handshake.de/pyprojects/zope/AdvancedQuery.html">AdvancedQuery</a>.</li>
+<li><a class="reference external" href="http://plone.org/documentation/manual/upgrade-guide/version/upgrading-plone-3-x-to-4.0/updating-add-on-products-for-plone-4.0/removed-advanced-query">http://plone.org/documentation/manual/upgrade-guide/version/upgrading-plone-3-x-to-4.0/updating-add-on-products-for-plone-4.0/removed-advanced-query</a></li>
+</ul>
+</div>
+<div class="section" id="unique-values">
+<h2><a class="toc-backref" href="#id30">Unique values</a><a class="headerlink" href="#unique-values" title="Permalink to this headline">¶</a></h2>
+<p>ZCatalog has <em>uniqueValuesFor()</em> method to retrieve all unique values for a certain index.
+It is intended to work on FieldIndexes only.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># getArea() is Archetype accessor for area field</span>
+<span class="c"># which is a string and tells the contet area.</span>
+<span class="c"># Custom getArea FieldIndex indexes these values</span>
+<span class="c"># to portal catalog.</span>
+<span class="c"># The following line gives all area values</span>
+<span class="c"># inputted on the site.</span>
+<span class="n">areas</span> <span class="o">=</span> <span class="n">portal_catalog</span><span class="o">.</span><span class="n">uniqueValuesFor</span><span class="p">(</span><span class="s">&quot;getArea&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="performance">
+<h2><a class="toc-backref" href="#id31">Performance</a><a class="headerlink" href="#performance" title="Permalink to this headline">¶</a></h2>
+<p>The following community mailing list blog posts is very insightful about the performance characteristics
+of Plone search and indexing:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://plone.293351.n2.nabble.com/Advice-for-site-with-very-large-number-of-objects-millions-tp5513207p5529103.html">http://plone.293351.n2.nabble.com/Advice-for-site-with-very-large-number-of-objects-millions-tp5513207p5529103.html</a></li>
+</ul>
+</div>
+<div class="section" id="batching">
+<h2><a class="toc-backref" href="#id32">Batching</a><a class="headerlink" href="#batching" title="Permalink to this headline">¶</a></h2>
+<p>TODO</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">results</span> <span class="o">=</span> <span class="n">Batch</span><span class="p">(</span><span class="n">contents</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">b_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">b_start</span><span class="p">,</span> <span class="n">orphan</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>orphan - the next page will be combined with the current page if it does not contain more than orphan elements</li>
+</ul>
+</div>
+<div class="section" id="walking-through-all-content">
+<h2><a class="toc-backref" href="#id33">Walking through all content</a><a class="headerlink" href="#walking-through-all-content" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">portal_catalog()</span></tt> call without search parameters will return all indexed
+site objects.</p>
+<p>Here is an example how to crawl through Plone content to search HTML
+snippets. This can be done by rendering every content object and check
+whether certain substrings exists the output HTML This snippet can be
+executed through-the-web in Zope Management Interface.</p>
+<p>This kind of scripting is especially useful if you need to find old links or
+migrate some text / HTML snippets in the content itself. There might be
+artifacts which only appear on the resulting pages (portlets, footer texts,
+etc.) and thus they are invisible to the normal full text search.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Find arbitary HTML snippets on Plone content pages</span>
+
+<span class="c"># Collect script output as text/html, so that you can</span>
+<span class="c"># call this script conveniently by just typing its URL to a web browser</span>
+<span class="nb">buffer</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+
+<span class="c"># We need to walk through all the content, as the</span>
+<span class="c"># links might not be indexed in any search catalog</span>
+<span class="k">for</span> <span class="n">brain</span> <span class="ow">in</span> <span class="n">context</span><span class="o">.</span><span class="n">portal_catalog</span><span class="p">():</span> <span class="c"># This queries cataloged brain of every content object</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">brain</span><span class="o">.</span><span class="n">getObject</span><span class="p">()</span>
+        <span class="c"># Call to the content object will render its default view and return it as text</span>
+        <span class="c"># Note: this will be slow - it equals to load every page from your Plone site</span>
+        <span class="n">rendered</span> <span class="o">=</span> <span class="n">obj</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s">&quot;yourtextmatch&quot;</span> <span class="ow">in</span> <span class="n">rendered</span><span class="p">:</span>
+            <span class="c"># found old link in the rendered output</span>
+            <span class="nb">buffer</span> <span class="o">+=</span> <span class="s">&quot;Found old links on &lt;a href=&#39;</span><span class="si">%s</span><span class="s">&#39;&gt;</span><span class="si">%s</span><span class="s">&lt;/a&gt;&lt;br&gt;</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">absolute_url</span><span class="p">(),</span> <span class="n">obj</span><span class="o">.</span><span class="n">Title</span><span class="p">())</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">pass</span> <span class="c"># Something may fail here if the content object is broken</span>
+
+<span class="k">return</span> <span class="nb">buffer</span>
+</pre></div>
+</div>
+<p>More info:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://blog.mfabrik.com/2011/02/17/finding-arbitary-html-snippets-on-plone-content-pages/">http://blog.mfabrik.com/2011/02/17/finding-arbitary-html-snippets-on-plone-content-pages/</a></li>
+</ul>
+</div>
+<div class="section" id="other-notes">
+<h2><a class="toc-backref" href="#id34">Other notes</a><a class="headerlink" href="#other-notes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://plone.org/documentation/tutorial/using-portal_catalog/tutorial-all-pages">Indexing tutorial</a> on plone.org</li>
+<li><a class="reference external" href="http://www.universalwebservices.net/web-programming-resources/zope-plone/advanced-sorting-of-plone-search-results/">Manual sorting example</a></li>
+</ul>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Querying</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#accesing-the-portal-catalog-tool">Accesing the portal catalog tool</a></li>
+<li><a class="reference internal" href="#querying-portal-catalog">Querying portal_catalog</a><ul>
+<li><a class="reference internal" href="#available-indexes">Available indexes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#brain-result-id">Brain result id</a></li>
+<li><a class="reference internal" href="#brain-result-path">Brain result path</a></li>
+<li><a class="reference internal" href="#brain-object-schema">Brain object schema</a><ul>
+<li><a class="reference internal" href="#getting-the-underlying-object-its-path-and-its-url-from-a-brain">Getting the underlying object, its path, and its URL from a brain</a></li>
+<li><a class="reference internal" href="#counting-value-of-an-specific-index">Counting value of an specific index</a></li>
+<li><a class="reference internal" href="#sorting-and-limiting-the-number-of-results">Sorting and limiting the number of results</a><ul>
+<li><a class="reference internal" href="#getobject-and-unrestrictedsearchresults">getObject() and unrestrictedSearchResults()</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#text-format">Text format</a></li>
+<li><a class="reference internal" href="#accessing-indexed-data">Accessing indexed data</a></li>
+<li><a class="reference internal" href="#dumping-portal-catalog-content">Dumping portal catalog content</a></li>
+<li><a class="reference internal" href="#bypassing-query-security-check">Bypassing query security check</a></li>
+<li><a class="reference internal" href="#bypassing-language-check">Bypassing language check</a></li>
+<li><a class="reference internal" href="#expired-content-check">Expired content check</a></li>
+<li><a class="reference internal" href="#none-as-query-parameter">None as query parameter</a></li>
+<li><a class="reference internal" href="#query-by-path">Query by path</a><ul>
+<li><a class="reference internal" href="#searching-for-content-within-a-folder">Searching for content within a folder</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#query-multiple-values">Query multiple values</a></li>
+<li><a class="reference internal" href="#querying-by-interface">Querying by interface</a></li>
+<li><a class="reference internal" href="#query-by-content-type">Query by content type</a></li>
+<li><a class="reference internal" href="#query-published-items">Query published items</a></li>
+<li><a class="reference internal" href="#getting-a-random-item">Getting a random item</a></li>
+<li><a class="reference internal" href="#querying-fieldindexes-by-range">Querying FieldIndexes by Range</a></li>
+<li><a class="reference internal" href="#querying-by-date">Querying by date</a></li>
+<li><a class="reference internal" href="#query-by-language">Query by language</a></li>
+<li><a class="reference internal" href="#boolean-queries-advancedquery">Boolean queries (AdvancedQuery)</a></li>
+<li><a class="reference internal" href="#unique-values">Unique values</a></li>
+<li><a class="reference internal" href="#performance">Performance</a></li>
+<li><a class="reference internal" href="#batching">Batching</a></li>
+<li><a class="reference internal" href="#walking-through-all-content">Walking through all content</a></li>
+<li><a class="reference internal" href="#other-notes">Other notes</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="indexing.html"
+                        title="previous chapter">Indexes and metadata</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../forms/index.html"
+                        title="next chapter">Forms, fields and widgets</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/searching_and_indexing/query.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../forms/index.html" title="Forms, fields and widgets"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="indexing.html" title="Indexes and metadata"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Searching and indexing</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

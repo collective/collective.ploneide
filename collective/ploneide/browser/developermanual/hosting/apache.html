@@ -1,0 +1,575 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Apache &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Hosting" href="index.html" />
+    <link rel="next" title="WSGI" href="wsgi.html" />
+    <link rel="prev" title="Zope" href="zope.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="wsgi.html" title="WSGI"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="zope.html" title="Zope"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Hosting</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="apache">
+<h1>Apache<a class="headerlink" href="#apache" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">Tips and guides for hosting Plone with Apache web server.</p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
+<li><a class="reference internal" href="#apache-plone-guide" id="id2">Apache + Plone guide</a></li>
+<li><a class="reference internal" href="#procedure-to-restart-apache-in-production-enviroment" id="id3">Procedure to restart Apache in production enviroment</a></li>
+<li><a class="reference internal" href="#www-redirects" id="id4">www-redirects</a></li>
+<li><a class="reference internal" href="#proxying-other-site-under-plone-uri-space" id="id5">Proxying other site under Plone URI space</a><ul>
+<li><a class="reference internal" href="#reverse-proxy-host" id="id6">Reverse proxy host</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#redirecting-certain-uris-to-old-site" id="id7">Redirecting certain URIs to old site</a></li>
+<li><a class="reference internal" href="#virtual-hosting-apache-configuration-generator" id="id8">Virtual hosting Apache configuration generator</a></li>
+<li><a class="reference internal" href="#caching-images" id="id9">Caching images</a><ul>
+<li><a class="reference internal" href="#unsetting-language-cookie-for-media-content" id="id10">Unsetting language cookie for media content</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#testing-cache-headers" id="id11">Testing cache headers</a></li>
+<li><a class="reference internal" href="#flushing-cache" id="id12">Flushing cache</a></li>
+<li><a class="reference internal" href="#custom-500-internal-error-page" id="id13">Custom 500 internal error page</a></li>
+<li><a class="reference internal" href="#complex-apache-virtual-host-configuration" id="id14">Complex Apache virtual host configuration</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Here are useful information and snippets when hosting Plone behind Apache.</p>
+</div>
+<div class="section" id="apache-plone-guide">
+<h2><a class="toc-backref" href="#id2">Apache + Plone guide</a><a class="headerlink" href="#apache-plone-guide" title="Permalink to this headline">¶</a></h2>
+<p>Basic tutorials are available</p>
+<ul class="simple">
+<li><a class="reference external" href="http://plone.org/documentation/kb/plone-apache">http://plone.org/documentation/kb/plone-apache</a></li>
+</ul>
+</div>
+<div class="section" id="procedure-to-restart-apache-in-production-enviroment">
+<h2><a class="toc-backref" href="#id3">Procedure to restart Apache in production enviroment</a><a class="headerlink" href="#procedure-to-restart-apache-in-production-enviroment" title="Permalink to this headline">¶</a></h2>
+<p>You might share the same Apache web server across
+several production sites. You don't want to hinder
+the performance of the other sites when doing Apache configuration changes to one site.</p>
+<p>The correct procedure to restart Apache is (on Ubuntu/Debian Linux)</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">#</span> Check that config files are working after editing them
+<span class="go">apache2ctl configtest</span>
+
+<span class="gp">#</span> Let Apache finish serving all the on-going requests before
+<span class="gp">#</span> restarting worker processes
+<span class="go">apache2ctl graceful</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="www-redirects">
+<h2><a class="toc-backref" href="#id4">www-redirects</a><a class="headerlink" href="#www-redirects" title="Permalink to this headline">¶</a></h2>
+<p>If you wish to force people to use your site with or without www prefix you can use
+the rules below. Note that setting this kind of rule is very useful from the search
+engine optimizatin point of view also.</p>
+<p>Example in &lt;VirtualHost&gt; section to redicte www.site.com -&gt; site.com:</p>
+<div class="highlight-python"><pre>&lt;VirtualHost 127.0.0.1:80&gt;
+
+         ServerName site.com
+         ServerAlias www.site.com
+
+
+        &lt;IfModule mod_rewrite.c&gt;
+             RewriteEngine On
+             RewriteCond %{HTTP_HOST} ^www\.site\.com [NC]
+             RewriteRule (.*) http://site.com$1 [L,R=302]
+
+         &lt;/IfModule&gt;</pre>
+</div>
+<p>Example in &lt;VirtualHost&gt; section to redirect site.com -&gt; www.site.com:</p>
+<div class="highlight-python"><pre>&lt;VirtualHost 127.0.0.1:80&gt;
+
+         ServerName site.com
+         ServerAlias www.site.com
+
+
+        &lt;IfModule mod_rewrite.c&gt;
+             RewriteEngine On
+             RewriteCond %{HTTP_HOST} ^site\.com [NC]
+             RewriteRule (.*) http://www.site.com$1 [L,R=302]
+         &lt;/IfModule&gt;</pre>
+</div>
+<p>Redirecting all the pages to the root of a new site:</p>
+<blockquote>
+RewriteEngine On
+RewriteRule (.*) <a class="reference external" href="http://www.newsite.com">http://www.newsite.com</a> [L,R=302]</blockquote>
+</div>
+<div class="section" id="proxying-other-site-under-plone-uri-space">
+<h2><a class="toc-backref" href="#id5">Proxying other site under Plone URI space</a><a class="headerlink" href="#proxying-other-site-under-plone-uri-space" title="Permalink to this headline">¶</a></h2>
+<p>The following rule can be used to put a static web site to sit in the
+same URI space with Plone. Put these rules <strong>before</strong> VirtualHost ProxyPass.</p>
+<p>Examples:</p>
+<div class="highlight-python"><pre>ProxyPass /othersite/ http://www.some.other.domain.com/othersite/
+ProxyPassReverse /othersite/ http://www.some.other.domain.com/othersite/</pre>
+</div>
+<div class="section" id="reverse-proxy-host">
+<h3><a class="toc-backref" href="#id6">Reverse proxy host</a><a class="headerlink" href="#reverse-proxy-host" title="Permalink to this headline">¶</a></h3>
+<p>By default, host name is correctly delivered from Apache to Plone.
+Otherwise you might see all your HTTP requests coming from localhost, Apache.</p>
+<p>You need:</p>
+<div class="highlight-python"><pre>ProxyPreserveHost On</pre>
+</div>
+<p>For more information, see</p>
+<ul class="simple">
+<li><a class="reference external" href="http://macadames.wordpress.com/2009/05/23/some-deliverance-tips/">http://macadames.wordpress.com/2009/05/23/some-deliverance-tips/</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="redirecting-certain-uris-to-old-site">
+<h2><a class="toc-backref" href="#id7">Redirecting certain URIs to old site</a><a class="headerlink" href="#redirecting-certain-uris-to-old-site" title="Permalink to this headline">¶</a></h2>
+<p>This is useful if you migrate to a Plone from some legacy technology
+and you still need to have some part of the URI space to
+point to the old server.</p>
+<ul class="simple">
+<li>Create alternative domain name for the existing old site (e.g. www2)</li>
+<li>Modify Apache configuration so that URLs still being used
+are redirected to the old server with alternative name, Put in this rewrite</li>
+</ul>
+<div class="highlight-python"><pre>&lt;location /media&gt;
+        RedirectMatch /media/(.*)$ http://www2.site.fi/media/$1
+&lt;/location&gt;</pre>
+</div>
+</div>
+<div class="section" id="virtual-hosting-apache-configuration-generator">
+<h2><a class="toc-backref" href="#id8">Virtual hosting Apache configuration generator</a><a class="headerlink" href="#virtual-hosting-apache-configuration-generator" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://betabug.ch/zope/witch">http://betabug.ch/zope/witch</a></li>
+</ul>
+</div>
+<div class="section" id="caching-images">
+<h2><a class="toc-backref" href="#id9">Caching images</a><a class="headerlink" href="#caching-images" title="Permalink to this headline">¶</a></h2>
+<p>You can force caching of content types
+on apache</p>
+<p>First you need to enable Apache modules:</p>
+<div class="highlight-python"><pre>* mod_headers</pre>
+</div>
+<ul class="simple">
+<li>mod_cache, mod_diskcache</li>
+<li>mod_expires</li>
+</ul>
+<p>On Debian this is:</p>
+<div class="highlight-python"><pre>sudo a2enmod</pre>
+</div>
+<p>Then you can add to your virtual host configuration:</p>
+<div class="highlight-python"><pre># Disk cache configuration
+CacheEnable disk /
+CacheRoot "/var/cache/yourorganization-production"
+CacheLastModifiedFactor 0.1
+#CacheDefaultExpire 1
+#CacheMaxExpire 7200
+CacheDirLength 2
+
+ExpiresActive On
+ExpiresByType image/gif A3600
+ExpiresByType image/png A3600
+ExpiresByType image/image/vnd.microsoft.icon A3600
+ExpiresByType image/jpeg A3600
+ExpiresByType text/css A3600
+ExpiresByType text/javascript A3600
+ExpiresByType application/x-javascript A3600
+
+# Create cache headers for downstream caches and browsers,
+# needed to enforce HTTPS cache -
+# Expires rules above are enough for plain HTTP
+
+# Set environment variable by guessing the content payload based on how URL ends
+SetEnvIfNoCase Request_URI "\.(?:gif|jpe?g|png|css|js|ico)$" cache-it
+
+# Force caching of HTTPS resources on the browser end
+# http://blog.pluron.com/2008/07/why-you-should.html
+Header append Cache-Control public env=cache-it
+
+# This header is only for the debugging
+Header append X-Cache-Tagged yes env=cache-it</pre>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Since Apache caches the whole HTTP response, including
+headers, see cookie implications below.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">TODO: Check if we need to do CacheIgnoreHeaders Set-Cookie here.</p>
+</div>
+<p>More info</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.debian-administration.org/users/lee/weblog/35">http://www.debian-administration.org/users/lee/weblog/35</a></li>
+</ul>
+<div class="section" id="unsetting-language-cookie-for-media-content">
+<h3><a class="toc-backref" href="#id10">Unsetting language cookie for media content</a><a class="headerlink" href="#unsetting-language-cookie-for-media-content" title="Permalink to this headline">¶</a></h3>
+<p>Media like content can confuse and break language selector on multilingual sites.</p>
+<p>By default, Plone sets I18N_LANGUAGE cookie on</p>
+<ul class="simple">
+<li>All page requests</li>
+<li>All ATImage requests</li>
+</ul>
+<p>Even if images are often language neutral, they still set I18N_LANGUAGE cookie
+on HTTP response. This is problematic if image gets cached and the user
+switches the language using the language selector. This happens when
+you enforce caching using Apache level rules (instead of using Products.CacheSetup
+or similar product). The user browsers received cached HTTP response image
+for the image and it contains Set-Cookie: I18N_LANGUAGE header for the wrong language
+-&gt; browser language choice by cookie is reset.</p>
+<p>A workaround is to force language cookie off from media like content:</p>
+<div class="highlight-python"><pre>SetEnvIfNoCase Request_URI "\.(?:gif|jpe?g|png|css|js|ico)$" language-neural
+SetEnvIfNoCase Request_URI "image_preview(/)$" language-neural
+SetEnvIfNoCase Request_URI "image_large(/)$" language-neural
+SetEnvIfNoCase Request_URI "image_thumb(/)$" language-neural
+SetEnvIfNoCase Request_URI "image_mini(/)$" language-neural
+
+Header unset Set-Cookie env=language-neutral</pre>
+</div>
+</div>
+</div>
+<div class="section" id="testing-cache-headers">
+<h2><a class="toc-backref" href="#id11">Testing cache headers</a><a class="headerlink" href="#testing-cache-headers" title="Permalink to this headline">¶</a></h2>
+<p>Use UNIX <em>wget</em> command. -S flag will display request headers.</p>
+<p>Remember to do different request for HTML, CSS, JS and image payloads - the cache rules might not be the same.</p>
+<p>HTTP example:</p>
+<div class="highlight-python"><pre>cd /tmp
+
+wget --cache=off -S http://production.yourorganizationinternational.org/yourorganizationlogotemplate.gif
+
+HTTP request sent, awaiting response...
+  HTTP/1.1 200 OK
+  Date: Tue, 09 Mar 2010 12:33:26 GMT
+  Server: Apache/2.2.8 (Ubuntu) DAV/2 SVN/1.4.6 mod_python/3.3.1 Python/2.5.2 PHP/5.2.4-2ubuntu5.4 with Suhosin-Patch mod_ssl/2.2.8 OpenSSL/0.9.8g
+  Last-Modified: Wed, 25 Nov 2009 06:51:41 GMT
+  Content-Length: 4837
+  Via: 1.0 production.yourorganizationinternational.org
+  Cache-Control: max-age=3600, public
+  Expires: Tue, 09 Mar 2010 13:02:29 GMT
+  Age: 1857
+  Keep-Alive: timeout=15, max=100
+  Connection: Keep-Alive
+  Content-Type: image/gif
+Length: 4837 (4.7K) [image/gif]
+Saving to: `yourorganizationlogotemplate.gif.14'</pre>
+</div>
+<p>HTTPS example:</p>
+<div class="highlight-python"><pre>cd /tmp
+wget --cache=off --no-check-certificate -S https://production.yourorganizationinternational.org/</pre>
+</div>
+</div>
+<div class="section" id="flushing-cache">
+<h2><a class="toc-backref" href="#id12">Flushing cache</a><a class="headerlink" href="#flushing-cache" title="Permalink to this headline">¶</a></h2>
+<p>Manually cleaning Apache disk cache:</p>
+<div class="highlight-python"><pre>sudo -i
+cd /var/cache/yoursite
+rm -rf *</pre>
+</div>
+</div>
+<div class="section" id="custom-500-internal-error-page">
+<h2><a class="toc-backref" href="#id13">Custom 500 internal error page</a><a class="headerlink" href="#custom-500-internal-error-page" title="Permalink to this headline">¶</a></h2>
+<p>To make you look more pro when you update the server or Plone goes down</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.codestyle.org/sitemanager/apache/errors-500.shtml">http://www.codestyle.org/sitemanager/apache/errors-500.shtml</a></li>
+</ul>
+</div>
+<div class="section" id="complex-apache-virtual-host-configuration">
+<h2><a class="toc-backref" href="#id14">Complex Apache virtual host configuration</a><a class="headerlink" href="#complex-apache-virtual-host-configuration" title="Permalink to this headline">¶</a></h2>
+<p>This config includes</p>
+<ul class="simple">
+<li>HTTPS and SSL certificate set-up</li>
+<li>Load balancing using ZEO front-ends and Apache load balancer module</li>
+<li>Apache disk cache</li>
+<li>Static resource caching w/HTTPS support</li>
+<li>Server site <a class="reference external" href="https://production.yourorganization.org">https://production.yourorganization.org</a></li>
+</ul>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">When using Apache load balancing sticky sessions are must.
+Otherwise you might encounter</p>
+</div>
+<p>See</p>
+<ul class="simple">
+<li><a class="reference external" href="http://stackoverflow.com/questions/5650716/are-sticky-sessions-needed-when-load-balancing-plone-3-3-5">http://stackoverflow.com/questions/5650716/are-sticky-sessions-needed-when-load-balancing-plone-3-3-5</a></li>
+</ul>
+<p>More information about how to set a sticky session cookie</p>
+<ul class="simple">
+<li><a class="reference external" href="http://plone.org/documentation/kb/sticky-sessions-and-mod_proxy_balancer">http://plone.org/documentation/kb/sticky-sessions-and-mod_proxy_balancer</a></li>
+</ul>
+<p>Example:</p>
+<div class="highlight-python"><pre>&lt;VirtualHost 123.123.123:443&gt;
+
+  ServerName  production.yourorganization.org
+  ServerAdmin rocks@mfabrik.com
+
+  SSLEngine On
+  SSLCertificateFile /etc/apache2/ssl-keys/yourorganization.org.cer
+  SSLCertificateKeyFile /etc/apache2/ssl-keys/yourorganization.org.key
+  SSLCertificateChainFile /etc/apache2/ssl-keys/InstantValidationCertChain.crt
+
+  LogFormat       combined
+  TransferLog     /var/log/apache2/production.yourorganization.org.log
+
+  &lt;IfModule mod_proxy.c&gt;
+   ProxyVia On
+
+   # prevent the webserver from being used as proxy
+   &lt;LocationMatch "^[^/]"&gt;
+     Deny from all
+   &lt;/LocationMatch&gt;
+  &lt;/IfModule&gt;
+
+  # Balance load between 4 ZEO front-ends
+  &lt;Proxy balancer://lbyourorganization&gt;
+    BalancerMember http://127.0.0.1:13001/
+    BalancerMember http://127.0.0.1:13002/
+    BalancerMember http://127.0.0.1:13003/
+    BalancerMember http://127.0.0.1:13004/
+  &lt;/Proxy&gt;
+
+  # Note: You might want to disable this URL of being public
+  # as it can be used to access Apache live settings
+  &lt;Location /balancer-manager&gt;
+    SetHandler balancer-manager
+    Order Deny,Allow
+    # Your trusted IP addresses
+    Allow from 123.123.123.123
+  &lt;/Location&gt;
+
+  ProxyPass /balancer-manager !
+  ProxyPass             / balancer://lbyourorganization/http://localhost/VirtualHostBase/https/production.yourorganization.org:443/yourorganization_plone_site/VirtualHostRoot/
+  ProxyPassReverse      / balancer://lbyourorganization/http://localhost/VirtualHostBase/https/production.yourorganization.org:443/yourorganization_plone_site/VirtualHostRoot/
+
+  # Disk cache configuration
+  CacheEnable disk /
+  CacheRoot "/var/cache/yourorganization-production"
+  CacheLastModifiedFactor 0.1
+  #CacheDefaultExpire 1
+  #CacheMaxExpire 7200
+  CacheDirLength 2
+  ExpiresActive On
+  ExpiresByType image/gif A3600
+  ExpiresByType image/png A3600
+  ExpiresByType image/jpeg A3600
+  ExpiresByType text/css A3600
+  ExpiresByType text/javascript A3600
+  ExpiresByType application/x-javascript A3600
+
+  # Create cache headers for downstream caches and browsers
+
+  # Set environment variable by guessing the content payload based on how URL ends
+  SetEnvIfNoCase Request_URI "\.(?:gif|jpe?g|png|css|js)$" cache-it
+
+  # Force caching of HTTPS resources on the browser end
+  # http://blog.pluron.com/2008/07/why-you-should.html
+  Header append Cache-Control public env=cache-it
+  Header append X-Cache-Tagged yes env=cache-it
+
+  # Debug header flags all requests coming from this server
+  Header append X-YourOrganization-Production yes
+
+&lt;/VirtualHost&gt;</pre>
+</div>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Apache</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#apache-plone-guide">Apache + Plone guide</a></li>
+<li><a class="reference internal" href="#procedure-to-restart-apache-in-production-enviroment">Procedure to restart Apache in production enviroment</a></li>
+<li><a class="reference internal" href="#www-redirects">www-redirects</a></li>
+<li><a class="reference internal" href="#proxying-other-site-under-plone-uri-space">Proxying other site under Plone URI space</a><ul>
+<li><a class="reference internal" href="#reverse-proxy-host">Reverse proxy host</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#redirecting-certain-uris-to-old-site">Redirecting certain URIs to old site</a></li>
+<li><a class="reference internal" href="#virtual-hosting-apache-configuration-generator">Virtual hosting Apache configuration generator</a></li>
+<li><a class="reference internal" href="#caching-images">Caching images</a><ul>
+<li><a class="reference internal" href="#unsetting-language-cookie-for-media-content">Unsetting language cookie for media content</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#testing-cache-headers">Testing cache headers</a></li>
+<li><a class="reference internal" href="#flushing-cache">Flushing cache</a></li>
+<li><a class="reference internal" href="#custom-500-internal-error-page">Custom 500 internal error page</a></li>
+<li><a class="reference internal" href="#complex-apache-virtual-host-configuration">Complex Apache virtual host configuration</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="zope.html"
+                        title="previous chapter">Zope</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="wsgi.html"
+                        title="next chapter">WSGI</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/hosting/apache.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="wsgi.html" title="WSGI"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="zope.html" title="Zope"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Hosting</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>

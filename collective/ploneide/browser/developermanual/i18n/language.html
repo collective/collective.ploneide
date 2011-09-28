@@ -1,0 +1,450 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Language functions &mdash; Plone Community Managed Developer Manual v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Plone Community Managed Developer Manual v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Internationalization (i18n)" href="index.html" />
+    <link rel="next" title="Translated content" href="translating_content.html" />
+    <link rel="prev" title="Translating text strings" href="localization.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="translating_content.html" title="Translated content"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="localization.html" title="Translating text strings"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Internationalization (i18n)</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="sphinx-content">
+    <div class="section" id="language-functions">
+<h1>Language functions<a class="headerlink" href="#language-functions" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-description admonition ">
+<p class="first admonition-title">Description</p>
+<p class="last">Acessing and changing the language state of Plone programmatically.</p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
+<li><a class="reference internal" href="#getting-the-current-language" id="id2">Getting the current language</a></li>
+<li><a class="reference internal" href="#getting-language-of-content-item" id="id3">Getting language of content item</a></li>
+<li><a class="reference internal" href="#set-site-language-settings" id="id4">Set site language settings</a></li>
+<li><a class="reference internal" href="#customizing-language-selector" id="id5">Customizing language selector</a><ul>
+<li><a class="reference internal" href="#making-language-flags-point-to-different-top-level-domains" id="id6">Making language flags point to different top level domains</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#custom-language-negotiator" id="id7">Custom language negotiator</a></li>
+<li><a class="reference internal" href="#other" id="id8">Other</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Each session has a language associated with.</p>
+<p>Active language is &quot;negotiated&quot; by plone.i18n.negotiator
+module. Several factors may involve determining what the
+language should be:</p>
+<ul class="simple">
+<li>Cookies (setting from the language selector)</li>
+<li>Domain name (like .fi for Finnish, .se for Swedish)</li>
+<li>Context (current content) language</li>
+<li>Browser language headers</li>
+</ul>
+<p>Language is negotiated at the beginning of the page view.</p>
+</div>
+<div class="section" id="getting-the-current-language">
+<h2><a class="toc-backref" href="#id2">Getting the current language</a><a class="headerlink" href="#getting-the-current-language" title="Permalink to this headline">¶</a></h2>
+<p>Example view/viewlet method of getting the current language.</p>
+<div class="highlight-python"><pre>from Acquisition import aq_inner
+from zope.component import getMultiAdapter
+
+class MyView(BrowserView):
+
+    ...
+
+        def language(self):
+            """
+            @return: Two letter string, the active language code
+            """
+            context = aq_inner(self.context)
+            portal_state = getMultiAdapter((context, self.request), name=u'plone_portal_state')
+            current_language = portal_state.language()
+            return current_language</pre>
+</div>
+</div>
+<div class="section" id="getting-language-of-content-item">
+<h2><a class="toc-backref" href="#id3">Getting language of content item</a><a class="headerlink" href="#getting-language-of-content-item" title="Permalink to this headline">¶</a></h2>
+<p>All content object don't necessarily support Language()
+look-up defined by IDublinCore interface. Below is the
+safe way to extract the served language on the content.</p>
+<p>Example BrowserView method:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">Acquisition</span> <span class="kn">import</span> <span class="n">aq_inner</span>
+
+<span class="k">def</span> <span class="nf">language</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Get the language of the context.</span>
+
+<span class="sd">    Useful in producing &lt;html&gt; tag.</span>
+<span class="sd">    You need to output language for every HTML page, see http://www.w3.org/TR/xhtml1/#strict</span>
+
+
+<span class="sd">    @return: The two letter language code of the current content.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">portal_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">unrestrictedTraverse</span><span class="p">(</span><span class="s">&quot;@@plone_portal_state&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">aq_inner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">)</span><span class="o">.</span><span class="n">Language</span><span class="p">()</span> <span class="ow">or</span> <span class="n">portal_state</span><span class="o">.</span><span class="n">default_language</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="set-site-language-settings">
+<h2><a class="toc-backref" href="#id4">Set site language settings</a><a class="headerlink" href="#set-site-language-settings" title="Permalink to this headline">¶</a></h2>
+<p>Manually:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Setup site langauge settings</span>
+<span class="n">portal</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">getSite</span><span class="p">()</span>
+<span class="n">ltool</span> <span class="o">=</span> <span class="n">portal</span><span class="o">.</span><span class="n">portal_languages</span>
+<span class="n">defaultLanguage</span> <span class="o">=</span> <span class="s">&#39;en&#39;</span>
+<span class="n">supportedLanguages</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;en&#39;</span><span class="p">,</span><span class="s">&#39;es&#39;</span><span class="p">]</span>
+<span class="n">ltool</span><span class="o">.</span><span class="n">manage_setLanguageSettings</span><span class="p">(</span><span class="n">defaultLanguage</span><span class="p">,</span> <span class="n">supportedLanguages</span><span class="p">,</span>
+                                      <span class="n">setUseCombinedLanguageCodes</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For unit testing, you need to run this in afterSetUp() after setting up the languages:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># THIS IS FOR UNIT TESTING ONLY</span>
+<span class="c"># Normally called by pretraverse hook,</span>
+<span class="c"># but must be called manually for the unit tests</span>
+<span class="c"># Goes only for the current request</span>
+<span class="n">ltool</span><span class="o">.</span><span class="n">setLanguageBindings</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Using GenericSetup and propertiestool.xml</p>
+<p>On Linguaplone enabled sites, using GenericSetup XML portal_languages.xml</p>
+</div>
+<div class="section" id="customizing-language-selector">
+<h2><a class="toc-backref" href="#id5">Customizing language selector</a><a class="headerlink" href="#customizing-language-selector" title="Permalink to this headline">¶</a></h2>
+<p>Multilingual Plone has two kinds of language selector viewlets</p>
+<ul class="simple">
+<li>Plone vanilla</li>
+<li>LinguaPlone -  LinguaPlone has its own language selector which replaces the default Plone selector if the add on
+product is installed</li>
+</ul>
+<p>More information</p>
+<ul class="simple">
+<li><a class="reference external" href="https://svn.plone.org/svn/plone/plone.app.i18n/trunk/plone/app/i18n/locales/browser/selector.py">https://svn.plone.org/svn/plone/plone.app.i18n/trunk/plone/app/i18n/locales/browser/selector.py</a></li>
+<li><a class="reference external" href="https://svn.plone.org/svn/plone/plone.app.i18n/trunk/plone/app/i18n/locales/browser/languageselector.pt">https://svn.plone.org/svn/plone/plone.app.i18n/trunk/plone/app/i18n/locales/browser/languageselector.pt</a></li>
+<li><a class="reference external" href="http://svn.plone.org/svn/plone/Products.LinguaPlone/tags/2.4/Products/LinguaPlone/browser/selector.py">http://svn.plone.org/svn/plone/Products.LinguaPlone/tags/2.4/Products/LinguaPlone/browser/selector.py</a></li>
+</ul>
+<div class="section" id="making-language-flags-point-to-different-top-level-domains">
+<h3><a class="toc-backref" href="#id6">Making language flags point to different top level domains</a><a class="headerlink" href="#making-language-flags-point-to-different-top-level-domains" title="Permalink to this headline">¶</a></h3>
+<p>If you use multiple domain names for different language it is often desirable to make the language selector
+point to a different domain. Search engines do not really like the dynamic language switcher and will
+index switching links, messing up your site search results.</p>
+<p>Example</p>
+</div>
+</div>
+<div class="section" id="custom-language-negotiator">
+<h2><a class="toc-backref" href="#id7">Custom language negotiator</a><a class="headerlink" href="#custom-language-negotiator" title="Permalink to this headline">¶</a></h2>
+<p>Below some example code.</p>
+<p>languages.py:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Custom language negotiator based on hostname.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">Products.PloneLanguageTool</span> <span class="kn">import</span> <span class="n">LanguageTool</span>
+
+<span class="c"># These are default languages available when hostname cannot be solved</span>
+<span class="n">all_languages</span> <span class="o">=</span> <span class="p">[</span> <span class="s">&quot;fi&quot;</span><span class="p">,</span> <span class="s">&quot;en&quot;</span> <span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">get_host_name</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Extract host name in virtual host safe manner</span>
+
+<span class="sd">    @param request: HTTPRequest object, assumed contains environ dictionary</span>
+
+<span class="sd">    @return: Host DNS name, as requested by client. Lowercased, no port part.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="s">&quot;HTTP_X_FORWARDED_HOST&quot;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+        <span class="c"># Virtual host</span>
+        <span class="n">host</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">&quot;HTTP_X_FORWARDED_HOST&quot;</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="s">&quot;HTTP_HOST&quot;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+        <span class="c"># Direct client request</span>
+        <span class="n">host</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">&quot;HTTP_HOST&quot;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">host</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">return</span> <span class="n">host</span>
+
+    <span class="c"># separate to domain name and port sections</span>
+    <span class="n">host</span><span class="o">=</span><span class="n">host</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;:&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">host</span>
+
+
+<span class="k">def</span> <span class="nf">get_language</span><span class="p">(</span><span class="n">domain_name</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    @param domain_name: Full qualified domain name of HTTP request</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">domain_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&quot;.mobi&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">domain_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&quot;.com&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&quot;en&quot;</span>
+    <span class="k">elif</span> <span class="n">domain_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&quot;.fi&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&quot;fi&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">&quot;en&quot;</span>
+
+<span class="k">def</span> <span class="nf">getCcTLDLanguages</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Monkey-patched top level domain language negotiator.</span>
+
+<span class="sd">    This will be installed by collective.monkeypatcher.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;REQUEST&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="n">request</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">REQUEST</span>
+
+    <span class="c"># Could not extract hostname</span>
+    <span class="n">hostname</span> <span class="o">=</span> <span class="n">get_host_name</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">hostname</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">all_languages</span>
+
+    <span class="c"># Limit available languages based on hostname</span>
+    <span class="n">langs</span> <span class="o">=</span> <span class="p">[</span> <span class="n">get_language</span><span class="p">(</span><span class="n">hostname</span><span class="p">)</span> <span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">langs</span>
+
+<span class="c"># Also we need to fix a bug present in Plone 3.3.5</span>
+<span class="c">#</span>
+<span class="c">#    @memoize</span>
+<span class="c">#    def language(self):</span>
+<span class="c">#        # TODO Looking for lower-case language is wrong, the negotiator</span>
+<span class="c">#        # machinery uses uppercase LANGUAGE. We cannot change this as long</span>
+<span class="c">#        # as we don&#39;t ship with a newer PloneLanguageTool which respects</span>
+<span class="c">#        # the content language, though.</span>
+<span class="c">#        return self.request.get(&#39;language&#39;, None) or \</span>
+<span class="c">#                aq_inner(self.context).Language() or self.default_language()</span>
+
+<span class="kn">from</span> <span class="nn">plone.memoize.view</span> <span class="kn">import</span> <span class="n">memoize</span><span class="p">,</span> <span class="n">memoize_contextless</span>
+
+<span class="k">def</span> <span class="nf">working_portal_state_language</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;LANGUAGE&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span> <span class="ow">or</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;language&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span> <span class="ow">or</span> \
+                <span class="n">aq_inner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">)</span><span class="o">.</span><span class="n">Language</span><span class="p">()</span> <span class="ow">or</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">default_language</span><span class="p">()</span>
+
+<span class="n">working_portal_state_language</span> <span class="o">=</span> <span class="n">memoize</span><span class="p">(</span><span class="n">working_portal_state_language</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>configure.zcml:</p>
+<div class="highlight-python"><pre>&lt;!-- Use collective.monkeypatcher to introduce our custom language negotiation phase --&gt;
+&lt;monkey:patch
+      description="Add custom TLD language resolution"
+      class="Products.PloneLanguageTool.LanguageTool"
+      original="getCcTLDLanguages"
+      replacement=".languages.getCcTLDLanguages"
+      /&gt;
+
+&lt;monkey:patch
+      description="Fix Plone 3.3.5 bug"
+      class="plone.app.layout.globals.portal.PortalState"
+      original="language"
+      replacement=".languages.working_portal_state_language"
+      /&gt;</pre>
+</div>
+</div>
+<div class="section" id="other">
+<h2><a class="toc-backref" href="#id8">Other</a><a class="headerlink" href="#other" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://reinout.vanrees.org/weblog/2007/12/14/translating-schemata-names.html">http://reinout.vanrees.org/weblog/2007/12/14/translating-schemata-names.html</a></li>
+<li><a class="reference external" href="http://maurits.vanrees.org/weblog/archive/2007/09/i18n-locales-and-plone-3.0">http://maurits.vanrees.org/weblog/archive/2007/09/i18n-locales-and-plone-3.0</a></li>
+<li><a class="reference external" href="http://blogs.ingeniweb.com/blogs/user/7/tag/i18ndude/">http://blogs.ingeniweb.com/blogs/user/7/tag/i18ndude/</a></li>
+<li><a class="reference external" href="http://plone.org/products/archgenxml/documentation/how-to/handling-i18n-translation-files-with-archgenxml-and-i18ndude/view?searchterm=">http://plone.org/products/archgenxml/documentation/how-to/handling-i18n-translation-files-with-archgenxml-and-i18ndude/view?searchterm=</a></li>
+</ul>
+</div>
+</div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html"><img src="../_static/plone-icon-64.png" />
+</a></p>
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Language functions</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#getting-the-current-language">Getting the current language</a></li>
+<li><a class="reference internal" href="#getting-language-of-content-item">Getting language of content item</a></li>
+<li><a class="reference internal" href="#set-site-language-settings">Set site language settings</a></li>
+<li><a class="reference internal" href="#customizing-language-selector">Customizing language selector</a><ul>
+<li><a class="reference internal" href="#making-language-flags-point-to-different-top-level-domains">Making language flags point to different top level domains</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#custom-language-negotiator">Custom language negotiator</a></li>
+<li><a class="reference internal" href="#other">Other</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="localization.html"
+                        title="previous chapter">Translating text strings</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="translating_content.html"
+                        title="next chapter">Translated content</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/i18n/language.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="translating_content.html" title="Translated content"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="localization.html" title="Translating text strings"
+             >previous</a> |</li>
+        <li><a href="../index.html">Plone Community Managed Developer Manual v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Internationalization (i18n)</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2010 mFabrik Research Oy and Plone community contributors.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+
+
+  </body>
+</html>
