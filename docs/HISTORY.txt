@@ -28,3 +28,8 @@ Changelog
 
 - UI design and implementation [shuens]
 
+- Added an initial PloneIDE's Documentation inside README.txt and setup.py files [macagua]
+
+- Added support for i18n [macagua]
+
+- Added Spanish Translation [macagua]
