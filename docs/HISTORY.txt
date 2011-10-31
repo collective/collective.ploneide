@@ -33,3 +33,5 @@ Changelog
 - Added support for i18n [macagua]
 
 - Added Spanish Translation [macagua]
+
+- Added Bash Script for generate the po files for locales [macagua]
