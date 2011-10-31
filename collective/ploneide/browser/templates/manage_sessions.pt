@@ -27,21 +27,22 @@
     
 </script>
 
-<h2>Sessions:</h2>
+<span i18n:domain="collective.ploneide">
+<h2 i18n:translate="">Sessions:</h2>
 <select id="sessions-group-list" name="sessions-group-list" onchange="loadFromSessionManager()">
 </select>
 <br/>
 <br/>
 
-<h2>Rename current session:</h2>
+<h2 i18n:translate="">Rename current session:</h2>
 <input type="text" id="new-session-name" name="new-session-name"/>
-<input type="button" value="Rename" onclick="renameFromSessionManager()">
+<input type="button" value="Rename" i18n:attributes="value" onclick="renameFromSessionManager()" />
 <br/>
 <br/>
 
-<input type="button" value="New empty session" onclick="createNewEmptySessionsGroup()">
+<input type="button" value="New empty session" i18n:attributes="value" onclick="createNewEmptySessionsGroup()" />
 
 <br/>
 <br/>
-<input type="button" value="Delete current session" onclick="removeCurrentSessionsGroup()">
-
+<input type="button" value="Delete current session" i18n:attributes="value" onclick="removeCurrentSessionsGroup()" />
+</span>

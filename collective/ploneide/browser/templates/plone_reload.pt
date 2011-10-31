@@ -11,15 +11,16 @@ window.onload = function() {
 </script>
 -->
 
-<h1>plone.reload</h1>
+<span i18n:domain="collective.ploneide">
+<h1 i18n:translate="">plone.reload</h1>
 <tal:block tal:condition="view/status">
 
-    <h2>Status</h2>
+    <h2 i18n:translate="">Status</h2>
 
     <pre tal:content="view/status"
          style="background-color:#ddd; padding:0.5em;
                 border: 1px black dashed; line-height:1.2em;">
-        Status
+        <tal:comment replace="nothing">Status</tal:comment>
     </pre>
     
 </tal:block>
@@ -33,10 +34,11 @@ window.onload = function() {
       
     <input type="hidden" name="action" value="zcml"/>
       
-    <input name="plone.reload" type="submit" value="Reload Code and ZCML" />
+    <input name="plone.reload" type="submit" value="Reload Code and ZCML" i18n:attributes="value" />
     <br/>
     <br/>
     <input tal:condition="view/isRestartable"
-           name="plone.restart" type="submit" value="Restart Plone" />
+           name="plone.restart" type="submit" value="Restart Plone" i18n:attributes="value" />
 
 </form>
+</span>

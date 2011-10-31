@@ -1,28 +1,29 @@
-<div id="editor-main" class="ui-layout-center">
-    <!--<div class="top-bar"><span>PloneIDE</span></div> -->
+<div id="editor-main" class="ui-layout-center" i18n:domain="collective.ploneide">
+    <!--<div class="top-bar"><span i18n:translate="">PloneIDE</span></div> -->
     <div class="editor-wrapper">
         <div id="tabs"><div id="editor-files-tabs"></div></div>
         <div id="editor-toolbar">
-            <a href="#"><span class="logo"></span><a>
+            <a href="#"><span class="logo"></span></a>
             <img src="++resource++collective.ploneide.icons/new_file.png" 
-                 alt="New File" 
+                 alt="New File" i18n:attributes="alt" 
                  id="new-empty-file" 
                  name="new-empty-file" 
                  onclick="createNewEmptySession()" />
 
             <img src="++resource++collective.ploneide.icons/open_file.png" 
-                 alt="Open File" 
+                 alt="Open File" i18n:attributes="alt"
                  id="open-file" 
                  name="open-file" />
 
             <img src="++resource++collective.ploneide.icons/save_file.png" 
-                 alt="Save File" 
+                 alt="Save File" i18n:attributes="alt"
                  id="save-file" 
                  name="save-file" 
                  onclick="saveCurrentFile()"/>
 
             <a href="@@save-as"  id="save-as" name="save-as">
-                <img src="++resource++collective.ploneide.icons/save_file_as.png" alt="Save File As" />
+                <img src="++resource++collective.ploneide.icons/save_file_as.png" 
+                     alt="Save File As" i18n:attributes="alt" />
             </a>  
             
             <select id="fontsize" size="1" onchange="setFontSize()">
@@ -43,42 +44,45 @@
             </select>
             
             <select id="syntax" name="syntax" onchange="changeSyntax()">
-                <option value="python">python</option>
-                <option value="javascript">javascript</option>
-                <option value="css">css</option>
-                <option value="html">html</option>
-                <option value="xml">xml</option>
-                <option value="text">text</option>
+                <option value="python" i18n:translate="">python</option>
+                <option value="javascript" i18n:translate="">javascript</option>
+                <option value="css" i18n:translate="">css</option>
+                <option value="html" i18n:translate="">html</option>
+                <option value="xml" i18n:translate="">xml</option>
+                <option value="text" i18n:translate="">text</option>
             </select>
             
             <img src="++resource++collective.ploneide.icons/split_vertical.png" 
-                 alt="Vertical split" 
+                 alt="Vertical split" i18n:attributes="alt"
                  id="split-vertical" 
                  name="split-vertical" 
                  onclick="splitVertical()" />
             <img src="++resource++collective.ploneide.icons/split_horizontal.png" 
-                 alt="Horizontal split" 
+                 alt="Horizontal split" i18n:attributes="alt" 
                  id="split-horizontal" 
                  name="split-horizontal" 
                  onclick="splitHorizontal()" />
                  
             <a href="@@manage-sessions"  id="manage-sessions" name="manage-sessions">
-                <img src="++resource++collective.ploneide.icons/manage_sessions.png" alt="Manage Sessions" />
+                <img src="++resource++collective.ploneide.icons/manage_sessions.png" 
+                     alt="Manage Sessions" i18n:attributes="alt" />
             </a>
             <a href="@@plone-reload"  id="plone-reload" name="plone-reload">
-                <img src="++resource++collective.ploneide.icons/plone_reload.png" alt="Plone Reload" />
+                <img src="++resource++collective.ploneide.icons/plone_reload.png" 
+                     alt="Plone Reload" i18n:attributes="alt" />
             </a>
             
             <a href="++resource++collective.ploneide.developermanual/index.html"  
                target="_blank"
                id="developermanual" 
                name="developermanual">
-                <img src="++resource++collective.ploneide.icons/help.png" alt="Save File As" />
+                <img src="++resource++collective.ploneide.icons/help.png" 
+                     alt="Save File As" i18n:attributes="alt" />
             </a>
             <a href="@@context-info"  id="context-info" name="context-info">
                 <img
                  src="++resource++collective.ploneide.icons/plone_restart.png" 
-                 alt="Context info"/>
+                 alt="Context info" i18n:attributes="alt" />
             </a>
         </div>
         <div id="editor"></div>
@@ -91,13 +95,13 @@
 <div id="tree" class="ui-layout-east">
     <ul class="panel-tabs">
         <li class="tab">
-            <a href="#" class="item-tree" title="tree"><span>Tree</span></a>
+            <a href="#" class="item-tree" title="tree" i18n:attributes="title"><span i18n:translate="">Tree</span></a>
         </li>
         <li class="tab">
-            <a href="#" class="item-debug" title="tree"><span>Debug</span></a>
+            <a href="#" class="item-debug" title="tree" i18n:attributes="title"><span i18n:translate="">Debug</span></a>
         </li>
         <li class="tab">
-            <a href="#" class="item-plone" title="tree"><span>Plone</span></a>
+            <a href="#" class="item-plone" title="tree" i18n:attributes="title"><span i18n:translate="">Plone</span></a>
         </li>
     </ul>
     <div class="panels">
@@ -120,21 +124,21 @@
                                 tal:attributes="value python:egg[0]"
                                 tal:content="python:egg[1]"/>
                     </select>
-                    <input type="button" value="Update" onclick="loadTreeView()">
+                    <input type="button" value="Update" i18n:attributes="value" onclick="loadTreeView()" />
                 </div>
 
                 <div id="file-explorer">
-                    <input type="hidden" id="directory" name="directory" size=30/>
-                    <select id="directory-area" name="directory-area" size=10 onclick="updateTreeView()">
+                    <input type="hidden" id="directory" name="directory" size="30" />
+                    <select id="directory-area" name="directory-area" size="10" onclick="updateTreeView()">
                     </select>
                 </div>
                 
-                <!--        <input type="button" value="Update" onclick="getDirectoryContents()">
+                <!--        <input type="button" value="Update" i18n:attributes="value" onclick="getDirectoryContents()">
                 <br/>
                 <select id="folder-contents" name="folder-contents">
                 </select>
                 <br/>
-                <input type="button" value="Open" onclick="loadFileInEditor()">-->
+                <input type="button" value="Open" i18n:attributes="value" onclick="loadFileInEditor()">-->
                 <br/>
 
                 <!-- Sessions -->
@@ -149,27 +153,27 @@
                        name="debugger-checkbox" 
                        id="debugger-checkbox"
                        value="True" 
-                       onclick="toggleDebugging()"/> Enable debugger
+                       onclick="toggleDebugging()"/> <span i18n:translate="">Enable debugger</span>
             </div>
             <div class="debugger-controls panel-box">
                 <img
                     src="++resource++collective.ploneide.icons/debugger_step.png"
-                    alt="Debugger continue"
+                    alt="Debugger continue" i18n:attributes="alt"
                     onclick="debuggerStep()"/>
                     
                 <img
                     src="++resource++collective.ploneide.icons/debugger_next.png"
-                    alt="Debugger next"
+                    alt="Debugger next" i18n:attributes="alt"
                     onclick="debuggerNext()"/>
 
                 <img
                     src="++resource++collective.ploneide.icons/debugger_continue.png"
-                    alt="Debugger continue"
+                    alt="Debugger continue" i18n:attributes="alt"
                     onclick="debuggerContinue()"/>
                     
                 <img
                     src="++resource++collective.ploneide.icons/debugger_return.png"
-                    alt="Debugger continue"
+                    alt="Debugger continue" i18n:attributes="alt"
                     onclick="debuggerReturn()"/>
             </div>
             <div id="watched-scope-placeholder" class="panel-box" >
@@ -183,6 +187,6 @@
             </div>
         </div>    
         
-        <div>asdasd2</div>        
+        <div><tal:comment replace="nothing">asdasd2</tal:comment></div>        
     </div>        
 </div>

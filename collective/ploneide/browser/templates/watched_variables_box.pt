@@ -1,4 +1,4 @@
-<p> Watched variables </p>
+<p i18n:domain="collective.ploneide" i18n:translate=""> Watched variables </p>
 <div class="debugger-scope-box watched-variable-box">
     <!-- Style for this section should be changed when the theme for the editor is changed -->
     

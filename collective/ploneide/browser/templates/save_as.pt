@@ -1,5 +1,5 @@
 <script type="text/javascript">
-    
+    <!--
     function loadSaveAsTreeView(){
         var directory = document.getElementById('save-as-project-eggs').value;
         $('#save-as-directory').val(directory);
@@ -35,29 +35,32 @@
         
         saveFileAs(directory, filename);
     }
-    
+    -->
 </script>
 
-<h2>Save as:</h2>
+<span i18n:domain="collective.ploneide">
+<h2 i18n:translate="">Save as:</h2>
 <div id="save-as-project-tree">
     <select id="save-as-project-eggs" name="save-as-project-eggs">
         <option tal:repeat="egg view/getCurrentEggs"
                 tal:attributes="value python:egg[0]"
                 tal:content="python:egg[1]"/>
     </select>
-    <input type="button" value="Update" onclick="loadSaveAsTreeView()">
+    <input type="button" value="Update" i18n:attributes="value" onclick="loadSaveAsTreeView()" />
 </div>
 
 <div id="save-as-file-explorer">
-    <input type="hidden" id="save-as-directory" name="save-as-directory">
-    <select id="save-as-directory-area" name="save-as-directory-area" size=10 onclick="updateSaveAsTreeView()">
+    <input type="hidden" id="save-as-directory" name="save-as-directory" />
+    <select id="save-as-directory-area" name="save-as-directory-area" size="10" onclick="updateSaveAsTreeView()">
     </select>
 </div>
 
-<h2>Current directory:</h2>
+<h2 i18n:translate="">Current directory:</h2>
 <span id="save-as-current-directory" name="save-as-current-directory"></span><br/>
 
-<h2>Filename:</h2>
-<input type="text" id="save-as-filename" name="save-as-filename">
+<h2 i18n:translate="">Filename:</h2>
+<input type="text" id="save-as-filename" name="save-as-filename" />
 
-<input type="button" value="Save" onclick="saveAsSave()">
+<input type="button" value="Save" i18n:attributes="value" onclick="saveAsSave()" />
+
+</span>
