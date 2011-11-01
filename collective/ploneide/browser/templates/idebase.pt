@@ -1,4 +1,4 @@
-<div id="editor-main" class="ui-layout-center" i18n:domain="collective.ploneide">
+<div i18n:domain="collective.ploneide" id="editor-main" class="ui-layout-center">
     <!--<div class="top-bar"><span i18n:translate="">PloneIDE</span></div> -->
     <div class="editor-wrapper">
         <div id="tabs"><div id="editor-files-tabs"></div></div>
@@ -147,7 +147,7 @@
             </div>
         </div>
         
-        <div>
+        <div i18n:domain="collective.ploneide">
             <div class="panel-box">
                 <input type="checkbox" 
                        name="debugger-checkbox" 
