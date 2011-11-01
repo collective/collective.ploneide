@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-10-23 18:50+0000\n"
+"POT-Creation-Date: 2011-11-01 15:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,12 +45,24 @@ msgstr ""
 msgid "Current directory:"
 msgstr ""
 
+#: ../browser/templates/idebase.pt:159
+msgid "Debugger continue"
+msgstr ""
+
+#: ../browser/templates/idebase.pt:164
+msgid "Debugger next"
+msgstr ""
+
 #: ../browser/templates/manage_sessions.pt:47
 msgid "Delete current session"
 msgstr ""
 
 #: ../browser/templates/context_info.pt:60
 msgid "Edit: ${edit_v}"
+msgstr ""
+
+#: ../browser/templates/idebase.pt:156
+msgid "Enable debugger"
 msgstr ""
 
 #: ../browser/templates/context_info.pt:49
@@ -193,7 +205,7 @@ msgstr ""
 msgid "Workflow policy:"
 msgstr ""
 
-#: ../browser/templates/ploneide.pt:62
+#: ../browser/templates/ploneide.pt:64
 msgid "Your browser does not support iframes."
 msgstr ""
 
