@@ -1,0 +1,236 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: collective.ploneide\n"
+"POT-Creation-Date: 2011-11-01 15:45+0000\n"
+"PO-Revision-Date: 2011-11-01 12:18-0400\n"
+"Last-Translator: Davi Lima <davi@simplesconsultoria.com.br>\n"
+"Language-Team: Simples Consultoria <contato@simplesconsultoria.com.br>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Language-Code: pt-br\n"
+"Language-Name: Brazilian Portuguese\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: collective.ploneide\n"
+
+#: ../browser/templates/context_info.pt:117
+msgid "(Default view is marked with *)"
+msgstr "(A visão padrão está marcada com um '*')"
+
+#: ../browser/templates/context_info.pt:48
+msgid "Condition"
+msgstr "Condição"
+
+#: ../browser/templates/context_info.pt:110
+msgid "Configuration"
+msgstr "Configuração"
+
+#: ../browser/templates/context_info.pt:16
+msgid "Content Type:"
+msgstr "Tipo de conteúdo:"
+
+#: ../browser/templates/idebase.pt:83
+msgid "Context info"
+msgstr "Informação de contexto"
+
+#: ../browser/templates/context_info.pt:11
+msgid "Context information:"
+msgstr "Informação de contexto:"
+
+#: ../browser/templates/save_as.pt:58
+msgid "Current directory:"
+msgstr "Diretório atual:"
+
+#: ../browser/templates/idebase.pt:159
+msgid "Debugger continue"
+msgstr "Continuar depuração"
+
+#: ../browser/templates/idebase.pt:164
+msgid "Debugger next"
+msgstr "Próxima depuração"
+
+#: ../browser/templates/manage_sessions.pt:47
+msgid "Delete current session"
+msgstr "Apagar sessão atual"
+
+#: ../browser/templates/context_info.pt:60
+msgid "Edit: ${edit_v}"
+msgstr "Editar: ${edit_v}"
+
+#: ../browser/templates/idebase.pt:156
+msgid "Enable debugger"
+msgstr "Habilitar depuração"
+
+#: ../browser/templates/context_info.pt:49
+msgid "Field file"
+msgstr "Campo de arquivo"
+
+#: ../browser/templates/save_as.pt:61
+msgid "Filename:"
+msgstr "Nome de arquivo:"
+
+#: ../browser/templates/global_variables_box.pt:1
+msgid "Global scope"
+msgstr "Escopo global"
+
+#: ../browser/templates/idebase.pt:60
+msgid "Horizontal split"
+msgstr "Divisão horizontal"
+
+#: ../browser/templates/context_info.pt:45
+msgid "ID"
+msgstr "Identificador"
+
+#: ../browser/templates/context_info.pt:46
+msgid "Label"
+msgstr "Etiqueta"
+
+#: ../browser/templates/local_variables_box.pt:1
+msgid "Local scope"
+msgstr "Escopo Local"
+
+#: ../browser/templates/idebase.pt:67
+msgid "Manage Sessions"
+msgstr "Gerenciar sessões"
+
+#: ../browser/templates/context_info.pt:19
+msgid "Meta type:"
+msgstr "Meta type:"
+
+#: ../browser/templates/idebase.pt:7
+msgid "New File"
+msgstr "Novo arquivo"
+
+#: ../browser/templates/manage_sessions.pt:43
+msgid "New empty session"
+msgstr "Nova sessão vazia"
+
+#: ../browser/templates/idebase.pt:13
+msgid "Open File"
+msgstr "Abrir arquivo"
+
+#: ../browser/templates/idebase.pt:71
+msgid "Plone Reload"
+msgstr "Recarregar Plone"
+
+#: ../browser/templates/context_info.pt:24
+msgid "Portal type:"
+msgstr "Portal type:"
+
+#: ../browser/templates/context_info.pt:153
+msgid "Provided interfaces:"
+msgstr "Interfaces fornecidas:"
+
+#: ../browser/templates/context_info.pt:116
+msgid "Provided views:"
+msgstr "Views fornecidas:"
+
+#: ../browser/templates/plone_reload.pt:37
+msgid "Reload Code and ZCML"
+msgstr "Recarregar código e configuração ZCML"
+
+#: ../browser/templates/manage_sessions.pt:39
+msgid "Rename"
+msgstr "Renomear"
+
+#: ../browser/templates/manage_sessions.pt:37
+msgid "Rename current session:"
+msgstr "Renomear sessão atual:"
+
+#: ../browser/templates/plone_reload.pt:40
+msgid "Restart Plone"
+msgstr "Reiniciar Plone"
+
+#: ../browser/templates/save_as.pt:64
+msgid "Save"
+msgstr "Gravar"
+
+#: ../browser/templates/idebase.pt:18
+msgid "Save File"
+msgstr "Salvar arquivo"
+
+#: ../browser/templates/idebase.pt:25
+msgid "Save File As"
+msgstr "Salvar arquivo como:"
+
+#: ../browser/templates/save_as.pt:42
+msgid "Save as:"
+msgstr "Salvar como:"
+
+#: ../browser/templates/context_info.pt:39
+msgid "Schema:"
+msgstr "Schema:"
+
+#: ../browser/templates/manage_sessions.pt:31
+msgid "Sessions:"
+msgstr "Sessões:"
+
+#: ../browser/templates/plone_reload.pt:18
+msgid "Status"
+msgstr "Status"
+
+#: ../browser/templates/context_info.pt:121
+msgid "There's a default page assigned here:"
+msgstr "Há uma página padrão configurada aqui:"
+
+#: ../browser/templates/save_as.pt:49
+msgid "Update"
+msgstr "Atualizar"
+
+#: ../browser/templates/idebase.pt:55
+msgid "Vertical split"
+msgstr "Divisão vertical"
+
+#: ../browser/templates/context_info.pt:57
+msgid "View: ${view_v}"
+msgstr "Ver: ${view_v}"
+
+#: ../browser/templates/context_info.pt:47
+msgid "Visibility"
+msgstr "Visibilidade"
+
+#: ../browser/templates/watched_variables_box.pt:1
+msgid "Watched variables"
+msgstr "Variáveis observadas"
+
+#: ../browser/templates/context_info.pt:50
+msgid "Widget file"
+msgstr "Nome do widget"
+
+#: ../browser/templates/context_info.pt:103
+msgid "Workflow policy:"
+msgstr "Política de workflow:"
+
+#: ../browser/templates/ploneide.pt:64
+msgid "Your browser does not support iframes."
+msgstr "Seu navegador não tem suporte a tags <iframe>."
+
+#: ../browser/templates/idebase.pt:49
+msgid "css"
+msgstr "CSS"
+
+#: ../browser/templates/idebase.pt:50
+msgid "html"
+msgstr "HTML"
+
+#: ../browser/templates/idebase.pt:48
+msgid "javascript"
+msgstr "JavaScript"
+
+#: ../browser/templates/plone_reload.pt:15
+msgid "plone.reload"
+msgstr "plone.reload"
+
+#: ../browser/templates/idebase.pt:47
+msgid "python"
+msgstr "Python"
+
+#: ../browser/templates/idebase.pt:52
+msgid "text"
+msgstr "Texto simples"
+
+#: ../browser/templates/idebase.pt:51
+msgid "xml"
+msgstr "XML"
+
