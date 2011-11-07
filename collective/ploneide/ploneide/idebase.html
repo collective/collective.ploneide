@@ -1,0 +1,192 @@
+<div id="editor-main" class="ui-layout-center">
+    <!--<div class="top-bar"><span i18n:translate="">PloneIDE</span></div> -->
+    <div class="editor-wrapper">
+        <div id="tabs"><div id="editor-files-tabs"></div></div>
+        <div id="editor-toolbar">
+            <a href="#"><span class="logo"></span></a>
+            <img src="resources/icons/new_file.png"
+                 alt="New File" i18n:attributes="alt" 
+                 id="new-empty-file" 
+                 name="new-empty-file" 
+                 onclick="createNewEmptySession()" />
+
+            <img src="resources/icons/open_file.png"
+                 alt="Open File" i18n:attributes="alt"
+                 id="open-file" 
+                 name="open-file" />
+
+            <img src="resources/icons/save_file.png"
+                 alt="Save File" i18n:attributes="alt"
+                 id="save-file" 
+                 name="save-file" 
+                 onclick="saveCurrentFile()"/>
+
+            <a href="save-as.html"  id="save-as" name="save-as">
+                <img src="resources/icons/save_file_as.png"
+                     alt="Save File As" i18n:attributes="alt" />
+            </a>  
+            
+            <select id="fontsize" size="1" onchange="setFontSize()">
+              <option value="8px">8px</option>
+              <option value="10px">10px</option>
+              <option value="11px">11px</option>
+              <option value="12px" selected="selected">12px</option>
+              <option value="14px">14px</option>
+              <option value="16px">16px</option>
+              <option value="18px">18px</option>
+              <option value="20px">20px</option>
+              <option value="22px">22px</option>
+              <option value="24px">24px</option>
+              <option value="26px">26px</option>
+              <option value="28px">28px</option>
+              <option value="30px">30px</option>
+              <option value="32px">32px</option>
+            </select>
+            
+            <select id="syntax" name="syntax" onchange="changeSyntax()">
+                <option value="python" i18n:translate="">python</option>
+                <option value="javascript" i18n:translate="">javascript</option>
+                <option value="css" i18n:translate="">css</option>
+                <option value="html" i18n:translate="">html</option>
+                <option value="xml" i18n:translate="">xml</option>
+                <option value="text" i18n:translate="">text</option>
+            </select>
+            
+            <img src="resources/icons/split_vertical.png"
+                 alt="Vertical split" i18n:attributes="alt"
+                 id="split-vertical" 
+                 name="split-vertical" 
+                 onclick="splitVertical()" />
+            <img src="resources/icons/split_horizontal.png"
+                 alt="Horizontal split" i18n:attributes="alt" 
+                 id="split-horizontal" 
+                 name="split-horizontal" 
+                 onclick="splitHorizontal()" />
+                 
+            <a href="manage-sessions.html"  id="manage-sessions" name="manage-sessions">
+                <img src="resources/icons/manage_sessions.png"
+                     alt="Manage Sessions" i18n:attributes="alt" />
+            </a>
+            <a href="plone-reload.html"  id="plone-reload" name="plone-reload">
+                <img src="resources/icons/plone_reload.png"
+                     alt="Plone Reload" i18n:attributes="alt" />
+            </a>
+            
+            <a href="developermanual/index.html"
+               target="_blank"
+               id="developermanual" 
+               name="developermanual">
+                <img src="resources/icons/help.png"
+                     alt="Save File As" i18n:attributes="alt" />
+            </a>
+            <a href="context-info.html"  id="context-info" name="context-info">
+                <img
+                 src="resources/icons/plone_restart.png"
+                 alt="Context info" i18n:attributes="alt" />
+            </a>
+        </div>
+        <div id="editor"></div>
+        <!--<input id="cockpitInput" type="text"/>-->
+        <div id="debugger-console">
+            <tal:debugger_boxes content="structure context/@@debugger-console-box"/>
+        </div>
+    </div>
+</div>
+<div id="tree" class="ui-layout-east">
+    <ul class="panel-tabs">
+        <li class="tab">
+            <a href="#" class="item-tree" title="tree" i18n:attributes="title"><span i18n:translate="">Tree</span></a>
+        </li>
+        <li class="tab">
+            <a href="#" class="item-debug" title="tree" i18n:attributes="title"><span i18n:translate="">Debug</span></a>
+        </li>
+        <li class="tab">
+            <a href="#" class="item-plone" title="tree" i18n:attributes="title"><span i18n:translate="">Plone</span></a>
+        </li>
+    </ul>
+    <div class="panels">
+        <div>
+            <div id="tree-placeholder" class="panel-box" >
+              <ul class="ultree" tal:repeat="egg view/getDevelopEggs">
+                  <li tal:define="path python:egg[0];
+                                  directory python:egg[1]">
+                      <a class="folder" href="" tal:content="directory" tal:attributes="rel path"></a>
+                      <ul></ul>                  
+                  </li>
+              </ul>
+                
+            </div>
+
+            <div class="panel-box">
+                <div id="project-tree">
+                    <select id="project-eggs" name="project-eggs">
+                        <option tal:repeat="egg view/getCurrentEggs"
+                                tal:attributes="value python:egg[0]"
+                                tal:content="python:egg[1]"/>
+                    </select>
+                    <input type="button" value="Update" i18n:attributes="value" onclick="loadTreeView()" />
+                </div>
+
+                <div id="file-explorer">
+                    <input type="hidden" id="directory" name="directory" size="30" />
+                    <select id="directory-area" name="directory-area" size="10" onclick="updateTreeView()">
+                    </select>
+                </div>
+                
+                <!--        <input type="button" value="Update" i18n:attributes="value" onclick="getDirectoryContents()">
+                <br/>
+                <select id="folder-contents" name="folder-contents">
+                </select>
+                <br/>
+                <input type="button" value="Open" i18n:attributes="value" onclick="loadFileInEditor()">-->
+                <br/>
+
+                <!-- Sessions -->
+                <!--<select id="sessions-group-list" name="sessions-group-list">
+                </select>-->
+            </div>
+        </div>
+        
+        <div i18n:domain="collective.ploneide">
+            <div class="panel-box">
+                <input type="checkbox" 
+                       name="debugger-checkbox" 
+                       id="debugger-checkbox"
+                       value="True" 
+                       onclick="toggleDebugging()"/> <span i18n:translate="">Enable debugger</span>
+            </div>
+            <div class="debugger-controls panel-box">
+                <img
+                    src="resources/icons/debugger_step.png"
+                    alt="Debugger continue" i18n:attributes="alt"
+                    onclick="debuggerStep()"/>
+                    
+                <img
+                    src="resources/icons/debugger_next.png"
+                    alt="Debugger next" i18n:attributes="alt"
+                    onclick="debuggerNext()"/>
+
+                <img
+                    src="resources/icons/debugger_continue.png"
+                    alt="Debugger continue" i18n:attributes="alt"
+                    onclick="debuggerContinue()"/>
+                    
+                <img
+                    src="resources/icons/debugger_return.png"
+                    alt="Debugger continue" i18n:attributes="alt"
+                    onclick="debuggerReturn()"/>
+            </div>
+            <div id="watched-scope-placeholder" class="panel-box" >
+              <tal:debugger_boxes content="structure context/@@watched-variables-box"/>
+            </div>
+            <div id="local-scope-placeholder" class="panel-box" >
+              <tal:debugger_boxes content="structure context/@@local-variables-box"/>
+            </div>
+            <div id="global-scope-placeholder" class="panel-box" >
+              <tal:debugger_boxes content="structure context/@@global-variables-box"/>
+            </div>
+        </div>    
+        
+        <div><tal:comment replace="nothing">asdasd2</tal:comment></div>        
+    </div>        
+</div>

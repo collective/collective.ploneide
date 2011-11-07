@@ -1,0 +1,67 @@
+/*BASIC TREE STYLE you can override this very easy*/
+.tree {
+    color:#000;
+    font-size:12px;
+}
+.tree a {
+    color:#000;
+    text-decoration:none;
+    border:medium none;
+}
+.tree img {
+    border:medium none;
+}
+
+.tree, 
+.tree ul, 
+.tree li {
+    list-style: none outside none;
+    margin: 0;
+    padding: 0;
+    display:block;
+}
+.tree ul {
+    margin-left:16px;
+}
+.dummy, .arrow {
+    float:left;
+}
+.arrow, 
+.icon,
+.dummy {
+    width:16px;
+    height:16px;
+}
+.icon {
+    margin-right:3px;
+    float:none;
+}
+.arrow {
+    background:url(images/bullet_arrow.png) no-repeat scroll 0 0 transparent;
+    cursor:pointer;
+}
+img.arrow:hover {
+    background:url(images/bullet_arrow.png) no-repeat scroll -16px 0 transparent;
+}
+.opened > img.arrow {
+    background:url(images/bullet_arrow.png) no-repeat scroll -32px 0 transparent;
+}
+.opened > img.arrow:hover {
+    background:url(images/bullet_arrow.png) no-repeat scroll -48px 0 transparent;
+}
+
+.folderish .container{
+    display:none;
+}
+.opened > .container {
+    display:block;
+}
+.folder img{
+    background:url(images/folder.png) no-repeat scroll 0 0 transparent;
+}
+.opened > .folder img{
+    background:url(images/folder-open.png) no-repeat scroll 0 0 transparent;
+}
+.page img {
+    background:url(images/page.png) no-repeat scroll 0 0 transparent;
+}
