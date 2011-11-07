@@ -7,3 +7,6 @@
 [submodule "collective/ploneide/browser/dojo"]
 	path = collective/ploneide/browser/dojo
 	url = git://github.com/dojo/dojo.git
+[submodule "collective/ploneide/browser/ace"]
+	path = collective/ploneide/browser/ace
+	url = git://github.com/ajaxorg/ace.git
