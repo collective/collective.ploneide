@@ -18,8 +18,9 @@
     <script type="text/javascript" src="++resource++plone.app.jquerytools.js"></script>
     <script type="text/javascript" src="++resource++plone.app.jquerytools.overlayhelpers.js"></script>
     <script type="text/javascript" src="++resource++plone.app.jquerytools.form.js"></script>
-    <script type="text/javascript" src="++resource++collective.ploneide.ace/ace.js"></script>
-    <script type="text/javascript" src="++resource++collective.ploneide.ace/cockpit.js"></script>
+    <script src="++resource++collective.ploneide.dojo/dojo.js"></script>    
+    <!--<script type="text/javascript" src="++resource++collective.ploneide.ace/ace.js"></script>-->
+    <!--<script type="text/javascript" src="++resource++collective.ploneide.ace/cockpit.js"></script>
     <script type="text/javascript" src="++resource++collective.ploneide.ace/split.js"></script>
     <script type="text/javascript" src="++resource++collective.ploneide.ace/mode-css.js"></script>
     <script type="text/javascript" src="++resource++collective.ploneide.ace/mode-html.js"></script>
@@ -39,7 +40,7 @@
     <script type="text/javascript" src="++resource++collective.ploneide.ace/theme-monokai.js"></script>
     <script type="text/javascript" src="++resource++collective.ploneide.ace/theme-pastel_on_dark.js"></script>
     <script type="text/javascript" src="++resource++collective.ploneide.ace/theme-twilight.js"></script>
-    <script type="text/javascript" src="++resource++collective.ploneide.ace/theme-vibrant_ink.js"></script>
+    <script type="text/javascript" src="++resource++collective.ploneide.ace/theme-vibrant_ink.js"></script> -->
 
 
     <!-- tree -->

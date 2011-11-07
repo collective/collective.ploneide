@@ -73,10 +73,34 @@ window.onload = function() {
         
 
     var deps = [ "pilot/fixoldbrowsers", "pilot/plugin_manager", "pilot/settings",
-                 "pilot/environment"];
+                 "pilot/environment", "ace", "dojo/domReady!"];
     
-    var plugins = [ "pilot/index", "cockpit/index"];
-    require(deps, function() {
+    var plugins = [ "pilot/index", "ace/defaults"];
+    var conf = {
+        baseUrl: '',
+        isDebug: true,
+        packages: [
+            "dojo"
+        ],
+        packagePaths: {
+            "++resource++collective.ploneide.ace": [
+                {
+                    name: "ace",
+                    main: "ace"
+                }
+            ],
+            "++resource++collective.ploneide.pilot": [
+                {
+                    name: "pilot",
+                    main: "index"
+                }
+            ]
+        },
+        aliases: [
+            ["text", "dojo/text"]
+        ]
+    };
+    require(conf, deps, function() {
         var catalog = require("pilot/plugin_manager").catalog;
         catalog.registerPlugins(plugins).then(function() {
             var env = require("pilot/environment").create();
