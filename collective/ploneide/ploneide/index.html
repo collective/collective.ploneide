@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
       lang="en">
       
@@ -8,6 +9,18 @@
     <link rel="stylesheet" type="text/css" media="screen" href="resources/ploneide.css" />
     <link rel="stylesheet" type="text/css" media="screen" href="resources/tree/style/simplejqtree.css" />
     <link rel="stylesheet" type="text/css" media="screen" href="resources/layout/layout.css" />
+<link rel="stylesheet" href="../dijit/themes/claro/claro.css">    
+<style type="text/css" media="screen">
+    body, html { width:100%; height:100%; margin:0; padding:0; overflow: hidden }
+    #main {
+        margin: 0;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+</style>    
     
     <script type="text/javascript">
         AUX_HOST="localhost";
@@ -19,12 +32,122 @@
         DEBUGGER_PORT=8082;
     </script>
     
-    <script type="text/javascript" src="jquery/jquery-1.7.js"></script>
+    <!--<script type="text/javascript" src="jquery/jquery-1.7.js"></script>
     <script type="text/javascript" src="jquery/jquery.tools.js"></script>
     <script type="text/javascript" src="jquery/jquery.overlayhelpers.js"></script>
-    <script type="text/javascript" src="jquery/jquery.form.js"></script>
+    <script type="text/javascript" src="jquery/jquery.form.js"></script>-->
     
-    <script type="text/javascript" src="ace/ace.js"></script>
+    
+    <script type="text/javascript" src="dojo/dojo.js"></script>
+<script>
+require({
+    baseUrl: '../',
+    isDebug: true,
+    packages: [
+        "dojo",
+        "dijit",
+        "dojox",
+        "dijit-ace"
+    ],
+    packagePaths: {
+        "ace/lib": [
+            {
+                name: "ace",
+                main: "ace"
+            }
+        ],
+        "pilot/lib": [
+            {
+                name: "pilot",
+                main: "index"
+            }
+        ]
+    },
+    aliases: [
+        ["text", "dojo/text"]
+    ]
+}, [
+    "dojo",
+    "dijit/layout/BorderContainer",
+    "dijit/layout/TabContainer",
+    "dijit/layout/ContentPane",
+    "dijit-ace/editor/TextEditor",
+    "dijit.Tree"
+    "resources/editor/handler",
+    "ace",
+    "dojo/domReady!"
+], function(dojo, BorderContainer, TabContainer, ContentPane, TextEditor, Tree, handler) {
+    var mainContainer = new BorderContainer({
+        id: "mainContainer",
+        gutters: false,
+        style: "width: 100%; height: 100%"
+    }, dojo.byId('main'));
+
+    // create the TabContainer
+    var contentTabs = new dijit.layout.TabContainer({
+        region: "center",
+        id: "contentTabs",
+        closable: true,
+        tabPosition: "top",
+        "class": "centerPanel",
+        href: "contentCenter.html"
+    });
+
+    // Add initial content to the TabContainer
+    contentTabs.addChild(
+            new dijit.layout.ContentPane({
+                id:'EditorContainer',
+                isLayoutContainer: true,
+                title: "Group 1"
+            })
+        );    
+    mainContainer.addChild(contentTabs);    
+
+    //editor handler
+    var handler = new handler.Handler();
+
+    var infoPane = new ContentPane({
+        title: "Document Info",
+        content: "Document Info Pane",
+        splitter: true,
+        region: "right",
+        style: "width: 200px; background-color: #ddd"
+    });
+
+    /*this is a clasic dijit tree*/
+    /*reference http://dojotoolkit.org/reference-guide/dijit/Tree.html*/
+    /*dojo.require("dojo.data.ItemFileReadStore");
+        dojo.require("dijit.Tree");
+
+        dojo.addOnLoad(function() {
+            var store = new dojo.data.ItemFileReadStore({
+                url: "../_static/js//dijit/tests/_data/countries.json"
+            });
+
+            var treeModel = new dijit.tree.ForestStoreModel({
+                store: store,
+                query: {
+                    "type": "continent"
+                },
+                rootId: "root",
+                rootLabel: "Continents",
+                childrenAttrs: ["children"]
+            });
+
+            new dijit.Tree({
+                model: treeModel
+            },
+            "treeOne");
+        });*/
+
+    mainContainer.addChild(infoPane);
+    
+    
+    mainContainer.startup();
+    handler.env.split.resize()
+});
+</script>    
+    <!--<script type="text/javascript" src="ace/ace.js"></script>
     <script type="text/javascript" src="ace/cockpit.js"></script>
     <script type="text/javascript" src="ace/split.js"></script>
     <script type="text/javascript" src="ace/mode-css.js"></script>
@@ -45,11 +168,11 @@
     <script type="text/javascript" src="ace/theme-monokai.js"></script>
     <script type="text/javascript" src="ace/theme-pastel_on_dark.js"></script>
     <script type="text/javascript" src="ace/theme-twilight.js"></script>
-    <script type="text/javascript" src="ace/theme-vibrant_ink.js"></script>
+    <script type="text/javascript" src="ace/theme-vibrant_ink.js"></script> -->
 
 
     <!-- tree -->
-    <script type="text/javascript" src="resources/tree/jquery.simplejqtree.js"></script>
+   <!-- <script type="text/javascript" src="resources/tree/jquery.simplejqtree.js"></script>
 
     <script type="text/javascript" src="resources/local_storage.js"></script>
     <script type="text/javascript" src="resources/sessions.js"></script>
@@ -59,15 +182,14 @@
     <script type="text/javascript" src="resources/debugging.js"></script>
     <script type="text/javascript" src="resources/aux.js"></script>
     <script type="text/javascript" src="resources/boot.js"></script>
-
+-->
     <!-- layout -->
+    <!--
     <script type="text/javascript" src="jquery/jquery-ui-1.8.16.custom.min.js"></script>
-    <script type="text/javascript" src="resources/layout/jquery.layout.js"></script>
+    <script type="text/javascript" src="resources/layout/jquery.layout.js"></script>-->
       
 </head>
-<body>
-    <!--<iframe class="ui-layout-south" src="localhost:8081" width="100%" height="100%">
-      <p>Your browser does not support iframes.</p>
-    </iframe> -->
+<body class="claro">
+<div id="main"></div>
 </body>
 </html>
