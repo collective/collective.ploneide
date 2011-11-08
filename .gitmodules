@@ -1,12 +1,12 @@
-[submodule "collective/ploneide/browser/pilot"]
-	path = collective/ploneide/browser/pilot
+[submodule "collective/ploneide/ploneide/pilot"]
+	path = collective/ploneide/ploneide/pilot
 	url = git://github.com/ajaxorg/pilot.git
-[submodule "collective/ploneide/browser/dijit"]
-	path = collective/ploneide/browser/dijit
+[submodule "collective/ploneide/ploneide/dijit"]
+	path = collective/ploneide/ploneide/dijit
 	url = git://github.com/dojo/dijit.git
-[submodule "collective/ploneide/browser/dojo"]
-	path = collective/ploneide/browser/dojo
+[submodule "collective/ploneide/ploneide/dojo"]
+	path = collective/ploneide/ploneide/dojo
 	url = git://github.com/dojo/dojo.git
-[submodule "collective/ploneide/browser/ace"]
-	path = collective/ploneide/browser/ace
+[submodule "collective/ploneide/ploneide/ace"]
+	path = collective/ploneide/ploneide/ace
 	url = git://github.com/ajaxorg/ace.git
