@@ -1,24 +1,25 @@
 function createPloneIDE(env){
     
+    Editor = require("ace/editor").Editor;
     EditSession = require("ace/edit_session").EditSession;
     UndoManager = require("ace/undomanager").UndoManager;
     Range = require("ace/range").Range;
-    JavaScriptMode = require("ace/mode/javascript").Mode;
+    /*JavaScriptMode = require("ace/mode/javascript").Mode;
     CssMode = require("ace/mode/css").Mode;
     HtmlMode = require("ace/mode/html").Mode;
     XmlMode = require("ace/mode/xml").Mode;
     PythonMode = require("ace/mode/python").Mode;
     TextMode = require("ace/mode/text").Mode;
-    theme = require("ace/theme/pastel_on_dark");
+    theme = require("ace/theme/pastel_on_dark");*/
     
     var canon = require("pilot/canon");
 
     var container = document.getElementById("editor");
-    var cockpitInput = document.getElementById("cockpitInput");
+    //var cockpitInput = document.getElementById("cockpitInput");
 
     // Splitting.
     var Split = require("ace/split").Split;
-    var split = new Split(container, theme, 1);
+    var split = new Split(container, 'twilight', 1);
     env.editor = split.getEditor(0);
     split.on("focus", function(editor) {
         env.editor = editor;
@@ -29,7 +30,7 @@ function createPloneIDE(env){
     window.env = env;
     window.ace = env.editor;
     
-    env.editor.getSession().setMode(new PythonMode());
+    env.editor.getSession().setMode('python');
 
 
     global_sessions = [];

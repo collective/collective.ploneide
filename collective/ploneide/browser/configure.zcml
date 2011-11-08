@@ -4,9 +4,17 @@
     i18n_domain="collective.ploneide">
 
   <browser:resourceDirectory
+      name="collective.ploneide.dojo"
+      directory="dojo"
+      /> 
+  <browser:resourceDirectory
       name="collective.ploneide.ace"
-      directory="ace"
+      directory="ace/lib"
       />
+  <browser:resourceDirectory
+      name="collective.ploneide.pilot"
+      directory="pilot/lib"
+      />      
 
   <browser:resourceDirectory
       name="collective.ploneide.resources"
