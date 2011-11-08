@@ -75,7 +75,7 @@ class PloneIDEServer(SocketServer.TCPServer):
     def run(self):
         logger.info("Starting internal server in %s:%s" % (HOST, PORT))
         self.serve_forever(poll_interval=0.5)
-        
+
     def stop(self):
         self.shutdown()
 
@@ -86,14 +86,14 @@ class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     require, in case:
     a) Zope is down
     b) We are in a debug session and Zope main process is stopped.
-    
+
     """
 
     def __init__(self, *args):
 
         #XXX: Is this the best way on doing this ?
         self.ploneide_server = args[2]
-        
+
         self.commands_map = {
                             'open-file' : self.ploneide_server.open_file,
                             'save-file' : self.ploneide_server.save_file,
@@ -132,9 +132,9 @@ class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         """
         From here we will call the proper function.
         """
-        
+
         #XXX: Do some checks before
-        
+
         # Here we check which was the command issued
         command = self.params['command']
         # Then we remove it from the list of params
@@ -146,11 +146,11 @@ class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         """
         GET handler
         """
-        
+
         # XXX: Need to do stronger checks, and proper data return in case
         # of possible errors
         #import pdb;pdb.set_trace()
-        
+
         self.params = {}
         self.result = False
 
@@ -186,7 +186,7 @@ class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
         else:
             self.result = SimpleHTTPServer.SimpleHTTPRequestHandler.do_GET(self)
-            
+
         return self.result
 
     def do_POST(self):
@@ -201,7 +201,7 @@ class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         # of possible errors
         self.params = {}
         self.result = False
-       
+
         content = cgi.FieldStorage(
                     fp=self.rfile,
                     headers=self.headers,
@@ -216,7 +216,7 @@ class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
         # Begin the response
         self.send_response(200)
-        
+
         servers = getattr(config.getConfiguration(), 'servers', None)
         if servers:
             instance_port = servers[0].port
@@ -226,17 +226,7 @@ class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
         self.end_headers()
         self.wfile.write(self.result)
-        
+
         return
 
-if __name__ == "__main__":
 
-    #logger.setLevel('INFO')
-    server_address = (HOST, PORT)
-    httpd = PloneIDEServer(server_address, PloneIDEHandler)
-
-    try:
-        httpd.run()
-    except KeyboardInterrupt:
-        httpd.stop()
-    

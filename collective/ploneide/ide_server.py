@@ -57,7 +57,7 @@ class PloneIDEHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     require, in case:
     a) Zope is down
     b) We are in a debug session and Zope main process is stopped.
-    
+
     """
 
     def decode_params(self):
@@ -81,9 +81,9 @@ class PloneIDEHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         """
         From here we will call the proper function.
         """
-        
+
         #XXX: Do some checks before
-        
+
         # Here we check which was the command issued
         command = self.params['command']
         # Then we remove it from the list of params
@@ -114,7 +114,7 @@ class PloneIDEHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             self.decode_params()
 
             self.dispatch_command()
-            
+
             self.send_response(200)
             self.send_header("Content-type", "text/plain; charset=utf-8")
 
@@ -124,13 +124,13 @@ class PloneIDEHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             servers = getattr(config.getConfiguration(), 'servers', None)
             if servers:
                 instance_port = servers[0].port
-    
+
                 self.send_header("Access-Control-Allow-Origin", "http://localhost:%s" % instance_port)
                 self.send_header("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
 
             self.end_headers()
             self.wfile.write(self.result)
-            
+
         return self.result
 
     def do_POST(self):
@@ -145,7 +145,7 @@ class PloneIDEHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         # of possible errors
         self.params = {}
         self.result = False
-       
+
         content = cgi.FieldStorage(
                     fp=self.rfile,
                     headers=self.headers,
@@ -160,7 +160,7 @@ class PloneIDEHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
         # Begin the response
         self.send_response(200)
-        
+
         servers = getattr(config.getConfiguration(), 'servers', None)
         if servers:
             instance_port = servers[0].port
@@ -170,8 +170,9 @@ class PloneIDEHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
         self.end_headers()
         self.wfile.write(self.result)
-        
+
         return
 
 server_address = (AUX_HOST, AUX_PORT)
 httpd = PloneIDEServer(server_address, PloneIDEHandler)
+
