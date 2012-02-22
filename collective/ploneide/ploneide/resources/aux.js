@@ -39,7 +39,7 @@ function changeSyntax(){
     var syntax = document.getElementById('syntax').value;
 
     var mode = getEditMode(syntax);
-    
+
     env.editor.getSession().setMode(mode);
     env.editor.focus();
 }
@@ -67,7 +67,7 @@ function updateTreeView(){
                         loadFileInEditor(new_dir);
                     }
                 });
-    
+
 }
 
 function treeSetup() {
@@ -99,7 +99,7 @@ function treeSetup() {
                 });
             }
     });
-        
+
     $('.ultree').simplejqtree({
         'ajax_handler':{
             'url': url,
@@ -111,11 +111,49 @@ function treeSetup() {
         'action_handler':function(item) {
             loadFileFromFullPath(item.attr('rel'));
         }
-    }); 
+    });
 }
 
 function panelsSetup() {
     //$("ul.panel-tabs").tabs("div.panels > div", {'effect':'fade'});
-    $("#right-panel-tabs").tabs();
-    $("#right-panel-tabs").tabs( "select" , 0 );
+    $("#right-panel-tabs").tabs({ selected: 0,
+                                  opacity: 'toggle'});
+}
+
+
+function createDialogForSessions(){
+    $('a#manage-sessions').click(function() {
+        var url = this.href;
+        // show a spinner or something via css
+        var dialog = $('<div style="display:none" class="loading" title="Manage sessions"></div>').appendTo('body');
+        // open the dialog
+        dialog.dialog({
+            // add a close listener to prevent adding multiple divs to the document
+            close: function(event, ui) {
+                // remove div with all data and events
+                dialog.remove();
+            },
+            modal: true
+        });
+
+//      load remote content
+        $.ajax({
+            url: url,
+            async: true,
+            success: function(results){
+                dialog.removeClass('loading');
+                dialog.html(results);
+            }
+        });
+//         dialog.load(
+//             url,
+//             {}, // omit this param object to issue a GET request instead a POST request, otherwise you may provide post parameters within the object
+//             function (responseText, textStatus, XMLHttpRequest) {
+//                 // remove the loading class
+//                 dialog.removeClass('loading');
+//             }
+//         );
+        //prevent the browser to follow the link
+        return false;
+    });
 }

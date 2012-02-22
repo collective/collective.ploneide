@@ -7,7 +7,7 @@
     padding: 0;
 }
 
-/*LOGO MENU*/ 
+/*LOGO MENU*/
 .logo {
     background:url('icons/ploneide_logo.png') no-repeat scroll 0 0 transparent;
     float:left;
@@ -18,7 +18,7 @@
     position:relative;
     top:-30px;
 }
- 
+
 #editor-main {
     background:none repeat scroll 0 0 #333;
     padding:10px 0 0;
@@ -27,7 +27,7 @@
     background-color:#444;
     background: url('icons/shadow_bar.png') repeat-x scroll 0 0 #222222;
     display: block;
-    margin:0px 0px 10px 0px;    
+    margin:0px 0px 10px 0px;
     padding: 5px 20px 6px;
     color: #fff;
     text-decoration: none;
@@ -39,7 +39,7 @@
     text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
     border-bottom: 1px solid rgba(0,0,0,0.25);
     position: relative;
-    cursor: pointer;    
+    cursor: pointer;
 }
 #editor-main .editor-wrapper {
     padding:0;
@@ -73,25 +73,26 @@
     border-radius: 0.5em 0.5em 0 0;
     -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
     -moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
-    box-shadow: 0 1px 2px rgba(0,0,0,.2);  
+    box-shadow: 0 1px 2px rgba(0,0,0,.2);
     color: #e9e9e9;
     border-top: solid 1px #555;
     background: #555;
     background: -webkit-gradient(linear, left top, left bottom, from(#444), to(#333));
-    background: -moz-linear-gradient(top, #444, #333);      
+    background: -moz-linear-gradient(top, #444, #333);
 }
+
 #editor-files-tabs .selected {
     cursor:pointer;
     background-color:#555;
     background: #616161;
     background: -webkit-gradient(linear, left top, left bottom, from(#666), to(#555));
-    background: -moz-linear-gradient(top, #666, #555);    
+    background: -moz-linear-gradient(top, #666, #555);
 }
 
 #editor-files-tabs span.tab:hover {
     background: #555;
     background: -webkit-gradient(linear, left top, left bottom, from(#444), to(#555));
-    background: -moz-linear-gradient(top, #444, #555);   
+    background: -moz-linear-gradient(top, #444, #555);
 }
 #editor-files-tabs .close {
     color:#999;
@@ -113,7 +114,7 @@
     border-bottom:1px solid #000;
 	background: -o-linear-gradient(top,#323232,#303030) repeat scroll 0 0 #303030;
 	background: -moz-linear-gradient(top,#323232,#303030) repeat scroll 0 0 #303030;
-	background: -webkit-gradient(linear,left top,left bottom,from(#323232),to(#303030)) repeat scroll 0 0 #303030;    
+	background: -webkit-gradient(linear,left top,left bottom,from(#323232),to(#303030)) repeat scroll 0 0 #303030;
 	float:left;
 	width:100%;
 	clear:both;
@@ -178,7 +179,7 @@
     margin-bottom: 5px;
 }
 #tree-placeholder {
-    
+
 }
 
 
@@ -281,4 +282,56 @@ img.filesystem-icon {
     border-width: 1px;
     border-style: solid;
     padding: 5px;
+}
+
+/* DIALOG STYLE */
+.ui-dialog .ui-dialog-titlebar {
+    cursor: move;
+    padding: .4em 1em;
+    position: relative;
+}
+
+.ui-dialog .ui-dialog-titlebar-close {
+    position: absolute;
+    right: 0.5em;
+    top: 50%;
+    width: 19px;
+    margin: -10px 0 0 0;
+    padding: 1px;
+    height: 18px;
+}
+
+.ui-dialog .ui-dialog-titlebar-close span {
+    display: block;
+    margin: 1px;
+    background-image: url('icons/close.png');
+}
+
+.ui-dialog .ui-widget-header {
+    background-color:#555;
+    background: #616161;
+    background: -webkit-gradient(linear, left top, left bottom, from(#666), to(#555));
+    background: -moz-linear-gradient(top, #666, #555);
+}
+
+.ui-dialog .ui-dialog-content {
+    position: relative;
+    border: 0;
+    padding: 0.5em 1em;
+    background: white;
+}
+
+.ui-widget-overlay {
+    background: #666 url('backgrounds/dialog_overlay.png') 50% 50% repeat;
+    opacity: .50;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.ui-icon {
+    display: block;
+    text-indent: -99999px;
+    overflow: hidden;
+    background-repeat: no-repeat;
 }

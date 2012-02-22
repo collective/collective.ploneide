@@ -43,16 +43,10 @@ window.onload = function() {
         }
     });
 
-    var height = $('#editor-main').height() - 75;
+    var height = $('#editor-main').height() - 100;
     $('#editor').height(height);
 
-
-    $('a#manage-sessions').prepOverlay(
-            {
-                subtype: 'ajax'
-            }
-        );
-        
+    createDialogForSessions();
     $('a#save-as').prepOverlay(
             {
                 subtype: 'ajax'
