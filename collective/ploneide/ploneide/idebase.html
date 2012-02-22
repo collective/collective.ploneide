@@ -93,95 +93,65 @@
     </div>
 </div>
 <div id="tree" class="ui-layout-east">
-    <ul class="panel-tabs">
-        <li class="tab">
-            <a href="#" class="item-tree" title="tree" i18n:attributes="title"><span i18n:translate="">Tree</span></a>
-        </li>
-        <li class="tab">
-            <a href="#" class="item-debug" title="tree" i18n:attributes="title"><span i18n:translate="">Debug</span></a>
-        </li>
-        <li class="tab">
-            <a href="#" class="item-plone" title="tree" i18n:attributes="title"><span i18n:translate="">Plone</span></a>
-        </li>
-    </ul>
-    <div class="panels">
-        <div>
-            <div id="tree-placeholder" class="panel-box" >
-              <ul class="ultree">
-              </ul>
-                
-            </div>
-<!--
-            <div class="panel-box">
-                <div id="project-tree">
-                    <select id="project-eggs" name="project-eggs">
-                        <option tal:repeat="egg view/getCurrentEggs"
-                                tal:attributes="value python:egg[0]"
-                                tal:content="python:egg[1]"/>
-                    </select>
-                    <input type="button" value="Update" i18n:attributes="value" onclick="loadTreeView()" />
+    <div id="right-panel-tabs">
+        <ul>
+            <li class="tab">
+                <a href="#item-tree" class="item-tree" title="tree" i18n:attributes="title"><span i18n:translate="">Tree</span></a>
+            </li>
+            <li class="tab">
+                <a href="#item-debug" class="item-debug" title="tree" i18n:attributes="title"><span i18n:translate="">Debug</span></a>
+            </li>
+            <li class="tab">
+                <a href="#item-plone" class="item-plone" title="tree" i18n:attributes="title"><span i18n:translate="">Plone</span></a>
+            </li>
+        </ul>
+            <div id="item-tree">
+                <div id="tree-placeholder" class="panel-box" >
+                <ul class="ultree">
+                </ul>
                 </div>
+            </div>
 
-                <div id="file-explorer">
-                    <input type="hidden" id="directory" name="directory" size="30" />
-                    <select id="directory-area" name="directory-area" size="10" onclick="updateTreeView()">
-                    </select>
+            <div id="item-debug">
+                <div class="panel-box">
+                    <input type="checkbox"
+                        name="debugger-checkbox"
+                        id="debugger-checkbox"
+                        value="True"
+                        onclick="toggleDebugging()"/> <span>Enable debugger</span>
                 </div>
-                -->
-                <!--        <input type="button" value="Update" i18n:attributes="value" onclick="getDirectoryContents()">
-                <br/>
-                <select id="folder-contents" name="folder-contents">
-                </select>
-                <br/>
-                <input type="button" value="Open" i18n:attributes="value" onclick="loadFileInEditor()">-->
-                <br/>
+                <!--<div class="debugger-controls panel-box">
+                    <img
+                        src="resources/icons/debugger_step.png"
+                        alt="Debugger continue" i18n:attributes="alt"
+                        onclick="debuggerStep()"/>
 
-                <!-- Sessions -->
-                <!--<select id="sessions-group-list" name="sessions-group-list">
-                </select>-->
-            </div>
-        </div>
-        
-        <div i18n:domain="collective.ploneide">
-            <div class="panel-box">
-                <input type="checkbox" 
-                       name="debugger-checkbox" 
-                       id="debugger-checkbox"
-                       value="True" 
-                       onclick="toggleDebugging()"/> <span i18n:translate="">Enable debugger</span>
-            </div>
-            <div class="debugger-controls panel-box">
-                <img
-                    src="resources/icons/debugger_step.png"
-                    alt="Debugger continue" i18n:attributes="alt"
-                    onclick="debuggerStep()"/>
-                    
-                <img
-                    src="resources/icons/debugger_next.png"
-                    alt="Debugger next" i18n:attributes="alt"
-                    onclick="debuggerNext()"/>
+                    <img
+                        src="resources/icons/debugger_next.png"
+                        alt="Debugger next" i18n:attributes="alt"
+                        onclick="debuggerNext()"/>
 
-                <img
-                    src="resources/icons/debugger_continue.png"
-                    alt="Debugger continue" i18n:attributes="alt"
-                    onclick="debuggerContinue()"/>
-                    
-                <img
-                    src="resources/icons/debugger_return.png"
-                    alt="Debugger continue" i18n:attributes="alt"
-                    onclick="debuggerReturn()"/>
+                    <img
+                        src="resources/icons/debugger_continue.png"
+                        alt="Debugger continue" i18n:attributes="alt"
+                        onclick="debuggerContinue()"/>
+
+                    <img
+                        src="resources/icons/debugger_return.png"
+                        alt="Debugger continue" i18n:attributes="alt"
+                        onclick="debuggerReturn()"/>
+                </div>
+                <div id="watched-scope-placeholder" class="panel-box" >
+                <tal:debugger_boxes content="structure context/@@watched-variables-box"/>
+                </div>
+                <div id="local-scope-placeholder" class="panel-box" >
+                <tal:debugger_boxes content="structure context/@@local-variables-box"/>
+                </div>
+                <div id="global-scope-placeholder" class="panel-box" >
+                <tal:debugger_boxes content="structure context/@@global-variables-box"/>
+                </div>-->
             </div>
-            <div id="watched-scope-placeholder" class="panel-box" >
-              <tal:debugger_boxes content="structure context/@@watched-variables-box"/>
-            </div>
-            <div id="local-scope-placeholder" class="panel-box" >
-              <tal:debugger_boxes content="structure context/@@local-variables-box"/>
-            </div>
-            <div id="global-scope-placeholder" class="panel-box" >
-              <tal:debugger_boxes content="structure context/@@global-variables-box"/>
-            </div>
-        </div>    
-        
-        <div><tal:comment replace="nothing">asdasd2</tal:comment></div>        
-    </div>        
+
+            <div id="item-plone" >ASD</div>
+    </div>
 </div>

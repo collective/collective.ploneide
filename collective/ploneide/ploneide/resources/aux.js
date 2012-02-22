@@ -69,14 +69,7 @@ function updateTreeView(){
                 });
     
 }
-/*
-        jQuery.post('http://'+AUX_HOST+':'+AUX_PORT,
-                    {'command':'save-file',
-                     'directory':directory,
-                     'file_name':file_name,
-                     'content':content
-                    },
-                    */
+
 function treeSetup() {
 
     // This will populate several file trees (will be able to configure it
@@ -122,5 +115,7 @@ function treeSetup() {
 }
 
 function panelsSetup() {
-    $("ul.panel-tabs").tabs("div.panels > div", {'effect':'fade'});
+    //$("ul.panel-tabs").tabs("div.panels > div", {'effect':'fade'});
+    $("#right-panel-tabs").tabs();
+    $("#right-panel-tabs").tabs( "select" , 0 );
 }

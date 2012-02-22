@@ -109,7 +109,7 @@
 }
 
 /* PANEL TABS */
-.panel-tabs {
+#right-panel-tabs .ui-tabs-nav {
     border-bottom:1px solid #000;
 	background: -o-linear-gradient(top,#323232,#303030) repeat scroll 0 0 #303030;
 	background: -moz-linear-gradient(top,#323232,#303030) repeat scroll 0 0 #303030;
@@ -118,32 +118,40 @@
 	width:100%;
 	clear:both;
 }
-.panel-tabs .tab{
+#right-panel-tabs .ui-tabs-nav .tab{
     float:left;
     height:49px;
 }
-.panel-tabs .tab a{
+
+#right-panel-tabs .ui-tabs-nav .tab a{
     float:left;
     color:#fff;
     height:50px;
     width:53px;
 }
-.panel-tabs .tab a span {
+
+#right-panel-tabs .ui-tabs-nav .tab a span {
     display:none;
 }
 
-.panel-tabs .tab .item-tree{
+#right-panel-tabs .ui-tabs-nav .tab .item-tree{
     background:url('icons/project_tree_icon_large.png') scroll no-repeat center center transparent;
 }
-.panel-tabs .tab .item-tree:hover, .panel-tabs .tab .item-tree.current{
+
+#right-panel-tabs .ui-tabs-nav .tab .item-tree:hover, #right-panel-tabs .ui-tabs-nav .ui-tabs-selected .item-tree{
     background:url('icons/project_tree_icon_large_hover.png') scroll no-repeat center center transparent;
 }
 
-.panel-tabs .tab .item-debug{
+#right-panel-tabs .ui-tabs-nav .tab .item-debug{
     background:url('icons/project_debug_icon_large.png') scroll no-repeat center center transparent;
 }
-.panel-tabs .tab .item-debug:hover, .panel-tabs .tab .item-debug.current{
+
+#right-panel-tabs .ui-tabs-nav .tab .item-debug:hover, #right-panel-tabs .ui-tabs-nav .ui-tabs-selected .item-debug{
     background:url('icons/project_debug_icon_large_hover.png') scroll no-repeat center center transparent;
+}
+
+#right-panel-tabs .ui-tabs-hide{
+  display: none
 }
 
 .panels {

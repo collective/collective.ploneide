@@ -1,7 +1,7 @@
 function getDebuggerScope(scope){
-
+    var url = 'http://'+window.$PLONEIDE_HOST+':'+window.$PLONEIDE_PORT;
     jQuery.ajax({type: 'POST',
-                 url: 'http://'+AUX_HOST+':'+AUX_PORT,
+                 url: url,
                  async : true,
                  dataType : 'json',
                  data: {'command': 'get-debugger-scope',
@@ -53,9 +53,9 @@ $(document).bind("debugger-stopped", getWatchedVariables);
 function addVariableToWatch(variable){
     
     // We add the variable 
-    
+    var url = 'http://'+window.$PLONEIDE_HOST+':'+window.$PLONEIDE_PORT;
     jQuery.ajax({type: 'POST',
-                 url: 'http://'+AUX_HOST+':'+AUX_PORT,
+                 url: url,
                  async : true,
                  data: {'command': 'add-watched-variable',
                         'variable': variable}
@@ -100,10 +100,10 @@ function runCodeInDebugger(event){
     }
     
     // If ENTER was pressed, then run the call
-        
+    var url = 'http://'+window.$PLONEIDE_HOST+':'+window.$PLONEIDE_PORT;
     var input = document.getElementById("debugger-console-input").value;
     jQuery.ajax({type: 'POST',
-                 url: 'http://'+AUX_HOST+':'+AUX_PORT,
+                 url: url,
                  async : true,
                  data: {'command': 'eval-code',
                         'input': input},

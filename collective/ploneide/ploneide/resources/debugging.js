@@ -45,7 +45,8 @@ function debuggerReturn() {
 }
 
 function addBreakpointsForFile(){
-    jQuery.post('http://'+AUX_HOST+':'+AUX_PORT,
+    var url = 'http://'+window.$PLONEIDE_HOST+':'+window.$PLONEIDE_PORT;
+    jQuery.post(url,
                 {'command':'get-breakpoints',
                  'filename':env.editor.session.filename
                  },
@@ -63,11 +64,13 @@ function addBreakpointsForFile(){
 $(document).bind("file-opened", addBreakpointsForFile);
 
 function addBreakpoint($this) {
+    var url = 'http://'+window.$PLONEIDE_HOST+':'+window.$PLONEIDE_PORT;
+
 //     env.editor.session.setBreakpoint(row);
-//     $.ajax({type: 'POST', url: 'http://'+AUX_HOST+':'+AUX_PORT, data: {'command':'add-breakpoint','row': 2}, async : false})
+//     $.ajax({type: 'POST', url: url, data: {'command':'add-breakpoint','row': 2}, async : false})
 /*
     $.ajax({type: 'POST',
-            url: 'http://'+AUX_HOST+':'+AUX_PORT,
+            url: url,
             data: {'command':'add-breakpoint',
                    'row': row},
             async : false,
@@ -75,8 +78,8 @@ function addBreakpoint($this) {
                           env.editor.session.setBreakpoint(row);
                        }
     });*/
-
-    jQuery.post('http://'+AUX_HOST+':'+AUX_PORT,
+    
+    jQuery.post(url,
                 {'command':'add-breakpoint',
                  'line':$this.html(),
                  'filename':env.editor.session.filename
@@ -95,12 +98,14 @@ function addBreakpoint($this) {
 }
 
 function removeBreakpoint($this) {
+    var url = 'http://'+window.$PLONEIDE_HOST+':'+window.$PLONEIDE_PORT;
+
 //     env.editor.session.clearBreakpoint(row);
-//     $.ajax({type: 'POST', url: 'http://'+AUX_HOST+':'+AUX_PORT, data: {'command':'add-breakpoint','row': 2}, async : false})
+//     $.ajax({type: 'POST', url: url, data: {'command':'add-breakpoint','row': 2}, async : false})
     
 /*
     $.ajax({type: 'POST',
-            url: 'http://'+AUX_HOST+':'+AUX_PORT,
+            url: url,
             data: {'command':'remove-breakpoint',
                    'row': row},
             async : false,
@@ -109,7 +114,7 @@ function removeBreakpoint($this) {
                        }
     });*/
 
-    jQuery.post('http://'+AUX_HOST+':'+AUX_PORT,
+    jQuery.post(url,
                 {'command':'remove-breakpoint',
                  'line':$this.html(),
                  'filename':env.editor.session.filename
@@ -153,9 +158,10 @@ $(document).bind("debugger-continue", removeCurrentLinePositionMarker);
 $(document).bind("debugger-return", removeCurrentLinePositionMarker);
                     
 function getDebuggerStatus(){
+    var url = 'http://'+window.$PLONEIDE_HOST+':'+window.$PLONEIDE_PORT;
 
     var res = jQuery.ajax({type: 'POST',
-                            url: 'http://'+AUX_HOST+':'+AUX_PORT,
+                            url: url,
                             async : false,
                             data: {'command': 'is-stopped'},
                             success: function(results){
@@ -210,9 +216,10 @@ $(document).bind("debugger-continue", checkDebuggerStopped);
 $(document).bind("debugger-return", checkDebuggerStopped);
 
 function enableDebugging(){
+    var url = 'http://'+window.$PLONEIDE_HOST+':'+window.$PLONEIDE_PORT;
 
     $.ajax({
-            url: 'http://'+AUX_HOST+':'+AUX_PORT,
+            url: url,
             async: true,
             data: {'command':'start-debugging'},
             success: function(results){
@@ -224,9 +231,10 @@ function enableDebugging(){
 }
 
 function disableDebugging(){
+    var url = 'http://'+window.$PLONEIDE_HOST+':'+window.$PLONEIDE_PORT;
 
     $.ajax({
-            url: 'http://'+AUX_HOST+':'+AUX_PORT,
+            url: url,
             async: true,
             data: {'command':'stop-debugging'}
             });    
