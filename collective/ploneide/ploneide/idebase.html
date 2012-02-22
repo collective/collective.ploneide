@@ -107,16 +107,11 @@
     <div class="panels">
         <div>
             <div id="tree-placeholder" class="panel-box" >
-              <ul class="ultree" tal:repeat="egg view/getDevelopEggs">
-                  <li tal:define="path python:egg[0];
-                                  directory python:egg[1]">
-                      <a class="folder" href="" tal:content="directory" tal:attributes="rel path"></a>
-                      <ul></ul>                  
-                  </li>
+              <ul class="ultree">
               </ul>
                 
             </div>
-
+<!--
             <div class="panel-box">
                 <div id="project-tree">
                     <select id="project-eggs" name="project-eggs">
@@ -132,7 +127,7 @@
                     <select id="directory-area" name="directory-area" size="10" onclick="updateTreeView()">
                     </select>
                 </div>
-                
+                -->
                 <!--        <input type="button" value="Update" i18n:attributes="value" onclick="getDirectoryContents()">
                 <br/>
                 <select id="folder-contents" name="folder-contents">

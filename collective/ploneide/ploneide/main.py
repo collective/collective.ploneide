@@ -6,12 +6,12 @@
 
 import os
 import tornado
+import sys
 
 import candc
 from ploneide import PloneIDEServer, PloneIDEHandler
 
-from config import HOST
-from config import PORT
+from config import Config
 
 PATH = os.path.dirname(__file__)
 
@@ -23,9 +23,12 @@ def temp_tornado_thread():
     candc.application.listen(8888)
     tornado.ioloop.IOLoop.instance().start()
 
-def main():
+def main(config_file=None):
     """ """
 
+    if not config_file:
+        print "You need to provide a valid config file"
+        sys.exit(1)
 
     print "Going to hurricane:" + PATH
 
@@ -35,9 +38,9 @@ def main():
     from thread import start_new_thread
     start_new_thread(temp_tornado_thread, ())
 
-    #logger.setLevel('INFO')
-    server_address = (HOST, PORT)
-    httpd = PloneIDEServer(server_address, PloneIDEHandler)
+    config = Config(config_file)
+
+    httpd = PloneIDEServer(config, PloneIDEHandler)
 
 
     try:

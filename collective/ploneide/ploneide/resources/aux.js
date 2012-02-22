@@ -1,4 +1,22 @@
 
+function getServersInfo(){
+    var url = location.href;
+    $.ajax({
+            url: url,
+            async: false,
+            data: {'command': 'get-servers-info'},
+            success: function(results){
+                var server_info = JSON.parse(results);
+                window.$DEBUG_HOST = server_info['debug_host'];
+                window.$DEBUG_PORT = server_info['debug_port'];
+                window.$INSTANCE_HOST = server_info['instance_host'];
+                window.$INSTANCE_PORT = server_info['instance_port'];
+                window.$PLONEIDE_HOST = server_info['ploneide_host'];
+                window.$PLONEIDE_PORT = server_info['ploneide_port'];
+            }
+    });
+}
+
 function getEditMode(mode) {
     var modes = {
         text: new TextMode(),
@@ -51,13 +69,50 @@ function updateTreeView(){
                 });
     
 }
-
+/*
+        jQuery.post('http://'+AUX_HOST+':'+AUX_PORT,
+                    {'command':'save-file',
+                     'directory':directory,
+                     'file_name':file_name,
+                     'content':content
+                    },
+                    */
 function treeSetup() {
+
+    // This will populate several file trees (will be able to configure it
+    // from the buildout ploneide recipe, which folders to list under which
+    // group. For now, we will just settle with "src"
+
+    var url = 'http://'+window.$PLONEIDE_HOST+':'+window.$PLONEIDE_PORT;
+    $.ajax({url: url,
+            async: false,
+            data: {'command': 'get-directory-content-ajax',
+                   'initial': true},
+            success: function(results){
+                $.each(JSON.parse(results), function (index, entry){
+                    var a = $('<a href="#"></a>');
+                    var li = $('<li></li>');
+                    var ul = $('<ul></ul>');
+                    a.attr('class', entry['metatype']);
+                    a.attr('rel', entry['rel']);
+                    a.text(entry['title']);
+
+                    li.append(a);
+                    if (entry['metatype'] == "folder"){
+                        li.append(ul);
+                    }
+
+                    $('.ultree').append(li);
+                });
+            }
+    });
+        
     $('.ultree').simplejqtree({
         'ajax_handler':{
-            'url': '@@directory-content-ajax',
+            'url': url,
             'data': function(n){
-                                return { directory : n.attr ? n.attr("rel") : '' };
+                                return { command : 'get-directory-content-ajax',
+                                         directory : n.attr ? n.attr("rel") : '' };
             }
         },
         'action_handler':function(item) {

@@ -7,11 +7,15 @@ import os
 import BaseHTTPServer
 import logging
 import cgi
+import re
+import json
+
+from App import config as zconfig
 
 #from threading import Thread
 
-from config import HOST
-from config import PORT
+#from config import HOST
+#from config import PORT
 
 FORMAT = '%(asctime)-15s %(message)s'
 logging.basicConfig(format=FORMAT)
@@ -22,6 +26,11 @@ class PloneIDEServer(SocketServer.TCPServer):
     """
     Base server
     """
+
+    def __init__(self, config, handler):
+        self.config = config
+        server_address = (config.ploneide_host, config.ploneide_port)
+        SocketServer.TCPServer.__init__(self, server_address, handler)
 
     def open_file(self, directory, file_name):
         result = None
@@ -45,6 +54,52 @@ class PloneIDEServer(SocketServer.TCPServer):
 
         return result
 
+    def directory_content_ajax(self, directory='', initial=False):
+
+        if initial:
+            # TODO: At the moment, we are just going to support "src" folder
+            #       but eventually, we will provide a wider rango of directories
+
+            directory = self.config.devel_dirs['src']
+            
+        if directory:
+            # Files to exclude
+            files_to_exclude = re.compile(r".*(pyc)$|.*~$")
+            dirs_to_exclude = re.compile(r"\A(\.)")
+            contents = []
+            # We will need to chdir to the directory, and then go back before
+            # leaving
+            cwd = os.getcwd()
+            os.chdir(directory)
+            dir_contents = os.listdir('.')
+
+
+            files = [i for i in dir_contents if (not os.path.isdir(i) and
+                                                     not files_to_exclude.match(i))]
+
+            dirs = [i for i in dir_contents if (os.path.isdir(i) and
+                                                not dirs_to_exclude.match(i))]
+
+            files.sort()
+            dirs.sort()
+            raw_json_dirs = [{'title':x, 'metatype':'folder', 'folderish':'true', 'rel': directory+'/'+x} for x in dirs]
+            raw_json_files = [{'title':x, 'metatype':'page', 'rel': directory+'/'+x} for x in files]
+            
+            os.chdir(cwd)
+            return json.dumps(raw_json_dirs + raw_json_files)
+
+        return
+
+    def get_servers_info(self):
+        data = {'instance_host': self.config.instance_host,
+                'instance_port': self.config.instance_port,
+                'ploneide_host': self.config.ploneide_host,
+                'ploneide_port': self.config.ploneide_port,
+                'debug_host': self.config.debug_host,
+                'debug_port': self.config.debug_port}
+
+        return json.dumps(data)
+        
     def add_breakpoint(self):
         pass
 
@@ -73,7 +128,12 @@ class PloneIDEServer(SocketServer.TCPServer):
         pass
 
     def run(self):
-        logger.info("Starting internal server in %s:%s" % (HOST, PORT))
+        #logger.info("Starting internal server in %s:%s" % (
+                                                     #self.config.ploneide_host,
+                                                     #self.config.ploneide_port))
+                                                     
+        print "Starting internal server in %s:%s" % (self.config.ploneide_host,
+                                                     self.config.ploneide_port)
         self.serve_forever(poll_interval=0.5)
 
     def stop(self):
@@ -95,6 +155,8 @@ class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         self.ploneide_server = args[2]
 
         self.commands_map = {
+                            'get-servers-info' : self.ploneide_server.get_servers_info,
+                            'get-directory-content-ajax' : self.ploneide_server.directory_content_ajax,
                             'open-file' : self.ploneide_server.open_file,
                             'save-file' : self.ploneide_server.save_file,
                             'add-breakpoint' : self.ploneide_server.add_breakpoint,
@@ -153,7 +215,8 @@ class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
         self.params = {}
         self.result = False
-
+        
+        #import pdb;pdb.set_trace()
         if '?' in self.path:
             params = '?'.join(self.path.split('?')[1:])
             param_list = params.split('&')
@@ -170,24 +233,23 @@ class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
                 # Headers needed for Cross-Origin Resource Sharing
                 # http://www.quimeraazul.com/tutoriales/2011/02/ajax-entre-dominios-con-el-estandar-cors-cross-origin-resource-sharing/
 
-                servers = getattr(config.getConfiguration(), 'servers', None)
-                if servers:
-                    instance_port = servers[0].port
-
-                    self.send_header("Access-Control-Allow-Origin",
-                                    "http://localhost:%s" % instance_port)
-                    self.send_header("Access-Control-Allow-Methods",
-                                    "POST, GET, OPTIONS")
+                # XXX: This should check all valid hosts from origin
+                self.send_header("Access-Control-Allow-Origin",
+                                "http://localhost:%s" %
+                                self.ploneide_server.config.ploneide_port)
+                                    
+                self.send_header("Access-Control-Allow-Methods",
+                                "POST, GET, OPTIONS")
 
                 self.end_headers()
                 self.wfile.write(self.result)
             else:
-                self.result = SimpleHTTPServer.SimpleHTTPRequestHandler.do_GET(self)
+                SimpleHTTPServer.SimpleHTTPRequestHandler.do_GET(self)
 
         else:
-            self.result = SimpleHTTPServer.SimpleHTTPRequestHandler.do_GET(self)
+            SimpleHTTPServer.SimpleHTTPRequestHandler.do_GET(self)
 
-        return self.result
+        #return self.result
 
     def do_POST(self):
         """
@@ -217,12 +279,13 @@ class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         # Begin the response
         self.send_response(200)
 
-        servers = getattr(config.getConfiguration(), 'servers', None)
-        if servers:
-            instance_port = servers[0].port
-
-            self.send_header("Access-Control-Allow-Origin", "http://localhost:%s" % instance_port)
-            self.send_header("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
+        # XXX: This should check all valid hosts from origin
+        self.send_header("Access-Control-Allow-Origin",
+                         "http://localhost:%s" %
+                                self.ploneide_server.config.ploneide_port)
+                                
+        self.send_header("Access-Control-Allow-Methods",
+                        "POST, GET, OPTIONS")
 
         self.end_headers()
         self.wfile.write(self.result)

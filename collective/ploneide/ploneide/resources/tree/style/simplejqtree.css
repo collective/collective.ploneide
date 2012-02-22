@@ -60,7 +60,7 @@ img.arrow:hover {
     background:url(images/folder.png) no-repeat scroll 0 0 transparent;
 }
 .opened > .folder img{
-    background:url(images/folder-open.png) no-repeat scroll 0 0 transparent;
+    background:url(images/folder_open.png) no-repeat scroll 0 0 transparent;
 }
 .page img {
     background:url(images/page.png) no-repeat scroll 0 0 transparent;

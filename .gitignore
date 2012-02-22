@@ -4,3 +4,4 @@
 .settings/
 *.pyc
 *.egg-info
+*~

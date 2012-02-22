@@ -33,13 +33,14 @@ function loadFileFromFullPath(full_path){
     }
     else{
 
+        var url = 'http://'+window.$PLONEIDE_HOST+':'+window.$PLONEIDE_PORT;
         var split = full_path.split("/");
         var directory = split.slice(0,-1).join("/");
         var file_name = split.slice(-1).pop();
 
         // If not, we open it
         jQuery.ajax({type: 'POST',
-                     url: 'http://'+AUX_HOST+':'+AUX_PORT,
+                     url: url,
                      async : false,
                      data: {'command': 'open-file',
                             'directory':directory,
@@ -79,8 +80,10 @@ function saveCurrentFile(){
         var file_name = split.slice(-1).pop();
     
         var content = session.getValue();
+
+        var url = 'http://'+window.$PLONEIDE_HOST+':'+window.$PLONEIDE_PORT;
     
-        jQuery.post('http://'+AUX_HOST+':'+AUX_PORT,
+        jQuery.post(url,
                     {'command':'save-file',
                      'directory':directory,
                      'file_name':file_name,
@@ -103,7 +106,8 @@ function saveFileAs(directory, filename){
     
     var content = session.getValue();
 
-    jQuery.post('http://'+AUX_HOST+':'+AUX_PORT,
+    var url = 'http://'+window.$PLONEIDE_HOST+':'+window.$PLONEIDE_PORT;
+    jQuery.post(url,
                 {'command':'save-file',
                  'file_name':filename,
                  'content':content

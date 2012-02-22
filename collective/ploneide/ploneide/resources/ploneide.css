@@ -9,7 +9,7 @@
 
 /*LOGO MENU*/ 
 .logo {
-    background:url('icons/ploneide-logo.png') no-repeat scroll 0 0 transparent;
+    background:url('icons/ploneide_logo.png') no-repeat scroll 0 0 transparent;
     float:left;
     width:40px;
     height:40px;
@@ -25,7 +25,7 @@
 }
 #editor-main .top-bar{
     background-color:#444;
-    background: url('icons/shadow-bar.png') repeat-x scroll 0 0 #222222;
+    background: url('icons/shadow_bar.png') repeat-x scroll 0 0 #222222;
     display: block;
     margin:0px 0px 10px 0px;    
     padding: 5px 20px 6px;
@@ -133,17 +133,17 @@
 }
 
 .panel-tabs .tab .item-tree{
-    background:url('icons/project-tree-icon-large.png') scroll no-repeat center center transparent;
+    background:url('icons/project_tree_icon_large.png') scroll no-repeat center center transparent;
 }
 .panel-tabs .tab .item-tree:hover, .panel-tabs .tab .item-tree.current{
-    background:url('icons/project-tree-icon-large-hover.png') scroll no-repeat center center transparent;
+    background:url('icons/project_tree_icon_large_hover.png') scroll no-repeat center center transparent;
 }
 
 .panel-tabs .tab .item-debug{
-    background:url('icons/project-debug-icon-large.png') scroll no-repeat center center transparent;
+    background:url('icons/project_debug_icon_large.png') scroll no-repeat center center transparent;
 }
 .panel-tabs .tab .item-debug:hover, .panel-tabs .tab .item-debug.current{
-    background:url('icons/project-debug-icon-large-hover.png') scroll no-repeat center center transparent;
+    background:url('icons/project_debug_icon_large_hover.png') scroll no-repeat center center transparent;
 }
 
 .panels {
