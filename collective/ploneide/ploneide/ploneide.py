@@ -3,14 +3,19 @@
 import SimpleHTTPServer
 import SocketServer
 
+import sys
 import os
 import BaseHTTPServer
 import logging
 import cgi
 import re
 import json
+import urllib2
+import subprocess
 
 from App import config as zconfig
+
+from debugger import Debugger
 
 #from threading import Thread
 
@@ -21,6 +26,7 @@ FORMAT = '%(asctime)-15s %(message)s'
 logging.basicConfig(format=FORMAT)
 
 logger = logging.getLogger("collective.ploneide: ")
+
 
 class PloneIDEServer(SocketServer.TCPServer):
     """
@@ -61,7 +67,7 @@ class PloneIDEServer(SocketServer.TCPServer):
             #       but eventually, we will provide a wider rango of directories
 
             directory = self.config.devel_dirs['src']
-            
+
         if directory:
             # Files to exclude
             files_to_exclude = re.compile(r".*(pyc)$|.*~$")
@@ -84,7 +90,7 @@ class PloneIDEServer(SocketServer.TCPServer):
             dirs.sort()
             raw_json_dirs = [{'title':x, 'metatype':'folder', 'folderish':'true', 'rel': directory+'/'+x} for x in dirs]
             raw_json_files = [{'title':x, 'metatype':'page', 'rel': directory+'/'+x} for x in files]
-            
+
             os.chdir(cwd)
             return json.dumps(raw_json_dirs + raw_json_files)
 
@@ -99,7 +105,42 @@ class PloneIDEServer(SocketServer.TCPServer):
                 'debug_port': self.config.debug_port}
 
         return json.dumps(data)
-        
+
+    def check_plone_instance_running(self):
+        url = "http://%s:%s"%(self.config.instance_host,
+                              self.config.instance_port)
+        up = False
+        try:
+            print "Checking if plone is UP"
+            urllib2.urlopen(url)
+            print "Is up"
+            up = True
+        except urllib2.URLError:
+            print "Is down"
+            up = False
+
+        return up
+
+    def start_plone_instance(self, sauna=False, debugger=False):
+        #import pdb;pdb.set_trace()
+        #XXX: There *MUST* be a better way than this...
+        #XXX: Use a Mutex or something so we can't start several times
+        env = os.environ
+        env['PYTHONPATH'] = ':'.join(sys.path)
+        self.zope_pid = subprocess.Popen(["python",
+                                          "start_plone.py",
+                                          str(self.config.debug_host),
+                                          str(self.config.debug_port),
+                                          str(sauna),
+                                          str(debugger),
+                                          str(self.config.config_file)],
+                                         env=env)
+
+    def kill_plone_instance(self):
+        #import pdb;pdb.set_trace()
+        if self.zope_pid:
+            self.zope_pid.kill()
+
     def add_breakpoint(self):
         pass
 
@@ -131,7 +172,7 @@ class PloneIDEServer(SocketServer.TCPServer):
         #logger.info("Starting internal server in %s:%s" % (
                                                      #self.config.ploneide_host,
                                                      #self.config.ploneide_port))
-                                                     
+
         print "Starting internal server in %s:%s" % (self.config.ploneide_host,
                                                      self.config.ploneide_port)
         self.serve_forever(poll_interval=0.5)
@@ -156,6 +197,9 @@ class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
         self.commands_map = {
                             'get-servers-info' : self.ploneide_server.get_servers_info,
+                            'check-plone-instance-running' : self.ploneide_server.check_plone_instance_running,
+                            'start-plone-instance': self.ploneide_server.start_plone_instance,
+                            'kill-plone-instance': self.ploneide_server.kill_plone_instance,
                             'get-directory-content-ajax' : self.ploneide_server.directory_content_ajax,
                             'open-file' : self.ploneide_server.open_file,
                             'save-file' : self.ploneide_server.save_file,
@@ -215,7 +259,7 @@ class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
         self.params = {}
         self.result = False
-        
+
         #import pdb;pdb.set_trace()
         if '?' in self.path:
             params = '?'.join(self.path.split('?')[1:])
@@ -234,10 +278,11 @@ class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
                 # http://www.quimeraazul.com/tutoriales/2011/02/ajax-entre-dominios-con-el-estandar-cors-cross-origin-resource-sharing/
 
                 # XXX: This should check all valid hosts from origin
+                #import pdb;pdb.set_trace()
                 self.send_header("Access-Control-Allow-Origin",
                                 "http://localhost:%s" %
                                 self.ploneide_server.config.ploneide_port)
-                                    
+
                 self.send_header("Access-Control-Allow-Methods",
                                 "POST, GET, OPTIONS")
 
@@ -280,10 +325,11 @@ class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         self.send_response(200)
 
         # XXX: This should check all valid hosts from origin
+        #import pdb;pdb.set_trace()
         self.send_header("Access-Control-Allow-Origin",
                          "http://localhost:%s" %
                                 self.ploneide_server.config.ploneide_port)
-                                
+
         self.send_header("Access-Control-Allow-Methods",
                         "POST, GET, OPTIONS")
 

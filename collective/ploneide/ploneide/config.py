@@ -18,6 +18,7 @@ class Config:
         #      hands. However, should we replace following line with
         #      ast.literal_eval ?
         self.devel_dirs = eval(config.get("Directories", "devel"))
+        self.zope_conf_file = config.get("Directories", "zope-conf-file")
 
         self.instance_host = config.get("Servers", "instance-host")
         self.instance_port = config.getint("Servers", "instance-port")

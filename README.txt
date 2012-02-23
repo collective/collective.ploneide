@@ -127,7 +127,7 @@ Or just contact me.
 Acknowledgements
 ================
 
-Special thanks to `Menttes`_ (the company i work for) for the support, and for letting me assign some of my time to this. 
+Special thanks to `Menttes`_ (the company i used to work for) for the support, and for letting me assign some of my time to this. 
 
 
 .. _Ace: https://github.com/ajaxorg/ace

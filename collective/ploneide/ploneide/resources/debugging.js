@@ -7,7 +7,7 @@ function debuggerStep() {
                 function(results){
                     $(document).trigger("debugger-step");
                 });
-    
+
 }
 
 
@@ -58,7 +58,7 @@ function addBreakpointsForFile(){
                     else{
                     }
                 });
-    
+
 }
 
 $(document).bind("file-opened", addBreakpointsForFile);
@@ -78,7 +78,7 @@ function addBreakpoint($this) {
                           env.editor.session.setBreakpoint(row);
                        }
     });*/
-    
+
     jQuery.post(url,
                 {'command':'add-breakpoint',
                  'line':$this.html(),
@@ -86,7 +86,7 @@ function addBreakpoint($this) {
                  },
                 function(results){
                     if (results == "True"){
-                        
+
                         env.editor.session.setBreakpoint($this.html()-1);
                         $(document).trigger("breakpoint-set");
                     }
@@ -102,7 +102,7 @@ function removeBreakpoint($this) {
 
 //     env.editor.session.clearBreakpoint(row);
 //     $.ajax({type: 'POST', url: url, data: {'command':'add-breakpoint','row': 2}, async : false})
-    
+
 /*
     $.ajax({type: 'POST',
             url: url,
@@ -141,7 +141,7 @@ function addRemoveBreakpoint(){
     else{
         addBreakpoint($(this));
     }
-    
+
 //     breakpoints = env.editor.session.getBreakpoints();
 
 }
@@ -156,7 +156,7 @@ $(document).bind("debugger-step", removeCurrentLinePositionMarker);
 $(document).bind("debugger-next", removeCurrentLinePositionMarker);
 $(document).bind("debugger-continue", removeCurrentLinePositionMarker);
 $(document).bind("debugger-return", removeCurrentLinePositionMarker);
-                    
+
 function getDebuggerStatus(){
     var url = 'http://'+window.$PLONEIDE_HOST+':'+window.$PLONEIDE_PORT;
 
@@ -225,9 +225,9 @@ function enableDebugging(){
             success: function(results){
                 checkDebuggerStopped();
             }
-            });    
-    
-    
+            });
+
+
 }
 
 function disableDebugging(){
@@ -237,8 +237,8 @@ function disableDebugging(){
             url: url,
             async: true,
             data: {'command':'stop-debugging'}
-            });    
-    
+            });
+
 }
 
 function toggleDebugging(){
@@ -249,6 +249,6 @@ function toggleDebugging(){
     else{
         disableDebugging();
     }
-        
+
 }
 

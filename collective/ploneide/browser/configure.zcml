@@ -22,9 +22,9 @@
       name="collective.ploneide.developermanual"
       directory="developermanual"
       />
-      
+
   <include file="debugger_boxes.zcml" />
-  
+
   <browser:page
       for="*"
       name="ploneide"
@@ -33,7 +33,7 @@
       permission="zope.Public"
       />
 
-  <!-- ide html -->      
+  <!-- ide html -->
   <browser:page
       for="*"
       class=".ploneide.IdeBaseView"
@@ -41,7 +41,7 @@
       template="templates/idebase.pt"
       permission="zope.Public"
       />
-      
+
   <browser:page
       for="*"
       name="list-directory"
@@ -53,11 +53,11 @@
   <browser:page
       for="*"
       name="directory-content-ajax"
-      attribute="directory_content_ajax"      
+      attribute="directory_content_ajax"
       class=".ploneide.ListDirectoryTree"
       permission="zope.Public"
-      />      
-      
+      />
+
   <browser:page
       for="*"
       name="manage-sessions"
@@ -80,14 +80,14 @@
       template="templates/context_info.pt"
       permission="zope.Public"
       />
-      
+
   <browser:page
       for="*"
       name="test-dir"
       class=".ploneide.TestDir"
       permission="zope.Public"
       />
-      
+<!--
   <browser:page
       name="plone-reload"
       for="*"
@@ -96,5 +96,5 @@
       template="templates/plone_reload.pt"
       allowed_interface="plone.reload.interfaces.IReload"
       />
-      
+-->
 </configure>

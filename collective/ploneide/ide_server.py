@@ -173,6 +173,6 @@ class PloneIDEHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
         return
 
-server_address = (AUX_HOST, AUX_PORT)
-httpd = PloneIDEServer(server_address, PloneIDEHandler)
+#server_address = (AUX_HOST, AUX_PORT)
+#httpd = PloneIDEServer(server_address, PloneIDEHandler)
 

@@ -151,6 +151,14 @@
     background:url('icons/project_debug_icon_large_hover.png') scroll no-repeat center center transparent;
 }
 
+#right-panel-tabs .ui-tabs-nav .tab .item-plone{
+    background:url('icons/project_plone_icon_large.png') scroll no-repeat center center transparent;
+}
+
+#right-panel-tabs .ui-tabs-nav .tab .item-plone:hover, #right-panel-tabs .ui-tabs-nav .ui-tabs-selected .item-plone{
+    background:url('icons/project_plone_icon_large_hover.png') scroll no-repeat center center transparent;
+}
+
 #right-panel-tabs .ui-tabs-hide{
   display: none
 }

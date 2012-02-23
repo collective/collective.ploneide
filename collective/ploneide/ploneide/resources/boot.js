@@ -1,13 +1,13 @@
 
 window.onload = function() {
 
-    String.prototype.endsWith = function(str) 
+    String.prototype.endsWith = function(str)
         {return (this.match(str+"$")==str)}
 
     // First thing first, let's load info for instance, ide and debug servers
     getServersInfo();
-    
-    //loading ide base        
+
+    //loading ide base
     $.ajax({
       url: 'idebase.html',
       async: false,
@@ -23,7 +23,7 @@ window.onload = function() {
     /*XXX THIS SHOULD BE IN A MODULEEEEE*/
     /*var panel_action_buttons = '<div class="button-project-tree"></div><div class="button-pin"></div>'*/
     var t = $('body').layout({
-        east__minSize:250,
+        east__minSize:280,
         east__spacing_open:10,
         east__spacing_closed:15,
         south__spacing_open:15,
@@ -46,32 +46,15 @@ window.onload = function() {
     var height = $('#editor-main').height() - 100;
     $('#editor').height(height);
 
-    createDialogForSessions();
-    $('a#save-as').prepOverlay(
-            {
-                subtype: 'ajax'
-            }
-        );
-   
-    $('a#context-info').prepOverlay(
-            {
-                subtype: 'ajax'
-            }
-        );
-        
-    $('a#plone-reload').prepOverlay(
-            {
-                subtype: 'ajax',
-                formselector: 'form[name="reload-form"]',
-                noform: 'reload'
-            }
-        );        
-        
-        
+    createDialogForID('a#manage-sessions');
+    createDialogForID('a#save-as');
+    createDialogForID('a#context-info');
+    createDialogForID('a#plone-reload');
+    checkPloneRunning();
 
     var deps = [ "pilot/fixoldbrowsers", "pilot/plugin_manager", "pilot/settings",
                  "pilot/environment"];
-    
+
     var plugins = [ "pilot/index", "cockpit/index"];
     require(deps, function() {
         var catalog = require("pilot/plugin_manager").catalog;
@@ -82,7 +65,7 @@ window.onload = function() {
             });
         });
     });
-    
+
     $('.ace_gutter-cell').live("click", addRemoveBreakpoint);
-    
+
 };

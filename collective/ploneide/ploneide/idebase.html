@@ -5,27 +5,27 @@
         <div id="editor-toolbar">
             <a href="#"><span class="logo"></span></a>
             <img src="resources/icons/new_file.png"
-                 alt="New File" i18n:attributes="alt" 
-                 id="new-empty-file" 
-                 name="new-empty-file" 
+                 alt="New File" i18n:attributes="alt"
+                 id="new-empty-file"
+                 name="new-empty-file"
                  onclick="createNewEmptySession()" />
 
             <img src="resources/icons/open_file.png"
                  alt="Open File" i18n:attributes="alt"
-                 id="open-file" 
+                 id="open-file"
                  name="open-file" />
 
             <img src="resources/icons/save_file.png"
                  alt="Save File" i18n:attributes="alt"
-                 id="save-file" 
-                 name="save-file" 
+                 id="save-file"
+                 name="save-file"
                  onclick="saveCurrentFile()"/>
 
             <a href="save-as.html"  id="save-as" name="save-as">
                 <img src="resources/icons/save_file_as.png"
                      alt="Save File As" i18n:attributes="alt" />
-            </a>  
-            
+            </a>
+
             <select id="fontsize" size="1" onchange="setFontSize()">
               <option value="8px">8px</option>
               <option value="10px">10px</option>
@@ -42,7 +42,7 @@
               <option value="30px">30px</option>
               <option value="32px">32px</option>
             </select>
-            
+
             <select id="syntax" name="syntax" onchange="changeSyntax()">
                 <option value="python" i18n:translate="">python</option>
                 <option value="javascript" i18n:translate="">javascript</option>
@@ -51,35 +51,38 @@
                 <option value="xml" i18n:translate="">xml</option>
                 <option value="text" i18n:translate="">text</option>
             </select>
-            
+
             <img src="resources/icons/split_vertical.png"
                  alt="Vertical split" i18n:attributes="alt"
-                 id="split-vertical" 
-                 name="split-vertical" 
+                 id="split-vertical"
+                 name="split-vertical"
                  onclick="splitVertical()" />
             <img src="resources/icons/split_horizontal.png"
-                 alt="Horizontal split" i18n:attributes="alt" 
-                 id="split-horizontal" 
-                 name="split-horizontal" 
+                 alt="Horizontal split" i18n:attributes="alt"
+                 id="split-horizontal"
+                 name="split-horizontal"
                  onclick="splitHorizontal()" />
-                 
-            <a href="manage-sessions.html"  id="manage-sessions" name="manage-sessions">
+
+            <a href="manage-sessions.html"  id="manage-sessions" name="manage-sessions"
+               title="Manage Sessions">
                 <img src="resources/icons/manage_sessions.png"
                      alt="Manage Sessions" i18n:attributes="alt" />
             </a>
-            <a href="plone-reload.html"  id="plone-reload" name="plone-reload">
+            <a href="plone-reload.html"  id="plone-reload" name="plone-reload"
+            title="Plone Reload">
                 <img src="resources/icons/plone_reload.png"
                      alt="Plone Reload" i18n:attributes="alt" />
             </a>
-            
+
             <a href="developermanual/index.html"
                target="_blank"
-               id="developermanual" 
+               id="developermanual"
                name="developermanual">
                 <img src="resources/icons/help.png"
                      alt="Save File As" i18n:attributes="alt" />
             </a>
-            <a href="context-info.html"  id="context-info" name="context-info">
+            <a href="context-info.html"  id="context-info" name="context-info"
+               title="Context info">
                 <img
                  src="resources/icons/plone_restart.png"
                  alt="Context info" i18n:attributes="alt" />
@@ -152,6 +155,27 @@
                 </div>-->
             </div>
 
-            <div id="item-plone" >ASD</div>
+            <div id="item-plone">
+                <div class="panel-box">
+                    <input type="checkbox"
+                        name="use-sauna-reload"
+                        id="use-sauna-reload"
+                        value="True"> Use sauna.reload</input>
+                    <div class="plone-command">
+                        <button id="start-plone" onclick="startPlone()">Start Plone</button>
+                        <button id="restart-plone">Restart Plone</button>
+                        <button id="stop-plone" onclick="stopPlone()">Stop Plone</button>
+                    </div>
+                    <img id="plone-loading" src="resources/images/spinner.gif" style="display:none;" alt="Loading"/>
+
+                    <div id="current-plone-status">
+                        <p><span>Current status: </span>
+                            <img id="plone-up" src="resources/images/plone_up.png" alt="Plone is up"/>
+                            <img id="plone-down" src="resources/images/plone_down.png" alt="Plone is down"/>
+                        </p>
+                    </div>
+
+                </div>
+            </div>
     </div>
 </div>

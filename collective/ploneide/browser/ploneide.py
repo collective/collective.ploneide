@@ -1,6 +1,6 @@
 from zope.interface import implements
 from Products.Five.browser import BrowserView
-from plone.reload.browser import Reload
+#from plone.reload.browser import Reload
 from Acquisition import aq_inner
 
 from interfaces import IPloneideView
@@ -13,8 +13,8 @@ from interfaces import IContextInfoView
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 
-from collective.ploneide.debug import debugger
-from collective.ploneide.ide_server import httpd
+#from collective.ploneide.debug import debugger
+#from collective.ploneide.ide_server import httpd
 
 from collective.ploneide.config import AUX_HOST
 from collective.ploneide.config import AUX_PORT
@@ -64,7 +64,7 @@ class PloneideView(BrowserView):
                 eggs.append((i, i.split("/")[-1]))
 
         eggs.sort(key=lambda egg:egg[1])
-        
+
         return eggs
 
     def getDevelopEggs(self):
@@ -86,7 +86,7 @@ class PloneideView(BrowserView):
         </script>
         """ % (AUX_HOST, AUX_PORT)
         return text
-        
+
     def getDebuggerServer(self):
         text = """
         <script type="text/javascript">
@@ -95,14 +95,14 @@ class PloneideView(BrowserView):
         </script>
         """ % (DEBUGGER_HOST, DEBUGGER_PORT)
         return text
- 
- 
+
+
 class IdeBaseView(PloneideView):
     """
     """
     pt = ViewPageTemplateFile('templates/idebase.pt')
 
- 
+
 #
 #ignore_directories = '.svn', 'CVS'
 #def _dir_hash(dir):
@@ -121,7 +121,7 @@ class IdeBaseView(PloneideView):
 
 class SaveAsView(PloneideView):
     implements(ISaveAsView)
-    
+
     pt = ViewPageTemplateFile('templates/save_as.pt')
 
 class ListDirectoryTree(BrowserView):
@@ -135,22 +135,22 @@ class ListDirectoryTree(BrowserView):
             contents = []
             os.chdir(directory)
             dir_contents = os.listdir('.')
-            
 
-            files = [i for i in dir_contents if (not os.path.isdir(i) and 
+
+            files = [i for i in dir_contents if (not os.path.isdir(i) and
                                                      not files_to_exclude.match(i))]
 
-            dirs = [i for i in dir_contents if (os.path.isdir(i) and 
+            dirs = [i for i in dir_contents if (os.path.isdir(i) and
                                                 not dirs_to_exclude.match(i))]
-            
+
             files.sort()
             dirs.sort()
             raw_json_dirs = [{'title':x, 'metatype':'folder', 'folderish':'true', 'rel': directory+'/'+x} for x in dirs]
             raw_json_files = [{'title':x, 'metatype':'page', 'rel': directory+'/'+x} for x in files]
             return json.dumps(raw_json_dirs + raw_json_files)
         return
-                 
-            
+
+
 class ListDirectory(BrowserView):
     implements(IListDirectory)
 
@@ -159,31 +159,31 @@ class ListDirectory(BrowserView):
         # Files to exclude
         files_to_exclude = re.compile(r".*(pyc)$|.*~$")
         dirs_to_exclude = re.compile(r"\A(\.)")
-        
+
         directory = self.request.get('directory', None)
         no_files = self.request.get('no_files', None)
 
         if not directory:
             directory = '/'
-            
+
         contents = []
         os.chdir(directory)
         dir_contents = os.listdir('.')
-        
+
         if no_files:
             files = []
         else:
-            files = [i for i in dir_contents if (not os.path.isdir(i) and 
+            files = [i for i in dir_contents if (not os.path.isdir(i) and
                                                  not files_to_exclude.match(i))]
-            
-            
-        dirs = [i for i in dir_contents if (os.path.isdir(i) and 
+
+
+        dirs = [i for i in dir_contents if (os.path.isdir(i) and
                                             not dirs_to_exclude.match(i))]
-        
+
         files.sort()
         dirs.sort()
-        
-        
+
+
         return ['..'] + dirs + files
 
 class TestDir(BrowserView):
@@ -202,7 +202,7 @@ class TestDir(BrowserView):
             result = path
         except:
             result = False
-                
+
 
         return result
 
@@ -211,37 +211,37 @@ class ContextInfoView(BrowserView):
 
     def getContentType(self):
         result = {}
-        
+
         if IATContentType.providedBy(self.context):
             py_file = inspect.getsourcefile(self.context.__class__)
-                    
+
             result['meta_type'] = self.context.meta_type
             result['portal_type'] = self.context.portal_type
             result['py_file'] = py_file
-            
+
         return result
-        
+
     def getSchemaForContentType(self):
         result = OrderedDict()
         schema = self.context.Schema()
-        
+
         field_ids = schema.keys()
         field_ids.sort()
-        
+
         for i in field_ids:
             field = schema[i]
             widget = field.widget
             field_py_file = inspect.getsourcefile(field.__class__)
             field_py_lineno = inspect.getsourcelines(field.__class__)[1]
-            
+
             widget_py_file = inspect.getsourcefile(widget.__class__)
             widget_py_lineno = inspect.getsourcelines(widget.__class__)[1]
-            
+
             label = widget.label
-            
+
             condition = widget.getCondition()
             visibility = widget.visible
-            
+
             result[i] = {'field' : field.__class__.__name__,
                          'field_py_file' : field_py_file,
                          'field_py_lineno' : field_py_lineno,
@@ -251,8 +251,8 @@ class ContextInfoView(BrowserView):
                          'label' : label,
                          'condition' : condition,
                          'visibility' : visibility,}
-                         
-                         
+
+
         return result
 
     def getProvidedInterfaces(self):
@@ -265,20 +265,20 @@ class ContextInfoView(BrowserView):
             return self.context.restrictedTraverse('front-page')
         else:
             return None
-        
+
     def getAllowedViews(self):
         """
         This method will return a dict containing the view name as keys
         and filesystem full path to both page template files and python
         files, according if it is a BrowserView or a FSPageTemplate
         """
-        
+
         pt = getToolByName(self.context, 'portal_types')
         portal_type = self.context.portal_type
         dvt = pt[portal_type]
-        
+
         result  = {}
-        # The following was taken from traverseName function from 
+        # The following was taken from traverseName function from
         # ZPublisher/BaseRequest.py
         for view in dvt.view_methods:
             if view[:1] in '@+':
@@ -290,24 +290,24 @@ class ContextInfoView(BrowserView):
                     except TraversalError:
                         result[view] = {}
                         continue
-    
+
                     if IAcquirer.providedBy(ob):
                         ob = ob.__of__(self.context)
-                    
+
             else:
                 if IPublishTraverse.providedBy(self.context):
                     ob = self.context.publishTraverse(self.request, view)
                 else:
-                    adapter = queryMultiAdapter((self.context, self.request), 
+                    adapter = queryMultiAdapter((self.context, self.request),
                                                 IPublishTraverse)
                     if adapter is None:
                         ## Zope2 doesn't set up its own adapters in a lot of cases
                         ## so we will just use a default adapter.
                         adapter = DefaultPublishTraverse(self.context, self.request)
-        
+
                     ob = adapter.publishTraverse(self.request, view)
-                    
-                         
+
+
             if isinstance(ob, BrowserView):
                 # Taken from five.customerize.browser
                 klass = ob.__class__
@@ -317,17 +317,17 @@ class ContextInfoView(BrowserView):
                 else:
                     py_file = inspect.getsourcefile(base)
                 pt_file = ob.index.filename
-                
+
                 result[view] = {'py':py_file,
                                 'pt':pt_file}
-                                
+
             elif isinstance(ob, FSPageTemplate):
                 result[view] = {'pt':ob.getObjectFSPath()}
- 
+
             else:
                 result[view] = {}
-                
-                
+
+
         return result
 
     def getWorkflowPolicy(self):
@@ -337,44 +337,44 @@ class ContextInfoView(BrowserView):
         wf = None
         if wf_chain:
             wf = workflowTool[wf_chain[0]]
-        
+
         return wf
 
-class ReloadPlone(Reload):
-    
-    def testMethod(self):
-        a = 2
-        
-        return a
-        
-    def __call__(self):
-        
-        plone_reload = self.request.form.get('plone.reload', None)
-        plone_restart = self.request.form.get('plone.restart', None)
-        
-        a = self.testMethod()
-        while a < 50:
-            a += 1
-            
-        
-        if plone_reload:
-            Reload.__call__(self)
-            
-        if plone_restart:
-            raise bdb.BdbQuit
-#            context = aq_inner(self.context)
-#            cpanel = context.unrestrictedTraverse('/Control_Panel')
-#            url = self.request.get('URL')
-#            cpanel.manage_restart(url)
-#            self.message = "Plone restarted."
-#            
-        return self.index()
+#class ReloadPlone(Reload):
 
-    def isRestartable(self):
-#        if os.environ.has_key('ZMANAGED'):
-#            return True
-#        return False
-        return True
-        
-    def status(self):
-        return self.message
+    #def testMethod(self):
+        #a = 2
+
+        #return a
+
+    #def __call__(self):
+
+        #plone_reload = self.request.form.get('plone.reload', None)
+        #plone_restart = self.request.form.get('plone.restart', None)
+
+        #a = self.testMethod()
+        #while a < 50:
+            #a += 1
+
+
+        #if plone_reload:
+            #Reload.__call__(self)
+
+        #if plone_restart:
+            #raise bdb.BdbQuit
+##            context = aq_inner(self.context)
+##            cpanel = context.unrestrictedTraverse('/Control_Panel')
+##            url = self.request.get('URL')
+##            cpanel.manage_restart(url)
+##            self.message = "Plone restarted."
+##
+        #return self.index()
+
+    #def isRestartable(self):
+##        if os.environ.has_key('ZMANAGED'):
+##            return True
+##        return False
+        #return True
+
+    #def status(self):
+        #return self.message

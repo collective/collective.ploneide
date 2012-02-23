@@ -1,30 +1,30 @@
 <script type="text/javascript">
 
     updateSessionGroupsList();
-    
+
     function renameFromSessionManager(){
         var new_name = document.getElementById("new-session-name").value;
         renameCurrentSessionsGroup(new_name);
     }
-    
+
     function loadFromSessionManager(){
         var name = document.getElementById("sessions-group-list").value;
         loadSessionsGroup(name);
     }
-    
+
     function removeCurrentSessionsGroup(){
         var storage = getSessionsDefaultStorage();
 
         var name = getCurrentSessionsGroupName();
         removeSessionsGroup(name);
-            
+
         if (storage == "localStorage"){
             var to_load = localStorageGetLastSessionGroupName();
             loadSessionsGroup(to_load);
         }
         updateSessionGroupsList();
     }
-    
+
 </script>
 
 <span i18n:domain="collective.ploneide">

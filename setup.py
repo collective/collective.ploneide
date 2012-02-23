@@ -26,7 +26,8 @@ setup(name='collective.ploneide',
       install_requires=[
           'setuptools',
           # -*- Extra requirements: -*-
-          'plone.reload',
+          'sauna.reload',
+          'TornadIO',
           'ordereddict',
       ],
       entry_points="""
