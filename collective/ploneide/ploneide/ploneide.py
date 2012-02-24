@@ -13,6 +13,8 @@ import json
 import urllib2
 import subprocess
 
+import signal
+
 from App import config as zconfig
 
 from debugger import Debugger
@@ -111,12 +113,9 @@ class PloneIDEServer(SocketServer.TCPServer):
                               self.config.instance_port)
         up = False
         try:
-            print "Checking if plone is UP"
             urllib2.urlopen(url)
-            print "Is up"
             up = True
         except urllib2.URLError:
-            print "Is down"
             up = False
 
         return up
@@ -137,9 +136,8 @@ class PloneIDEServer(SocketServer.TCPServer):
                                          env=env)
 
     def kill_plone_instance(self):
-        #import pdb;pdb.set_trace()
         if self.zope_pid:
-            self.zope_pid.kill()
+            self.zope_pid.send_signal(signal.SIGINT)
 
     def add_breakpoint(self):
         pass
