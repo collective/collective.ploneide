@@ -150,3 +150,23 @@ function createDialogForID(id){
         return false;
     });
 }
+
+function createDialogForContent(title, content){
+    // show a spinner or something via css
+    var dialog = $('<div style="display:none" class="loading" title="'+title+'"></div>').appendTo('body');
+    
+    dialog.removeClass('loading');
+    dialog.html(content);
+    // open the dialog
+    dialog.dialog({
+        // add a close listener to prevent adding multiple divs to the document
+        close: function(event, ui) {
+            // remove div with all data and events
+            dialog.remove();
+        },
+        modal: true,
+        width: document.width - 200,
+        height: document.height - 200
+        
+    });
+}

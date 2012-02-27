@@ -19,6 +19,8 @@ from App import config as zconfig
 
 from debugger import Debugger
 
+from thread import start_new_thread
+    
 #from threading import Thread
 
 #from config import HOST
@@ -39,6 +41,13 @@ class PloneIDEServer(SocketServer.TCPServer):
         self.config = config
         server_address = (config.ploneide_host, config.ploneide_port)
         SocketServer.TCPServer.__init__(self, server_address, handler)
+        self.stdout = []
+        self.stderr = []
+        self.stdout_html = ''
+        self.stderr_html = ''
+        self.read_stdout_thread = None
+        self.read_stderr_thread = None
+                
 
     def open_file(self, directory, file_name):
         result = None
@@ -115,12 +124,17 @@ class PloneIDEServer(SocketServer.TCPServer):
         try:
             urllib2.urlopen(url)
             up = True
+#            if self.zope_pid:
+#                (stdout, stderr) = self.zope_pid.communicate()
+#                self.stdout += stdout
+#                self.stderr += stderr
+                
         except urllib2.URLError:
             up = False
 
         return up
 
-    def start_plone_instance(self, sauna=False, debugger=False):
+    def start_plone_instance(self, sauna=False, debugger=False, lines_console=300):
         #import pdb;pdb.set_trace()
         #XXX: There *MUST* be a better way than this...
         #XXX: Use a Mutex or something so we can't start several times
@@ -133,11 +147,67 @@ class PloneIDEServer(SocketServer.TCPServer):
                                           str(sauna),
                                           str(debugger),
                                           str(self.config.config_file)],
-                                         env=env)
+                                         env=env,
+                                         stdout=subprocess.PIPE,
+                                         stderr=subprocess.PIPE)
+        self.lines_console = lines_console
+        self.stdout = []
+        self.stderr = []
+        self.stdout_html = ''
+        self.stderr_html = ''
+        self.read_stdout_thread = start_new_thread(self.readstdout, ())
+        self.read_stderr_thread = start_new_thread(self.readstderr, ())
 
+    def readstdout(self):
+        text = self.zope_pid.stdout.readline()
+        while text:
+            self.stdout.append(text)
+            self.stdout = self.stdout[-self.lines_console:]
+            self.pipe_to_html('stdout')
+            text = self.zope_pid.stdout.readline()
+        
+    def readstderr(self):
+        text = self.zope_pid.stderr.readline()
+        while text:
+            self.stderr.append(text)
+            self.stderr = self.stderr[-self.lines_console:]
+            self.pipe_to_html('stderr')
+            text = self.zope_pid.stderr.readline()
+
+    def pipe_to_html(self, name):
+        
+        html = '<div class="%s-output"><h1>%s</h1>' % (name,name.upper())
+        pipe = getattr(self, name)
+        
+        opened_list = False
+        for line in pipe:
+            if line.startswith('\t') and opened_list:
+                html += '<li>%s</li>' % line.strip()
+            elif line.startswith('\t') and not opened_list:
+                html += '<ul><li>%s</li>' % line.strip()
+                opened_list = True
+            elif not line.startswith('\t') and opened_list:
+                html += '</ul><p>%s</p>' % line.strip()
+                opened_list = False
+            else:
+                html += '<p>%s</p>' % line.strip()
+        html += '</div>'
+        
+        setattr(self, name+'_html', html)
+        
     def kill_plone_instance(self):
         if self.zope_pid:
             self.zope_pid.send_signal(signal.SIGINT)
+
+    def get_console_output(self, lines_console=300):
+        output = """
+        <div id="console-output">
+        %s
+        %s
+        </div>
+        """ % (self.stdout_html, self.stderr_html)
+        
+        return output
 
     def add_breakpoint(self):
         pass
@@ -198,6 +268,7 @@ class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
                             'check-plone-instance-running' : self.ploneide_server.check_plone_instance_running,
                             'start-plone-instance': self.ploneide_server.start_plone_instance,
                             'kill-plone-instance': self.ploneide_server.kill_plone_instance,
+                            'get-console-output': self.ploneide_server.get_console_output,
                             'get-directory-content-ajax' : self.ploneide_server.directory_content_ajax,
                             'open-file' : self.ploneide_server.open_file,
                             'save-file' : self.ploneide_server.save_file,

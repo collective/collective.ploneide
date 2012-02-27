@@ -137,3 +137,37 @@ function stopPlone(){
         });
 
 }
+
+function updateConsoleOutput(){
+    var url = 'http://'+window.$PLONEIDE_HOST+':'+window.$PLONEIDE_PORT;
+
+    $.ajax({type: 'POST',
+            url: url,
+            data: {'command': 'get-console-output'},
+            async : true,
+            dataType : "html",
+            success: function(results){
+                    if (document.getElementById("console-output") !== null){
+                        $("div#console-output").replaceWith(results);
+                        setTimeout(updateConsoleOutput, 1000);
+                    }
+                    }
+
+        });
+
+}
+
+function renderConsoleOutput(){
+    var url = 'http://'+window.$PLONEIDE_HOST+':'+window.$PLONEIDE_PORT;
+
+    $.ajax({type: 'POST',
+            url: url,
+            data: {'command': 'get-console-output'},
+            async : true,
+            dataType : "html",
+            success: function(results){
+                    createDialogForContent('Contole Output', results);
+                    updateConsoleOutput();
+                }
+        });
+}
