@@ -122,7 +122,7 @@ class PloneIDEServer(SocketServer.TCPServer):
                               self.config.instance_port)
         up = False
         try:
-            urllib2.urlopen(url)
+            urllib2.urlopen(url, timeout=0.2)
             up = True
 #            if self.zope_pid:
 #                (stdout, stderr) = self.zope_pid.communicate()
