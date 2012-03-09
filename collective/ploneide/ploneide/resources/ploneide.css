@@ -187,7 +187,9 @@
     margin-bottom: 5px;
 }
 #tree-placeholder {
-
+    overflow: scroll;
+    max-height: 480px;
+    white-space: nowrap;
 }
 
 

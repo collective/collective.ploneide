@@ -165,8 +165,8 @@ function createDialogForContent(title, content){
             dialog.remove();
         },
         modal: true,
-        width: document.width - 200,
-        height: document.height - 200
+        width: window.innerWidth - 200,
+        height: window.innerHeight - 200
         
     });
 }

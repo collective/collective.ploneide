@@ -78,11 +78,17 @@ function checkPloneRunning(){
                         $("#current-plone-status > p > img#plone-up").css("display", "inline");
                         $("#current-plone-status > p > img#plone-down").css("display", "none");
                         $("img#plone-loading").css("display", "none");
+                        $("#start-plone").attr('disabled', true);
+                        $("#restart-plone").attr('disabled', false);
+                        $("#stop-plone").attr('disabled', false);
                         setTimeout(checkPloneRunning, 1000);
                     }
                     else{
                         $("#current-plone-status > p > img#plone-down").css("display", "inline");
                         $("#current-plone-status > p > img#plone-up").css("display", "none");
+                        $("#start-plone").attr('disabled', false);
+                        $("#restart-plone").attr('disabled', true);
+                        $("#stop-plone").attr('disabled', true);
                         setTimeout(checkPloneRunning, 1000);
                     }
 
@@ -148,7 +154,10 @@ function updateConsoleOutput(){
             dataType : "html",
             success: function(results){
                     if (document.getElementById("console-output") !== null){
-                        $("div#console-output").replaceWith(results);
+                        if ($("div#console-output").html() != $(results).html()){
+                            $("div#console-output").replaceWith(results);
+                        }
+                        
                         setTimeout(updateConsoleOutput, 1000);
                     }
                     }
