@@ -63,6 +63,7 @@ function createPloneIDE(env){
 
     // We create the sessions group.
     createSessionsGroup();
+    getDeveloperManualLink();
 
 };
 
@@ -157,7 +158,7 @@ function updateConsoleOutput(){
                         if ($("div#console-output").html() != $(results).html()){
                             $("div#console-output").replaceWith(results);
                         }
-                        
+
                         setTimeout(updateConsoleOutput, 1000);
                     }
                     }
@@ -177,6 +178,25 @@ function renderConsoleOutput(){
             success: function(results){
                     createDialogForContent('Contole Output', results);
                     updateConsoleOutput();
+                }
+        });
+}
+
+function getDeveloperManualLink(){
+    var url = 'http://'+window.$PLONEIDE_HOST+':'+window.$PLONEIDE_PORT;
+
+    $.ajax({type: 'POST',
+            url: url,
+            data: {'command': 'get-developer-manual-location'},
+            async : true,
+            dataType : "text",
+            success: function(results){
+                    if (results.startsWith('http://')){
+                        $("#developermanual").attr('href', results+"/index.html");
+                    }
+                    else{
+                        $("#developermanual").attr('href', "/developermanual/index.html");
+                    }
                 }
         });
 }

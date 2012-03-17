@@ -10,6 +10,7 @@ import logging
 import cgi
 import re
 import json
+import urllib
 import urllib2
 import subprocess
 
@@ -20,7 +21,7 @@ from App import config as zconfig
 from debugger import Debugger
 
 from thread import start_new_thread
-    
+
 #from threading import Thread
 
 #from config import HOST
@@ -47,7 +48,7 @@ class PloneIDEServer(SocketServer.TCPServer):
         self.stderr_html = ''
         self.read_stdout_thread = None
         self.read_stderr_thread = None
-                
+
 
     def open_file(self, directory, file_name):
         result = None
@@ -117,9 +118,10 @@ class PloneIDEServer(SocketServer.TCPServer):
 
         return json.dumps(data)
 
-    def check_plone_instance_running(self):
-        url = "http://%s:%s"%(self.config.instance_host,
-                              self.config.instance_port)
+    def get_developer_manual_location(self):
+        return self.config.dev_manual_loc
+
+    def _ping_server(self, url):
         up = False
         try:
             urllib2.urlopen(url, timeout=0.2)
@@ -128,11 +130,24 @@ class PloneIDEServer(SocketServer.TCPServer):
 #                (stdout, stderr) = self.zope_pid.communicate()
 #                self.stdout += stdout
 #                self.stderr += stderr
-                
+
         except urllib2.URLError:
             up = False
 
         return up
+
+
+    def check_debug_running(self):
+        url = "http://%s:%s"%(self.config.debug_host,
+                              self.config.debug_port)
+
+        return self._ping_server(url)
+
+    def check_plone_instance_running(self):
+        url = "http://%s:%s"%(self.config.instance_host,
+                              self.config.instance_port)
+
+        return self._ping_server(url)
 
     def start_plone_instance(self, sauna=False, debugger=False, lines_console=300):
         #import pdb;pdb.set_trace()
@@ -165,7 +180,7 @@ class PloneIDEServer(SocketServer.TCPServer):
             self.stdout = self.stdout[-self.lines_console:]
             self.pipe_to_html('stdout')
             text = self.zope_pid.stdout.readline()
-        
+
     def readstderr(self):
         text = self.zope_pid.stderr.readline()
         while text:
@@ -175,10 +190,10 @@ class PloneIDEServer(SocketServer.TCPServer):
             text = self.zope_pid.stderr.readline()
 
     def pipe_to_html(self, name):
-        
+
         html = '<div class="%s-output"><h1>%s</h1>' % (name,name.upper())
         pipe = getattr(self, name)
-        
+
         opened_list = False
         for line in pipe:
             if line.startswith('\t') and opened_list:
@@ -192,9 +207,9 @@ class PloneIDEServer(SocketServer.TCPServer):
             else:
                 html += '<p>%s</p>' % line.strip()
         html += '</div>'
-        
+
         setattr(self, name+'_html', html)
-        
+
     def kill_plone_instance(self):
         if self.zope_pid:
             self.zope_pid.send_signal(signal.SIGINT)
@@ -206,8 +221,18 @@ class PloneIDEServer(SocketServer.TCPServer):
         %s
         </div>
         """ % (self.stdout_html, self.stderr_html)
-        
+
         return output
+
+    def dispatch_debugger_command(self, params):
+        if self.check_debug_running():
+            url = "http://%s:%s"%(self.config.debug_host,
+                                self.config.debug_port)
+            result =  urllib2.urlopen(url, params)
+        else:
+            result = ""
+
+        return result
 
     def add_breakpoint(self):
         pass
@@ -216,24 +241,6 @@ class PloneIDEServer(SocketServer.TCPServer):
         pass
 
     def get_breakpoints(self):
-        pass
-
-    def start_debugging(self):
-        pass
-
-    def stop_debugging(self):
-        pass
-
-    def is_stopped(self):
-        pass
-
-    def get_scope(self):
-        pass
-
-    def add_watched_variable(self):
-        pass
-
-    def eval_code(self):
         pass
 
     def run(self):
@@ -263,24 +270,29 @@ class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         #XXX: Is this the best way on doing this ?
         self.ploneide_server = args[2]
 
+        self.debugger_commands = ['start-debugging',
+                                  'stop-debugging',
+                                  'is-stopped',
+                                  'get-debugger-scope',
+                                  'add-watched-variable',
+                                  'eval-code']
+
+        self.debugger_dispatch = self.ploneide_server.dispatch_debugger_command
+
         self.commands_map = {
                             'get-servers-info' : self.ploneide_server.get_servers_info,
+                            'get-developer-manual-location': self.ploneide_server.get_developer_manual_location,
                             'check-plone-instance-running' : self.ploneide_server.check_plone_instance_running,
+                            'check-debug-running' : self.ploneide_server.check_debug_running,
                             'start-plone-instance': self.ploneide_server.start_plone_instance,
                             'kill-plone-instance': self.ploneide_server.kill_plone_instance,
                             'get-console-output': self.ploneide_server.get_console_output,
                             'get-directory-content-ajax' : self.ploneide_server.directory_content_ajax,
                             'open-file' : self.ploneide_server.open_file,
                             'save-file' : self.ploneide_server.save_file,
-                            'add-breakpoint' : self.ploneide_server.add_breakpoint,
-                            'remove-breakpoint' : self.ploneide_server.remove_breakpoint,
-                            'get-breakpoints' : self.ploneide_server.get_breakpoints,
-                            'start-debugging' : self.ploneide_server.start_debugging,
-                            'stop-debugging' : self.ploneide_server.stop_debugging,
-                            'is-stopped': self.ploneide_server.is_stopped,
-                            'get-debugger-scope': self.ploneide_server.get_scope,
-                            'add-watched-variable': self.ploneide_server.add_watched_variable,
-                            'eval-code': self.ploneide_server.eval_code,
+                            'add-breakpoint': self.ploneide_server.add_breakpoint,
+                            'remove-breakpoint': self.ploneide_server.remove_breakpoint,
+                            'get-breakpoints': self.ploneide_server.get_breakpoints
                             }
 
         SimpleHTTPServer.SimpleHTTPRequestHandler.__init__(self, *args)
@@ -312,10 +324,16 @@ class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
         # Here we check which was the command issued
         command = self.params['command']
-        # Then we remove it from the list of params
-        del(self.params['command'])
-        # And we call the proper function
-        self.result = self.commands_map[command](**self.params)
+
+        if command not in self.debugger_commands:
+            # Then we remove it from the list of params
+            del(self.params['command'])
+            # And we call the proper function
+            self.result = self.commands_map[command](**self.params)
+        else:
+            # This is a command intended for the debugger
+            params = urllib.urlencode(self.params)
+            self.result = self.debugger_dispatch(params)
 
     def do_GET(self):
         """
@@ -329,7 +347,13 @@ class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         self.params = {}
         self.result = False
 
-        #import pdb;pdb.set_trace()
+        old_cwd = os.getcwd()
+
+        if self.path.startswith('/developermanual'):
+            path = self.ploneide_server.get_developer_manual_location()
+            os.chdir(path)
+            self.path = self.path[len('/developermanual'):]
+
         if '?' in self.path:
             params = '?'.join(self.path.split('?')[1:])
             param_list = params.split('&')
@@ -363,6 +387,8 @@ class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         else:
             SimpleHTTPServer.SimpleHTTPRequestHandler.do_GET(self)
 
+        # Let's go back to our old dir
+        os.chdir(old_cwd)
         #return self.result
 
     def do_POST(self):
@@ -378,6 +404,7 @@ class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         self.params = {}
         self.result = False
 
+        #import pdb;pdb.set_trace()
         content = cgi.FieldStorage(
                     fp=self.rfile,
                     headers=self.headers,

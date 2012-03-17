@@ -4,6 +4,9 @@ window.onload = function() {
     String.prototype.endsWith = function(str)
         {return (this.match(str+"$")==str)}
 
+    String.prototype.startsWith = function(str)
+        {return (this.match("^"+str)==str)}
+
     // First thing first, let's load info for instance, ide and debug servers
     getServersInfo();
 

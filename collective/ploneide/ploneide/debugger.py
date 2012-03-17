@@ -411,6 +411,7 @@ class Debugger(bdb.Bdb, BaseHTTPServer.BaseHTTPRequestHandler):
     def handle_command(self):
         try:
             command = self.params['command']
+            print "#### HANDLE: %s"%command
             del(self.params['command'])
             self.result = getattr(self, "do_%s"%command)(**self.params)
         except:

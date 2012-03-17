@@ -26,3 +26,5 @@ class Config:
         self.ploneide_port = config.getint("Servers", "ploneide-port")
         self.debug_host = config.get("Servers", "debug-host")
         self.debug_port = config.getint("Servers", "debug-port")
+
+        self.dev_manual_loc = config.get("Dev Manual", "location")
