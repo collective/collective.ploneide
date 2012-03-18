@@ -127,9 +127,9 @@ function localStoragePurgeSessionGroup(name){
             // If it was removed, then i need to move this session to the
             // previous one
             var prev_name = localStorage["ploneide.sessions.names."+i];
-            
+
             localStorage["ploneide.sessions.names."+(i-1)] = prev_name;
-        
+
         }
         else{
             // If it wasn't yet, i need to know if this is the one
@@ -146,7 +146,7 @@ function localStoragePurgeSessionGroup(name){
         // I need to remove the last entry
         localStorage.removeItem("ploneide.sessions.names."+(i-1));
     }
-    
+
     if (i == 1){
         // If this session was the only one stored, we need to remove the
         // global flag
@@ -179,7 +179,7 @@ function localStorageRenameSessionGroup(old_name, new_name){
     if (localStorage["ploneide.sessions.last"] == old_name){
         renaming_current_session_group = true;
     }
-    
+
     // We first need to rename the session from the global sessions list
     var i = 0;
     while (localStorage["ploneide.sessions.names."+i] != null){
@@ -246,4 +246,82 @@ function localStorageGetLastSessionGroupName(){
     }
 
     return localStorage["ploneide.sessions.last"];
+}
+
+
+function localStoragePurgeBreakpoints(){
+    if (!supports_html5_storage()){
+        return false;
+    }
+
+    var i = 0;
+    while (localStorage["ploneide.breakpoint."+i] != null){
+        localStorage.removeItem("ploneide.breakpoint."+i);
+        i++;
+    }
+    localStorage.removeItem("ploneide.breakpoints");
+
+}
+
+
+function localStorageSaveBreakpoints(){
+    if (!supports_html5_storage()){
+        return false;
+    }
+
+    localStoragePurgeBreakpoints();
+
+    var counter = 0;
+    for (filename in env.$breakpoints){
+        var file_bkpts = env.$breakpoints[filename];
+        for (lineno in file_bkpts){
+            var condition = file_bkpts[lineno]['condition'];
+            localStorage["ploneide.breakpoint."+counter] = filename + ':' + lineno + ':' + condition;
+            counter++;
+        }
+    }
+
+    if (counter > 0){
+        localStorage["ploneide.breakpoints"] = true;
+    }
+}
+
+
+function localStorageLoadBreakpoints(){
+    if (!supports_html5_storage()){
+        return false;
+    }
+
+    env.$breakpoints = {};
+    if (localStorage["ploneide.breakpoints"] != "true"){
+        return;
+    }
+
+    var i = 0;
+    while (localStorage["ploneide.breakpoint."+i] != null){
+        var vals = localStorage["ploneide.breakpoint."+i].split(':');
+
+        var filename = vals[0];
+        var lineno = vals[1];
+
+        var file_bkpt = env.$breakpoints[filename];
+        if (file_bkpt === undefined){
+            file_bkpt = {};
+        }
+
+        var line_bkpt = file_bkpt[lineno];
+        if (line_bkpt === undefined){
+            var condition = '';
+            for (var j=2;j<vals.length;j++){
+                if (j>2){
+                    condition += ':';
+                }
+                condition += vals[j];
+            }
+            file_bkpt[lineno] = {'condition':condition};
+            env.$breakpoints[filename] = file_bkpt;
+        }
+        i++;
+    }
+
 }

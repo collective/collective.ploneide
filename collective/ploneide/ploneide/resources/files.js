@@ -1,6 +1,4 @@
-
-function getEditModeFromFilename(file_name) {
-
+function getFileType(file_name){
     var mode = "text";
     if (/^.*\.js$/i.test(file_name)) {
         mode = "javascript";
@@ -18,6 +16,12 @@ function getEditModeFromFilename(file_name) {
         mode = "python";
     }
 
+    return mode;
+}
+
+function getEditModeFromFilename(file_name) {
+
+    var mode = getFileType(file_name);
     return getEditMode(mode);
 
 }
@@ -53,7 +57,7 @@ function loadFileFromFullPath(full_path){
 
                                 }
                     });
-        
+
     }
 }
 
@@ -73,16 +77,16 @@ function loadFileInEditor(file_name){
 function saveCurrentFile(){
 
     var session = env.editor.getSession();
-    
+
     if (session.filename !== ""){
         var split = session.filename.split("/");
         var directory = split.slice(0,-1).join("/");
         var file_name = split.slice(-1).pop();
-    
+
         var content = session.getValue();
 
         var url = 'http://'+window.$PLONEIDE_HOST+':'+window.$PLONEIDE_PORT;
-    
+
         jQuery.post(url,
                     {'command':'save-file',
                      'directory':directory,
@@ -103,7 +107,7 @@ function saveCurrentFile(){
 function saveFileAs(directory, filename){
 
     var session = env.editor.getSession();
-    
+
     var content = session.getValue();
 
     var url = 'http://'+window.$PLONEIDE_HOST+':'+window.$PLONEIDE_PORT;
@@ -118,16 +122,16 @@ function saveFileAs(directory, filename){
                     session.filename = results;
                     session.setMode(mode);
                     session.tab_id = name;
-                    
+
                     storeCurrentSessionsGroup();
-                    
+
                     updateFilesTabs();
                 });
 }
 
 
 function loadFilesFromList(files_to_open){
-    
+
     for (var index in files_to_open){
         var full_path = files_to_open[index];
 
@@ -139,4 +143,4 @@ function loadFilesFromList(files_to_open){
         }
     }
 }
-        
+

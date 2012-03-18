@@ -1,3 +1,8 @@
+function isEmpty(ob){
+    // Helper for dicts
+    for (var prop in ob) if (ob.hasOwnProperty(prop)) return false;
+    return true;
+}
 
 function getServersInfo(){
     var url = location.href;
@@ -154,7 +159,7 @@ function createDialogForID(id){
 function createDialogForContent(title, content){
     // show a spinner or something via css
     var dialog = $('<div style="display:none" class="loading" title="'+title+'"></div>').appendTo('body');
-    
+
     dialog.removeClass('loading');
     dialog.html(content);
     // open the dialog
@@ -167,6 +172,6 @@ function createDialogForContent(title, content){
         modal: true,
         width: window.innerWidth - 200,
         height: window.innerHeight - 200
-        
+
     });
 }

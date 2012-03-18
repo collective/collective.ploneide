@@ -7,6 +7,14 @@ window.onload = function() {
     String.prototype.startsWith = function(str)
         {return (this.match("^"+str)==str)}
 
+    // In case trim not supported for this browser
+    if(typeof(String.prototype.trim) === "undefined")
+    {
+        String.prototype.trim = function()
+        {
+            return String(this).replace(/^\s+|\s+$/g, '');
+        };
+    }
     // First thing first, let's load info for instance, ide and debug servers
     getServersInfo();
 

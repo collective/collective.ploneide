@@ -61,6 +61,7 @@ function createPloneIDE(env){
         }
     });
 
+    getSavedBreakpoints();
     // We create the sessions group.
     createSessionsGroup();
     getDeveloperManualLink();

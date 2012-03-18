@@ -45,74 +45,94 @@ function debuggerReturn() {
 }
 
 function addBreakpointsForFile(){
-    var url = 'http://'+window.$PLONEIDE_HOST+':'+window.$PLONEIDE_PORT;
-    jQuery.post(url,
-                {'command':'get-breakpoints',
-                 'filename':env.editor.session.filename
-                 },
-                function(results){
-                    if (results != ""){
-                        var split = results.split(":");
-                        env.editor.session.setBreakpoints(split);
-                    }
-                    else{
-                    }
-                });
+    var filename = env.editor.session.filename;
+    var file_bkpt = env.$breakpoints[filename];
+    if (file_bkpt === undefined){
+        file_bkpt = {};
+    }
 
+    for (lineno in file_bkpt){
+        env.editor.session.setBreakpoint(lineno-1);
+    }
 }
 
 $(document).bind("file-opened", addBreakpointsForFile);
 
 function addBreakpoint($this) {
+    var lineno = $this.html();
+    var filename = env.editor.session.filename;
+
+    // This wil *only* work for python files
+    var mode = getFileType(filename);
+    if (mode != "python"){
+        return;
+    }
+
+    var line = env.editor.session.getLine(lineno-1).trim();
+
+    if (line.startsWith("#") || line === ""){
+        // If this is a blank line or a comment, we won't place a breakpoint
+        // Have to figure our a way to tell if the current line belongs to a
+        // docstring or not
+        return
+    }
+
+    var file_bkpt = env.$breakpoints[filename];
+    if (file_bkpt === undefined){
+        file_bkpt = {};
+    }
+
+    var line_bkpt = file_bkpt[lineno];
+    if (line_bkpt === undefined){
+        file_bkpt[lineno] = {'condition':''};
+        env.$breakpoints[filename] = file_bkpt;
+    }
+
+    env.editor.session.setBreakpoint(lineno-1);
+
+    $(document).trigger("breakpoint-set");
+
+    // Now that our breakpoint is set, let's notify the server if it is running
+
     var url = 'http://'+window.$PLONEIDE_HOST+':'+window.$PLONEIDE_PORT;
-
-//     env.editor.session.setBreakpoint(row);
-//     $.ajax({type: 'POST', url: url, data: {'command':'add-breakpoint','row': 2}, async : false})
-/*
-    $.ajax({type: 'POST',
-            url: url,
-            data: {'command':'add-breakpoint',
-                   'row': row},
-            async : false,
-            success : function(results){
-                          env.editor.session.setBreakpoint(row);
-                       }
-    });*/
-
     jQuery.post(url,
                 {'command':'add-breakpoint',
                  'line':$this.html(),
                  'filename':env.editor.session.filename
                  },
                 function(results){
-                    if (results == "True"){
-
-                        env.editor.session.setBreakpoint($this.html()-1);
-                        $(document).trigger("breakpoint-set");
-                    }
-                    else{
-                        $(document).trigger("breakpoint-set-error");
-                    }
+                    // We don't care about the result value anymore.
                 });
 
 }
 
 function removeBreakpoint($this) {
+    var lineno = $this.html();
+    var filename = env.editor.session.filename;
+
+    var file_bkpt = env.$breakpoints[filename];
+    if (file_bkpt === undefined){
+        // This shouldn't happen, we didn't even had breakpoints for the
+        // file :-/
+        file_bkpt = {};
+    }
+
+    delete file_bkpt[lineno];
+
+    env.$breakpoints[filename] = file_bkpt;
+
+    if (isEmpty(file_bkpt)){
+        delete env.$breakpoints[filename];
+    }
+
+    env.editor.session.clearBreakpoint(lineno-1);
+
+    $(document).trigger("breakpoint-unset");
+    // Now that our breakpoint was removed, let's notify the server if it
+    // is running
+
+
     var url = 'http://'+window.$PLONEIDE_HOST+':'+window.$PLONEIDE_PORT;
-
-//     env.editor.session.clearBreakpoint(row);
-//     $.ajax({type: 'POST', url: url, data: {'command':'add-breakpoint','row': 2}, async : false})
-
-/*
-    $.ajax({type: 'POST',
-            url: url,
-            data: {'command':'remove-breakpoint',
-                   'row': row},
-            async : false,
-            success : function(results){
-                        env.editor.session.clearBreakpoint(row);
-                       }
-    });*/
 
     jQuery.post(url,
                 {'command':'remove-breakpoint',
@@ -120,15 +140,8 @@ function removeBreakpoint($this) {
                  'filename':env.editor.session.filename
                  },
                 function(results){
-                    if (results == "True"){
-                        env.editor.session.clearBreakpoint($this.html()-1);
-                        $(document).trigger("breakpoint-unset");
-                    }
-                    else{
-                        $(document).trigger("breakpoint-unset-error");
-                    }
+                    // We don't care about the result value anymore.
                 });
-
 
 }
 
@@ -251,4 +264,34 @@ function toggleDebugging(){
     }
 
 }
+
+function getBreakpointsDefaultStorage(){
+    // Eventually we might have more than one storage option. For now
+    // we only return localStorage
+
+    return "localStorage";
+}
+
+function getSavedBreakpoints(){
+    // We get the default storage to be used
+    var storage = getBreakpointsDefaultStorage();
+
+    if (storage == "localStorage"){
+        localStorageLoadBreakpoints();
+    }
+
+}
+
+function saveBreakpoints(){
+    // We get the default storage to be used
+    var storage = getBreakpointsDefaultStorage();
+
+    if (storage == "localStorage"){
+        localStorageSaveBreakpoints();
+    }
+
+}
+
+$(document).bind("breakpoint-set", saveBreakpoints);
+$(document).bind("breakpoint-unset", saveBreakpoints);
 
