@@ -46,6 +46,7 @@ function loadFileFromFullPath(full_path){
         jQuery.ajax({type: 'POST',
                      url: url,
                      async : false,
+                     dataType : "text",
                      data: {'command': 'open-file',
                             'directory':directory,
                             'file_name':file_name},
