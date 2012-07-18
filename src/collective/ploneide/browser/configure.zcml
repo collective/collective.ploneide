@@ -18,11 +18,6 @@
       directory="icons"
       />
 
-  <browser:resourceDirectory
-      name="collective.ploneide.developermanual"
-      directory="developermanual"
-      />
-
   <include file="debugger_boxes.zcml" />
 
   <browser:page
