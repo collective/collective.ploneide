@@ -64,5 +64,5 @@ function createPloneIDE(env){
     // We create the sessions group.
     createSessionsGroup();
         
-};
+}
     
