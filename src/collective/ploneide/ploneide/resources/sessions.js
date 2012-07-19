@@ -370,7 +370,7 @@ function splitSession(value) {
         var orientation = sp.BESIDE;
     }
     
-    var sameOrientation = (sp.getOriantation() == orientation);
+    var sameOrientation = (sp.getOrientation() == orientation);
     
     if (alreadySplitted && sameOrientation){
         // Should clos
@@ -379,14 +379,14 @@ function splitSession(value) {
         sp.setSession(session, 0);
     }
     else if (!alreadySplitted) {
-        sp.setOriantation(orientation);
+        sp.setOrientation(orientation);
         sp.setSplits(2);
         var session = sp.getEditor(0).session;
         var newSession = sp.setSession(session, 1);
         newSession.name = session.name;
     }
     else {
-        sp.setOriantation(orientation);
+        sp.setOrientation(orientation);
     }
 }
     

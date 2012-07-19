@@ -18,10 +18,11 @@
     <script type="text/javascript" src="jquery/jquery-ui-1.8.17.custom.min.js"></script>
     <script type="text/javascript" src="resources/layout/jquery.layout.js"></script>
 
-    <script type="text/javascript" src="ace/ace.js"></script>
-    <script type="text/javascript" src="ace/cockpit.js"></script>
-    <script type="text/javascript" src="ace/split.js"></script>
-    <script type="text/javascript" src="ace/mode-css.js"></script>
+
+    <!--<script type="text/javascript" src="ace/ace.js"></script>-->
+    <!--<script type="text/javascript" src="ace/cockpit.js"></script>
+    <script type="text/javascript" src="ace/split.js"></script>-->
+    <!--<script type="text/javascript" src="ace/mode-css.js"></script>
     <script type="text/javascript" src="ace/mode-html.js"></script>
     <script type="text/javascript" src="ace/mode-javascript.js"></script>
     <script type="text/javascript" src="ace/mode-python.js"></script>
@@ -39,8 +40,7 @@
     <script type="text/javascript" src="ace/theme-monokai.js"></script>
     <script type="text/javascript" src="ace/theme-pastel_on_dark.js"></script>
     <script type="text/javascript" src="ace/theme-twilight.js"></script>
-    <script type="text/javascript" src="ace/theme-vibrant_ink.js"></script>
-
+    <script type="text/javascript" src="ace/theme-vibrant_ink.js"></script>-->
 
     <!-- tree -->
     <script type="text/javascript" src="resources/tree/jquery.simplejqtree.js"></script>
@@ -48,12 +48,11 @@
     <script type="text/javascript" src="resources/local_storage.js"></script>
     <script type="text/javascript" src="resources/sessions.js"></script>
     <script type="text/javascript" src="resources/files.js"></script>
-    <script type="text/javascript" src="resources/ploneide.js"></script>
     <script type="text/javascript" src="resources/debugger_boxes.js"></script>
     <script type="text/javascript" src="resources/debugging.js"></script>
     <script type="text/javascript" src="resources/aux.js"></script>
-    <script type="text/javascript" src="resources/boot.js"></script>
-
+    <script type="text/javascript" src="resources/ploneide.js"></script>
+    <!--<script type="text/javascript" src="resources/boot.js"></script>-->
 
 </head>
 <body>
@@ -61,4 +60,48 @@
       <p>Your browser does not support iframes.</p>
     </iframe>
 </body>
+
+  <script type="text/javascript">
+
+        String.prototype.endsWith = function(str)
+            {return (this.match(str+"$")==str)}
+
+        String.prototype.startsWith = function(str)
+            {return (this.match("^"+str)==str)}
+
+        // In case trim not supported for this browser
+        if(typeof(String.prototype.trim) === "undefined")
+        {
+            String.prototype.trim = function()
+            {
+                return String(this).replace(/^\s+|\s+$/g, '');
+            };
+        }
+        // First thing first, let's load info for instance, ide and debug servers
+        getServersInfo();
+
+        //loading ide base
+        $.ajax({
+          url: 'idebase.html',
+          async: false,
+          success: function(data) {
+            $('body').prepend(data);
+            //setup
+            treeSetup();
+            panelsSetup();
+          }
+        });
+
+        var require = {
+          baseUrl: window.location.protocol + "//" + window.location.host + window.location.pathname.split("/").slice(0, -1).join("/"),
+          paths: {
+              ace: "ace"
+          }
+        };
+  </script>
+    
+  <script src="resources/require.js" data-main="resources/boot" type="text/javascript"></script>
+
+
+
 </html>

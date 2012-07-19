@@ -1,35 +1,143 @@
 
-window.onload = function() {
+function singleLineEditor(el) {
+    var renderer = new Renderer(el);
+    renderer.scrollBar.element.style.display = "none";
+    renderer.scrollBar.width = 0;
+    renderer.content.style.height = "auto";
 
-    String.prototype.endsWith = function(str)
-        {return (this.match(str+"$")==str)}
+    renderer.screenToTextCoordinates = function(x, y) {
+        var pos = this.pixelToScreenCoordinates(x, y);
+        return this.session.screenToDocumentPosition(
+            Math.min(this.session.getScreenLength() - 1, Math.max(pos.row, 0)),
+            Math.max(pos.column, 0)
+        );
+    };
+    // todo size change event
+    renderer.$computeLayerConfig = function() {
+        var longestLine = this.$getLongestLine();
+        var firstRow = 0;
+        var lastRow = this.session.getLength();
+        var height = this.session.getScreenLength() * this.lineHeight;
 
-    String.prototype.startsWith = function(str)
-        {return (this.match("^"+str)==str)}
+        this.scrollTop = 0;
+        var config = this.layerConfig;
+        config.width = longestLine;
+        config.padding = this.$padding;
+        config.firstRow = 0;
+        config.firstRowScreen = 0;
+        config.lastRow = lastRow;
+        config.lineHeight = this.lineHeight;
+        config.characterWidth = this.characterWidth;
+        config.minHeight = height;
+        config.maxHeight = height;
+        config.offset = 0;
+        config.height = height;
 
-    // In case trim not supported for this browser
-    if(typeof(String.prototype.trim) === "undefined")
-    {
-        String.prototype.trim = function()
-        {
-            return String(this).replace(/^\s+|\s+$/g, '');
-        };
-    }
-    // First thing first, let's load info for instance, ide and debug servers
-    getServersInfo();
+        this.$gutterLayer.element.style.marginTop = 0 + "px";
+        this.content.style.marginTop = 0 + "px";
+        this.content.style.width = longestLine + 2 * this.$padding + "px";
+        this.content.style.height = height + "px";
+        this.scroller.style.height = height + "px";
+        this.container.style.height = height + "px";
+    };
+    renderer.isScrollableBy=function(){return false};
 
-    //loading ide base
-    $.ajax({
-      url: 'idebase.html',
-      async: false,
-      success: function(data) {
-        $('body').prepend(data);
-        //setup
-        treeSetup();
-        panelsSetup();
-      }
+    var editor = new Editor(renderer);
+    new MultiSelect(editor);
+    editor.session.setUndoManager(new UndoManager());
+
+    editor.setHighlightActiveLine(false);
+    editor.setShowPrintMargin(false);
+    editor.renderer.setShowGutter(false);
+    // editor.renderer.setHighlightGutterLine(false);
+    return editor;
+}
+
+function startupPloneIDE() {
+
+    env = {};
+
+    dom = require("ace/lib/dom");
+    net = require("ace/lib/net");
+
+    event = require("ace/lib/event");
+    EditSession = require("ace/edit_session").EditSession;
+    UndoManager = require("ace/undomanager").UndoManager;
+
+    vim = require("ace/keyboard/vim").handler;
+    emacs = require("ace/keyboard/emacs").handler;
+    HashHandler = require("ace/keyboard/hash_handler").HashHandler;
+
+    Renderer = require("ace/virtual_renderer").VirtualRenderer;
+    Editor = require("ace/editor").Editor;
+    MultiSelect = require("ace/multi_select").MultiSelect;
+    Range = require("ace/range").Range;
+    JavaScriptMode = require("ace/mode/javascript").Mode;
+    CssMode = require("ace/mode/css").Mode;
+    HtmlMode = require("ace/mode/html").Mode;
+    XmlMode = require("ace/mode/xml").Mode;
+    PythonMode = require("ace/mode/python").Mode;
+    TextMode = require("ace/mode/text").Mode;
+    theme = require("ace/theme/pastel_on_dark");
+
+    var container = document.getElementById("editor");
+    
+    // Splitting.
+    Split = require("ace/split").Split;
+    var split = new Split(container, theme, 1);
+    env.editor = split.getEditor(0);
+    split.on("focus", function(editor) {
+        env.editor = editor;
+        // updateUIEditorOptions();
+    });
+    env.split = split;
+    window.env = env;
+    window.ace = env.editor;
+
+    env.editor.setAnimatedScroll(false);
+
+    env.editor.getSession().setMode(new PythonMode());
+
+    var consoleEl = dom.createElement("div");
+    container.parentNode.appendChild(consoleEl);
+    consoleEl.style.position="fixed"
+    consoleEl.style.bottom = "1px"
+    consoleEl.style.right = 0
+    consoleEl.style.background = "white"
+    consoleEl.style.border = "1px solid #baf"
+    consoleEl.style.zIndex = "100"
+    var cmdLine = new singleLineEditor(consoleEl);
+    cmdLine.editor = env.editor;
+    env.editor.cmdLine = cmdLine;
+
+    // Save shortcut, works from the editor and the command line.
+    env.editor.commands.addCommand({
+        name: "save",
+        bindKey: {
+            win: "Ctrl-S",
+            mac: "Command-S",
+            sender: "editor|cli"
+        },
+        exec: function() {
+            saveCurrentFile();
+        }
     });
 
+    // Toggle comments shortcut, works from the editor and the command line.
+    env.editor.commands.addCommand({
+        name: "toggleComments",
+        bindKey: {
+            win: "Ctrl-D",
+            mac: "Command-D",
+            sender: "editor|cli"
+        },
+        exec: function() {
+            env.editor.toggleCommentLines();
+        }
+    });
+
+    // add multiple cursor support to editor
+    require("ace/multi_select").MultiSelect(env.editor);
 
     /*XXX THIS SHOULD BE IN A MODULEEEEE*/
     /*var panel_action_buttons = '<div class="button-project-tree"></div><div class="button-pin"></div>'*/
@@ -39,7 +147,7 @@ window.onload = function() {
         east__spacing_closed:15,
         south__spacing_open:15,
         south__spacing_closed:15,
-        south__initClosed:	true,
+        south__initClosed:  true,
         onresize_end: function () {
             /* XXX: Need to calculate this more dynamically */
             var height = $('#editor-main').height() - 75;
@@ -63,20 +171,28 @@ window.onload = function() {
     createDialogForID('a#plone-reload');
     checkPloneRunning();
 
-    var deps = [ "pilot/fixoldbrowsers", "pilot/plugin_manager", "pilot/settings",
-                 "pilot/environment"];
-
-    var plugins = [ "pilot/index", "cockpit/index"];
-    require(deps, function() {
-        var catalog = require("pilot/plugin_manager").catalog;
-        catalog.registerPlugins(plugins).then(function() {
-            var env = require("pilot/environment").create();
-            catalog.startupPlugins({ env: env }).then(function() {
-                createPloneIDE(env);
-            });
-        });
-    });
-
     $('.ace_gutter-cell').live("click", addRemoveBreakpoint);
 
-};
+    getSavedBreakpoints();
+    // We create the sessions group.
+    createSessionsGroup();
+    getDeveloperManualLink();
+}
+
+global_sessions = [];
+
+define(function(require, exports, module) {
+    "use strict";
+
+    require("ace/lib/fixoldbrowsers");
+    require("ace/config").init();
+
+    require(["ace/ace", "ace/keyboard/vim", "ace/keyboard/emacs",
+             "ace/mode/javascript", "ace/mode/css", "ace/mode/html",
+             "ace/mode/xml", "ace/mode/python", "ace/mode/text", 
+             "ace/theme/pastel_on_dark", "ace/split"], function(util) {
+        startupPloneIDE();
+    });
+
+
+});
