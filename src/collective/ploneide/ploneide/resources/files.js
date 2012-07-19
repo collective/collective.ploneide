@@ -96,6 +96,7 @@ function saveCurrentFile(){
                     },
                     function(results){
     //                 alert(results);
+                        unmarkModified();
                     });
     }
     else{

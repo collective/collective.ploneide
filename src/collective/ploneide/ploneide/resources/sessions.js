@@ -1,3 +1,16 @@
+
+function markModified(){
+    var tab_index = env.editor.getSession().tab_index;
+    span = $('span.tab').get(tab_index);
+    $(span).addClass('modified');
+}
+
+function unmarkModified(){
+    var tab_index = env.editor.getSession().tab_index;
+    span = $('span.tab').get(tab_index);
+    $(span).removeClass('modified');
+}
+
 tabs_select = function(tab){
     $(tab).siblings('.tab').removeClass('selected');
     $(tab).addClass('selected');
@@ -112,6 +125,10 @@ function createNewSession(data, mode, id, full_path){
     session.tab_id = name;
     session.tab_index = length;
     session.filename = full_path;
+
+    session.on("change", function(editor){
+        markModified();
+    });
 
     global_sessions.push(session);
 
@@ -373,7 +390,7 @@ function splitSession(value) {
     var sameOrientation = (sp.getOrientation() == orientation);
     
     if (alreadySplitted && sameOrientation){
-        // Should clos
+        // Should close
         var session = sp.getCurrentEditor().session;
         sp.setSplits(1);
         sp.setSession(session, 0);

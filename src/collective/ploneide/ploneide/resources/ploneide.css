@@ -53,6 +53,11 @@
     height: 100%;
     border:medium none;
 }
+
+#editor-files-tabs .selected span.tab.modified, #editor-files-tabs span.tab.modified{
+    text-decoration: underline;
+    color: red;
+}
 #editor-files-tabs {
     padding-left:49px;
 }
