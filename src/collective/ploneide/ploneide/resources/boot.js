@@ -129,7 +129,7 @@ function startupPloneIDE() {
     var consoleEl = dom.createElement("div");
     container.parentNode.appendChild(consoleEl);
     // $('body').append(consoleEl);
-    consoleEl.style.position="fixed"
+    consoleEl.style.position="relative"
     // consoleEl.style.bottom = "1px"
     consoleEl.style.left = 0
     consoleEl.style.background = "white"

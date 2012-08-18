@@ -1,7 +1,7 @@
  function resizeEditorSection(){
     var consoleEl = $('div.ace_editor.ace-tm').get(0);
 
-    var height = $('#editor-main').height() - 80;
+    var height = $('#editor-main').height() - 92;
     var width = $('#editor-main').width();
 
     if ($('#debugger-console').css('display') != "none"){
