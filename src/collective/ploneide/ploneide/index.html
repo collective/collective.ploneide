@@ -18,8 +18,8 @@
     <script type="text/javascript" src="jquery/jquery-ui-1.8.17.custom.min.js"></script>
     <script type="text/javascript" src="resources/layout/jquery.layout.js"></script>
 
-
-    <!--<script type="text/javascript" src="ace/ace.js"></script>-->
+    <!--<script type="text/javascript" src="ace/ace.js"></script>
+    <script type="text/javascript" src="ace/mode/css_worker.js"></script>-->
     <!--<script type="text/javascript" src="ace/cockpit.js"></script>
     <script type="text/javascript" src="ace/split.js"></script>-->
     <!--<script type="text/javascript" src="ace/mode-css.js"></script>
@@ -90,6 +90,21 @@
             treeSetup();
             panelsSetup();
           }
+        });
+
+        /*XXX THIS SHOULD BE IN A MODULEEEEE*/
+        /*var panel_action_buttons = '<div class="button-project-tree"></div><div class="button-pin"></div>'*/
+        var t = $('body').layout({
+            east__minSize:280,
+            east__spacing_open:10,
+            east__spacing_closed:15,
+            south__spacing_open:15,
+            south__spacing_closed:15,
+            south__initClosed:  true,
+            onresize_end: function () {
+                /* XXX: Need to calculate this more dynamically */
+                resizeEditorSection();
+            }
         });
 
         var require = {

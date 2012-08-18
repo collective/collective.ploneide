@@ -16,6 +16,10 @@ import subprocess
 
 import signal
 
+from static_check import PloneIDEReport
+
+from pep8 import Checker
+
 from App import config as zconfig
 
 from debugger import Debugger
@@ -48,7 +52,6 @@ class PloneIDEServer(SocketServer.TCPServer):
         self.stderr_html = ''
         self.read_stdout_thread = None
         self.read_stderr_thread = None
-
 
     def open_file(self, directory, file_name):
         result = None
@@ -93,7 +96,7 @@ class PloneIDEServer(SocketServer.TCPServer):
 
 
             files = [i for i in dir_contents if (not os.path.isdir(i) and
-                                                     not files_to_exclude.match(i))]
+                     not files_to_exclude.match(i))]
 
             dirs = [i for i in dir_contents if (os.path.isdir(i) and
                                                 not dirs_to_exclude.match(i))]
@@ -191,7 +194,7 @@ class PloneIDEServer(SocketServer.TCPServer):
 
     def pipe_to_html(self, name):
 
-        html = '<div class="%s-output"><h1>%s</h1>' % (name,name.upper())
+        html = '<div class="%s-output"><h1>%s</h1>' % (name, name.upper())
         pipe = getattr(self, name)
 
         opened_list = False
@@ -228,7 +231,7 @@ class PloneIDEServer(SocketServer.TCPServer):
         if self.check_debug_running():
             url = "http://%s:%s"%(self.config.debug_host,
                                 self.config.debug_port)
-            result =  urllib2.urlopen(url, params)
+            result = urllib2.urlopen(url, params)
         else:
             result = ""
 
@@ -243,6 +246,18 @@ class PloneIDEServer(SocketServer.TCPServer):
     def get_breakpoints(self):
         pass
 
+    def static_check(self, content=""):
+        results = []
+
+        if content:
+            lines = [i+'\n' for i in content.split('\n')]
+            checker = Checker(None, report=PloneIDEReport())
+            checker.lines = lines
+
+            results = checker.check_all()
+
+        return json.dumps(results)
+        
     def run(self):
         #logger.info("Starting internal server in %s:%s" % (
                                                      #self.config.ploneide_host,
@@ -292,7 +307,8 @@ class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
                             'save-file' : self.ploneide_server.save_file,
                             'add-breakpoint': self.ploneide_server.add_breakpoint,
                             'remove-breakpoint': self.ploneide_server.remove_breakpoint,
-                            'get-breakpoints': self.ploneide_server.get_breakpoints
+                            'get-breakpoints': self.ploneide_server.get_breakpoints,
+                            'python-static-check': self.ploneide_server.static_check
                             }
 
         SimpleHTTPServer.SimpleHTTPRequestHandler.__init__(self, *args)

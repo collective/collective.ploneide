@@ -55,7 +55,7 @@
 }
 
 #editor-files-tabs .selected span.tab.modified, #editor-files-tabs span.tab.modified{
-    text-decoration: underline;
+    /*text-decoration: underline;*/
     color: red;
 }
 #editor-files-tabs {

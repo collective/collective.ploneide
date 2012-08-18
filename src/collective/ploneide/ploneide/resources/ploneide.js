@@ -1,3 +1,21 @@
+ function resizeEditorSection(){
+    var consoleEl = $('div.ace_editor.ace-tm').get(0);
+
+    var height = $('#editor-main').height() - 80;
+    var width = $('#editor-main').width();
+
+    if ($('#debugger-console').css('display') != "none"){
+        $('#debugger-console').height(height * 0.3);
+        $('#editor').height(height * 0.7);
+    }
+    else{
+        $('#editor').height(height);
+    }
+
+    env.split.resize();
+    consoleEl.style.width = width + "px";
+    env.editor.cmdLine.resize()
+}
 
 function checkPloneRunning(){
     var url = 'http://'+window.$PLONEIDE_HOST+':'+window.$PLONEIDE_PORT;

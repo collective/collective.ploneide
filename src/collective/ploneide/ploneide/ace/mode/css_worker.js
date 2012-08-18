@@ -53,7 +53,6 @@ oop.inherits(Worker, Mirror);
     
     this.onUpdate = function() {
         var value = this.doc.getValue();
-        
         var result = CSSLint.verify(value);
         this.sender.emit("csslint", result.messages.map(function(msg) {
             delete msg.rule;

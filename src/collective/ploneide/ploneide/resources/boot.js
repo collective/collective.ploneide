@@ -54,7 +54,8 @@ function singleLineEditor(el) {
 }
 
 function startupPloneIDE() {
-
+    // XXX: Need to find a way to clear the browser history at this point
+    //      so there are no problems (e.g. trackpad gesture to go left in mac)
     env = {};
 
     dom = require("ace/lib/dom");
@@ -77,6 +78,32 @@ function startupPloneIDE() {
     HtmlMode = require("ace/mode/html").Mode;
     XmlMode = require("ace/mode/xml").Mode;
     PythonMode = require("ace/mode/python").Mode;
+    
+    
+    var WorkerClient = require("ace/worker/worker_client").WorkerClient;
+    PythonMode.prototype.createWorker = function(session) {
+        var worker = new WorkerClient(["ace"], "python_worker", "Worker");
+        worker.attachToDocument(session.getDocument());
+        
+        worker.on("python_static_check", function(e) {
+            var errors = [];
+            results = JSON.parse(e.data);
+            results.forEach(function(message) {
+                errors.push({
+                    row: message.line - 1,
+                    column: message.col - 1,
+                    text: message.message,
+                    type: message.type,
+                    lint: message
+                });
+            });
+            
+            session.setAnnotations(errors);
+        });
+        return worker;
+    };
+    
+    
     TextMode = require("ace/mode/text").Mode;
     theme = require("ace/theme/pastel_on_dark");
 
@@ -98,11 +125,13 @@ function startupPloneIDE() {
 
     env.editor.getSession().setMode(new PythonMode());
 
+    // XXX: Make the console to work
     var consoleEl = dom.createElement("div");
     container.parentNode.appendChild(consoleEl);
+    // $('body').append(consoleEl);
     consoleEl.style.position="fixed"
-    consoleEl.style.bottom = "1px"
-    consoleEl.style.right = 0
+    // consoleEl.style.bottom = "1px"
+    consoleEl.style.left = 0
     consoleEl.style.background = "white"
     consoleEl.style.border = "1px solid #baf"
     consoleEl.style.zIndex = "100"
@@ -111,7 +140,7 @@ function startupPloneIDE() {
     env.editor.cmdLine = cmdLine;
 
     // Save shortcut, works from the editor and the command line.
-    env.editor.commands.addCommand({
+    env.editor.commands.addCommands([{
         name: "save",
         bindKey: {
             win: "Ctrl-S",
@@ -121,10 +150,8 @@ function startupPloneIDE() {
         exec: function() {
             saveCurrentFile();
         }
-    });
-
-    // Toggle comments shortcut, works from the editor and the command line.
-    env.editor.commands.addCommand({
+    },
+    {
         name: "toggleComments",
         bindKey: {
             win: "Ctrl-D",
@@ -134,33 +161,27 @@ function startupPloneIDE() {
         exec: function() {
             env.editor.toggleCommentLines();
         }
-    });
+    },
+    {
+        name: "focusCommandLine",
+        bindKey: "shift-esc",
+        exec: function(editor, needle) { editor.cmdLine.focus(); },
+        readOnly: true
+    }]);
 
+    cmdLine.commands.bindKeys({
+        "Shift-Return|Ctrl-Return|Alt-Return": function(cmdLine) { cmdLine.insert("\n")},
+        "Esc|Shift-Esc": function(cmdLine){ cmdLine.session.setValue(''); cmdLine.editor.focus(); },
+        "Return": function(cmdLine){
+            var command = cmdLine.getValue().split(/\s+/);
+            var editor = cmdLine.editor;
+            editor.commands.exec(command[0], editor, command[1]);
+            cmdLine.session.setValue('');
+            editor.focus();
+        },
+    })
     // add multiple cursor support to editor
     require("ace/multi_select").MultiSelect(env.editor);
-
-    /*XXX THIS SHOULD BE IN A MODULEEEEE*/
-    /*var panel_action_buttons = '<div class="button-project-tree"></div><div class="button-pin"></div>'*/
-    var t = $('body').layout({
-        east__minSize:280,
-        east__spacing_open:10,
-        east__spacing_closed:15,
-        south__spacing_open:15,
-        south__spacing_closed:15,
-        south__initClosed:  true,
-        onresize_end: function () {
-            /* XXX: Need to calculate this more dynamically */
-            var height = $('#editor-main').height() - 75;
-            if ($('#debugger-console').css('display') != "none"){
-                $('#debugger-console').height(height * 0.3);
-                $('#editor').height(height * 0.7);
-            }
-            else{
-                $('#editor').height(height);
-            }
-            env.split.resize();
-        }
-    });
 
     var height = $('#editor-main').height() - 100;
     $('#editor').height(height);
@@ -173,13 +194,16 @@ function startupPloneIDE() {
 
     $('.ace_gutter-cell').live("click", addRemoveBreakpoint);
 
+    global_sessions = [];
+
     getSavedBreakpoints();
     // We create the sessions group.
     createSessionsGroup();
     getDeveloperManualLink();
+    resizeEditorSection();
+
 }
 
-global_sessions = [];
 
 define(function(require, exports, module) {
     "use strict";
@@ -190,7 +214,7 @@ define(function(require, exports, module) {
     require(["ace/ace", "ace/keyboard/vim", "ace/keyboard/emacs",
              "ace/mode/javascript", "ace/mode/css", "ace/mode/html",
              "ace/mode/xml", "ace/mode/python", "ace/mode/text", 
-             "ace/theme/pastel_on_dark", "ace/split"], function(util) {
+             "ace/theme/pastel_on_dark", "ace/split", "ace/worker/worker_client"], function(util) {
         startupPloneIDE();
     });
 

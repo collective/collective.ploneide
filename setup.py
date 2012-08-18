@@ -34,6 +34,8 @@ setup(name='collective.ploneide',
       install_requires=[
           'setuptools',
           # -*- Extra requirements: -*-
+          'pep8',
+          'pyflakes',
           'sauna.reload',
           'TornadIO',
           'ordereddict',
