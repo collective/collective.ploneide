@@ -18,7 +18,7 @@ class PloneIDEReport(BaseReport):
         code = super(PloneIDEReport, self).error(line_number, offset,
                                                  text, check)
 
-        if code and (self.counters[code] == 1):
+        if code:
             self._all_errors.append( {
                 'line': self.line_offset + line_number, 
                 'col': offset + 1,

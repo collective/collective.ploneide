@@ -63,7 +63,6 @@ class PloneIDEServer(SocketServer.TCPServer):
 
         return result
 
-
     def save_file(self, directory, file_name, content):
         result = None
         if directory and file_name:
@@ -79,7 +78,8 @@ class PloneIDEServer(SocketServer.TCPServer):
 
         if initial:
             # TODO: At the moment, we are just going to support "src" folder
-            #       but eventually, we will provide a wider rango of directories
+            #       but eventually, we will provide a wider range of
+            #       directories
 
             directory = self.config.devel_dirs['src']
 
@@ -94,7 +94,6 @@ class PloneIDEServer(SocketServer.TCPServer):
             os.chdir(directory)
             dir_contents = os.listdir('.')
 
-
             files = [i for i in dir_contents if (not os.path.isdir(i) and
                      not files_to_exclude.match(i))]
 
@@ -103,8 +102,14 @@ class PloneIDEServer(SocketServer.TCPServer):
 
             files.sort()
             dirs.sort()
-            raw_json_dirs = [{'title':x, 'metatype':'folder', 'folderish':'true', 'rel': directory+'/'+x} for x in dirs]
-            raw_json_files = [{'title':x, 'metatype':'page', 'rel': directory+'/'+x} for x in files]
+            raw_json_dirs = [{'title':x,
+                              'metatype':'folder',
+                              'folderish':'true',
+                              'rel': directory + '/' + x} for x in dirs]
+
+            raw_json_files = [{'title':x,
+                               'metatype':'page',
+                               'rel': directory + '/' + x} for x in files]
 
             os.chdir(cwd)
             return json.dumps(raw_json_dirs + raw_json_files)
@@ -139,20 +144,22 @@ class PloneIDEServer(SocketServer.TCPServer):
 
         return up
 
-
     def check_debug_running(self):
-        url = "http://%s:%s"%(self.config.debug_host,
-                              self.config.debug_port)
+        url = "http://%s:%s" % (self.config.debug_host,
+                                self.config.debug_port)
 
         return self._ping_server(url)
 
     def check_plone_instance_running(self):
-        url = "http://%s:%s"%(self.config.instance_host,
-                              self.config.instance_port)
+        url = "http://%s:%s" % (self.config.instance_host,
+                                self.config.instance_port)
 
         return self._ping_server(url)
 
-    def start_plone_instance(self, sauna=False, debugger=False, lines_console=300):
+    def start_plone_instance(self,
+                             sauna=False,
+                             debugger=False,
+                             lines_console=300):
         #import pdb;pdb.set_trace()
         #XXX: There *MUST* be a better way than this...
         #XXX: Use a Mutex or something so we can't start several times
@@ -211,7 +218,7 @@ class PloneIDEServer(SocketServer.TCPServer):
                 html += '<p>%s</p>' % line.strip()
         html += '</div>'
 
-        setattr(self, name+'_html', html)
+        setattr(self, name + '_html', html)
 
     def kill_plone_instance(self):
         if self.zope_pid:
@@ -229,8 +236,8 @@ class PloneIDEServer(SocketServer.TCPServer):
 
     def dispatch_debugger_command(self, params):
         if self.check_debug_running():
-            url = "http://%s:%s"%(self.config.debug_host,
-                                self.config.debug_port)
+            url = "http://%s:%s" % (self.config.debug_host,
+                                    self.config.debug_port)
             result = urllib2.urlopen(url, params)
         else:
             result = ""
@@ -250,18 +257,18 @@ class PloneIDEServer(SocketServer.TCPServer):
         results = []
 
         if content:
-            lines = [i+'\n' for i in content.split('\n')]
+            lines = [i + '\n' for i in content.split('\n')]
             checker = Checker(None, report=PloneIDEReport())
             checker.lines = lines
 
             results = checker.check_all()
 
         return json.dumps(results)
-        
+
     def run(self):
         #logger.info("Starting internal server in %s:%s" % (
-                                                     #self.config.ploneide_host,
-                                                     #self.config.ploneide_port))
+                                                 #self.config.ploneide_host,
+                                                 #self.config.ploneide_port))
 
         print "Starting internal server in %s:%s" % (self.config.ploneide_host,
                                                      self.config.ploneide_port)
@@ -269,6 +276,7 @@ class PloneIDEServer(SocketServer.TCPServer):
 
     def stop(self):
         self.shutdown()
+
 
 class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     """
@@ -295,24 +303,23 @@ class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         self.debugger_dispatch = self.ploneide_server.dispatch_debugger_command
 
         self.commands_map = {
-                            'get-servers-info' : self.ploneide_server.get_servers_info,
-                            'get-developer-manual-location': self.ploneide_server.get_developer_manual_location,
-                            'check-plone-instance-running' : self.ploneide_server.check_plone_instance_running,
-                            'check-debug-running' : self.ploneide_server.check_debug_running,
-                            'start-plone-instance': self.ploneide_server.start_plone_instance,
-                            'kill-plone-instance': self.ploneide_server.kill_plone_instance,
-                            'get-console-output': self.ploneide_server.get_console_output,
-                            'get-directory-content-ajax' : self.ploneide_server.directory_content_ajax,
-                            'open-file' : self.ploneide_server.open_file,
-                            'save-file' : self.ploneide_server.save_file,
-                            'add-breakpoint': self.ploneide_server.add_breakpoint,
-                            'remove-breakpoint': self.ploneide_server.remove_breakpoint,
-                            'get-breakpoints': self.ploneide_server.get_breakpoints,
-                            'python-static-check': self.ploneide_server.static_check
-                            }
+            'get-servers-info': self.ploneide_server.get_servers_info,
+            'get-developer-manual-location': self.ploneide_server.get_developer_manual_location,
+            'check-plone-instance-running': self.ploneide_server.check_plone_instance_running,
+            'check-debug-running': self.ploneide_server.check_debug_running,
+            'start-plone-instance': self.ploneide_server.start_plone_instance,
+            'kill-plone-instance': self.ploneide_server.kill_plone_instance,
+            'get-console-output': self.ploneide_server.get_console_output,
+            'get-directory-content-ajax': self.ploneide_server.directory_content_ajax,
+            'open-file': self.ploneide_server.open_file,
+            'save-file': self.ploneide_server.save_file,
+            'add-breakpoint': self.ploneide_server.add_breakpoint,
+            'remove-breakpoint': self.ploneide_server.remove_breakpoint,
+            'get-breakpoints': self.ploneide_server.get_breakpoints,
+            'python-static-check': self.ploneide_server.static_check
+        }
 
         SimpleHTTPServer.SimpleHTTPRequestHandler.__init__(self, *args)
-
 
     def decode_params(self):
         """
@@ -322,14 +329,15 @@ class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
         #XXX: Check all possible characters we might need to decode
         char_map = {
-            "%2B" : "+",
-            "%2F" : "/",
-            "%3D" : "=",
-            }
+            "%2B": "+",
+            "%2F": "/",
+            "%3D": "=",
+        }
 
         for par in self.params.keys():
             for code in char_map:
-                self.params[par] = self.params[par].replace(code, char_map[code])
+                self.params[par] = self.params[par].replace(code,
+                                                            char_map[code])
 
     def dispatch_command(self):
         """
@@ -389,11 +397,11 @@ class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
                 # XXX: This should check all valid hosts from origin
                 #import pdb;pdb.set_trace()
                 self.send_header("Access-Control-Allow-Origin",
-                                "http://localhost:%s" %
-                                self.ploneide_server.config.ploneide_port)
+                                 "http://localhost:%s" %
+                                 self.ploneide_server.config.ploneide_port)
 
                 self.send_header("Access-Control-Allow-Methods",
-                                "POST, GET, OPTIONS")
+                                 "POST, GET, OPTIONS")
 
                 self.end_headers()
                 self.wfile.write(self.result)
@@ -424,9 +432,10 @@ class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         content = cgi.FieldStorage(
                     fp=self.rfile,
                     headers=self.headers,
-                    environ={'REQUEST_METHOD':'POST',
-                             'CONTENT_TYPE':self.headers['Content-Type'],
-                             })
+                    environ={'REQUEST_METHOD': 'POST',
+                             'CONTENT_TYPE': self.headers['Content-Type'],
+                             }
+        )
 
         for key in content.keys():
             self.params[key] = content[key].value
@@ -440,14 +449,12 @@ class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         #import pdb;pdb.set_trace()
         self.send_header("Access-Control-Allow-Origin",
                          "http://localhost:%s" %
-                                self.ploneide_server.config.ploneide_port)
+                         self.ploneide_server.config.ploneide_port)
 
         self.send_header("Access-Control-Allow-Methods",
-                        "POST, GET, OPTIONS")
+                         "POST, GET, OPTIONS")
 
         self.end_headers()
         self.wfile.write(self.result)
 
         return
-
-
