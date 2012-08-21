@@ -16,9 +16,7 @@ import subprocess
 
 import signal
 
-from static_check import PloneIDEReport
-
-from pep8 import Checker
+from static_check import StaticCheck
 
 from App import config as zconfig
 
@@ -254,15 +252,14 @@ class PloneIDEServer(SocketServer.TCPServer):
         pass
 
     def static_check(self, content=""):
-        results = []
+        
+        check = StaticCheck(content)
 
-        if content:
-            lines = [i + '\n' for i in content.split('\n')]
-            checker = Checker(None, report=PloneIDEReport())
-            checker.lines = lines
-
-            results = checker.check_all()
-
+        check.check_pep8()
+        check.check_pyflakes()
+        
+        results = check.get_results()
+        
         return json.dumps(results)
 
     def run(self):

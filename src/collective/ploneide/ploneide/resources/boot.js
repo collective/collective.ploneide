@@ -88,7 +88,11 @@ function startupPloneIDE() {
         worker.on("python_static_check", function(e) {
             var errors = [];
             results = JSON.parse(e.data);
-            results.forEach(function(message) {
+            pyflakes = results[0];
+            pep8 = results[1];
+            compile_errors = results[2];
+            
+            pep8.forEach(function(message) {
                 errors.push({
                     row: message.line - 1,
                     column: message.col - 1,
@@ -97,7 +101,23 @@ function startupPloneIDE() {
                     lint: message
                 });
             });
-            
+            pyflakes.forEach(function(message) {
+                errors.push({
+                    row: message.line - 1,
+                    text: message.message,
+                    type: message.type,
+                    lint: message
+                });
+            });
+
+            if (compile_errors != ""){
+                $('span.tab.selected').addClass('compile-error');
+            }
+            else{
+                $('span.tab.selected').removeClass('compile-error');
+            }
+            $('span.tab.selected').attr("title", compile_errors);   
+
             session.setAnnotations(errors);
         });
         return worker;
