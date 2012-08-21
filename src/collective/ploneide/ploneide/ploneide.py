@@ -5,7 +5,6 @@ import SocketServer
 
 import sys
 import os
-import BaseHTTPServer
 import logging
 import cgi
 import re
@@ -17,10 +16,6 @@ import subprocess
 import signal
 
 from static_check import StaticCheck
-
-from App import config as zconfig
-
-from debugger import Debugger
 
 from thread import start_new_thread
 
@@ -85,7 +80,7 @@ class PloneIDEServer(SocketServer.TCPServer):
             # Files to exclude
             files_to_exclude = re.compile(r".*(pyc)$|.*~$")
             dirs_to_exclude = re.compile(r"\A(\.)")
-            contents = []
+
             # We will need to chdir to the directory, and then go back before
             # leaving
             cwd = os.getcwd()
@@ -252,14 +247,14 @@ class PloneIDEServer(SocketServer.TCPServer):
         pass
 
     def static_check(self, content=""):
-        
+
         check = StaticCheck(content)
 
         check.check_pep8()
         check.check_pyflakes()
-        
+
         results = check.get_results()
-        
+
         return json.dumps(results)
 
     def run(self):
