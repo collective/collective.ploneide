@@ -20,6 +20,8 @@
 function checkPloneRunning(){
     var url = 'http://'+window.$PLONEIDE_HOST+':'+window.$PLONEIDE_PORT;
 
+    setTimeout(checkPloneRunning, 1000);
+    
     $.ajax({type: 'POST',
             url: url,
             data: {'command': 'check-plone-instance-running'},
@@ -32,7 +34,7 @@ function checkPloneRunning(){
                         $("#start-plone").attr('disabled', true);
                         $("#restart-plone").attr('disabled', false);
                         $("#stop-plone").attr('disabled', false);
-                        setTimeout(checkPloneRunning, 1000);
+                        $("#debugger-checkbox").attr('disabled', false);
                     }
                     else{
                         $("#current-plone-status > p > img#plone-down").css("display", "inline");
@@ -40,7 +42,7 @@ function checkPloneRunning(){
                         $("#start-plone").attr('disabled', false);
                         $("#restart-plone").attr('disabled', true);
                         $("#stop-plone").attr('disabled', true);
-                        setTimeout(checkPloneRunning, 1000);
+                        $("#debugger-checkbox").attr('disabled', true);
                     }
 
                 }
