@@ -1,5 +1,15 @@
 from zope.interface import Interface
 
+class IStartDebugger(Interface):
+    """
+    This view will set the system dispatcher to allow debugging
+    """
+
+class IStopDebugger(Interface):
+    """
+    This view will unset the system dispatcher to stop debugging
+    """
+
 class IPloneideView(Interface):
     """
     This view will contain the editor

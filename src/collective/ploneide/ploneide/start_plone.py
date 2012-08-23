@@ -12,7 +12,7 @@ import json
 import urllib2
 
 import Zope2.Startup.run
-from debugger import Debugger
+from collective.ploneide.ploneide.debugger import debug
 
 from config import Config
 
@@ -56,9 +56,9 @@ def warm_up_the_sauna(config):
 
     if reload_paths:
         # 1) Defer autoinclude of packages found under reload paths.
-        autoinclude.defer_paths()
+        autoinclude.deferConfigurations()
         # 2) Prevent Five from finding packages under reload paths.
-        fiveconfigure.defer_install()
+        fiveconfigure.deferInstalls()
 
 
 if __name__ == '__main__':
@@ -91,6 +91,6 @@ if __name__ == '__main__':
 
     bootstrap = "import Zope2.Startup.run ; Zope2.Startup.run.run()"
 
-    debug = Debugger(debug_host, debug_port)
-
+    print debug
+    debug.create_server(debug_host, debug_port)
     debug.run(bootstrap)

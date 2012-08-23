@@ -19,6 +19,8 @@ from static_check import StaticCheck
 
 from thread import start_new_thread
 
+from collective.ploneide.ploneide.debugger import debug
+
 #from threading import Thread
 
 #from config import HOST
@@ -168,6 +170,14 @@ class PloneIDEServer(SocketServer.TCPServer):
                                          env=env,
                                          stdout=subprocess.PIPE,
                                          stderr=subprocess.PIPE)
+        # self.zope_pid = subprocess.Popen(["python",
+        #                                   "start_plone.py",
+        #                                   str(self.config.debug_host),
+        #                                   str(self.config.debug_port),
+        #                                   str(sauna),
+        #                                   str(debugger),
+        #                                   str(self.config.config_file)],
+        #                                  env=env)
         self.lines_console = lines_console
         self.stdout = []
         self.stderr = []
@@ -237,14 +247,32 @@ class PloneIDEServer(SocketServer.TCPServer):
 
         return result
 
-    def add_breakpoint(self):
-        pass
+    def start_debugging(self):
+        # XXX: For now, this only works if the instance is up
+        url = "http://%s:%s/@@start-debugging" % (self.config.instance_host,
+                                self.config.instance_port)
+        urllib2.urlopen(url)
+        return True
+        
+    def stop_debugging(self):
+        # XXX: For now, this only works if the instance is up
+        url = "http://%s:%s/@@stop-debugging" % (self.config.instance_host,
+                                self.config.instance_port)
+        urllib2.urlopen(url)
+        return True
+        
+    def add_breakpoint(self, filename, line, condition=None, temporary = 0):
+        debug.addBreakpoint(filename=filename, 
+                            line=line, 
+                            condition=condition, 
+                            temporary=temporary)
 
-    def remove_breakpoint(self):
-        pass
+    def remove_breakpoint(self, filename, line):
+        debug.removeBreakpoint(filename=filename, 
+                               line=line)
 
-    def get_breakpoints(self):
-        pass
+    def get_breakpoints(self, filename):
+        return debug.getBreakpoints(filename=filename)
 
     def static_check(self, content=""):
 
@@ -285,9 +313,7 @@ class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         #XXX: Is this the best way on doing this ?
         self.ploneide_server = args[2]
 
-        self.debugger_commands = ['start-debugging',
-                                  'stop-debugging',
-                                  'is-stopped',
+        self.debugger_commands = ['is-stopped',
                                   'get-debugger-scope',
                                   'add-watched-variable',
                                   'eval-code']
@@ -308,7 +334,10 @@ class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
             'add-breakpoint': self.ploneide_server.add_breakpoint,
             'remove-breakpoint': self.ploneide_server.remove_breakpoint,
             'get-breakpoints': self.ploneide_server.get_breakpoints,
-            'python-static-check': self.ploneide_server.static_check
+            'python-static-check': self.ploneide_server.static_check,
+            'start-debugging': self.ploneide_server.start_debugging,
+            'stop-debugging': self.ploneide_server.stop_debugging,
+                                  
         }
 
         SimpleHTTPServer.SimpleHTTPRequestHandler.__init__(self, *args)

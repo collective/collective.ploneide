@@ -23,10 +23,8 @@ class Debugger(bdb.Bdb, BaseHTTPServer.BaseHTTPRequestHandler):
     def __call__(self, request, client_address, server):
         BaseHTTPServer.BaseHTTPRequestHandler.__init__(self, request, client_address, server)
 
-    def __init__(self, debugger_host, debugger_port):
+    def __init__(self):
         bdb.Bdb.__init__(self)
-        server_address = (debugger_host, debugger_port)
-        self.http = BaseHTTPServer.HTTPServer(server_address, self)
         # We use this variable to know if the debugger has stopped execution
         self.stopped = False
         # We use this value to know if we should restart execution in case
@@ -121,7 +119,48 @@ class Debugger(bdb.Bdb, BaseHTTPServer.BaseHTTPRequestHandler):
         else:
             return False
 
+    # def trace_dispatch(self, arg1, arg2, arg3):
+    #     # print "######## trace dispatch ##########"
+    #     # import pdb;pdb.set_trace()  
+    #     bdb.Bdb.trace_dispatch(self, arg1, arg2, arg3)
+    #     stack, curindex = self.get_stack(arg1, None)
+    #     curframe = stack[curindex][0]
+    #     print "%s:%s" %(self.canonic(curframe.f_code.co_filename),
+    #                     curframe.f_lineno)
+
+        # print "%s:%s" %(self.canonic(self.curframe.f_code.co_filename),
+        #                     self.curframe.f_lineno)
+    def trace_dispatch(self, frame, event, arg):
+        print "trace_dispatch:", self.canonic(frame.f_code.co_filename), frame.f_lineno
+        if self.quitting:
+            print "self.quitting"
+            return # None
+        if event == 'line':
+            print "line"
+            return self.dispatch_line(frame)
+        if event == 'call':
+            print "call"
+            return self.dispatch_call(frame, arg)
+        if event == 'return':
+            print "return"
+            return self.dispatch_return(frame, arg)
+        if event == 'exception':
+            print "exception"
+            return self.dispatch_exception(frame, arg)
+        if event == 'c_call':
+            print "c_call"
+            return self.trace_dispatch
+        if event == 'c_exception':
+            print "c_exception"
+            return self.trace_dispatch
+        if event == 'c_return':
+            print "c_return"
+            return self.trace_dispatch
+        print 'bdb.Bdb.dispatch: unknown debugging event:', repr(event)
+        return self.trace_dispatch
+
     def set_dispatcher(self):
+        print "######## set dispatcher ##########"
         self.can_debug = False
         frame = sys._getframe().f_back
         self.reset()
@@ -129,14 +168,15 @@ class Debugger(bdb.Bdb, BaseHTTPServer.BaseHTTPRequestHandler):
             frame.f_trace = self.trace_dispatch
             self.botframe = frame
             frame = frame.f_back
-        self.set_continue()
+        # self.set_continue()
         sys.settrace(self.trace_dispatch)
-        #threading.settrace(self.trace_dispatch)
+        threading.settrace(self.trace_dispatch)
 
     def remove_dispatcher(self):
+        print "######## remove dispatcher ##########"
         self.can_debug = False
         sys.settrace(None)
-        #threading.settrace(None)
+        threading.settrace(None)
 
     def start_debugging(self):
         self.can_debug = True
@@ -281,6 +321,10 @@ class Debugger(bdb.Bdb, BaseHTTPServer.BaseHTTPRequestHandler):
             self.quitting = 1
             self.remove_dispatcher()
 
+    def create_server(self, debugger_host, debugger_port):        
+        server_address = (debugger_host, debugger_port)
+        self.http = BaseHTTPServer.HTTPServer(server_address, self)
+
 
     def reset(self):
         bdb.Bdb.reset(self)
@@ -314,6 +358,10 @@ class Debugger(bdb.Bdb, BaseHTTPServer.BaseHTTPRequestHandler):
         """
         Method that get's called when dispatching a call
         """
+        print "Call:", self.canonic(frame.f_code.co_filename), frame.f_lineno
+        print "Can debug", self.can_debug
+        print "stop here", self.stop_here(frame)
+        
         if self.can_debug and self.stop_here(frame):
             #print "Call:", self.canonic(frame.f_code.co_filename), frame.f_lineno
             self.interaction(frame, None)
@@ -322,6 +370,8 @@ class Debugger(bdb.Bdb, BaseHTTPServer.BaseHTTPRequestHandler):
         """
         This function is called when we stop or break at this line.
         """
+        print "Line:", self.canonic(frame.f_code.co_filename), frame.f_lineno
+        print "Can debug", self.can_debug
         if self.can_debug:
             #print "Line:", self.canonic(frame.f_code.co_filename), frame.f_lineno
             self.interaction(frame, None)
@@ -333,6 +383,7 @@ class Debugger(bdb.Bdb, BaseHTTPServer.BaseHTTPRequestHandler):
         They start indexing rows in 0, so we need to substract 1 to every
         line with a breakpoint
         """
+        print "######## get breakpoints ##########"
         breaks = self.breaks.get(filename)
         if breaks:
             return ':'.join([str(i-1) for i in breaks])
@@ -344,6 +395,7 @@ class Debugger(bdb.Bdb, BaseHTTPServer.BaseHTTPRequestHandler):
         This will add a breakpoint to the program.
         based on do_break in PDB.
         """
+        print "######## add breakpoint ##########"
         funcname = None
         f = self.lookupmodule(filename)
         if not f:
@@ -362,6 +414,7 @@ class Debugger(bdb.Bdb, BaseHTTPServer.BaseHTTPRequestHandler):
         if line:
             # now set the break point
             err = self.set_break(filename, line, temporary, condition, funcname)
+            print self.breaks.get(filename)
             if err:
                 return False
             else:
@@ -370,7 +423,7 @@ class Debugger(bdb.Bdb, BaseHTTPServer.BaseHTTPRequestHandler):
         return False
 
     def removeBreakpoint(self, filename, line):
-
+        print "######## remove breakpoints ##########"
         lineno = int(line)
         err = self.clear_break(filename, lineno)
         if err:
@@ -379,6 +432,7 @@ class Debugger(bdb.Bdb, BaseHTTPServer.BaseHTTPRequestHandler):
         return True
 
     def interaction(self, frame, traceback):
+        print "######## interaction ##########"
         self.valid_read = False
         self.setup(frame, traceback)
         while not self.valid_read:
@@ -457,3 +511,5 @@ class Debugger(bdb.Bdb, BaseHTTPServer.BaseHTTPRequestHandler):
         self.valid_read = True
 
         return
+
+debug = Debugger()

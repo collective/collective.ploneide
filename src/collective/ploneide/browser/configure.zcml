@@ -18,68 +18,24 @@
       directory="icons"
       />
 
-  <include file="debugger_boxes.zcml" />
-
   <browser:page
       for="*"
-      name="ploneide"
-      class=".ploneide.PloneideView"
-      template="templates/ploneide.pt"
-      permission="zope.Public"
-      />
-
-  <!-- ide html -->
-  <browser:page
-      for="*"
-      class=".ploneide.IdeBaseView"
-      name="idebase"
-      template="templates/idebase.pt"
+      name="start-debugging"
+      class=".debugger.StartDebugger"
       permission="zope.Public"
       />
 
   <browser:page
       for="*"
-      name="list-directory"
-      class=".ploneide.ListDirectory"
-      template="templates/directory_contents.pt"
+      name="stop-debugging"
+      class=".debugger.StopDebugger"
       permission="zope.Public"
       />
 
   <browser:page
       for="*"
-      name="directory-content-ajax"
-      attribute="directory_content_ajax"
-      class=".ploneide.ListDirectoryTree"
-      permission="zope.Public"
-      />
-
-  <browser:page
-      for="*"
-      name="manage-sessions"
-      template="templates/manage_sessions.pt"
-      permission="zope.Public"
-      />
-
-  <browser:page
-     for="*"
-      name="save-as"
-      class=".ploneide.SaveAsView"
-      template="templates/save_as.pt"
-      permission="zope.Public"
-      />
-
-  <browser:page
-     for="*"
-      name="context-info"
-      class=".ploneide.ContextInfoView"
-      template="templates/context_info.pt"
-      permission="zope.Public"
-      />
-
-  <browser:page
-      for="*"
-      name="test-dir"
-      class=".ploneide.TestDir"
+      name="test-view"
+      class=".debugger.TestView"
       permission="zope.Public"
       />
 <!--

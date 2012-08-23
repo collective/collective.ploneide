@@ -59,7 +59,7 @@ function addBreakpointsForFile(){
 $(document).bind("file-opened", addBreakpointsForFile);
 
 function addBreakpoint($this) {
-    var lineno = $this.html();
+    var lineno = $this.text();
     var filename = env.editor.session.filename;
 
     // This wil *only* work for python files
@@ -97,7 +97,7 @@ function addBreakpoint($this) {
     var url = 'http://'+window.$PLONEIDE_HOST+':'+window.$PLONEIDE_PORT;
     jQuery.post(url,
                 {'command':'add-breakpoint',
-                 'line':$this.html(),
+                 'line':lineno,
                  'filename':env.editor.session.filename
                  },
                 function(results){
@@ -107,7 +107,7 @@ function addBreakpoint($this) {
 }
 
 function removeBreakpoint($this) {
-    var lineno = $this.html();
+    var lineno = $this.text();
     var filename = env.editor.session.filename;
 
     var file_bkpt = env.$breakpoints[filename];
@@ -136,7 +136,7 @@ function removeBreakpoint($this) {
 
     jQuery.post(url,
                 {'command':'remove-breakpoint',
-                 'line':$this.html(),
+                 'line':lineno,
                  'filename':env.editor.session.filename
                  },
                 function(results){
@@ -199,7 +199,7 @@ function getDebuggerStatus(){
 function checkDebuggerStopped(){
     // XXX: Reimplement this with socket.io
     var res = getDebuggerStatus();
-    if (res.response == "False" || res.response == ""){
+    if (res.response == "False" || res.response == "" || res.response === undefined){
         // Hide controls
         $(".debugger-controls").css('display','none');
         $('#debugger-console').css('display','none');
