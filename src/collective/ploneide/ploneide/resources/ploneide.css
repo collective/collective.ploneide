@@ -7,6 +7,16 @@
     padding: 0;
 }
 
+#ploneide-down-warning{
+    display: none;
+    background-color: yellow;
+    z-index: 100;
+    position: absolute;
+    border-color: red;
+    border-width: thick;
+    border-style: solid;
+}
+
 /*LOGO MENU*/
 .logo {
     background:url('icons/ploneide_logo.png') no-repeat scroll 0 0 transparent;

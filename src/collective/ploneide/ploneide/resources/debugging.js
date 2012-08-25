@@ -1,47 +1,52 @@
 
 function debuggerStep() {
 
-    jQuery.post('http://'+DEBUGGER_HOST+':'+DEBUGGER_PORT,
+    jQuery.post('http://'+window.$DEBUG_HOST+':'+window.$DEBUG_PORT,
                 {'command':'step'
                  },
                 function(results){
-                    $(document).trigger("debugger-step");
+                    // $(document).trigger("debugger-step");
                 });
+
+    $(document).trigger("debugger-step");
 
 }
 
 
 function debuggerNext() {
 
-    jQuery.post('http://'+DEBUGGER_HOST+':'+DEBUGGER_PORT,
+    jQuery.post('http://'+window.$DEBUG_HOST+':'+window.$DEBUG_PORT,
                 {'command':'next'
                  },
                 function(results){
-                    $(document).trigger("debugger-next");
+                    // $(document).trigger("debugger-next");
                 });
 
+    $(document).trigger("debugger-next");
 }
 
 function debuggerContinue() {
 
-    jQuery.post('http://'+DEBUGGER_HOST+':'+DEBUGGER_PORT,
+    jQuery.post('http://'+window.$DEBUG_HOST+':'+window.$DEBUG_PORT,
                 {'command':'continue'
                  },
                 function(results){
-                    $(document).trigger("debugger-continue");
+                    // $(document).trigger("debugger-continue");
                 });
 
+    $(document).trigger("debugger-continue");
 }
 
 function debuggerReturn() {
 
-    jQuery.post('http://'+DEBUGGER_HOST+':'+DEBUGGER_PORT,
+    jQuery.post('http://'+window.$DEBUG_HOST+':'+window.$DEBUG_PORT,
                 {'command':'return'
                  },
                 function(results){
-                    $(document).trigger("debugger-return");
+                    // $(document).trigger("debugger-return");
                 });
 
+    $(document).trigger("debugger-return");
 }
 
 function addBreakpointsForFile(){
@@ -170,57 +175,58 @@ $(document).bind("debugger-next", removeCurrentLinePositionMarker);
 $(document).bind("debugger-continue", removeCurrentLinePositionMarker);
 $(document).bind("debugger-return", removeCurrentLinePositionMarker);
 
-function getDebuggerStatus(){
+function checkDebuggerStopped(){
     var url = 'http://'+window.$PLONEIDE_HOST+':'+window.$PLONEIDE_PORT;
 
     var res = jQuery.ajax({type: 'POST',
                             url: url,
-                            async : false,
+                            async : true,
                             data: {'command': 'is-stopped'},
                             success: function(results){
-                                        if (results != "False" && results != ""){
-                                            var split = results.split(":");
-                                            var full_path = split[0];
-                                            var lineno = split[1];
-                                            loadFileFromFullPath(full_path);
-                                            env.editor.scrollToLine(lineno, true);
-                                            addBreakpointsForFile();
-                                            var range = new Range(lineno -1, 0, lineno*1, 0); // Adding *1 to the string will cast it to int (???????)
-                                            env.editor.session.$debugger_current_line_marker = env.editor.session.addMarker(range, "debugger_current_line", "line");
-                                        }
+                                if (results != "False" && results != ""){
+                                    var split = results.split(":");
+                                    var full_path = split[0];
+                                    var lineno = split[1];
+                                    loadFileFromFullPath(full_path);
+                                    env.editor.scrollToLine(lineno, true);
+                                    addBreakpointsForFile();
+                                    var range = new Range(lineno -1, 0, lineno*1, 0); // Adding *1 to the string will cast it to int (???????)
+                                    env.editor.session.$debugger_current_line_marker = env.editor.session.addMarker(range, "debugger_current_line", "line");
 
-                                        }
-                            });
+                                    // Show controls
+                                    $(".debugger-controls").css('display','block');
+                                    $('#debugger-console').css('display','block');
+                                    $('#debugger-watched-variable-box').css('display','block');
+                                    $('#debugger-local-scope-box').css('display','block');
+                                    $('#debugger-global-scope-box').css('display','block');
+                                    // var height = $('#editor-main').height() - 75;
+                                    // $('#debugger-console').height(height * 0.3);
+                                    // $('#editor').height(height * 0.7);
+                                    // env.split.resize();
+                                    $(document).trigger("debugger-stopped");
+                                    
+                                    resizeEditorSection();
+                                }
+                                else{
+                                    // Hide controls
+                                    $(".debugger-controls").css('display','none');
+                                    $('#debugger-console').css('display','none');
+                                    $('#debugger-watched-variable-box').css('display','none');
+                                    $('#debugger-local-scope-box').css('display','none');
+                                    $('#debugger-global-scope-box').css('display','none');
+                                    // var height = $('#editor-main').height() - 75;
+                                    // $('#editor').height(height);
+                                    // env.split.resize();
+                                    resizeEditorSection();
+                                    var debugger_checkbox = $("#debugger-checkbox:checked");
+                                    if (debugger_checkbox.val() !== undefined){
+                                        setTimeout(checkDebuggerStopped, 500);
+                                    }
+                                }
 
-    return res;
-}
+                            }           
+                });
 
-
-function checkDebuggerStopped(){
-    // XXX: Reimplement this with socket.io
-    var res = getDebuggerStatus();
-    if (res.response == "False" || res.response == "" || res.response === undefined){
-        // Hide controls
-        $(".debugger-controls").css('display','none');
-        $('#debugger-console').css('display','none');
-        var height = $('#editor-main').height() - 75;
-        $('#editor').height(height);
-        env.split.resize();
-        var debugger_checkbox = $("#debugger-checkbox:checked");
-        if (debugger_checkbox.val() !== undefined){
-            setTimeout(checkDebuggerStopped, 500);
-        }
-    }
-    else{
-        $(document).trigger("debugger-stopped");
-        // Show controls
-        $(".debugger-controls").css('display','block');
-        $('#debugger-console').css('display','block');
-        var height = $('#editor-main').height() - 75;
-        $('#debugger-console').height(height * 0.3);
-        $('#editor').height(height * 0.7);
-        env.split.resize();
-    }
 }
 
 $(document).bind("debugger-step", checkDebuggerStopped);

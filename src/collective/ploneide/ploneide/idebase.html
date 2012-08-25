@@ -91,7 +91,7 @@
         <div id="editor"></div>
         <!--<input id="cockpitInput" type="text"/>-->
         <div id="debugger-console">
-            <tal:debugger_boxes content="structure context/@@debugger-console-box"/>
+            <!--<tal:debugger_boxes content="structure context/@@debugger-console-box"/>-->
         </div>
     </div>
 </div>
@@ -123,7 +123,7 @@
                         value="True"
                         onclick="toggleDebugging()"/> <span>Enable debugger</span>
                 </div>
-                <!--<div class="debugger-controls panel-box">
+                <div class="debugger-controls panel-box">
                     <img
                         src="resources/icons/debugger_step.png"
                         alt="Debugger continue" i18n:attributes="alt"
@@ -144,6 +144,7 @@
                         alt="Debugger continue" i18n:attributes="alt"
                         onclick="debuggerReturn()"/>
                 </div>
+                <!--
                 <div id="watched-scope-placeholder" class="panel-box" >
                 <tal:debugger_boxes content="structure context/@@watched-variables-box"/>
                 </div>

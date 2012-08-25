@@ -10,6 +10,29 @@ class IStopDebugger(Interface):
     This view will unset the system dispatcher to stop debugging
     """
 
+class IAddBreakpoint(Interface):
+    """
+    This view will set the system dispatcher to allow debugging
+    """
+
+class IRemoveBreakpoint(Interface):
+    """
+    This view will unset the system dispatcher to stop debugging
+    """
+
+class IGetBreakpoints(Interface):
+    """
+    This view will unset the system dispatcher to stop debugging
+    """
+
+class ITestView(Interface):
+    """
+    This view will set the system dispatcher to allow debugging
+    """
+
+
+
+
 class IPloneideView(Interface):
     """
     This view will contain the editor

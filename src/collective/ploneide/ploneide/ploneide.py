@@ -19,8 +19,6 @@ from static_check import StaticCheck
 
 from thread import start_new_thread
 
-from collective.ploneide.ploneide.debugger import debug
-
 #from threading import Thread
 
 #from config import HOST
@@ -127,14 +125,14 @@ class PloneIDEServer(SocketServer.TCPServer):
     def _ping_server(self, url):
         up = False
         try:
+            # print "try"
             urllib2.urlopen(url, timeout=0.2)
             up = True
-#            if self.zope_pid:
-#                (stdout, stderr) = self.zope_pid.communicate()
-#                self.stdout += stdout
-#                self.stderr += stderr
-
         except urllib2.URLError:
+            # print "except1"
+            up = False
+        except:
+            # print "except2"
             up = False
 
         return up
@@ -238,41 +236,78 @@ class PloneIDEServer(SocketServer.TCPServer):
         return output
 
     def dispatch_debugger_command(self, params):
+        result = "" 
+        # print "CHECK DEBUGGING"
         if self.check_debug_running():
+            # print "PARAMS", params
             url = "http://%s:%s" % (self.config.debug_host,
                                     self.config.debug_port)
             result = urllib2.urlopen(url, params)
-        else:
-            result = ""
 
         return result
 
     def start_debugging(self):
-        # XXX: For now, this only works if the instance is up
-        url = "http://%s:%s/@@start-debugging" % (self.config.instance_host,
-                                self.config.instance_port)
-        urllib2.urlopen(url)
-        return True
+        result = ""
+        if self.check_plone_instance_running():
+            url = "http://%s:%s/@@start-debugging" % (self.config.instance_host,
+                                                      self.config.instance_port)
+            result = urllib2.urlopen(url)
+
+        return result
         
     def stop_debugging(self):
-        # XXX: For now, this only works if the instance is up
-        url = "http://%s:%s/@@stop-debugging" % (self.config.instance_host,
-                                self.config.instance_port)
-        urllib2.urlopen(url)
-        return True
+        result = ""
+        if self.check_plone_instance_running():
+            url = "http://%s:%s/@@stop-debugging" % (self.config.instance_host,
+                                                     self.config.instance_port)
+            result = urllib2.urlopen(url)
+
+        return result
         
     def add_breakpoint(self, filename, line, condition=None, temporary = 0):
-        debug.addBreakpoint(filename=filename, 
-                            line=line, 
-                            condition=condition, 
-                            temporary=temporary)
+        result = ""
+        params = {'filename': filename,
+                  'line': line,
+                  'condition': condition,
+                  'temporary': temporary,}
+
+        # First, check with the instance, if it is responding, then add the breakpoint
+        if self.check_plone_instance_running():
+            url = "http://%s:%s/@@add-breakpoint" % (self.config.instance_host,
+                                                     self.config.instance_port)
+            result = urllib2.urlopen(url, urllib.urlencode(params))
+
+        # If it's not, then probably we are in a debug session, so send the breakpoint there
+        params['command'] = 'add-breakpoint'
+        if self.check_debug_running():
+            url = "http://%s:%s" % (self.config.debug_host,
+                                    self.config.debug_port)
+            result = urllib2.urlopen(url, urllib.urlencode(params))
+
+        return result
 
     def remove_breakpoint(self, filename, line):
-        debug.removeBreakpoint(filename=filename, 
-                               line=line)
+        result = ""
+        params = {'filename': filename,
+                  'line': line,}
+
+        # First, check with the instance, if it is responding, then add the breakpoint
+        if self.check_plone_instance_running():
+            url = "http://%s:%s/@@remove-breakpoint" % (self.config.instance_host,
+                                                     self.config.instance_port)
+            result = urllib2.urlopen(url, urllib.urlencode(params))
+
+        # If it's not, then probably we are in a debug session, so send the breakpoint there
+        params['command'] = 'remove-breakpoint'
+        if self.check_debug_running():
+            url = "http://%s:%s" % (self.config.debug_host,
+                                    self.config.debug_port)
+            result = urllib2.urlopen(url, urllib.urlencode(params))
+
+        return result
 
     def get_breakpoints(self, filename):
-        return debug.getBreakpoints(filename=filename)
+        pass
 
     def static_check(self, content=""):
 
@@ -316,7 +351,7 @@ class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         self.debugger_commands = ['is-stopped',
                                   'get-debugger-scope',
                                   'add-watched-variable',
-                                  'eval-code']
+                                  'eval-code',]
 
         self.debugger_dispatch = self.ploneide_server.dispatch_debugger_command
 
@@ -331,12 +366,12 @@ class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
             'get-directory-content-ajax': self.ploneide_server.directory_content_ajax,
             'open-file': self.ploneide_server.open_file,
             'save-file': self.ploneide_server.save_file,
-            'add-breakpoint': self.ploneide_server.add_breakpoint,
-            'remove-breakpoint': self.ploneide_server.remove_breakpoint,
-            'get-breakpoints': self.ploneide_server.get_breakpoints,
             'python-static-check': self.ploneide_server.static_check,
             'start-debugging': self.ploneide_server.start_debugging,
             'stop-debugging': self.ploneide_server.stop_debugging,
+            'add-breakpoint': self.ploneide_server.add_breakpoint,
+            'remove-breakpoint': self.ploneide_server.remove_breakpoint,
+            'get-breakpoints': self.ploneide_server.get_breakpoints,
                                   
         }
 
@@ -374,11 +409,16 @@ class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
             # Then we remove it from the list of params
             del(self.params['command'])
             # And we call the proper function
+            # print "COMMAND:", command
+            # print "self.params", self.params
             self.result = self.commands_map[command](**self.params)
         else:
             # This is a command intended for the debugger
             params = urllib.urlencode(self.params)
             self.result = self.debugger_dispatch(params)
+            if self.result:
+                self.result = self.result.read()
+            # print "RETURNED FROM DEBUGGER: ", self.result
 
     def do_GET(self):
         """

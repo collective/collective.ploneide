@@ -56,6 +56,12 @@
 
 </head>
 <body>
+
+    <div id="ploneide-down-warning">
+        <p>
+            <span>Warning: PloneIDE is currently down.</span>
+        </p>
+    </div>
     <iframe class="ui-layout-south" src="" width="100%" height="100%">
       <p>Your browser does not support iframes.</p>
     </iframe>
@@ -91,6 +97,37 @@
             panelsSetup();
           }
         });
+
+        //load debugger boxes
+        $.ajax({
+          url: 'watched_variables_box.html',
+          async: false,
+          success: function(data) {
+            $('div#item-debug').append(data);
+          }
+        });
+        $.ajax({
+          url: 'local_variables_box.html',
+          async: false,
+          success: function(data) {
+            $('div#item-debug').append(data);
+          }
+        });
+        $.ajax({
+          url: 'global_variables_box.html',
+          async: false,
+          success: function(data) {
+            $('div#item-debug').append(data);
+          }
+        });
+        $.ajax({
+          url: 'debugger_console_box.html',
+          async: false,
+          success: function(data) {
+            $('div#debugger-console').append(data);
+          }
+        });        
+
 
         /*XXX THIS SHOULD BE IN A MODULEEEEE*/
         /*var panel_action_buttons = '<div class="button-project-tree"></div><div class="button-pin"></div>'*/

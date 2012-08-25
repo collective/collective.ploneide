@@ -14,6 +14,9 @@ from copy import deepcopy
 from App import config
 
 
+line_prefix = '\n-> '
+
+
 class Debugger(bdb.Bdb, BaseHTTPServer.BaseHTTPRequestHandler):
     """
     Main debugger for PloneIDE.
@@ -21,9 +24,20 @@ class Debugger(bdb.Bdb, BaseHTTPServer.BaseHTTPRequestHandler):
     """
 
     def __call__(self, request, client_address, server):
-        BaseHTTPServer.BaseHTTPRequestHandler.__init__(self, request, client_address, server)
+        try:
+            BaseHTTPServer.BaseHTTPRequestHandler.__init__(self, request, client_address, server)   
+        except:
+            pass
 
     def __init__(self):
+        # print "####################### INIT ################"
+        # self.print_stack_trace()
+
+        self.debugger_commands = {'is-stopped': self.is_stopped,
+                                  'get-debugger-scope': self.get_scope,
+                                  'add-watched-variable': self.add_watched_variable,
+                                  'eval-code': self.eval_code,}
+
         bdb.Bdb.__init__(self)
         # We use this variable to know if the debugger has stopped execution
         self.stopped = False
@@ -113,11 +127,15 @@ class Debugger(bdb.Bdb, BaseHTTPServer.BaseHTTPRequestHandler):
         False otherwise
         """
         if self.stopped:
-            return "%s:%s" %(self.canonic(self.curframe.f_code.co_filename),
+            # print "IS_STOPPED: ", "%s:%s" %(self.canonic(self.curframe.f_code.co_filename),
+            #                                 self.curframe.f_lineno)
+            result = "%s:%s" %(self.canonic(self.curframe.f_code.co_filename),
                             self.curframe.f_lineno)
 
         else:
-            return False
+            result = ""
+
+        return result
 
     # def trace_dispatch(self, arg1, arg2, arg3):
     #     # print "######## trace dispatch ##########"
@@ -130,37 +148,89 @@ class Debugger(bdb.Bdb, BaseHTTPServer.BaseHTTPRequestHandler):
 
         # print "%s:%s" %(self.canonic(self.curframe.f_code.co_filename),
         #                     self.curframe.f_lineno)
-    def trace_dispatch(self, frame, event, arg):
-        print "trace_dispatch:", self.canonic(frame.f_code.co_filename), frame.f_lineno
-        if self.quitting:
-            print "self.quitting"
-            return # None
-        if event == 'line':
-            print "line"
-            return self.dispatch_line(frame)
-        if event == 'call':
-            print "call"
-            return self.dispatch_call(frame, arg)
-        if event == 'return':
-            print "return"
-            return self.dispatch_return(frame, arg)
-        if event == 'exception':
-            print "exception"
-            return self.dispatch_exception(frame, arg)
-        if event == 'c_call':
-            print "c_call"
+
+    def dispatch_call(self, frame, arg):
+        # XXX 'arg' is no longer used
+        if self.botframe is None:
+            # First call of dispatch since reset()
+            self.botframe = frame.f_back # (CT) Note that this may also be None!
             return self.trace_dispatch
-        if event == 'c_exception':
-            print "c_exception"
-            return self.trace_dispatch
-        if event == 'c_return':
-            print "c_return"
-            return self.trace_dispatch
-        print 'bdb.Bdb.dispatch: unknown debugging event:', repr(event)
+        # if not (self.stop_here(frame) or self.break_anywhere(frame)):
+        #     # No need to trace this function
+        #     return # None
+        self.user_call(frame, arg)
+        if self.quitting: raise BdbQuit
         return self.trace_dispatch
 
+    # def trace_dispatch(self, frame, event, arg):
+    #     if self.quitting:
+    #         print "self.quitting"
+    #         return # None
+    #     if event == 'line':
+    #         if 'debugger.py' in self.canonic(frame.f_code.co_filename):
+    #             print "trace_dispatch line:", self.canonic(frame.f_code.co_filename), frame.f_lineno
+    #             print "Stop here: ", self.stop_here(frame)
+    #             print "break here: ", self.break_here(frame)
+    #             print "STOP HERE"
+    #             print "self.skip", self.skip
+    #             try:
+    #                 print "self.is_skipped_module", self.is_skipped_module(frame.f_globals.get('__name__'))
+    #             except:
+    #                 pass
+    #             print "frame is self.stopframe", frame is self.stopframe
+    #             print "frame is self.botframe", frame is self.botframe
+    #             print "BREAK HERE"
+    #             filename = self.canonic(frame.f_code.co_filename)
+    #             print "filename in self.breaks", filename in self.breaks
+    #             lineno = frame.f_lineno
+    #             try:
+    #                 print "lineno in self.breaks[filename]", lineno in self.breaks[filename]
+    #                 lineno = frame.f_code.co_firstlineno
+    #                 print "lineno in self.breaks[filename]", lineno in self.breaks[filename]
+    #             except:
+    #                 pass
+
+    #         return self.dispatch_line(frame)
+    #     if event == 'call':
+    #         if 'debugger.py' in self.canonic(frame.f_code.co_filename):
+    #             print "trace_dispatch call:", self.canonic(frame.f_code.co_filename), frame.f_lineno
+    #             print "Stop here: ", self.stop_here(frame)
+    #             print "break anywhere: ", self.break_anywhere(frame)
+    #             print "STOP HERE"
+    #             print "self.skip", self.skip
+    #             try:
+    #                 print "self.is_skipped_module", self.is_skipped_module(frame.f_globals.get('__name__'))
+    #             except:
+    #                 pass
+    #             print "frame is self.stopframe", frame is self.stopframe
+    #             print "frame is self.botframe", frame is self.botframe
+    #             print "BREAK ANYWHERE"
+    #             print self
+    #             print "self.canonic(frame.f_code.co_filename) in self.breaks", self.canonic(frame.f_code.co_filename) in self.breaks
+    #             print "self.breaks", self.breaks
+    #             print "self.canonic(frame.f_code.co_filename)", self.canonic(frame.f_code.co_filename)
+
+    #         return self.dispatch_call(frame, arg)
+    #     if event == 'return':
+    #         # print "return"
+    #         return self.dispatch_return(frame, arg)
+    #     if event == 'exception':
+    #         # print "exception"
+    #         return self.dispatch_exception(frame, arg)
+    #     if event == 'c_call':
+    #         # print "c_call"
+    #         return self.trace_dispatch
+    #     if event == 'c_exception':
+    #         # print "c_exception"
+    #         return self.trace_dispatch
+    #     if event == 'c_return':
+    #         # print "c_return"
+    #         return self.trace_dispatch
+    #     print 'bdb.Bdb.dispatch: unknown debugging event:', repr(event)
+    #     return self.trace_dispatch
+
     def set_dispatcher(self):
-        print "######## set dispatcher ##########"
+        # print "######## set dispatcher ##########"
         self.can_debug = False
         frame = sys._getframe().f_back
         self.reset()
@@ -168,12 +238,12 @@ class Debugger(bdb.Bdb, BaseHTTPServer.BaseHTTPRequestHandler):
             frame.f_trace = self.trace_dispatch
             self.botframe = frame
             frame = frame.f_back
-        # self.set_continue()
+        self.set_continue()
         sys.settrace(self.trace_dispatch)
         threading.settrace(self.trace_dispatch)
 
     def remove_dispatcher(self):
-        print "######## remove dispatcher ##########"
+        # print "######## remove dispatcher ##########"
         self.can_debug = False
         sys.settrace(None)
         threading.settrace(None)
@@ -358,9 +428,9 @@ class Debugger(bdb.Bdb, BaseHTTPServer.BaseHTTPRequestHandler):
         """
         Method that get's called when dispatching a call
         """
-        print "Call:", self.canonic(frame.f_code.co_filename), frame.f_lineno
-        print "Can debug", self.can_debug
-        print "stop here", self.stop_here(frame)
+        # print "Call:", self.canonic(frame.f_code.co_filename), frame.f_lineno
+        # print "Can debug", self.can_debug
+        # print "stop here", self.stop_here(frame)
         
         if self.can_debug and self.stop_here(frame):
             #print "Call:", self.canonic(frame.f_code.co_filename), frame.f_lineno
@@ -370,8 +440,8 @@ class Debugger(bdb.Bdb, BaseHTTPServer.BaseHTTPRequestHandler):
         """
         This function is called when we stop or break at this line.
         """
-        print "Line:", self.canonic(frame.f_code.co_filename), frame.f_lineno
-        print "Can debug", self.can_debug
+        # print "Line:", self.canonic(frame.f_code.co_filename), frame.f_lineno
+        # print "Can debug", self.can_debug
         if self.can_debug:
             #print "Line:", self.canonic(frame.f_code.co_filename), frame.f_lineno
             self.interaction(frame, None)
@@ -383,19 +453,19 @@ class Debugger(bdb.Bdb, BaseHTTPServer.BaseHTTPRequestHandler):
         They start indexing rows in 0, so we need to substract 1 to every
         line with a breakpoint
         """
-        print "######## get breakpoints ##########"
+        # print "######## get breakpoints ##########"
         breaks = self.breaks.get(filename)
         if breaks:
             return ':'.join([str(i-1) for i in breaks])
 
         return
 
-    def addBreakpoint(self, filename, line, condition=None, temporary = 0):
+    def addBreakpoint(self, filename, line, condition=None, temporary=False):
         """
         This will add a breakpoint to the program.
         based on do_break in PDB.
         """
-        print "######## add breakpoint ##########"
+        # print "######## add breakpoint ##########"
         funcname = None
         f = self.lookupmodule(filename)
         if not f:
@@ -414,7 +484,7 @@ class Debugger(bdb.Bdb, BaseHTTPServer.BaseHTTPRequestHandler):
         if line:
             # now set the break point
             err = self.set_break(filename, line, temporary, condition, funcname)
-            print self.breaks.get(filename)
+            # print self.breaks
             if err:
                 return False
             else:
@@ -423,7 +493,7 @@ class Debugger(bdb.Bdb, BaseHTTPServer.BaseHTTPRequestHandler):
         return False
 
     def removeBreakpoint(self, filename, line):
-        print "######## remove breakpoints ##########"
+        # print "######## remove breakpoints ##########"
         lineno = int(line)
         err = self.clear_break(filename, lineno)
         if err:
@@ -432,7 +502,7 @@ class Debugger(bdb.Bdb, BaseHTTPServer.BaseHTTPRequestHandler):
         return True
 
     def interaction(self, frame, traceback):
-        print "######## interaction ##########"
+        # print "######## interaction ##########"
         self.valid_read = False
         self.setup(frame, traceback)
         while not self.valid_read:
@@ -465,12 +535,16 @@ class Debugger(bdb.Bdb, BaseHTTPServer.BaseHTTPRequestHandler):
     def handle_command(self):
         try:
             command = self.params['command']
-            print "#### HANDLE: %s"%command
+            # print "#### HANDLE: %s"%command
             del(self.params['command'])
-            self.result = getattr(self, "do_%s"%command)(**self.params)
+
+            if command in self.debugger_commands:
+                self.result = self.debugger_commands[command](**self.params)
+            else:
+                self.result = getattr(self, "do_%s"%command)(**self.params)
+                self.valid_read = True
         except:
             self.result = ""
-
 
     def do_POST(self):
         """
@@ -483,7 +557,7 @@ class Debugger(bdb.Bdb, BaseHTTPServer.BaseHTTPRequestHandler):
         # XXX: Need to do stronger checks, and proper data return in case
         # of possible errors
         self.params = {}
-        self.results = ""
+        self.result = ""
 
         content = cgi.FieldStorage(
                     fp=self.rfile,
@@ -503,13 +577,36 @@ class Debugger(bdb.Bdb, BaseHTTPServer.BaseHTTPRequestHandler):
 
         instance_port = config.getConfiguration().servers[0].port
 
-        self.send_header("Access-Control-Allow-Origin", "http://localhost:%s" % instance_port)
+        self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
         self.end_headers()
+
+        # print "TO RETURN:", self.result
         self.wfile.write(self.result)
 
-        self.valid_read = True
-
         return
+
+    def do_GET(self):
+        """
+        GET handler
+        """
+
+        # XXX: Need to do stronger checks, and proper data return in case
+        # of possible errors
+        #import pdb;pdb.set_trace()
+
+        self.params = {}
+        self.result = False
+
+        # print "DO_GET", self.path
+
+        self.send_response(200) 
+
+        instance_port = config.getConfiguration().servers[0].port
+
+        self.send_header("Access-Control-Allow-Origin", "http://localhost:%s" % instance_port)
+        self.send_header("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
+
+        self.end_headers()
 
 debug = Debugger()

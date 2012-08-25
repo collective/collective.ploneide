@@ -34,6 +34,20 @@
 
   <browser:page
       for="*"
+      name="add-breakpoint"
+      class=".debugger.AddBreakpoint"
+      permission="zope.Public"
+      />
+
+  <browser:page
+      for="*"
+      name="remove-breakpoint"
+      class=".debugger.RemoveBreakpoint"
+      permission="zope.Public"
+      />
+
+  <browser:page
+      for="*"
       name="test-view"
       class=".debugger.TestView"
       permission="zope.Public"

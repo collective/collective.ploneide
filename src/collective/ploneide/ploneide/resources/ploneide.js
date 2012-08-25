@@ -22,31 +22,41 @@ function checkPloneRunning(){
 
     setTimeout(checkPloneRunning, 1000);
     
-    $.ajax({type: 'POST',
+    var res = $.ajax({
+            type: 'POST',
             url: url,
             data: {'command': 'check-plone-instance-running'},
-            async : true,
-            success: function(results){
-                    if (results != "False" && results != ""){
-                        $("#current-plone-status > p > img#plone-up").css("display", "inline");
-                        $("#current-plone-status > p > img#plone-down").css("display", "none");
-                        $("img#plone-loading").css("display", "none");
-                        $("#start-plone").attr('disabled', true);
-                        $("#restart-plone").attr('disabled', false);
-                        $("#stop-plone").attr('disabled', false);
-                        $("#debugger-checkbox").attr('disabled', false);
-                    }
-                    else{
-                        $("#current-plone-status > p > img#plone-down").css("display", "inline");
-                        $("#current-plone-status > p > img#plone-up").css("display", "none");
-                        $("#start-plone").attr('disabled', false);
-                        $("#restart-plone").attr('disabled', true);
-                        $("#stop-plone").attr('disabled', true);
-                        $("#debugger-checkbox").attr('disabled', true);
-                    }
-
-                }
+            async: true,
+            timeout: 500
+            
         });
+
+    res.success(function(results){
+        $("#ploneide-down-warning").css("display", "none");
+
+        if (results != "False" && results != ""){
+            $("#current-plone-status > p > img#plone-up").css("display", "inline");
+            $("#current-plone-status > p > img#plone-down").css("display", "none");
+            $("img#plone-loading").css("display", "none");
+            $("#start-plone").attr('disabled', true);
+            $("#restart-plone").attr('disabled', false);
+            $("#stop-plone").attr('disabled', false);
+            // $("#debugger-checkbox").attr('disabled', false);
+        }
+        else{
+            $("#current-plone-status > p > img#plone-down").css("display", "inline");
+            $("#current-plone-status > p > img#plone-up").css("display", "none");
+            $("#start-plone").attr('disabled', false);
+            $("#restart-plone").attr('disabled', true);
+            $("#stop-plone").attr('disabled', true);
+            // $("#debugger-checkbox").attr('disabled', true);
+        }
+
+    });
+
+    res.error(function(){
+        $("#ploneide-down-warning").css("display", "inline");
+    });
 
 }
 
