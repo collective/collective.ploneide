@@ -15,7 +15,6 @@ class StartDebugger(BrowserView):
     implements(IStartDebugger)
 
     def __call__(self):
-        print debug
         debug.set_dispatcher()
         debug.start_debugging()
 

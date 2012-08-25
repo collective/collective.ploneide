@@ -152,6 +152,7 @@ class PloneIDEServer(SocketServer.TCPServer):
     def start_plone_instance(self,
                              sauna=False,
                              debugger=False,
+                             bkpts=[],
                              lines_console=300):
         #import pdb;pdb.set_trace()
         #XXX: There *MUST* be a better way than this...
@@ -164,18 +165,20 @@ class PloneIDEServer(SocketServer.TCPServer):
                                           str(self.config.debug_port),
                                           str(sauna),
                                           str(debugger),
-                                          str(self.config.config_file)],
-                                         env=env,
-                                         stdout=subprocess.PIPE,
-                                         stderr=subprocess.PIPE)
+                                          str(self.config.config_file),
+                                          json.dumps(bkpts)],
+                                          env=env,
+                                          stdout=subprocess.PIPE,
+                                          stderr=subprocess.PIPE)
         # self.zope_pid = subprocess.Popen(["python",
         #                                   "start_plone.py",
         #                                   str(self.config.debug_host),
         #                                   str(self.config.debug_port),
         #                                   str(sauna),
         #                                   str(debugger),
-        #                                   str(self.config.config_file)],
-        #                                  env=env)
+        #                                   str(self.config.config_file),
+        #                                   json.dumps(bkpts)],
+        #                                   env=env)
         self.lines_console = lines_console
         self.stdout = []
         self.stderr = []
@@ -374,8 +377,10 @@ class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
             'get-breakpoints': self.ploneide_server.get_breakpoints,
                                   
         }
-
-        SimpleHTTPServer.SimpleHTTPRequestHandler.__init__(self, *args)
+        try:
+            SimpleHTTPServer.SimpleHTTPRequestHandler.__init__(self, *args)
+        except:
+            pass
 
     def decode_params(self):
         """
@@ -497,10 +502,15 @@ class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
                              'CONTENT_TYPE': self.headers['Content-Type'],
                              }
         )
-
         for key in content.keys():
-            self.params[key] = content[key].value
-
+            if isinstance(content[key], list):
+                # For some reason, when we get a list, the key name, ends
+                # with '[]' in it's name (??) that's why we need to do
+                # key[:-2] in the params key
+                self.params[key[:-2]] = [i.value for i in content[key]]
+            else:
+                self.params[key] = content[key].value
+            
         self.dispatch_command()
 
         # Begin the response

@@ -41,7 +41,7 @@ function checkPloneRunning(){
             $("#start-plone").attr('disabled', true);
             $("#restart-plone").attr('disabled', false);
             $("#stop-plone").attr('disabled', false);
-            // $("#debugger-checkbox").attr('disabled', false);
+            $("#debugger-checkbox").attr('disabled', false);
         }
         else{
             $("#current-plone-status > p > img#plone-down").css("display", "inline");
@@ -49,7 +49,8 @@ function checkPloneRunning(){
             $("#start-plone").attr('disabled', false);
             $("#restart-plone").attr('disabled', true);
             $("#stop-plone").attr('disabled', true);
-            // $("#debugger-checkbox").attr('disabled', true);
+            $("#debugger-checkbox").selected(false)
+            $("#debugger-checkbox").attr('disabled', true);
         }
 
     });
@@ -64,6 +65,7 @@ function startPlone(){
     var url = 'http://'+window.$PLONEIDE_HOST+':'+window.$PLONEIDE_PORT;
     var debugger_checkbox = $("#debugger-checkbox:checked");
     var sauna_checkbox = $("#use-sauna-reload:checked");
+    var bkpts = [];
 
     if (debugger_checkbox.val()){
         debugger_checkbox = true;
@@ -79,11 +81,19 @@ function startPlone(){
         sauna_checkbox = false;
     }
     $("img#plone-loading").css("display", "inline");
+    for (filename in env.$breakpoints){
+        var file_bkpts = env.$breakpoints[filename];
+        for (lineno in file_bkpts){
+            var condition = file_bkpts[lineno]['condition'];
+            bkpts.push(filename + ':' + lineno + ':' + condition);
+        }
+    }
     $.ajax({type: 'POST',
             url: url,
             data: {'command': 'start-plone-instance',
                    'sauna': sauna_checkbox,
-                   'debugger': debugger_checkbox
+                   'debugger': debugger_checkbox,
+                   'bkpts': JSON.stringify(bkpts)
                     },
             async : true,
             success: function(results){

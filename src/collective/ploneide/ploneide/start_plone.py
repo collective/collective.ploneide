@@ -70,6 +70,7 @@ if __name__ == '__main__':
     load_debugger = sys.argv[4] == 'true' and True or False
 
     plone_conf_file = sys.argv[5]
+    bkpts = json.loads(str(json.loads(sys.argv[6])))
 
     config = Config(plone_conf_file)
 
@@ -91,6 +92,16 @@ if __name__ == '__main__':
 
     bootstrap = "import Zope2.Startup.run ; Zope2.Startup.run.run()"
 
-    print debug
     debug.create_server(debug_host, debug_port)
+
+    for bkpt in bkpts:
+        filename, lineno, condition = bkpt.split(':')
+        debug.addBreakpoint(filename, 
+                            lineno, 
+                            condition=condition)
+
+    if load_debugger:
+        debug.set_dispatcher()
+        debug.start_debugging()
+
     debug.run(bootstrap)
