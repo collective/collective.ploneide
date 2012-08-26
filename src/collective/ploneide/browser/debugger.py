@@ -2,6 +2,8 @@ from zope.interface import implements
 
 from Products.Five.browser import BrowserView
 
+from Products.CMFCore.utils import getToolByName
+
 from interfaces import IStartDebugger
 from interfaces import IStopDebugger
 from interfaces import IAddBreakpoint
@@ -70,8 +72,9 @@ class TestView(BrowserView):
         return 2
         
     def __call__(self):
-        from time import sleep
-        sleep(2)
+        portal_catalog = getToolByName(self.context, 'portal_catalog')
+        
+        portal_catalog
         for i in range(10):
             i
         self.blah()

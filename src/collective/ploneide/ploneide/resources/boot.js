@@ -183,6 +183,17 @@ function startupPloneIDE() {
         }
     },
     {
+        name: "getCodeDefinition",
+        bindKey: {
+            win: "Ctrl-G",
+            mac: "Command-G",
+            sender: "editor|cli"
+        },
+        exec: function() {
+            getCodeDefinition();
+        }
+    },
+    {
         name: "focusCommandLine",
         bindKey: "shift-esc",
         exec: function(editor, needle) { editor.cmdLine.focus(); },

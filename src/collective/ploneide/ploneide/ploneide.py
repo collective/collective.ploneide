@@ -15,6 +15,8 @@ import subprocess
 
 import signal
 
+from rope.contrib.codeassist import get_definition_location
+
 from static_check import StaticCheck
 
 from thread import start_new_thread
@@ -35,16 +37,18 @@ class PloneIDEServer(SocketServer.TCPServer):
     Base server
     """
 
-    def __init__(self, config, handler):
+    def __init__(self, config, http_handler, rope_project, rope_handler):
         self.config = config
         server_address = (config.ploneide_host, config.ploneide_port)
-        SocketServer.TCPServer.__init__(self, server_address, handler)
+        SocketServer.TCPServer.__init__(self, server_address, http_handler)
         self.stdout = []
         self.stderr = []
         self.stdout_html = ''
         self.stderr_html = ''
         self.read_stdout_thread = None
         self.read_stderr_thread = None
+        self.rope_project = rope_project
+        self.rope_handler = rope_handler
 
     def open_file(self, directory, file_name):
         result = None
@@ -335,6 +339,33 @@ class PloneIDEServer(SocketServer.TCPServer):
     def stop(self):
         self.shutdown()
 
+    def get_code_definition(self, code, line, column):
+        # Calculate the offset
+        index = 0
+        for i in range(int(line)):
+            try:
+                index = code.index('\n', index+1)
+            except:
+                return ""
+
+        offset = index + int(column) + 1
+
+        definition = get_definition_location(self.rope_project, code, offset)
+
+        if definition:
+            fileobject = definition[0]
+            lineno = definition[1]
+
+            if fileobject and lineno:
+                filepath = fileobject.path        
+                return "%s:%s" % (filepath, lineno)
+            else:
+                return ""
+        else:
+            return ""
+
+
+
 
 class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     """
@@ -375,6 +406,7 @@ class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
             'add-breakpoint': self.ploneide_server.add_breakpoint,
             'remove-breakpoint': self.ploneide_server.remove_breakpoint,
             'get-breakpoints': self.ploneide_server.get_breakpoints,
+            'get-code-definition': self.ploneide_server.get_code_definition,
                                   
         }
         try:
