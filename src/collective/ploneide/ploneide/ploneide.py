@@ -350,7 +350,11 @@ class PloneIDEServer(SocketServer.TCPServer):
 
         offset = index + int(column) + 1
 
-        definition = get_definition_location(self.rope_project, code, offset)
+        try:
+            definition = get_definition_location(self.rope_project, code, offset)
+        except:
+            # Something bad happened
+            return ""
 
         if definition:
             fileobject = definition[0]
