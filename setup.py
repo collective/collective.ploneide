@@ -6,8 +6,8 @@ import os
 version = '0.1'
 
 description = "Integrated Development Environment for Plone."
-long_description = open("README.txt").read() + "\n" + \
-                   open(os.path.join("docs", "INSTALL.txt")).read() + "\n" + \
+long_description = open("README.rst").read() + "\n" + \
+                   open(os.path.join("docs", "INSTALL.rst")).read() + "\n" + \
                    open(os.path.join("docs", "CREDITS.txt")).read() + "\n" + \
                    open(os.path.join("docs", "HISTORY.txt")).read()
 
