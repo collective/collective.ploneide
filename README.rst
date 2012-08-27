@@ -20,18 +20,18 @@ Basic editing
 
 The Ace editor is a 100% Javascript editor, capable of doing what most "desktop editors" are capable of:
 
- * Change font size
- * Syntax Highlight
- * Auto indent
- * Block commenting
- * Braces matching
- * Syntax check
- * Undo / Redo
- * Vertical and Horizontal splitting
- * Find text
- * Search and replace
- * Goto Line
- * More... 
+* Change font size
+* Syntax Highlight
+* Auto indent
+* Block commenting
+* Braces matching
+* Syntax check
+* Undo / Redo
+* Vertical and Horizontal splitting
+* Find text
+* Search and replace
+* Goto Line
+* More... 
 
 Session Management
 ------------------
@@ -50,17 +50,17 @@ Contextual information
 
 This is one of the most powerful features. Since this is a contextual IDE, it knows where it was opened, so, from the contextual panel, you can get all sorts of information regarding the current object, and also, actions:
 
- * Portal type
- * Meta type
- * Open the file where the class for this object is defined
- * List of provided interfaces
- * All schema fields for the current object
- * Open the file, and go to the line number, where the widget or field is defined
- * Which workflow policy is being used for this object
- * Open the workflow definition in the ZMI in a new browser tab
- * List of available views
- * Open the template files where these views are defined.
- * Open the python file for the view class, if this is a z3view 
+* Portal type
+* Meta type
+* Open the file where the class for this object is defined
+* List of provided interfaces
+* All schema fields for the current object
+* Open the file, and go to the line number, where the widget or field is defined
+* Which workflow policy is being used for this object
+* Open the workflow definition in the ZMI in a new browser tab
+* List of available views
+* Open the template files where these views are defined.
+* Open the python file for the view class, if this is a z3view 
 
 Those are the options already implemented, but the list could be endless.
 
@@ -92,14 +92,14 @@ Buildout
 
 If you're using buildout, the following steps should be enough:
 
- 1. Have collective.ploneide and collective.recipe.ploneide available inside your src/ directory (preferably using mr.developer)
- 2. Add collective.ploneide to your instance eggs list
- 3. Create a new "ploneide" section with
+1. Have collective.ploneide and collective.recipe.ploneide available inside your src/ directory (preferably using mr.developer)
+2. Add collective.ploneide to your instance eggs list
+3. Create a new "ploneide" section with::
 
-      [ploneide]
-      recipe = collective.recipe.ploneide
+     [ploneide]
+     recipe = collective.recipe.ploneide
 
- 4. Re-run buildout 
+4. Re-run buildout 
 
 Eventually, this process will be replaced to using just the recipe.
 
