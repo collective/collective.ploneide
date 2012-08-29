@@ -367,3 +367,9 @@ img.filesystem-icon {
     overflow: hidden;
     background-repeat: no-repeat;
 }
+
+.ui-tabs-panel {
+    clear: both;
+    float: left;
+    width: 100%;
+}
