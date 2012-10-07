@@ -21,6 +21,8 @@ from static_check import StaticCheck
 
 from thread import start_new_thread
 
+from zcml_frontend.main import ZCMLDirectives
+
 #from threading import Thread
 
 #from config import HOST
@@ -368,7 +370,12 @@ class PloneIDEServer(SocketServer.TCPServer):
         else:
             return ""
 
-
+    def get_zcml_directives(self):
+        old_cwd = os.getcwd()
+        os.chdir('zcml_frontend')
+        directives = ZCMLDirectives()
+        os.chdir(old_cwd)
+        return directives.toString()
 
 
 class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
@@ -411,6 +418,7 @@ class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
             'remove-breakpoint': self.ploneide_server.remove_breakpoint,
             'get-breakpoints': self.ploneide_server.get_breakpoints,
             'get-code-definition': self.ploneide_server.get_code_definition,
+            'get-zcml-directives': self.ploneide_server.get_zcml_directives,
                                   
         }
         try:
