@@ -1,4 +1,5 @@
 <script type="text/javascript" src="jquery/jquery-1.7.1.js"></script>  
+<script type="text/javascript" src="jquery/jquery-ui-1.8.17.custom.min.js"></script>
 <script type="text/javascript" src="resources/zcml_frontend.js"></script>  
 <link rel="stylesheet" type="text/css" media="screen" href="resources/zcml_frontend.css" />
 
@@ -20,8 +21,11 @@
     </div>
 
     <div class="namespaces" >
+        <h1>Namespaces:</h1>
     </div>
     <div class="zcml-directives" >
+        <h1>Directives:</h1>
+        <input type="hidden" value="0" name="directives-count"/>
     </div>
     <div class="footer-elements">
 
@@ -33,7 +37,7 @@
                  class="button"
                  i18n:attributes="alt" />-->
                 <a href="#">Namespaces</a>
-                <ul class="namespaces">
+                <ul class="possible-namespaces">
                     <li>
                         <a href="#"
                            class="namespace-element"
@@ -59,8 +63,8 @@
                      class="button"
                      i18n:attributes="alt" />-->
                 <a href="#">Directives</a>
-                <ul class="directives">
-                    <li class="directive">
+                <ul class="possible-directives">
+                    <li>
                         <a href="#"
                            class="directive-element"
                            data-directive="custom">

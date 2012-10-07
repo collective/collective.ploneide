@@ -13,7 +13,7 @@ directive_namespace_template = """
 """
 
 directive_template = """
-    <li class="directive">
+    <li>
         <a href="#"
            class="directive-element"
            data-directive="%(namespace)s:%(id)s">
