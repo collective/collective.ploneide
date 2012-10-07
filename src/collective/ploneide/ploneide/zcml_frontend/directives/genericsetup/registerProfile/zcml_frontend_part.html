@@ -1,0 +1,51 @@
+<div class="genericsetup_registerProfile">
+
+    <h2>genericsetup:registerProfile</h2>
+    <label for="genericsetup_registerProfile_name_%(element_number)s" class="required_field">Name:</label>
+    <img src="resources/icons/help.png"
+                   title="The name is how GenericSetup will identify your profile." />
+    <input type="input" 
+           id="genericsetup_registerProfile_name_%(element_number)s" 
+           name="genericsetup_registerProfile_name_%(element_number)s"
+           value="default"
+           /> 
+
+    <label for="genericsetup_registerProfile_title_%(element_number)s" >title:</label>
+    <img src="resources/icons/help.png"
+                   title="The title of the profile will show up in the portal_setup tool when you select what profile you want to import. The title may also be used in the portal_quickinstaller if it picks up the profile as the install profile for your package." />
+    <input type="input" 
+           id="genericsetup_registerProfile_title_%(element_number)s" 
+           name="genericsetup_registerProfile_title_%(element_number)s"
+           value=""
+           /> 
+
+    <label for="genericsetup_registerProfile_directory_%(element_number)s" >directory:</label>
+    <img src="resources/icons/help.png"
+                   title="The directory attribute is the relative path to the folder containing the profile information.  The directory name is conventionally the same as the profile name." />
+    <input type="input" 
+           id="genericsetup_registerProfile_directory_%(element_number)s" 
+           name="genericsetup_registerProfile_directory_%(element_number)s"
+           value="profiles/default"
+           />
+    <br />
+
+    <label for="genericsetup_registerProfile_description_%(element_number)s" >description:</label>
+    <img src="resources/icons/help.png"
+                   title="The description gives a brief summary of what the profile is used for." />
+    <input type="input" 
+           id="genericsetup_registerProfile_description_%(element_number)s" 
+           name="genericsetup_registerProfile_description_%(element_number)s"
+           value=""
+           /> 
+
+    <label for="genericsetup_registerProfile_provides_%(element_number)s" >provides:</label>
+    <img src="resources/icons/help.png"
+                   title="The provides attribute tells GenericSetup what kind of profile you are registering. For almost all cases you will be registering an extension profile to extend Plone's base profile." />
+    <input type="input" 
+           size="50"
+           id="genericsetup_registerProfile_provides_%(element_number)s" 
+           name="genericsetup_registerProfile_provides_%(element_number)s"
+           value="Products.GenericSetup.interfaces.EXTENSION"
+           /> 
+
+</div>
