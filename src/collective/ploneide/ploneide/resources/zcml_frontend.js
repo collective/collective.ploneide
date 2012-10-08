@@ -90,6 +90,6 @@ function updateNamespaceValues() {
 }
 
 function bindEvents(){
-    $(".footer-elements a.namespace-element").bind("click", addNameSpace);
-    $(".footer-elements a.directive-element").bind("click", addDirective);
+    $(".top-menu a.namespace-element").bind("click", addNameSpace);
+    $(".top-menu a.directive-element").bind("click", addDirective);
 }
