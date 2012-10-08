@@ -1,0 +1,39 @@
+<div class="resource_directory">
+    <h2>browser:resourceDirectory</h2>
+    <label for="browser_resource_directory_name_%(element_number)s" class="required_field">Name:</label>
+    <img src="resources/icons/help.png"
+                   title="TThe name of the resource. This is the name used in resource urls. Resource urls are of the form site/@@/resourcename, where site is the url of 'site', a folder with a site manager. We make resource urls site-relative (as opposed to content-relative) so as not to defeat caches." />
+    <input type="input" 
+           id="browser_resource_directory_name_%(element_number)s" 
+           name="browser_resource_directory_name_%(element_number)s"
+           value=""
+           /> 
+
+    <label for="browser_resource_directory_directory_%(element_number)s" class="required_field">directory:</label>
+    <img src="resources/icons/help.png"
+                   title="The directory containing the resource data." />
+    <input type="input" 
+           id="browser_resource_directory_directory_%(element_number)s" 
+           name="browser_resource_directory_directory_%(element_number)s"
+           value=""
+           /> 
+    <br />
+
+    <label for="browser_resource_directory_layer_%(element_number)s" >layer:</label>
+    <img src="resources/icons/help.png"
+                   title="The layer the resource should be found in. For information on layers, see the documentation for the skin directive. Defaults to 'default'." />
+    <input type="text" 
+           id="browser_resource_directory_layer_%(element_number)s" 
+           name="browser_resource_directory_layer_%(element_number)s"
+           value=""
+           /> 
+
+    <label for="browser_resource_directory_permission_%(element_number)s" >permission:</label>
+    <img src="resources/icons/help.png"
+                   title="The layer the resource should be found in. For information on layers, see the documentation for the skin directive. Defaults to 'default'." />
+    <input type="text" 
+           id="browser_resource_directory_permission_%(element_number)s" 
+           name="browser_resource_directory_permission_%(element_number)s"
+           value=""
+           /> 
+</div>

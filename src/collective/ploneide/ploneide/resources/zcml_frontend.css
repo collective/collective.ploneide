@@ -46,7 +46,7 @@ ul.add-new-menu > li
    display:inline;
 }
 
-.browser_page, .genericsetup_registerProfile
+.browser_page, .genericsetup_registerProfile, .resource_directory
 {
     border-style: solid;
 }
