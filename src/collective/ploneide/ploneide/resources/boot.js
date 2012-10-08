@@ -225,6 +225,8 @@ function startupPloneIDE() {
 
     $('.ace_gutter-cell').live("click", addRemoveBreakpoint);
 
+    $("a#front-end").bind("click", switchFrontEnd);
+
     global_sessions = [];
 
     getSavedBreakpoints();
@@ -232,6 +234,7 @@ function startupPloneIDE() {
     createSessionsGroup();
     getDeveloperManualLink();
     resizeEditorSection();
+
 
 }
 

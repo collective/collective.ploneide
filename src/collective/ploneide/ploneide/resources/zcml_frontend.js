@@ -1,4 +1,64 @@
 
+/* XXX:
+    Move this to a "generic" front-end dispatcher, eventually, when
+    we have additional front-ends
+    */
+
+function hasFrontEnd(filename){
+    if (filename == "configure.zcml"){
+        return true;
+    }
+
+    return false;
+}
+
+function showHideFrontEndButton(){
+    var session = env.editor.getSession();
+
+    if (session.filename !== ""){
+        var split = session.filename.split("/");
+        var file_name = split.slice(-1).pop();
+
+        if (hasFrontEnd(file_name)){
+            $("a#front-end").show();
+        }
+        else{
+            $("a#front-end").hide();
+        }
+    }
+    else{
+        $("a#front-end").hide();
+    }
+}
+
+$(document).bind("session-switched", showHideFrontEndButton);
+
+function switchFrontEnd(){
+    var objects = $('#editor, .ace_editor');
+    if (objects.is(':visible')){
+        objects.hide();
+        var url = 'http://'+window.$PLONEIDE_HOST+':'+window.$PLONEIDE_PORT+'/zcml_frontend.html';
+        $.ajax({type: 'GET',
+                url: url,
+                data: {},
+                async: true,
+                dataType: "html",
+                success: function(results){
+                        $('.editor-wrapper').append(results);
+                        updateNamespaceValues();
+                        updateDirectivesValues();
+                        // ZCMLToHtml();
+                        bindEvents();
+                    }
+            });
+    }
+    else{
+        objects.show();
+        $(".zcml-frontend").remove();
+    }
+
+}
+
 function addNameSpace($this){
     $this.preventDefault();
     var namespace = $(this).attr('data-namespace');
@@ -92,4 +152,5 @@ function updateNamespaceValues() {
 function bindEvents(){
     $(".top-menu a.namespace-element").bind("click", addNameSpace);
     $(".top-menu a.directive-element").bind("click", addDirective);
+
 }
