@@ -34,9 +34,9 @@ function showHideFrontEndButton(){
 $(document).bind("session-switched", showHideFrontEndButton);
 
 function switchFrontEnd(){
-    var objects = $('#editor, .ace_editor');
-    if (objects.is(':visible')){
-        objects.hide();
+    if ($("#editor").is(':visible')){
+        $("#editor").hide()
+        $(".ace_editor").hide();
         var url = 'http://'+window.$PLONEIDE_HOST+':'+window.$PLONEIDE_PORT+'/zcml_frontend.html';
         $.ajax({type: 'GET',
                 url: url,
@@ -53,7 +53,8 @@ function switchFrontEnd(){
             });
     }
     else{
-        objects.show();
+        $(".ace_editor").show();
+        $("#editor").show()
         $(".zcml-frontend").remove();
     }
 
