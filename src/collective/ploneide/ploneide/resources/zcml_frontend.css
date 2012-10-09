@@ -1,49 +1,123 @@
+/* List of Tabs */
 
 ul.add-new-menu
 {
    list-style:none;
+   display: inline-block;
 }
 
-ul.add-new-menu li
+/* Tab */
+
+li.menu_tab
 {
-   position:relative; 
+   position:relative;
    width:auto;
    white-space: nowrap;
 }
 
-ul.add-new-menu li ul img, .zcml-directives img
+.possible-directives img,
+.possible-namespaces img,
+.zcml-directives img
 {
    width: 16px;
 }
 
-ul.add-new-menu ul
-{
-   position:absolute; 
-   left:50px; 
-   top:-1px;
-   display:none;
-   list-style:none;
-   background-color: white;
+
+/* Add menu tabs */
+.zcml-frontend .top-menu .menu_tab {
+    border:#BBB 1px solid;
+    color: black;
+    display:block;
+    float:left;
+    padding:7px 15px;
+    margin-right:10px;
+    cursor:pointer;
 }
 
-ul.add-new-menu li:hover > ul
-{
-   display:block;
+/* Rounded Corners */
+.zcml-frontend .top-menu .menu_tab {
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    -khtml-border-radius: 6px;
 }
 
-ul.add-new-menu > li > ul
-{
-   position:absolute;
-   left:-41px;
-   top:19px;
-   display:none;
-   list-style:none;
-   background-color: white;
+/* Drop Shadow */
+/* .shadow, */
+.zcml-frontend .top-menu .menu_tab,
+.zcml-frontend .top-menu .menu_tab ul{
+    -moz-box-shadow: 0px 1px 3px #000;
+    -webkit-box-shadow: 0px 1px 3px #000;
+    box-shadow: 0px 1px 3px #000;
 }
 
-ul.add-new-menu > li 
+/* Default Grey Gradient */
+.zcml-frontend .top-menu .menu_tab,
+.zcml-frontend .top-menu .menu_tab ul{
+    background: #848484; /* for non-css3 browsers */
+/*     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#000000', endColorstr='#DDDDDD'); /* for IE */ */
+/*     background: -webkit-gradient(linear, left top, left bottom, from(#000), to(#848484)); /* for webkit browsers */ */
+/*     background: -moz-linear-gradient(top,  #FFF,  #000); /* for firefox 3.6+ */ */
+}
+
+/* Submenu 1*/
+
+.possible-namespaces,
+.possible-directives
 {
-   display:inline;
+    position:absolute;
+    left:0px;
+    top:35px;
+    display:none;
+    list-style:none;
+    background-color: white;
+}
+
+.possible-namespaces > li,
+.possible-directives > li{
+    margin-left: 4px;
+}
+
+.zcml-frontend .top-menu .menu_tab ul{
+    border:#BBB 1px solid;
+    padding:2px 0px;
+    margin-right:10px;
+    -webkit-border-radius:3px;
+    -moz-border-radius:3px;
+    border-radius:3px;
+    -khtml-border-radius: 3px;
+    border-bottom: 1px solid;
+    width:100%;
+}
+
+
+/* Submenu 2 */
+
+.possible-namespaces > li > ul,
+.possible-directives > li > ul{
+    position:absolute;
+    left:0px;
+    top:35px;
+    display:none;
+    list-style:none;
+    background-color: white;
+}
+
+ul.possible-namespaces > li:hover > ul,
+ul.possible-directives > li:hover > ul
+{
+    position:absolute;
+    display:none;
+    list-style:none;
+    left:95px;
+    top:0px;
+}
+
+ul.add-new-menu li.menu_tab:hover > ul,
+ul.possible-namespaces > li:hover > ul,
+ul.possible-directives > li:hover > ul
+{
+    display:block;
 }
 
 .browser_page, .genericsetup_registerProfile
