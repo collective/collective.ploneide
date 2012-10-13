@@ -23,7 +23,6 @@ ul.add-new-menu ul
    top:-1px;
    display:none;
    list-style:none;
-   background-color: white;
 }
 
 ul.add-new-menu li:hover > ul
@@ -38,7 +37,6 @@ ul.add-new-menu > li > ul
    top:19px;
    display:none;
    list-style:none;
-   background-color: white;
 }
 
 ul.add-new-menu > li 
