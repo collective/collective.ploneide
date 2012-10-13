@@ -32,19 +32,6 @@ function updateDirectivesValues() {
         });
 }
 
-function updateNamespaceValues() {
-    // var url = 'http://'+window.$PLONEIDE_HOST+':'+window.$PLONEIDE_PORT;
-    var url = 'http://localhost:8180';
-    $.ajax({type: 'POST',
-            url: url,
-            data: {'command': 'get-zcml-namespaces'},
-            async : false,
-            success: function(results){
-                    $('ul.namespaces').prepend(results);
-                }
-        });
-}
-
 function bindEvents(){
     // $('.add-new-menu > li').bind('mouseover', openSubMenu);
     // $('.add-new-menu > li').bind('mouseout', closeSubMenu);

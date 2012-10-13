@@ -31,19 +31,11 @@ directive_template = """
     </li>
 """
 
-namespace_template = """
-    <li>
-        <a href="#"
-           class="namespace-element"
-           data-namespace="%(namespace)s">
-            <span>%(id)s</span>
-        </a>
-    </li>
-"""
 
 class ZCMLDirectives(object):
 
     def __init__(self):
+        # import pdb;pdb.set_trace()
         cur_dir = os.getcwd()
         namespaces = os.listdir('directives')
         self.html = ""
@@ -78,23 +70,6 @@ class ZCMLDirectives(object):
             self.html += directive_namespace_template % dict(namespace=namespace,
                                                              directives=directives)
 
-
-
-    def toString(self):
-        return self.html
-
-
-class ZCMLNamespaces(object):
-
-    def __init__(self):
-        cur_dir = os.getcwd()
-        namespaces = os.listdir('namespaces')
-        self.html = ""
-
-        for namespace_id in namespaces:
-            namespace_file = open(os.path.join(cur_dir, 'namespaces', namespace_id))
-            self.html += namespace_template % dict(namespace=namespace_file.read(),
-                                                   id=namespace_id)
 
 
     def toString(self):

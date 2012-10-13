@@ -22,7 +22,6 @@ from static_check import StaticCheck
 from thread import start_new_thread
 
 from zcml_frontend.main import ZCMLDirectives
-from zcml_frontend.main import ZCMLNamespaces
 
 #from threading import Thread
 
@@ -378,13 +377,6 @@ class PloneIDEServer(SocketServer.TCPServer):
         os.chdir(old_cwd)
         return directives.toString()
 
-    def get_zcml_namespaces(self):
-        old_cwd = os.getcwd()
-        os.chdir('zcml_frontend')
-        namespaces = ZCMLNamespaces()
-        os.chdir(old_cwd)
-        return namespaces.toString()        
-
 
 class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     """
@@ -427,7 +419,6 @@ class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
             'get-breakpoints': self.ploneide_server.get_breakpoints,
             'get-code-definition': self.ploneide_server.get_code_definition,
             'get-zcml-directives': self.ploneide_server.get_zcml_directives,
-            'get-zcml-namespaces': self.ploneide_server.get_zcml_namespaces,
                                   
         }
         try:
