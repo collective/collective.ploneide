@@ -44,24 +44,16 @@ function addNameSpace($this){
 function addDirective($this){
     $this.preventDefault();
     var directive = $(this).attr('data-directive');
-    var index = $("#directives-count").val()*1;
 
-    // var url = 'http://'+window.$PLONEIDE_HOST+':'+window.$PLONEIDE_PORT;
-    var url = 'http://localhost:8180';
-    $.ajax({type: 'POST',
-            url: url,
-            data: {'command': 'get-zcml-directive-html',
-                   'directive': directive,
-                    'index': index},
-            async: false,
-            dataType: "html",
-            success: function(results){
-                    $("div.zcml-directives").append(results);
-                    index++;
-                    $("#directives-count").val(index);
-                }
-        });
 }
+
+function openSubMenu() {
+    $(this).children('ul').css('visibility', 'visible');    
+};
+
+function closeSubMenu() {
+    $(this).children('ul').css('visibility', 'hidden'); 
+};
 
 function updateDirectivesValues() {
     // var url = 'http://'+window.$PLONEIDE_HOST+':'+window.$PLONEIDE_PORT;
@@ -90,6 +82,12 @@ function updateNamespaceValues() {
 }
 
 function bindEvents(){
+    // $('.add-new-menu > li').bind('mouseover', openSubMenu);
+    // $('.add-new-menu > li').bind('mouseout', closeSubMenu);
+
+    // $('.directive-sub-menu').bind('mouseover', openSubMenu);
+    // $('.directive-sub-menu').bind('mouseout', closeSubMenu);
+   
     $(".footer-elements a.namespace-element").bind("click", addNameSpace);
     $(".footer-elements a.directive-element").bind("click", addDirective);
 }

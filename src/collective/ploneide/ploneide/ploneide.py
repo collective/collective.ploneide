@@ -23,7 +23,6 @@ from thread import start_new_thread
 
 from zcml_frontend.main import ZCMLDirectives
 from zcml_frontend.main import ZCMLNamespaces
-from zcml_frontend.main import ZCMLDirectiveHTML
 
 #from threading import Thread
 
@@ -377,21 +376,14 @@ class PloneIDEServer(SocketServer.TCPServer):
         os.chdir('zcml_frontend')
         directives = ZCMLDirectives()
         os.chdir(old_cwd)
-        return directives
+        return directives.toString()
 
     def get_zcml_namespaces(self):
         old_cwd = os.getcwd()
         os.chdir('zcml_frontend')
         namespaces = ZCMLNamespaces()
         os.chdir(old_cwd)
-        return namespaces
-
-    def get_zcml_directive_html(self, directive, index):
-        old_cwd = os.getcwd()
-        os.chdir('zcml_frontend')
-        html = ZCMLDirectiveHTML(directive, index)
-        os.chdir(old_cwd)
-        return html
+        return namespaces.toString()        
 
 
 class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
@@ -435,7 +427,6 @@ class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
             'get-breakpoints': self.ploneide_server.get_breakpoints,
             'get-code-definition': self.ploneide_server.get_code_definition,
             'get-zcml-directives': self.ploneide_server.get_zcml_directives,
-            'get-zcml-directive-html': self.ploneide_server.get_zcml_directive_html,
             'get-zcml-namespaces': self.ploneide_server.get_zcml_namespaces,
                                   
         }

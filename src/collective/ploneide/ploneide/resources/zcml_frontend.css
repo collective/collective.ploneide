@@ -11,7 +11,7 @@ ul.add-new-menu li
    white-space: nowrap;
 }
 
-ul.add-new-menu li ul img, .zcml-directives img
+ul.add-new-menu li ul img
 {
    width: 16px;
 }
@@ -42,9 +42,4 @@ ul.add-new-menu > li > ul
 ul.add-new-menu > li 
 {
    display:inline;
-}
-
-.browser_page, .genericsetup_registerProfile
-{
-    border-style: solid;
 }
