@@ -34,8 +34,7 @@ function showHideFrontEndButton(){
 $(document).bind("session-switched", showHideFrontEndButton);
 
 function switchFrontEnd(){
-    if ($("#editor").is(':visible')){
-        $("#editor").hide()
+    if ($(".ace_editor").is(':visible')){
         $(".ace_editor").hide();
         var url = 'http://'+window.$PLONEIDE_HOST+':'+window.$PLONEIDE_PORT+'/zcml_frontend.html';
         $.ajax({type: 'GET',
@@ -44,7 +43,7 @@ function switchFrontEnd(){
                 async: true,
                 dataType: "html",
                 success: function(results){
-                        $('.editor-wrapper').append(results);
+                        $('#editor').append(results);
                         updateNamespaceValues();
                         updateDirectivesValues();
                         // ZCMLToHtml();
@@ -54,7 +53,6 @@ function switchFrontEnd(){
     }
     else{
         $(".ace_editor").show();
-        $("#editor").show()
         $(".zcml-frontend").remove();
     }
 

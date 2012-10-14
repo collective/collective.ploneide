@@ -55,9 +55,6 @@ li.menu_tab
 .zcml-frontend .top-menu .menu_tab,
 .zcml-frontend .top-menu .menu_tab ul{
     background: #848484; /* for non-css3 browsers */
-/*     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#000000', endColorstr='#DDDDDD'); /* for IE */ */
-/*     background: -webkit-gradient(linear, left top, left bottom, from(#000), to(#848484)); /* for webkit browsers */ */
-/*     background: -moz-linear-gradient(top,  #FFF,  #000); /* for firefox 3.6+ */ */
 }
 
 /* Submenu 1*/
@@ -70,6 +67,7 @@ li.menu_tab
     top:35px;
     display:none;
     list-style:none;
+    float:left;
     background-color: white;
 }
 
@@ -83,7 +81,6 @@ li.menu_tab
     width:auto;
 }
 
-
 /* Submenu 2 */
 
 .possible-namespaces > li > ul,
@@ -91,6 +88,7 @@ li.menu_tab
     position:absolute;
     left:0px;
     top:35px;
+    float:left;
     display:none;
     list-style:none;
     background-color: white;
@@ -113,9 +111,6 @@ ul.possible-directives > li:hover > ul
     display:block;
 }
 
-/*ul.add-new-menu li.menu_tab:hover > ul > li,
-ul.possible-namespaces > li > ul li,
-ul.possible-directives > li > ul li*/
 .menu_tab li{
     width: 100%;
 }
@@ -129,8 +124,11 @@ ul.possible-directives > li > ul li*/
     padding: 4px;
 }
 
-#zcml-content{
-    overflow: scroll;
+#zcmlcontent{
+    overflow-x: hidden;
+    overflow-y: scroll;
+    height: 331px;
+    width: 100%;
 }
 
 .browser_page, .genericsetup_registerProfile, .resource_directory
