@@ -131,6 +131,7 @@ function updateDirectivesValues() {
             url: url,
             data: {'command': 'get-zcml-directives'},
             async : false,
+            dataType: "text",
             success: function(results){
                     $('ul.possible-directives').prepend(results);
                 }
@@ -144,6 +145,7 @@ function updateNamespaceValues() {
             url: url,
             data: {'command': 'get-zcml-namespaces'},
             async : false,
+            dataType: "text",
             success: function(results){
                     $('ul.possible-namespaces').prepend(results);
                 }
