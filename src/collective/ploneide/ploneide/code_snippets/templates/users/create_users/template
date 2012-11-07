@@ -1,0 +1,19 @@
+# ** imports **
+from Products.CMFCore.utils import getToolByName
+
+# ** code **
+portal_reg = getToolByName(${context}, 'portal_registration')
+
+${username} = str(${username}.lower())
+
+properties = {
+            'username' : ${username},
+            # Full name must be always as utf-8 encoded
+            'fullname' : ${fullname}.encode("utf-8"),
+            'email' : ${email},
+            }
+
+try:
+    member = portal_reg.addMember(${username}, ${password}, properties=properties)
+except ValueError, e:
+    """ You should handle the error here """

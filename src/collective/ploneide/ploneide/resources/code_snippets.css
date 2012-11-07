@@ -1,0 +1,8 @@
+.code_snippets{
+    min-width: 550px;
+}
+
+#snippet-placeholder{
+    min-width: 400px;
+    min-height: 170px;
+}

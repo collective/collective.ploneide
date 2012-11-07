@@ -1,0 +1,29 @@
+<script type="text/javascript">
+    GetAvailableCategories();
+</script>
+
+<div class="code_snippets"
+     i18n:domain="collective.ploneide">
+    
+    <h2 i18n:translate="">Filter:</h2>
+    <input type="text" id="filter-snippets" name="filter-snippets"/>
+    <input type="button" value="Filter" i18n:attributes="value" onclick="filterSnippets()" />
+    <br/>
+
+    <h2 i18n:translate="">Snippets:</h2>
+    <h3 i18n:translate="">Categories:</h3>
+
+    <select id="snippets-categories" name="snippets-categories" size="10" onclick="chosenCategory()">
+    </select>
+    <select id="snippets-list" name="snippets-list" size="10" onclick="chosenSnippet()">
+    </select>
+    <textarea id="snippet-placeholder" name="snippet-placeholder" readonly="readonly">
+    </textarea>
+
+    <br/>
+    <div id="variables-wrapper"></div>
+    <br/>
+
+    <input type="button" value="Insert" i18n:attributes="value" onclick="insertSnippet()" />
+
+</div>

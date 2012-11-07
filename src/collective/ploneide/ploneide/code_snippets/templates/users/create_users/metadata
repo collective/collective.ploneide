@@ -1,0 +1,5 @@
+[Default]
+
+title = Create users
+tags = ['members', 'users', 'create', 'new', 'registration']
+vars = [('context', 'self.context'), ('username', 'username'), ('fullname', 'fullname'), ('email', 'email'), ('password', 'password')]

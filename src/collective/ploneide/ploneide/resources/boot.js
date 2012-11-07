@@ -221,6 +221,7 @@ function startupPloneIDE() {
     createDialogForID('a#save-as');
     createDialogForID('a#context-info');
     createDialogForID('a#plone-reload');
+    createSnippetsDialog('a#code-snippets');
     checkPloneRunning();
 
     $('.ace_gutter-cell').live("click", addRemoveBreakpoint);

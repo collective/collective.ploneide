@@ -21,6 +21,8 @@ from static_check import StaticCheck
 
 from thread import start_new_thread
 
+from code_snippets.main import codesnippets
+
 #from threading import Thread
 
 #from config import HOST
@@ -130,7 +132,7 @@ class PloneIDEServer(SocketServer.TCPServer):
         up = False
         try:
             # print "try"
-            urllib2.urlopen(url, timeout=0.2)
+            urllib2.urlopen(url, timeout=0.3)
             up = True
         except urllib2.URLError:
             # print "except1"
@@ -368,8 +370,31 @@ class PloneIDEServer(SocketServer.TCPServer):
         else:
             return ""
 
+    def get_available_snippets_categories(self):
+        categories = codesnippets.get_categories()
+        return json.dumps(categories)
 
+    def get_snippets_for_category(self, category):
+        snippets = codesnippets.get_snippets_for_category(category)
+        return json.dumps(snippets)
 
+    def get_snippet(self, category, snippet_id):
+        snippet = codesnippets.get_snippet(category, snippet_id)
+        return json.dumps(snippet)
+
+    def insert_snippet_into_code(self, category, snippet_id, variables, 
+                                 code, line, column):
+
+        vars = json.loads(variables)
+        line = int(line)
+        column = int(column)
+        code_to_return = codesnippets.insert_snippet_into_code(category, 
+                                                               snippet_id, 
+                                                               vars, 
+                                                               code, 
+                                                               line, 
+                                                               column)
+        return json.dumps(code_to_return)
 
 class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     """
@@ -411,7 +436,10 @@ class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
             'remove-breakpoint': self.ploneide_server.remove_breakpoint,
             'get-breakpoints': self.ploneide_server.get_breakpoints,
             'get-code-definition': self.ploneide_server.get_code_definition,
-                                  
+            'get-available-snippets-categories': self.ploneide_server.get_available_snippets_categories,
+            'get-snippets-for-category': self.ploneide_server.get_snippets_for_category,
+            'get-snippet': self.ploneide_server.get_snippet,
+            'insert-snippet-into-code': self.ploneide_server.insert_snippet_into_code,
         }
         try:
             SimpleHTTPServer.SimpleHTTPRequestHandler.__init__(self, *args)
