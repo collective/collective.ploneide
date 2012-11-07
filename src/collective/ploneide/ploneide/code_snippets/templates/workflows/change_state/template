@@ -1,0 +1,14 @@
+# ** imports **
+from Products.CMFCore.utils import getToolByName
+from Products.CMFCore.WorkflowCore import WorkflowException
+
+# ** code **
+workflowTool = getToolByName(${context}, "portal_workflow")
+try:
+    workflowTool.doActionFor(${context}, "your-action-id-here")
+except WorkflowException:
+    # a workflow exception is risen if the state transition is not available
+    # (the sampleProperty content is in a workflow state which
+    # does not have a "submit" transition)
+    # DO SOMETHING HERE...
+    pass

@@ -1,0 +1,5 @@
+[Default]
+
+title = Get object's state
+tags = ['workflows', 'state']
+vars = [('context', 'self.context'),]

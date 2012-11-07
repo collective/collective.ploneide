@@ -1,0 +1,12 @@
+# ** imports **
+from Products.CMFCore.utils import getToolByName
+
+# ** code **
+workflowTool = getToolByName(${context}, "portal_workflow")
+# Returns tuple of all workflows assigned for a context object
+chain = workflowTool.getChainFor(${context})
+# Returns workflow state object
+status = workflowTool.getStatusOf(chain[0], ${context})
+# Plone workflows use variable called "review_state" to store state id
+# of the object state
+state = status["review_state"]

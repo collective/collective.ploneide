@@ -1,0 +1,5 @@
+[Default]
+
+title = Change object's state
+tags = ['workflows', 'state']
+vars = [('context', 'self.context'),]
