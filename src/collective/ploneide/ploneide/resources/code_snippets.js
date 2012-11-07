@@ -30,6 +30,11 @@ function chosenCategory(){
             async : true,
             success: function(results){
                 var snippets = JSON.parse(results);
+
+                $("#snippets-list").html("");
+                $("#variables-wrapper").html("");
+                $("#snippet-placeholder").val("");
+                
                 for (var i = 0; i < snippets.length; i++) {
                     var option = $("<option></option>");
                     option.attr("value", snippets[i][0]);
@@ -54,6 +59,9 @@ function chosenSnippet(){
             async : true,
             success: function(results){
                 var snippets = JSON.parse(results);
+
+                $("#variables-wrapper").html("");
+
                 $("#snippet-placeholder").val(snippets.template);
 
                 var vars = snippets.vars;
