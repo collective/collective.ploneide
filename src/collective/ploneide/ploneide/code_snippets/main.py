@@ -47,7 +47,9 @@ class CodeSnippets(object):
         print "Done"
 
     def get_categories(self):
-        return self.snippets.keys()
+        categories = self.snippets.keys()
+        categories.sort()
+        return categories
 
     def get_snippets_for_category(self, category):
         category_dict = self.snippets.get(category, {})
@@ -55,6 +57,8 @@ class CodeSnippets(object):
 
         for i in category_dict.keys():
             snippets.append(([i], category_dict[i]['title']))
+
+        snippets.sort(key=lambda x:x[1])
 
         return snippets
 
