@@ -1,0 +1,5 @@
+# ** imports **
+from zope.component import getMultiAdapter
+
+# ** code **
+view = getMultiAdapter((${context}, ${request}), name=${name})

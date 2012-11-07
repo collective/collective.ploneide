@@ -1,0 +1,5 @@
+[Default]
+
+title = Normalize ID
+tags = ['normalization', 'i18n']
+vars = [('id', 'id'),]

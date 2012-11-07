@@ -1,0 +1,5 @@
+[Default]
+
+title = Get view
+tags = ['views', 'multiadapter']
+vars = [('context', 'self.context'), ('request', 'self.request'), ('name', 'name')]

@@ -1,0 +1,5 @@
+[Default]
+
+title = Create content
+tags = ['dexterity', 'create']
+vars = [('folder', 'self.context'), ('title', 'title')]

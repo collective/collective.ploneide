@@ -1,0 +1,7 @@
+# ** imports **
+from plone.dexterity.utils import createContentInContainer
+
+# ** code **
+# Factory-type information id is the same as in types.xml
+# optionally you can set checkConstraints=False to skip permission checks
+item = createContentInContainer(${folder}, "your.app.dexterity.fti.information", title=${title})
