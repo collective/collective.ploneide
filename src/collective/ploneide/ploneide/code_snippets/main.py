@@ -118,7 +118,7 @@ class CodeSnippets(object):
                                    code_lines + 
                                    splitted_code[line+1:])
 
-        return {'code': resulting_code, 'lines': len(code_lines)}
+        return {'code': resulting_code, 'lines': len(code_lines) + len(import_lines)}
 
 codesnippets = CodeSnippets()
 
