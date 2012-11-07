@@ -388,13 +388,13 @@ class PloneIDEServer(SocketServer.TCPServer):
         vars = json.loads(variables)
         line = int(line)
         column = int(column)
-        code_to_return = codesnippets.insert_snippet_into_code(category, 
+        result = codesnippets.insert_snippet_into_code(category, 
                                                                snippet_id, 
                                                                vars, 
                                                                code, 
                                                                line, 
                                                                column)
-        return json.dumps(code_to_return)
+        return json.dumps(result)
 
 class PloneIDEHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     """

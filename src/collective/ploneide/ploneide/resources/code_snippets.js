@@ -123,10 +123,15 @@ function insertSnippet(){
                    'column': position.column},
             async : true,
             success: function(results){
-                env.editor.session.doc.setValue(JSON.parse(results));
+                results = JSON.parse(results);
+                env.editor.session.doc.setValue(results['code']);
                 // Should we close the snippets overlay?
                 //XXX: Figure out if there's a more proper way of doing this
                 $(".ui-dialog-titlebar-close").click();
+
+                // Now go to the last line that was inserted and focus the editor
+                env.editor.navigateTo(position.row + results['lines'], true);
+                env.editor.focus();
             }
         });
 

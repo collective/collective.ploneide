@@ -113,12 +113,12 @@ class CodeSnippets(object):
 
         # XXX: For now, we just put the imports on top. Replace this to use 
         #      rope and its import assist tools.
-        resulting_code = (import_lines +
-                          splitted_code[0:line] + 
-                          code_lines + 
-                          splitted_code[line+1:])
+        resulting_code = '\n'.join(import_lines +
+                                   splitted_code[0:line] + 
+                                   code_lines + 
+                                   splitted_code[line+1:])
 
-        return '\n'.join(resulting_code)
+        return {'code': resulting_code, 'lines': len(code_lines)}
 
 codesnippets = CodeSnippets()
 
